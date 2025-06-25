@@ -5,53 +5,36 @@ using UnityEngine;
 public class fieldPlayer : MonoBehaviour
 {
     Animator playerAnimator;
-    private float moveSpeed = 2f;
-    Vector3 currentScale;
+    private float moveSpeed = 3f;
+    Rigidbody2D rb;
+    Vector2 moveInput;
 
-    // Start is called before the first frame update
     void Start()
     {
         playerAnimator = GetComponent<Animator>();
-        currentScale = transform.localScale;
+        rb = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        Vector3 moveDirection = Vector3.zero;
+        moveInput.x = Input.GetAxisRaw("Horizontal");
+        moveInput.y = Input.GetAxisRaw("Vertical");
+        moveInput = moveInput.normalized;
 
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            moveDirection += Vector3.right;
-            transform.localScale = new Vector3(Mathf.Abs(currentScale.x), currentScale.y, currentScale.z);
-        }
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            moveDirection += Vector3.left;
-            transform.localScale = new Vector3(-Mathf.Abs(currentScale.x), currentScale.y, currentScale.z);
-        }
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            moveDirection += Vector3.up;
-        }
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            moveDirection += Vector3.down;
-        }
+        bool isMoving = moveInput.sqrMagnitude > 0;
+        playerAnimator.SetBool("isRunning", isMoving);
 
-        if (moveDirection != Vector3.zero)
+        if (moveInput.x != 0)
         {
-            MovePlayer(moveDirection.normalized);
-            playerAnimator.SetBool("isRunning", true);
-        }
-        else
-        {
-            playerAnimator.SetBool("isRunning", false);
+            Vector3 currentScale = transform.localScale;
+            currentScale.x = Mathf.Abs(currentScale.x) * Mathf.Sign(moveInput.x);
+            transform.localScale = currentScale;
         }
     }
 
-    void MovePlayer(Vector3 direction)
+    void FixedUpdate()
     {
-        transform.position += direction * moveSpeed * Time.deltaTime;
+        Vector2 moveAmount = moveInput * moveSpeed;
+        rb.MovePosition(rb.position + moveAmount * Time.fixedDeltaTime);
     }
 }
