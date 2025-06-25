@@ -5,15 +5,21 @@ public class FieldGenerator : MonoBehaviour
 {
     public Tilemap tilemap;
     public TileBase groundTile;
+    [SerializeField] FieldData fiieldData;
 
-    public int width = 30;
-    public int height = 20;
     public string seed = "banana123"; // ここ変えたら別マップ
     private int[,] mapBase;
+    int width = 30;
+    int height = 20;
     private float fillPercent = 0.4f; // 埋め込む確率
+    private float objectPercent = 0.2f; // 埋め込む確率
 
     void Start()
     {
+        width = fiieldData.FieldWidth;
+        height = fiieldData.FieldHeight;
+        fillPercent = fiieldData.FillPercent;
+        groundTile = fiieldData.GroundTile;
         GenerateField();
     }
 
