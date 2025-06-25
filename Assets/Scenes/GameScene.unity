@@ -269,8 +269,8 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: -2, y: 0}
-  m_SizeDelta: {x: 40, y: 70}
-  m_Pivot: {x: 0, y: 0}
+  m_SizeDelta: {x: 1, y: 1}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &611831674
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -652,10 +652,10 @@ GameObject:
   - component: {fileID: 2049345912}
   - component: {fileID: 2049345914}
   - component: {fileID: 2049345913}
-  - component: {fileID: 2049345915}
   - component: {fileID: 2049345918}
   - component: {fileID: 2049345917}
   - component: {fileID: 2049345916}
+  - component: {fileID: 2049345915}
   m_Layer: 0
   m_Name: FieldTilemap
   m_TagString: Untagged
@@ -841,7 +841,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilemap: {fileID: 2049345914}
   groundTile: {fileID: 11400000, guid: 9be9dc78c52c50d42b6b92834664ab59, type: 2}
-  fiieldData: {fileID: 11400000, guid: 062360f19936728418ec684672f50a9b, type: 2}
+  gateTile: {fileID: 11400000, guid: 6a44720eff83ed84b89e1ea36473e0cd, type: 2}
+  fieldData: {fileID: 11400000, guid: 062360f19936728418ec684672f50a9b, type: 2}
   seed: banana123
 --- !u!66 &2049345916
 CompositeCollider2D:
@@ -885,7 +886,7 @@ CompositeCollider2D:
   m_CompositePaths:
     m_Paths: []
   m_VertexDistance: 0.0005
-  m_OffsetDistance: 0.00005
+  m_OffsetDistance: 0.2
   m_UseDelaunayMesh: 0
   m_CompositeGameObject: {fileID: 2049345911}
 --- !u!50 &2049345917

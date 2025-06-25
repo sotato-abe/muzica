@@ -5,7 +5,7 @@ using UnityEngine;
 public class fieldPlayer : MonoBehaviour
 {
     Animator playerAnimator;
-    private float moveSpeed = 3f;
+    private float moveSpeed = 2f;
     Rigidbody2D rb;
     Vector2 moveInput;
 

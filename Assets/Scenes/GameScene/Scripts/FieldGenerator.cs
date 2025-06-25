@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -5,7 +7,8 @@ public class FieldGenerator : MonoBehaviour
 {
     public Tilemap tilemap;
     public TileBase groundTile;
-    [SerializeField] FieldData fiieldData;
+    public TileBase gateTile;
+    [SerializeField] FieldData fieldData;
 
     public string seed = "banana123"; // ここ変えたら別マップ
     private int[,] mapBase;
@@ -13,20 +16,20 @@ public class FieldGenerator : MonoBehaviour
     int height = 20;
     private float fillPercent = 0.4f; // 埋め込む確率
     private float objectPercent = 0.2f; // 埋め込む確率
+    private HashSet<Vector2Int> placedGates = new HashSet<Vector2Int>();
 
     void Start()
     {
-        width = fiieldData.FieldWidth;
-        height = fiieldData.FieldHeight;
-        fillPercent = fiieldData.FillPercent;
-        groundTile = fiieldData.GroundTile;
+        width = fieldData.FieldWidth;
+        height = fieldData.FieldHeight;
+        fillPercent = fieldData.FillPercent;
+        groundTile = fieldData.GroundTile;
+        gateTile = fieldData.GateTile;
         GenerateField();
     }
 
     void GenerateField()
     {
-        Debug.Log("GenerateField");
-
         // タイルマップをクリア
         tilemap.ClearAllTiles();
         Random.InitState(seed.GetHashCode());
@@ -38,13 +41,12 @@ public class FieldGenerator : MonoBehaviour
         {
             SmoothMap();
         }
-
         RenderingField();
+        CreateAllGate();
     }
 
     void GenerateGroundMap()
     {
-        Debug.Log("GenerateGround");
         // シードで初期化して、モザイク状のフィールドマップをmapBaseに生成
         mapBase = new int[width, height];
         for (int x = -width / 2; x < width / 2; x++)
@@ -67,8 +69,6 @@ public class FieldGenerator : MonoBehaviour
     // 　モザイク状のフィールドマップを滑らかにしていく
     private void SmoothMap()
     {
-        Debug.Log("SmoothMap");
-
         // 1回のスムージングで周囲の地面タイル数をカウントし、4以上なら地面、4未満なら空白にする
         for (int x = -width / 2; x < width / 2; x++)
         {
@@ -120,10 +120,87 @@ public class FieldGenerator : MonoBehaviour
         return count;
     }
 
+    private void CreateAllGate()
+    {
+        // 上端と下端にゲートを作成
+        if (fieldData.IsTopOpen)
+        {
+            CreateGate(new Vector2Int(Random.Range(0, width), height - 1));
+        }
+        if (fieldData.IsBottomOpen)
+        {
+            CreateGate(new Vector2Int(Random.Range(0, width), 0));
+        }
+        if (fieldData.IsRightOpen)
+        {
+            CreateGate(new Vector2Int(width - 1, Random.Range(0, height)));
+        }
+        if (fieldData.IsLeftOpen)
+        {
+            CreateGate(new Vector2Int(0, Random.Range(0, height)));
+        }
+        placedGates = new HashSet<Vector2Int>();
+    }
+
+
+    private void CreateGate(Vector2Int entry)
+    {
+        // Debug.Log($"Creating gate at {entry}");
+        Queue<Vector2Int> queue = new Queue<Vector2Int>();
+        HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
+        Dictionary<Vector2Int, Vector2Int> cameFrom = new Dictionary<Vector2Int, Vector2Int>();
+
+        queue.Enqueue(entry);
+        visited.Add(entry);
+
+        Vector2Int foundTarget = Vector2Int.zero;
+        bool found = false;
+
+        // 幅優先探索でGroundを探す
+        while (queue.Count > 0)
+        {
+            Vector2Int current = queue.Dequeue();
+
+            // Groundを見つけたら終わり
+            if (mapBase[current.x, current.y] == 1 && !placedGates.Contains(current))
+            {
+                placedGates.Add(current);
+                found = true;
+                Vector3Int tilePosition = new Vector3Int(current.x - width / 2, current.y - height / 2, 0);
+                tilemap.SetTile(tilePosition, gateTile);
+                break;
+            }
+
+            // 隣接セル（上下左右）をチェック
+            Vector2Int[] directions = new Vector2Int[]
+            {
+                    Vector2Int.up,
+                    Vector2Int.down,
+                    Vector2Int.left,
+                    Vector2Int.right
+            };
+
+            foreach (var dir in directions)
+            {
+                Vector2Int neighbor = current + dir;
+
+                if (IsInMap(neighbor) && !visited.Contains(neighbor))
+                {
+                    visited.Add(neighbor);
+                    queue.Enqueue(neighbor);
+                    cameFrom[neighbor] = current;
+                }
+            }
+        }
+    }
+
+    private bool IsInMap(Vector2Int pos)
+    {
+        return pos.x >= 0 && pos.x < width && pos.y >= 0 && pos.y < height;
+    }
+
     private void RenderingField()
     {
-        Debug.Log("RenderingField");
-
         // タイルマップに地面タイルを配置
         for (int x = -width / 2; x < width / 2; x++)
         {
