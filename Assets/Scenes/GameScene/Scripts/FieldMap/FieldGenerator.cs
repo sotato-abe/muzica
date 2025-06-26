@@ -6,8 +6,8 @@ using UnityEngine.Tilemaps;
 public class FieldGenerator : MonoBehaviour
 {
     [SerializeField] FieldData fieldData;
+    [SerializeField] GameObject GateObject;
     public Tilemap tilemap;
-    public GameObject[] objectPrefabs;
     public string seed = "banana123"; // ここ変えたら別マップ
     private int[,] mapBase;
     private int[,] areaMapBase;
@@ -20,6 +20,7 @@ public class FieldGenerator : MonoBehaviour
     public TileBase gateTile;
     public int objectCount = 5;
     private HashSet<Vector2Int> placedGates = new HashSet<Vector2Int>();
+    public GameObject[] objectPrefabs;
 
     void Start()
     {
@@ -33,7 +34,7 @@ public class FieldGenerator : MonoBehaviour
         GenerateField();
     }
 
-    void GenerateField()
+    public void GenerateField()
     {
         // タイルマップをクリア
         tilemap.ClearAllTiles();
@@ -262,8 +263,27 @@ public class FieldGenerator : MonoBehaviour
                 {
                     Vector3Int tilePosition = new Vector3Int(x, y, 0);
                     tilemap.SetTile(tilePosition, gateTile);
+                    Vector3 worldPos = tilemap.CellToWorld(new Vector3Int(gridX - width / 2, gridY - height / 2, 0)) + new Vector3(0f, 0.5f, 0f);
+                    Instantiate(GateObject, worldPos, Quaternion.identity);
                 }
             }
+        }
+    }
+
+    public void ClearField()
+    {
+        // タイルマップをクリア
+        tilemap.ClearAllTiles();
+        mapBase = new int[width, height];
+        areaMapBase = new int[width, height];
+        placedGates.Clear();
+        foreach (var obj in GameObject.FindGameObjectsWithTag("FieldObject"))
+        {
+            Destroy(obj);
+        }
+        foreach (var obj in GameObject.FindGameObjectsWithTag("Gate"))
+        {
+            Destroy(obj);
         }
     }
 }

@@ -122,6 +122,81 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &41220936
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 41220937}
+  - component: {fileID: 41220939}
+  - component: {fileID: 41220938}
+  m_Layer: 5
+  m_Name: Frame
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &41220937
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 41220936}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 527113197}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &41220938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 41220936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: be45e9a0f67f06f45918291191a31f98, type: 3}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 2
+--- !u!222 &41220939
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 41220936}
+  m_CullTransparentMesh: 1
 --- !u!1 &203233052
 GameObject:
   m_ObjectHideFlags: 0
@@ -3676,6 +3751,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1802683842}
+  - {fileID: 41220937}
   m_Father: {fileID: 854224271}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
@@ -3760,7 +3836,7 @@ GameObject:
   - component: {fileID: 611831680}
   m_Layer: 5
   m_Name: FieldPlayer
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4405,6 +4481,7 @@ GameObject:
   m_Component:
   - component: {fileID: 746391297}
   - component: {fileID: 746391296}
+  - component: {fileID: 746391298}
   m_Layer: 0
   m_Name: FieldMap
   m_TagString: Untagged
@@ -4440,6 +4517,21 @@ Transform:
   - {fileID: 2049345912}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &746391298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 746391295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2ccf9901489a4f49964edf3d7400163, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fieldGenerator: {fileID: 2049345915}
+  player: {fileID: 611831672}
+  fieldSpawnPoint: {x: 0, y: 0, z: 0}
 --- !u!1 &854224267
 GameObject:
   m_ObjectHideFlags: 0
@@ -4848,7 +4940,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: b84603ee4b5b7b2409270fb492ac9587, type: 3}
-  m_Type: 0
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -4856,7 +4948,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 2
 --- !u!222 &1802683844
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5077,14 +5169,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fieldData: {fileID: 11400000, guid: dbc1b5bf9366e9844afc1b1f76443859, type: 2}
+  GateObject: {fileID: 6779465890414966303, guid: f382b421336f2c54cb37151fd400110c, type: 3}
   tilemap: {fileID: 2049345914}
-  objectPrefabs:
-  - {fileID: 6779465890414966303, guid: 0754e8932db7b9c4f908ae2c2c22b5aa, type: 3}
   seed: banana123
   groundTile: {fileID: 11400000, guid: 9be9dc78c52c50d42b6b92834664ab59, type: 2}
   grassTile: {fileID: 11400000, guid: 548ecb6307727c1439660085a71f9efd, type: 2}
   gateTile: {fileID: 11400000, guid: 6a44720eff83ed84b89e1ea36473e0cd, type: 2}
   objectCount: 5
+  objectPrefabs:
+  - {fileID: 6779465890414966303, guid: 0754e8932db7b9c4f908ae2c2c22b5aa, type: 3}
 --- !u!66 &2049345916
 CompositeCollider2D:
   m_ObjectHideFlags: 0
