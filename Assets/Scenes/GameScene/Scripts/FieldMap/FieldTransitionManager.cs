@@ -29,8 +29,9 @@ public class FieldTransitionManager : MonoBehaviour
 
         // 新しいフィールドを生成
         fieldGenerator.GenerateField();
-
-        // プレイヤーを初期位置に移動
-        player.position = fieldSpawnPoint;
+        // ゲートの位置を取得してその位置をプレイヤーの初期位置に設定
+        Vector2Int spawnPos = fieldGenerator.GetEntorancePosition();
+        Vector3Int cell = new Vector3Int(spawnPos.x, spawnPos.y, 0);
+        player.position = fieldGenerator.tilemap.GetCellCenterWorld(cell);
     }
 }

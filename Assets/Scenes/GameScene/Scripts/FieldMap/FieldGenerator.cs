@@ -19,6 +19,7 @@ public class FieldGenerator : MonoBehaviour
     public TileBase grassTile;
     public TileBase gateTile;
     public int objectCount = 5;
+    public int test = 0;
     private HashSet<Vector2Int> placedGates = new HashSet<Vector2Int>();
     public GameObject[] objectPrefabs;
 
@@ -38,7 +39,7 @@ public class FieldGenerator : MonoBehaviour
     {
         // タイルマップをクリア
         tilemap.ClearAllTiles();
-        Random.InitState(seed.GetHashCode());
+        Random.InitState((seed + test).GetHashCode());
 
         // グラウンドを生成
         mapBase = GenerateGroundMap(new int[width, height], groundFillPercent);
@@ -62,6 +63,7 @@ public class FieldGenerator : MonoBehaviour
         CreateAllGate();
         RenderingField();
         CreateObjects();
+        test++;
     }
 
     private int[,] GenerateGroundMap(int[,] draftMap, float fillPercent)
@@ -162,7 +164,6 @@ public class FieldGenerator : MonoBehaviour
         {
             CreateGate(new Vector2Int(0, Random.Range(0, height)));
         }
-        placedGates = new HashSet<Vector2Int>();
     }
 
 
@@ -186,9 +187,15 @@ public class FieldGenerator : MonoBehaviour
             // Groundを見つけたら終わり
             if (mapBase[current.x, current.y] == (int)TileType.Ground && !placedGates.Contains(current))
             {
-                placedGates.Add(current);
+                // インデックス → Tilemap座標系に変換
+                int tileX = current.x - width / 2;
+                int tileY = current.y - height / 2;
+                Vector2Int tilePos = new Vector2Int(tileX, tileY);
+
+                placedGates.Add(tilePos);
                 found = true;
-                mapBase[current.x, current.y] = (int)TileType.Gate; // タイルをオブジェクトに変更
+
+                mapBase[current.x, current.y] = (int)TileType.Gate; // ゲートに変換
                 break;
             }
 
@@ -285,5 +292,21 @@ public class FieldGenerator : MonoBehaviour
         {
             Destroy(obj);
         }
+    }
+
+    public Vector2Int GetEntorancePosition()
+    {
+        // ゲートの位置を取得して返す
+        if (placedGates.Count > 0)
+        {
+            Vector2Int gatePos = new Vector2Int(0, 0);
+            foreach (var pos in placedGates)
+            {
+                gatePos = pos;
+                break; // 最初のゲート位置を返す
+            }
+            return gatePos;
+        }
+        return Vector2Int.zero; // ゲートがない場合はゼロベクトルを返す
     }
 }

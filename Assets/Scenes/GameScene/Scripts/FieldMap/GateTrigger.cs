@@ -2,17 +2,30 @@ using UnityEngine;
 
 public class GateTrigger : MonoBehaviour
 {
-    public string destinationField; // 次のマップ名など（例："Field_B"）
     public FieldData nextField;
+    private bool isTriggered = false;
+    private float triggerTime = 0f;
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (!isTriggered && other.CompareTag("Player"))
+        {
+            triggerTime += Time.deltaTime;
+
+            if (triggerTime >= 1f)
+            {
+                isTriggered = true;
+                FieldTransitionManager.Instance.LoadField();
+            }
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log($"ゲートに入った → 遷移先: {destinationField}");
-
-            // フィールド遷移呼び出し（仮）
-            FieldTransitionManager.Instance.LoadField();
+            triggerTime = 0f;
+            isTriggered = false;
         }
     }
 }
