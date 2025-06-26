@@ -5,29 +5,32 @@ using UnityEngine.Tilemaps;
 
 public class FieldGenerator : MonoBehaviour
 {
-    public Tilemap tilemap;
-    public Tilemap objectTilemap;
-    public TileBase groundTile;
-    public TileBase gateTile;
-    public TileBase objectTile1;
     [SerializeField] FieldData fieldData;
+    public Tilemap tilemap;
+    public TileBase groundTile;
+    public TileBase grassTile;
+    public TileBase gateTile;
+    public GameObject[] objectPrefabs;
     public int objectCount = 5;
 
     public string seed = "banana123"; // ここ変えたら別マップ
     private int[,] mapBase;
+    private int[,] areaMapBase;
     int width = 30;
     int height = 20;
-    private float fillPercent = 0.4f; // 埋め込む確率
-    private float objectPercent = 0.2f; // 埋め込む確率
+    private float groundFillPercent = 0.4f; // 埋め込む確率
+    private float areaFillPercent = 0.2f; // 埋め込む確率
     private HashSet<Vector2Int> placedGates = new HashSet<Vector2Int>();
 
     void Start()
     {
         width = fieldData.FieldWidth;
         height = fieldData.FieldHeight;
-        fillPercent = fieldData.FillPercent;
+        groundFillPercent = fieldData.GroundFillPercent;
+        areaFillPercent = fieldData.AreaFillPercent;
         groundTile = fieldData.FieldTileSet.GroundTile;
-        objectTile1 = fieldData.FieldTileSet.ObjectTile;
+        grassTile = fieldData.FieldTileSet.GrassTile;
+        objectCount = fieldData.ObjectCount;
         GenerateField();
     }
 
@@ -38,21 +41,32 @@ public class FieldGenerator : MonoBehaviour
         Random.InitState(seed.GetHashCode());
 
         // グラウンドを生成
-        GenerateGroundMap();
+        mapBase = GenerateGroundMap(new int[width, height], groundFillPercent);
+        areaMapBase = GenerateGroundMap(new int[width, height], areaFillPercent);
 
-        for (int i = 0; i < 2; i++)
+        mapBase = SmoothMap(mapBase);
+        areaMapBase = SmoothMap(areaMapBase);
+
+        // mapBaseにareaMapBaseをマージ（areaMapBaseが1のところをmapbaseに２で追加）
+        for (int x = 0; x < width; x++)
         {
-            SmoothMap();
+            for (int y = 0; y < height; y++)
+            {
+                if (areaMapBase[x, y] == 1 && mapBase[x, y] == 1)
+                {
+                    mapBase[x, y] = 2; // 地面とエリアの重なり
+                }
+            }
         }
+
         RenderingField();
         CreateAllGate();
         CreateObjects();
     }
 
-    void GenerateGroundMap()
+    private int[,] GenerateGroundMap(int[,] draftMap, float fillPercent)
     {
         // シードで初期化して、モザイク状のフィールドマップをmapBaseに生成
-        mapBase = new int[width, height];
         for (int x = -width / 2; x < width / 2; x++)
         {
             for (int y = -height / 2; y < height / 2; y++)
@@ -60,45 +74,50 @@ public class FieldGenerator : MonoBehaviour
                 // ランダムに地面タイルを配置
                 if (Random.value < fillPercent)
                 {
-                    mapBase[x + width / 2, y + height / 2] = 1; // 地面タイル
+                    draftMap[x + width / 2, y + height / 2] = 1; // 地面タイル
                 }
                 else
                 {
-                    mapBase[x + width / 2, y + height / 2] = 0; // 空白タイル
+                    draftMap[x + width / 2, y + height / 2] = 0; // 空白タイル
                 }
             }
         }
+        return draftMap;
     }
 
     // 　モザイク状のフィールドマップを滑らかにしていく
-    private void SmoothMap()
+    private int[,] SmoothMap(int[,] draftMap)
     {
-        // 1回のスムージングで周囲の地面タイル数をカウントし、4以上なら地面、4未満なら空白にする
-        for (int x = -width / 2; x < width / 2; x++)
+        for (int i = 0; i < 2; i++)
         {
-            for (int y = -height / 2; y < height / 2; y++)
+            // 1回のスムージングで周囲の地面タイル数をカウントし、4以上なら地面、4未満なら空白にする
+            for (int x = -width / 2; x < width / 2; x++)
             {
-                int gridX = x + width / 2;
-                int gridY = y + height / 2;
-
-                // 周囲の地面タイル数をカウント
-                int surroundingGroundCount = GetSurroundingGroundCount(gridX, gridY);
-
-                // 4以上なら地面、4未満なら空白にする
-                if (surroundingGroundCount >= 4)
+                for (int y = -height / 2; y < height / 2; y++)
                 {
-                    mapBase[gridX, gridY] = 1; // 地面タイル
-                }
-                else
-                {
-                    mapBase[gridX, gridY] = 0; // 空白タイル
+                    int gridX = x + width / 2;
+                    int gridY = y + height / 2;
+
+                    // 周囲の地面タイル数をカウント
+                    int surroundingGroundCount = GetSurroundingGroundCount(gridX, gridY, draftMap);
+
+                    // 4以上なら地面、4未満なら空白にする
+                    if (surroundingGroundCount >= 4)
+                    {
+                        draftMap[gridX, gridY] = 1; // 地面タイル
+                    }
+                    else
+                    {
+                        draftMap[gridX, gridY] = 0; // 空白タイル
+                    }
                 }
             }
         }
+        return draftMap;
     }
 
     //　指定座標の周囲のグラウンド数を取得
-    private int GetSurroundingGroundCount(int gridX, int gridY)
+    private int GetSurroundingGroundCount(int gridX, int gridY, int[,] draftMap)
     {
         int count = 0;
 
@@ -116,7 +135,7 @@ public class FieldGenerator : MonoBehaviour
                 // マップの範囲内であることを確認
                 if (checkX >= 0 && checkX < width && checkY >= 0 && checkY < height)
                 {
-                    count += mapBase[checkX, checkY];
+                    count += draftMap[checkX, checkY];
                 }
             }
         }
@@ -200,26 +219,22 @@ public class FieldGenerator : MonoBehaviour
 
     private void CreateObjects()
     {
-    int placed = 0;
-    System.Random rand = new System.Random(seed.GetHashCode());
+        int placed = 0;
+        System.Random rand = new System.Random(seed.GetHashCode());
 
-    while (placed < objectCount)
-    {
-        int x = rand.Next(0, width);
-        int y = rand.Next(0, height);
-
-        Vector2Int pos = new Vector2Int(x, y);
-        if (!IsInMap(pos) || mapBase[x, y] != 1)
-            continue;
-
-        Vector3Int tilePos = new Vector3Int(x - width / 2, y - height / 2, 0);
-
-        if (objectTilemap.GetTile(tilePos) == null)
+        while (placed < objectCount)
         {
-            objectTilemap.SetTile(tilePos, objectTile1);
-            placed++;
+            int x = rand.Next(0, width);
+            int y = rand.Next(0, height);
+
+            if (mapBase[x, y] == 1) // 地面の上だけ
+            {
+                Vector3 worldPos = tilemap.CellToWorld(new Vector3Int(x - width / 2, y - height / 2, 0)) + new Vector3(0.5f, 0.5f, 0f);
+
+                Instantiate(objectPrefabs[rand.Next(objectPrefabs.Length)], worldPos, Quaternion.identity);
+                placed++;
+            }
         }
-    }
     }
 
     private bool IsInMap(Vector2Int pos)
@@ -241,6 +256,11 @@ public class FieldGenerator : MonoBehaviour
                 {
                     Vector3Int tilePosition = new Vector3Int(x, y, 0);
                     tilemap.SetTile(tilePosition, groundTile);
+                }
+                if (mapBase[gridX, gridY] == 2)
+                {
+                    Vector3Int tilePosition = new Vector3Int(x, y, 0);
+                    tilemap.SetTile(tilePosition, grassTile);
                 }
             }
         }

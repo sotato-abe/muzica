@@ -9,9 +9,9 @@ public class FieldData : ScriptableObject
     [SerializeField] int fieldHeight = 40;
     [SerializeField] int fieldWidth = 30;
     [SerializeField] FieldTileSet fieldTileSet;
-    [SerializeField] float fillPercent = 0.3f; // マップの建蔽率
-    [SerializeField] float objectPercent = 0.4f; // マップの建蔽率
-
+    [SerializeField] float groundFillPercent = 0.4f; // マップの建蔽率
+    [SerializeField] float areaFillPercent = 0.2f; // マップの建蔽率
+    [SerializeField] int objectCount = 5;
     [SerializeField] bool isTopOpen = false;
     [SerializeField] bool isBottomOpen = false;
     [SerializeField] bool isRightOpen = false;
@@ -20,8 +20,9 @@ public class FieldData : ScriptableObject
     public int FieldHeight { get => fieldHeight; }
     public int FieldWidth { get => fieldWidth; }
     public FieldTileSet FieldTileSet { get => fieldTileSet; }
-    public float FillPercent { get => fillPercent; }
-    public float ObjectPercent { get => objectPercent; }
+    public float GroundFillPercent { get => groundFillPercent; }
+    public float AreaFillPercent { get => areaFillPercent; }
+    public int ObjectCount { get => objectCount; }
     public bool IsTopOpen { get => isTopOpen; }
     public bool IsBottomOpen { get => isBottomOpen; }
     public bool IsRightOpen { get => isRightOpen; }
