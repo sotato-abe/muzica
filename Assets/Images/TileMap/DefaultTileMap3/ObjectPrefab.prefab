@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2404048189020373101}
   - component: {fileID: 7848078968260953523}
   - component: {fileID: 8505424805274862813}
+  - component: {fileID: 7785923596756389309}
   m_Layer: 5
   m_Name: ObjectPrefab
   m_TagString: Untagged
@@ -28,7 +29,7 @@ RectTransform:
   m_GameObject: {fileID: 6779465890414966303}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -142,13 +143,25 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.06378174, y: 0.532959}
-      - {x: -0.28930664, y: 0.36871338}
-      - {x: -0.41662598, y: 0.07318115}
-      - {x: -0.41119385, y: -0.33874512}
-      - {x: -0.22857666, y: -0.5}
-      - {x: 0.12158203, y: -0.5}
-      - {x: 0.4078369, y: -0.3552246}
-      - {x: 0.4144287, y: 0.073913574}
-      - {x: 0.21362305, y: 0.53619385}
+    - - {x: -0.004455572, y: 0.22558594}
+      - {x: -0.17077638, y: 0.17108156}
+      - {x: -0.3705241, y: 0.044657387}
+      - {x: -0.36509195, y: -0.29699707}
+      - {x: -0.18682863, y: -0.4538981}
+      - {x: 0.12817383, y: -0.43851724}
+      - {x: 0.34855145, y: -0.3244629}
+      - {x: 0.3463542, y: 0.05194092}
+      - {x: 0.18505861, y: 0.16953532}
   m_UseDelaunayMesh: 0
+--- !u!114 &7785923596756389309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6779465890414966303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 256797bac4e9b3f44a356a652a68cc07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
