@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class fieldPlayer : MonoBehaviour
+public class FieldPlayer : MonoBehaviour
 {
     Animator playerAnimator;
     private float moveSpeed = 2f;
