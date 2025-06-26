@@ -6,9 +6,12 @@ using UnityEngine.Tilemaps;
 public class FieldGenerator : MonoBehaviour
 {
     public Tilemap tilemap;
+    public Tilemap objectTilemap;
     public TileBase groundTile;
     public TileBase gateTile;
+    public TileBase objectTile1;
     [SerializeField] FieldData fieldData;
+    public int objectCount = 5;
 
     public string seed = "banana123"; // ここ変えたら別マップ
     private int[,] mapBase;
@@ -23,8 +26,8 @@ public class FieldGenerator : MonoBehaviour
         width = fieldData.FieldWidth;
         height = fieldData.FieldHeight;
         fillPercent = fieldData.FillPercent;
-        groundTile = fieldData.GroundTile;
-        gateTile = fieldData.GateTile;
+        groundTile = fieldData.FieldTileSet.GroundTile;
+        objectTile1 = fieldData.FieldTileSet.ObjectTile;
         GenerateField();
     }
 
@@ -43,6 +46,7 @@ public class FieldGenerator : MonoBehaviour
         }
         RenderingField();
         CreateAllGate();
+        CreateObjects();
     }
 
     void GenerateGroundMap()
@@ -192,6 +196,30 @@ public class FieldGenerator : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void CreateObjects()
+    {
+    int placed = 0;
+    System.Random rand = new System.Random(seed.GetHashCode());
+
+    while (placed < objectCount)
+    {
+        int x = rand.Next(0, width);
+        int y = rand.Next(0, height);
+
+        Vector2Int pos = new Vector2Int(x, y);
+        if (!IsInMap(pos) || mapBase[x, y] != 1)
+            continue;
+
+        Vector3Int tilePos = new Vector3Int(x - width / 2, y - height / 2, 0);
+
+        if (objectTilemap.GetTile(tilePos) == null)
+        {
+            objectTilemap.SetTile(tilePos, objectTile1);
+            placed++;
+        }
+    }
     }
 
     private bool IsInMap(Vector2Int pos)
