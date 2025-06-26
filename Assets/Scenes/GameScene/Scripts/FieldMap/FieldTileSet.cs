@@ -11,6 +11,7 @@ public class FieldTileSet : ScriptableObject
     [SerializeField] TileBase grassTile;
     [SerializeField] GameObject[] objectPrefabs;
 
+    public FieldType FieldType { get => fieldType; }
     public TileBase GroundTile { get => groundTile; }
     public TileBase GrassTile { get => grassTile; }
     public GameObject[] ObjectPrefabs { get => objectPrefabs; }
