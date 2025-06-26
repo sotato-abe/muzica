@@ -23,7 +23,7 @@ public class FieldGenerator : MonoBehaviour
     private HashSet<Vector2Int> placedGates = new HashSet<Vector2Int>();
     public GameObject[] objectPrefabs;
 
-    void Start()
+    public void SetField()
     {
         width = fieldData.FieldWidth;
         height = fieldData.FieldHeight;
