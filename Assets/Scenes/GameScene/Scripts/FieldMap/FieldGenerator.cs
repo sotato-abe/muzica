@@ -19,27 +19,32 @@ public class FieldGenerator : MonoBehaviour
     public TileBase grassTile;
     public TileBase gateTile;
     public int objectCount = 5;
-    public int test = 0;
     private HashSet<Vector2Int> placedGates = new HashSet<Vector2Int>();
     public GameObject[] objectPrefabs;
 
-    public void SetField()
+    public void SetField(FieldData fieldData, FieldTileSet fieldTileSet, string seed = "banana123")
     {
+        this.fieldData = fieldData;
+        this.groundTile = fieldTileSet.GroundTile;
+        this.grassTile = fieldTileSet.GrassTile;
+        // this.objectPrefabs = fieldData.ObjectPrefabs;
+
+        // フィールドのパラメータを設定
         width = fieldData.FieldWidth;
         height = fieldData.FieldHeight;
         groundFillPercent = fieldData.GroundFillPercent;
         areaFillPercent = fieldData.AreaFillPercent;
-        groundTile = fieldData.FieldTileSet.GroundTile;
-        grassTile = fieldData.FieldTileSet.GrassTile;
         objectCount = fieldData.ObjectCount;
+
+        this.seed = seed;
         GenerateField();
     }
 
     public void GenerateField()
     {
+        ClearField();
         // タイルマップをクリア
-        tilemap.ClearAllTiles();
-        Random.InitState((seed + test).GetHashCode());
+        Random.InitState(seed.GetHashCode());
 
         // グラウンドを生成
         mapBase = GenerateGroundMap(new int[width, height], groundFillPercent);
@@ -63,7 +68,6 @@ public class FieldGenerator : MonoBehaviour
         CreateAllGate();
         RenderingField();
         CreateObjects();
-        test++;
     }
 
     private int[,] GenerateGroundMap(int[,] draftMap, float fillPercent)
@@ -150,24 +154,24 @@ public class FieldGenerator : MonoBehaviour
         // 上端と下端にゲートを作成
         if (fieldData.IsTopOpen)
         {
-            CreateGate(new Vector2Int(Random.Range(0, width), height - 1));
+            CreateGate(new Vector2Int(Random.Range(0, width), height - 1), Vector2Int.up);
         }
         if (fieldData.IsBottomOpen)
         {
-            CreateGate(new Vector2Int(Random.Range(0, width), 0));
+            CreateGate(new Vector2Int(Random.Range(0, width), 0), Vector2Int.down);
         }
         if (fieldData.IsRightOpen)
         {
-            CreateGate(new Vector2Int(width - 1, Random.Range(0, height)));
+            CreateGate(new Vector2Int(width - 1, Random.Range(0, height)), Vector2Int.right);
         }
         if (fieldData.IsLeftOpen)
         {
-            CreateGate(new Vector2Int(0, Random.Range(0, height)));
+            CreateGate(new Vector2Int(0, Random.Range(0, height)), Vector2Int.left);
         }
     }
 
 
-    private void CreateGate(Vector2Int entry)
+    private void CreateGate(Vector2Int entry, Vector2Int direction)
     {
         Queue<Vector2Int> queue = new Queue<Vector2Int>();
         HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
@@ -187,7 +191,6 @@ public class FieldGenerator : MonoBehaviour
             // Groundを見つけたら終わり
             if (mapBase[current.x, current.y] == (int)TileType.Ground && !placedGates.Contains(current))
             {
-                // インデックス → Tilemap座標系に変換
                 int tileX = current.x - width / 2;
                 int tileY = current.y - height / 2;
                 Vector2Int tilePos = new Vector2Int(tileX, tileY);
@@ -195,9 +198,23 @@ public class FieldGenerator : MonoBehaviour
                 placedGates.Add(tilePos);
                 found = true;
 
-                mapBase[current.x, current.y] = (int)TileType.Gate; // ゲートに変換
+                // mapBase[current.x, current.y] = (int)TileType.Gate;
+
+                // プレハブ生成位置（タイル中央＋Y補正）
+                Vector3Int tilePosition = new Vector3Int(tileX, tileY, 0);
+                Vector3 worldPos = tilemap.GetCellCenterWorld(tilePosition) + new Vector3(0f, 0.25f, 0f);
+
+                GameObject gateObj = Instantiate(GateObject, worldPos, Quaternion.identity);
+
+                GateTrigger gateTrigger = gateObj.GetComponent<GateTrigger>();
+                if (gateTrigger != null)
+                {
+                    gateTrigger.direction = direction;
+                }
+
                 break;
             }
+
 
             Vector2Int[] directions = new Vector2Int[]
             {
@@ -270,8 +287,8 @@ public class FieldGenerator : MonoBehaviour
                 {
                     Vector3Int tilePosition = new Vector3Int(x, y, 0);
                     tilemap.SetTile(tilePosition, gateTile);
-                    Vector3 worldPos = tilemap.CellToWorld(new Vector3Int(gridX - width / 2, gridY - height / 2, 0)) + new Vector3(0f, 0.5f, 0f);
-                    Instantiate(GateObject, worldPos, Quaternion.identity);
+                    // Vector3 worldPos = tilemap.CellToWorld(new Vector3Int(gridX - width / 2, gridY - height / 2, 0)) + new Vector3(0f, 0.5f, 0f);
+                    // Instantiate(GateObject, worldPos, Quaternion.identity);
                 }
             }
         }

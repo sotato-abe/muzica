@@ -6,6 +6,7 @@ using UnityEngine.Tilemaps;
 [CreateAssetMenu(fileName = "NewFieldData", menuName = "Field/FieldData")]
 public class FieldData : ScriptableObject
 {
+    [SerializeField] Vector2Int position = new Vector2Int(0, 0); // フィールドの位置
     [SerializeField] int fieldHeight = 40;
     [SerializeField] int fieldWidth = 30;
     [SerializeField] FieldTileSet fieldTileSet;
@@ -17,6 +18,7 @@ public class FieldData : ScriptableObject
     [SerializeField] bool isRightOpen = false;
     [SerializeField] bool isLeftOpen = false;
 
+    public Vector2Int Position { get => position; }
     public int FieldHeight { get => fieldHeight; }
     public int FieldWidth { get => fieldWidth; }
     public FieldTileSet FieldTileSet { get => fieldTileSet; }

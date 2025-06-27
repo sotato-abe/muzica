@@ -2,9 +2,10 @@ using UnityEngine;
 
 public class GateTrigger : MonoBehaviour
 {
-    public FieldData nextField;
     private bool isTriggered = false;
     private float triggerTime = 0f;
+
+    public Vector2Int direction = Vector2Int.zero; // 移動方向を指定するための変数
 
     private void OnTriggerStay2D(Collider2D other)
     {
@@ -15,7 +16,7 @@ public class GateTrigger : MonoBehaviour
             if (triggerTime >= 1f)
             {
                 isTriggered = true;
-                FieldTransitionManager.Instance.LoadField();
+                WorldMapController.Instance.ChangePlayerCoordinate(direction);
             }
         }
     }

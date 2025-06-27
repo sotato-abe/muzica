@@ -9,7 +9,7 @@ public class FieldDatabase : MonoBehaviour
     public static FieldDatabase Instance { get; private set; }
 
     public List<FieldData> fieldDataList;
-    private Dictionary<FieldType, FieldData> dataDict;
+    private Dictionary<Vector2Int, FieldData> dataDict;
 
     private void Awake()
     {
@@ -25,7 +25,7 @@ public class FieldDatabase : MonoBehaviour
 
     private void Initialize()
     {
-        dataDict = new Dictionary<FieldType, FieldData>();
+        dataDict = new Dictionary<Vector2Int, FieldData>();
 
         foreach (var data in fieldDataList)
         {
@@ -35,24 +35,27 @@ public class FieldDatabase : MonoBehaviour
                 continue;
             }
 
-            if (dataDict.ContainsKey(data.FieldTileSet.FieldType))
+            if (dataDict.ContainsKey(data.Position))
             {
-                Debug.LogWarning($"fieldDatabase: Duplicate entry for {data.FieldTileSet.FieldType} found. Skipping.");
+                Debug.LogWarning($"fieldDatabase: Duplicate entry for {data.Position} found. Skipping.");
                 continue;
             }
 
-            dataDict[data.FieldTileSet.FieldType] = data;
+            dataDict[data.Position] = data;
         }
     }
 
-    // FieldTypeに基づいてfieldDataを返す
-    public FieldData GetData(FieldType type)
+    // targetPositionに基づいてpositionが一致するfieldDataを返す
+    public FieldData GetFieldDataByCoordinate(Vector2Int targetPosition)
     {
-        if (dataDict != null && dataDict.TryGetValue(type, out var data))
+        foreach (var data in fieldDataList)
         {
-            return data;
+            if (data.Position == targetPosition)
+            {
+                return data;
+            }
         }
 
-        return null;
+        return fieldDataList.FirstOrDefault(); // 最初のデータを返すか、nullを返す
     }
 }
