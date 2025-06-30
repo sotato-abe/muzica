@@ -17,7 +17,7 @@ public class FieldGenerator : MonoBehaviour
     private const int DEFAULT_OBJECT_COUNT = 5; // オブジェクトの配置数
     private const int SMOOTHING_ITERATIONS = 3; // スムージングの反復回数
     private const int SURROUNDING_GROUND_THRESHOLD = 4; // 周囲の地面タイル数の閾値
-    private const float GATE_OBJECT_Y_OFFSET = 0.25f;
+    private const float GATE_OBJECT_Y_OFFSET = 0.1f;
     private const float OBJECT_POSITION_OFFSET = 0.5f;
 
     // 方向定数
@@ -118,6 +118,8 @@ public class FieldGenerator : MonoBehaviour
     public Vector3Int GetEntrancePosition(Vector2Int direction)
     {
         Vector2Int targetPos = GetGatePosition(direction);
+        // targetPosに進行方向の反対方向を加える
+        targetPos -= GetOppositeDirection(direction);
         return ConvertToTilePosition(targetPos);
     }
 
@@ -154,6 +156,8 @@ public class FieldGenerator : MonoBehaviour
         groundFillPercent = fieldData.GroundFillPercent;
         areaFillPercent = fieldData.AreaFillPercent;
         objectCount = fieldData.ObjectCount;
+        this.objectPrefabs = new GameObject[0];
+        objectPrefabs = fieldTileSet.ObjectPrefabs;
 
         this.seed = seed;
     }
@@ -187,6 +191,9 @@ public class FieldGenerator : MonoBehaviour
                 if (Random.value < fillPercent)
                 {
                     draftMap[x, y] = (int)TileType.Ground;
+                }else
+                {
+                    draftMap[x, y] = (int)TileType.None; // 空タイルを設定
                 }
             }
         }
@@ -219,6 +226,10 @@ public class FieldGenerator : MonoBehaviour
                     if (surroundingGroundCount >= SURROUNDING_GROUND_THRESHOLD)
                     {
                         draftMap[x, y] = (int)TileType.Ground;
+                    }
+                    else
+                    {
+                        draftMap[x, y] = (int)TileType.None; // 空タイルを設定
                     }
                 }
             }
