@@ -11,6 +11,14 @@ public class WorldMapController : MonoBehaviour
     // FieldTransitionManagerの管理
 
     public static WorldMapController Instance { get; private set; }
+    public TileBase playerIcon;
+    public Vector2Int playerPosition;
+    public Tilemap groundMap;
+    public Tilemap fieldMap;
+    public Tilemap pinMap;
+    public FieldGenerator fieldGenerator; // 今あるフィールド生成スクリプト
+    public Transform player;              // プレイヤー
+    [SerializeField] private WorldMapCamera worldMapCamera;
 
     private void Awake()
     {
@@ -24,27 +32,19 @@ public class WorldMapController : MonoBehaviour
         }
     }
 
-    public TileBase playerIcon;
-    public Vector2Int playerPosition;
-    public Tilemap groundMap;
-    public Tilemap fieldMap;
-    public Tilemap pinMap;
-    public FieldGenerator fieldGenerator; // 今あるフィールド生成スクリプト
-    public Transform player;              // プレイヤー
-
     private void Start()
     {
-        ChangePlayerCoordinate(playerPosition);
+        ChangePlayerCoordinate(new Vector2Int(0, 0));
         Vector2Int startPos = Vector2Int.up;
     }
 
     public void ChangePlayerCoordinate(Vector2Int direction)
     {
         playerPosition = playerPosition + direction;
-        FieldTileSet tileSet = GetTileSet(playerPosition);
+        FieldTileSet fieldTileSet = GetTileSet(playerPosition);
         FieldData fieldData = GetFieldData(playerPosition);
 
-        fieldGenerator.SetField(fieldData, tileSet, playerPosition.x + "," + playerPosition.y);
+        fieldGenerator.SetField(fieldData, fieldTileSet, playerPosition.x + "," + playerPosition.y);
         SetFieldPlayerPosition(direction);
         SetWorldMapPlayerPosition();
         Debug.Log($"Player position changed to {playerPosition}");
@@ -95,6 +95,7 @@ public class WorldMapController : MonoBehaviour
             if (pinMap != null)
             {
                 pinMap.SetTile(cell, playerIcon);
+                SetWorldCameraPosition();
                 Debug.Log($"Player icon set at position {playerPosition.x}/{playerPosition.y} in pinMap.");
             }
             else
@@ -102,5 +103,28 @@ public class WorldMapController : MonoBehaviour
                 Debug.LogWarning("pinMap is not assigned in WorldMapController.");
             }
         }
+    }
+
+    // playerIconを中心視するようにworldMapCameraを移動
+    private void SetWorldCameraPosition()
+    {
+        if (worldMapCamera == null)
+        {
+            worldMapCamera = Camera.main.GetComponent<WorldMapCamera>(); // 必要なら自動取得
+            if (worldMapCamera == null)
+            {
+                Debug.LogWarning("WorldMapCamera is not assigned or not found on main camera.");
+                return;
+            }
+        }
+
+        Vector3Int tilePos = new Vector3Int(playerPosition.x, playerPosition.y, 0);
+        Vector3 worldPos = pinMap.GetCellCenterWorld(tilePos);
+
+        // カメラの位置をプレイヤーのアイコンに移動（Zは固定）
+        Vector3 camPos = new Vector3(worldPos.x, worldPos.y, worldMapCamera.transform.position.z);
+        worldMapCamera.transform.position = camPos;
+
+        Debug.Log($"Camera moved to follow player at world pos {camPos}");
     }
 }

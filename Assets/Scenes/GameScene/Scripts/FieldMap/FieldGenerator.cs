@@ -11,7 +11,7 @@ public class FieldGenerator : MonoBehaviour
     #region Constants
     private const int SMOOTHING_ITERATIONS = 3; // スムージングの反復回数
     private const int SURROUNDING_GROUND_THRESHOLD = 4; // 周囲の地面タイル数の閾値
-    private const float GATE_OBJECT_Y_OFFSET = 0.1f;
+    private const float GATE_OBJECT_Y_OFFSET = 0.25f;
     private const float OBJECT_POSITION_OFFSET = 0.5f;
 
     // 方向定数

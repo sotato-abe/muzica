@@ -13,8 +13,68 @@ public class WorldMapRender : MonoBehaviour
 
     private void Start()
     {
-        // OutputTileMapData();
+        // OutputTileMapData(); // JSONファイルを出力する場合はコメントアウトを外す
         RenderGroundMap();
+        RenderFieldMap();
+    }
+
+    private void RenderGroundMap()
+    {
+        TileMapData mapData = LoadJsonMapData("GroundMapData");
+
+        groundMap.ClearAllTiles(); // 既存のタイルをクリア
+        for (int y = 0; y < mapData.rows; y++)
+        {
+            for (int x = 0; x < mapData.cols; x++)
+            {
+                int fieldTypeID = mapData.data[y][x];
+                TileBase tile = FieldTileSetDatabase.Instance.GetGroundTileByType((FieldType)fieldTypeID);
+                if (tile != null)
+                {
+                    Vector3Int position = new Vector3Int(x, y, 0);
+                    groundMap.SetTile(position, tile);
+                }
+            }
+        }
+    }
+
+    private TileMapData LoadJsonMapData(string fileName)
+    {
+        string filePath = Path.Combine(Application.persistentDataPath, fileName + ".json");
+
+        if (!File.Exists(filePath))
+        {
+            Debug.LogError($"JSONファイルが見つかりません: {filePath}");
+            return null;
+        }
+
+        try
+        {
+            string jsonData = File.ReadAllText(filePath);
+            TileMapData mapData = JsonConvert.DeserializeObject<TileMapData>(jsonData);
+            return mapData;
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"マップデータ読込エラー: {e.Message}");
+            return null;
+        }
+    }
+
+    private void RenderFieldMap()
+    {
+        // FieldDatabaseに登録されているFieldDataを取得
+        // 各FieldDataのPositionにをfieldMapにIconをタイルにして配置
+        foreach (var fieldData in FieldDatabase.Instance.fieldDataList)
+        {
+            if (fieldMap != null && fieldData.Icon != null)
+            {
+                Vector3Int cell = new Vector3Int(fieldData.Position.x, fieldData.Position.y, 0);
+                Tile tile = ScriptableObject.CreateInstance<Tile>();
+                tile.sprite = fieldData.Icon;
+                fieldMap.SetTile(cell, tile);
+            }
+        }
     }
 
     public void OutputTileMapData()
@@ -89,78 +149,5 @@ public class WorldMapRender : MonoBehaviour
         }
 
         Debug.Log($"タイルマップデータをJSONとして出力しました: {filePath}");
-    }
-
-    private void RenderGroundMap()
-    {
-        TileMapData mapData = LoadJsonMapData("GroundMapData");
-
-        groundMap.ClearAllTiles(); // 既存のタイルをクリア
-        for (int y = 0; y < mapData.rows; y++)
-        {
-            for (int x = 0; x < mapData.cols; x++)
-            {
-                int fieldTypeID = mapData.data[y][x];
-                TileBase tile = FieldTileSetDatabase.Instance.GetGroundTileByType((FieldType)fieldTypeID);
-                if (tile != null)
-                {
-                    Vector3Int position = new Vector3Int(x, y, 0);
-                    groundMap.SetTile(position, tile);
-                }
-                else
-                {
-                    Debug.LogWarning($"Tile not found for FieldType ID: {fieldTypeID} at position ({x}, {y})");
-                }
-            }
-        }
-    }
-
-    private TileMapData LoadJsonMapData(string fileName)
-    {
-        string filePath = Path.Combine(Application.persistentDataPath, fileName + ".json");
-
-        if (!File.Exists(filePath))
-        {
-            Debug.LogError($"JSONファイルが見つかりません: {filePath}");
-            return null;
-        }
-
-        try
-        {
-            string jsonData = File.ReadAllText(filePath);
-            TileMapData mapData = JsonConvert.DeserializeObject<TileMapData>(jsonData);
-            return mapData;
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError($"マップデータ読込エラー: {e.Message}");
-            return null;
-        }
-    }
-
-    private void RenderFieldMap()
-    {
-        //FieldDatabaseに登録されているFieldDataを取得
-        // 各FieldDataのPositionにをfieldMapにIconをタイルにして配置
-        foreach (var fieldData in FieldDatabase.Instance.fieldDataList)
-        {
-            if (fieldData == null)
-            {
-                Debug.LogWarning("FieldData is null, skipping.");
-                continue;
-            }
-
-            Vector3Int cell = new Vector3Int(fieldData.Position.x, fieldData.Position.y, 0);
-            if (fieldMap != null && fieldData.Icon != null)
-            {
-                Tile tile = ScriptableObject.CreateInstance<Tile>();
-                tile.sprite = fieldData.Icon;
-                fieldMap.SetTile(cell, tile);
-            }
-            else
-            {
-                Debug.LogWarning($"FieldMap or Icon is not assigned for position {fieldData.Position}");
-            }
-        }
     }
 }
