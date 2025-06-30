@@ -105,6 +105,11 @@ public class FieldGenerator : MonoBehaviour
     /// <returns>入場位置のタイル座標</returns>
     public Vector3Int GetEntrancePosition(Vector2Int direction)
     {
+        if (direction == Vector2Int.zero)
+        {
+            // 進行方向が指定されていない場合はマップの中心を返す
+            return new Vector3Int(width / 2, height / 2, 0);
+        }
         Vector2Int targetPos = GetGatePosition(direction);
         // targetPosに進行方向の反対方向を加える
         targetPos -= GetOppositeDirection(direction);
@@ -179,7 +184,8 @@ public class FieldGenerator : MonoBehaviour
                 if (Random.value < fillPercent)
                 {
                     draftMap[x, y] = (int)TileType.Ground;
-                }else
+                }
+                else
                 {
                     draftMap[x, y] = (int)TileType.None; // 空タイルを設定
                 }
@@ -281,28 +287,28 @@ public class FieldGenerator : MonoBehaviour
     /// </summary>
     private void CreateAllGates()
     {
-        if (fieldData.IsTopOpen)
+        if (fieldData.isTopOpen)
         {
             Vector2Int topGate = new Vector2Int(Random.Range(width / 4, width * 3 / 4), height - 1);
             CreateGate(topGate, Vector2Int.up);
             gatePositions[Vector2Int.up] = topGate;
         }
 
-        if (fieldData.IsBottomOpen)
+        if (fieldData.isBottomOpen)
         {
             Vector2Int bottomGate = new Vector2Int(Random.Range(width / 4, width * 3 / 4), 0);
             CreateGate(bottomGate, Vector2Int.down);
             gatePositions[Vector2Int.down] = bottomGate;
         }
 
-        if (fieldData.IsRightOpen)
+        if (fieldData.isRightOpen)
         {
             Vector2Int rightGate = new Vector2Int(width - 1, Random.Range(height / 4, height * 3 / 4));
             CreateGate(rightGate, Vector2Int.right);
             gatePositions[Vector2Int.right] = rightGate;
         }
 
-        if (fieldData.IsLeftOpen)
+        if (fieldData.isLeftOpen)
         {
             Vector2Int leftGate = new Vector2Int(0, Random.Range(height / 4, height * 3 / 4));
             CreateGate(leftGate, Vector2Int.left);

@@ -14,10 +14,10 @@ public class FieldData : ScriptableObject
     [SerializeField] float groundFillPercent = 0.4f; // マップの建蔽率
     [SerializeField] float areaFillPercent = 0.2f; // マップの建蔽率
     [SerializeField] int objectCount = 5;
-    [SerializeField] bool isTopOpen = false;
-    [SerializeField] bool isBottomOpen = false;
-    [SerializeField] bool isRightOpen = false;
-    [SerializeField] bool isLeftOpen = false;
+    public bool isTopOpen = false;
+    public bool isBottomOpen = false;
+    public bool isRightOpen = false;
+    public bool isLeftOpen = false;
 
     public Vector2Int Position { get => position; }
     public Sprite Icon { get => icon; }
@@ -27,8 +27,4 @@ public class FieldData : ScriptableObject
     public float GroundFillPercent { get => groundFillPercent; }
     public float AreaFillPercent { get => areaFillPercent; }
     public int ObjectCount { get => objectCount; }
-    public bool IsTopOpen { get => isTopOpen; }
-    public bool IsBottomOpen { get => isBottomOpen; }
-    public bool IsRightOpen { get => isRightOpen; }
-    public bool IsLeftOpen { get => isLeftOpen; }
 }

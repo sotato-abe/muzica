@@ -18,6 +18,7 @@ public class WorldMapController : MonoBehaviour
     public FieldGenerator fieldGenerator; // 今あるフィールド生成スクリプト
     public Transform player;              // プレイヤー
     [SerializeField] private WorldMapCamera worldMapCamera;
+    [SerializeField] WorldMapRender worldMapRender;
 
     private void Awake()
     {
@@ -42,6 +43,12 @@ public class WorldMapController : MonoBehaviour
         playerPosition = playerPosition + direction;
         FieldTileSet fieldTileSet = GetTileSet(playerPosition);
         FieldData fieldData = GetFieldData(playerPosition);
+
+        // WorldMapで周りのfieldを確認して、fieldがあればfieldDataのisTopOpenとかを設定する
+        fieldData.isTopOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.up);
+        fieldData.isBottomOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.down);
+        fieldData.isRightOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.right);
+        fieldData.isLeftOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.left);
 
         fieldGenerator.SetField(fieldData, fieldTileSet, playerPosition.x + "," + playerPosition.y);
         SetFieldPlayerPosition(direction);

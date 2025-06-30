@@ -7,7 +7,7 @@ using System.Linq;
 public class FieldDatabase : MonoBehaviour
 {
     public static FieldDatabase Instance { get; private set; }
-
+    [SerializeField] public FieldData defaultFieldData;
     public List<FieldData> fieldDataList;
     private Dictionary<Vector2Int, FieldData> dataDict;
 
@@ -56,6 +56,6 @@ public class FieldDatabase : MonoBehaviour
             }
         }
 
-        return null; // nullを返す
+        return defaultFieldData;
     }
 }

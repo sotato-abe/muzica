@@ -58,6 +58,15 @@ public class WorldMapRender : MonoBehaviour
         {
             string jsonData = File.ReadAllText(filePath);
             TileMapData mapData = JsonConvert.DeserializeObject<TileMapData>(jsonData);
+            // groundMapBase にjsonDataのデータを設定
+            groundMapBase = new int[mapData.rows, mapData.cols];
+            for (int y = 0; y < mapData.rows; y++)
+            {
+                for (int x = 0; x < mapData.cols; x++)
+                {
+                    groundMapBase[y, x] = mapData.data[y][x];
+                }
+            }
             return mapData;
         }
         catch (System.Exception e)
@@ -130,6 +139,27 @@ public class WorldMapRender : MonoBehaviour
                         case string name when name.Contains("Sea"):
                             fieldType = FieldType.Sea;
                             break;
+                        case string name when name.Contains("Desert"):
+                            fieldType = FieldType.Desert;
+                            break;
+                        case string name when name.Contains("Wetlands"):
+                            fieldType = FieldType.Wetlands;
+                            break;
+                        case string name when name.Contains("Snow"):
+                            fieldType = FieldType.Snow; // 未実装  
+                            break;
+                        case string name when name.Contains("Rock"):
+                            fieldType = FieldType.Rock;
+                            break;
+                        case string name when name.Contains("Magma"):
+                            fieldType = FieldType.Magma; // 未実装
+                            break;  
+                        case string name when name.Contains("Pollution"):
+                            fieldType = FieldType.Pollution; // 未実装
+                            break;
+                        case string name when name.Contains("Ocean"):
+                            fieldType = FieldType.Ocean;
+                            break; 
                         default:
                             fieldType = FieldType.None;
                             break;
@@ -159,5 +189,25 @@ public class WorldMapRender : MonoBehaviour
         }
 
         Debug.Log($"タイルマップデータをJSONとして出力しました: {filePath}");
+    }
+
+    //groundMapBaseの位置にFieldMapがあるかどうかを確認するメソッド
+    public bool HasFieldMap(Vector2Int position)
+    {
+        if (groundMapBase == null)
+        {
+            Debug.LogError("groundMapBaseが初期化されていません。");
+            return false;
+        }
+
+        // 範囲外チェック
+        if (position.x < 0 || position.y < 0 || position.y >= groundMapBase.GetLength(0) || position.x >= groundMapBase.GetLength(1))
+        {
+            Debug.LogWarning($"座標 {position} は範囲外です。");
+            return false;
+        }
+
+        // 指定位置にFieldMapがあるかどうかを確認
+        return groundMapBase[position.y, position.x] != (int)FieldType.None;
     }
 }
