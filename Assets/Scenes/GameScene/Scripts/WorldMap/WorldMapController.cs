@@ -79,8 +79,8 @@ public class WorldMapController : MonoBehaviour
     {
         if (player != null)
         {
-            Vector3Int playerPos = fieldGenerator.GetEntorancePosition(direction);
-            player.position = fieldGenerator.tilemap.GetCellCenterWorld(playerPos);
+            Vector3Int playerPos = fieldGenerator.GetEntrancePosition(direction);
+            player.position = fieldGenerator.Tilemap.GetCellCenterWorld(playerPos);
         }
     }
 
