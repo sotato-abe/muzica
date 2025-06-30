@@ -22,6 +22,11 @@ public class FieldGenerator : MonoBehaviour
     private HashSet<Vector2Int> placedGates = new HashSet<Vector2Int>();
     public GameObject[] objectPrefabs;
 
+    private Vector2Int topGate = new Vector2Int(0, 0);
+    private Vector2Int bottomGate = new Vector2Int(0, 0);
+    private Vector2Int leftGate = new Vector2Int(0, 0);
+    private Vector2Int rightGate = new Vector2Int(0, 0);
+
     public void SetField(FieldData fieldData, FieldTileSet fieldTileSet, string seed = "banana123")
     {
         this.fieldData = fieldData;
@@ -154,80 +159,77 @@ public class FieldGenerator : MonoBehaviour
         // 上端と下端にゲートを作成
         if (fieldData.IsTopOpen)
         {
-            CreateGate(new Vector2Int(Random.Range(0, width), height - 1), Vector2Int.up);
+            topGate = new Vector2Int(Random.Range(0, width), height - 1);
+            CreateGate(topGate, Vector2Int.up);
+
         }
         if (fieldData.IsBottomOpen)
         {
-            CreateGate(new Vector2Int(Random.Range(0, width), 0), Vector2Int.down);
+            bottomGate = new Vector2Int(Random.Range(0, width), 0);
+            CreateGate(bottomGate, Vector2Int.down);
         }
         if (fieldData.IsRightOpen)
         {
-            CreateGate(new Vector2Int(width - 1, Random.Range(0, height)), Vector2Int.right);
+            rightGate = new Vector2Int(width - 1, Random.Range(0, height));
+            CreateGate(rightGate, Vector2Int.right);
         }
         if (fieldData.IsLeftOpen)
         {
-            CreateGate(new Vector2Int(0, Random.Range(0, height)), Vector2Int.left);
+            leftGate = new Vector2Int(0, Random.Range(0, height));
+            CreateGate(leftGate, Vector2Int.left);
         }
     }
 
 
     private void CreateGate(Vector2Int entry, Vector2Int direction)
     {
+        mapBase[entry.x, entry.y] = (int)TileType.Gate;
         Queue<Vector2Int> queue = new Queue<Vector2Int>();
         HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
         Dictionary<Vector2Int, Vector2Int> cameFrom = new Dictionary<Vector2Int, Vector2Int>();
 
+        int tileX = entry.x - width / 2;
+        int tileY = entry.y - height / 2;
+        Vector3Int tilePosition = new Vector3Int(tileX, tileY, 0);
+        Vector3 worldPos = tilemap.GetCellCenterWorld(tilePosition) + new Vector3(0f, 0.25f, 0f);
+
+        GameObject gateObj = Instantiate(GateObject, worldPos, Quaternion.identity);
+
+        GateTrigger gateTrigger = gateObj.GetComponent<GateTrigger>();
+        if (gateTrigger != null)
+        {
+            gateTrigger.direction = direction;
+        }
+
         queue.Enqueue(entry);
         visited.Add(entry);
 
-        Vector2Int foundTarget = Vector2Int.zero;
-        bool found = false;
-
-        // 幅優先探索でGroundを探す
         while (queue.Count > 0)
         {
             Vector2Int current = queue.Dequeue();
 
-            // Groundを見つけたら終わり
-            if (mapBase[current.x, current.y] == (int)TileType.Ground && !placedGates.Contains(current))
+            if ((mapBase[current.x, current.y] == (int)TileType.Ground || mapBase[current.x, current.y] == (int)TileType.Grass) && !placedGates.Contains(current))
             {
-                int tileX = current.x - width / 2;
-                int tileY = current.y - height / 2;
-                Vector2Int tilePos = new Vector2Int(tileX, tileY);
-
-                placedGates.Add(tilePos);
-                found = true;
-
-                // mapBase[current.x, current.y] = (int)TileType.Gate;
-
-                // プレハブ生成位置（タイル中央＋Y補正）
-                Vector3Int tilePosition = new Vector3Int(tileX, tileY, 0);
-                Vector3 worldPos = tilemap.GetCellCenterWorld(tilePosition) + new Vector3(0f, 0.25f, 0f);
-
-                GameObject gateObj = Instantiate(GateObject, worldPos, Quaternion.identity);
-
-                GateTrigger gateTrigger = gateObj.GetComponent<GateTrigger>();
-                if (gateTrigger != null)
+                Vector2Int pathPos = current;
+                while (cameFrom.ContainsKey(pathPos))
                 {
-                    gateTrigger.direction = direction;
+                    mapBase[pathPos.x, pathPos.y] = (int)TileType.Ground;
+                    pathPos = cameFrom[pathPos];
                 }
-
                 break;
             }
 
-
             Vector2Int[] directions = new Vector2Int[]
             {
-                    Vector2Int.up,
-                    Vector2Int.down,
-                    Vector2Int.left,
-                    Vector2Int.right
+            Vector2Int.up,
+            Vector2Int.down,
+            Vector2Int.left,
+            Vector2Int.right
             };
 
             foreach (var dir in directions)
             {
                 Vector2Int neighbor = current + dir;
-
                 if (IsInMap(neighbor) && !visited.Contains(neighbor))
                 {
                     visited.Add(neighbor);
@@ -248,7 +250,7 @@ public class FieldGenerator : MonoBehaviour
             int x = rand.Next(0, width);
             int y = rand.Next(0, height);
 
-            if (mapBase[x, y] == (int)TileType.Ground)
+            if (mapBase[x, y] == (int)TileType.Ground || mapBase[x, y] == (int)TileType.Grass)
             {
                 Vector3 worldPos = tilemap.CellToWorld(new Vector3Int(x - width / 2, y - height / 2, 0)) + new Vector3(0.5f, 0.5f, 0f);
 
@@ -286,9 +288,7 @@ public class FieldGenerator : MonoBehaviour
                 else if (mapBase[gridX, gridY] == (int)TileType.Gate)
                 {
                     Vector3Int tilePosition = new Vector3Int(x, y, 0);
-                    tilemap.SetTile(tilePosition, gateTile);
-                    // Vector3 worldPos = tilemap.CellToWorld(new Vector3Int(gridX - width / 2, gridY - height / 2, 0)) + new Vector3(0f, 0.5f, 0f);
-                    // Instantiate(GateObject, worldPos, Quaternion.identity);
+                    tilemap.SetTile(tilePosition, groundTile);
                 }
             }
         }
@@ -311,19 +311,32 @@ public class FieldGenerator : MonoBehaviour
         }
     }
 
-    public Vector2Int GetEntorancePosition()
+    public Vector3Int GetEntorancePosition(Vector2Int direction)
     {
+        Vector2Int targetPos = Vector2Int.zero;
         // ゲートの位置を取得して返す
-        if (placedGates.Count > 0)
+        if (direction == Vector2Int.up && fieldData.IsTopOpen)
         {
-            Vector2Int gatePos = new Vector2Int(0, 0);
-            foreach (var pos in placedGates)
-            {
-                gatePos = pos;
-                break; // 最初のゲート位置を返す
-            }
-            return gatePos;
+            targetPos = bottomGate;
         }
-        return Vector2Int.zero; // ゲートがない場合はゼロベクトルを返す
+        else if (direction == Vector2Int.down && fieldData.IsBottomOpen)
+        {
+            targetPos = topGate;
+        }
+        else if (direction == Vector2Int.right && fieldData.IsRightOpen)
+        {
+            targetPos = leftGate;
+        }
+        else if (direction == Vector2Int.left && fieldData.IsLeftOpen)
+        {
+            targetPos = rightGate;
+        }
+        else
+        {
+            targetPos = bottomGate;
+        }
+
+        Vector3Int tilePosition = new Vector3Int(targetPos.x - width / 2, targetPos.y - height / 2, 0);
+        return tilePosition;
     }
 }

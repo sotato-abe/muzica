@@ -34,24 +34,19 @@ public class WorldMapController : MonoBehaviour
 
     private void Start()
     {
-        // 初期フィールドをロード
         ChangePlayerCoordinate(playerPosition);
-        SetPlayerPosition();
-        SetMapPlayerPosition();
+        Vector2Int startPos = Vector2Int.up;
     }
 
-    public void ChangePlayerCoordinate(Vector2Int newPosition)
+    public void ChangePlayerCoordinate(Vector2Int direction)
     {
-        playerPosition = playerPosition + newPosition;
+        playerPosition = playerPosition + direction;
         FieldTileSet tileSet = GetTileSet(playerPosition);
         FieldData fieldData = GetFieldData(playerPosition);
 
         fieldGenerator.SetField(fieldData, tileSet, playerPosition.x + "," + playerPosition.y);
-
-        Vector2Int spawnPos = fieldGenerator.GetEntorancePosition();
-        Vector3Int cell = new Vector3Int(spawnPos.x, spawnPos.y, 0);
-        player.position = fieldGenerator.tilemap.GetCellCenterWorld(cell);
-        SetMapPlayerPosition();
+        SetFieldPlayerPosition(direction);
+        SetWorldMapPlayerPosition();
     }
 
     private FieldTileSet GetTileSet(Vector2Int targetPosition)
@@ -62,7 +57,6 @@ public class WorldMapController : MonoBehaviour
             Debug.LogWarning($"No tile found at position {targetPosition} in groundMap!");
             return null;
         }
-        Debug.Log($"Tile {tile}");
 
         FieldTileSet fieldTileSet = FieldTileSetDatabase.Instance.GetTileSetFromByTile(tile);
 
@@ -81,7 +75,16 @@ public class WorldMapController : MonoBehaviour
         return fieldData;
     }
 
-    private void SetMapPlayerPosition()
+    private void SetFieldPlayerPosition(Vector2Int direction)
+    {
+        if (player != null)
+        {
+            Vector3Int playerPos = fieldGenerator.GetEntorancePosition(direction);
+            player.position = fieldGenerator.tilemap.GetCellCenterWorld(playerPos);
+        }
+    }
+
+    private void SetWorldMapPlayerPosition()
     {
         // pinMap上にプレイヤーの位置を表示
         if (player != null)
@@ -96,16 +99,6 @@ public class WorldMapController : MonoBehaviour
             {
                 Debug.LogWarning("pinMap is not assigned in WorldMapController.");
             }
-        }
-    }
-
-    private void SetPlayerPosition() // TODO　入口と反対側に移動するようにする
-    {
-        if (player != null)
-        {
-            Vector2Int spawnPos = fieldGenerator.GetEntorancePosition();
-            Vector3Int cell = new Vector3Int(spawnPos.x, spawnPos.y, 0);
-            player.position = fieldGenerator.tilemap.GetCellCenterWorld(cell);
         }
     }
 }

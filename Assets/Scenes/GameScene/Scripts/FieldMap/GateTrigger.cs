@@ -13,7 +13,7 @@ public class GateTrigger : MonoBehaviour
         {
             triggerTime += Time.deltaTime;
 
-            if (triggerTime >= 1f)
+            if (triggerTime >= 2f)
             {
                 isTriggered = true;
                 WorldMapController.Instance.ChangePlayerCoordinate(direction);
