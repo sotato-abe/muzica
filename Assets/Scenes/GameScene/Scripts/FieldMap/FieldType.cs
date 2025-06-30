@@ -1,14 +1,15 @@
 public enum FieldType
 {
-        Default,        // 0 デフォルト なし
-        Desert,         // 1 砂漠 447
-        Wilderness,     // 2 荒野 451
-        Grasslands,     // 3 草原 443
-        Wetlands,       // 4 湿地 441
-        Snow,           // 5 雪 631
-        Ice,            // 6 氷床 629
-        Magma,          // 7 マグマ 603
-        Pollution,      // 8 汚染 437
-        Sea,            // 9 海 622
-        Ocean,          // 10 遠洋 621
+        None,         // 0 なし
+        Default,        // 1 デフォルト なし
+        Desert,         // 2 砂漠 447
+        Wilderness,     // 3 荒野 451
+        Grasslands,     // 4 草原 443
+        Wetlands,       // 5 湿地 441
+        Snow,           // 6 雪 631
+        Ice,            // 7 氷床 629
+        Magma,          // 8 マグマ 603
+        Pollution,      // 9 汚染 437
+        Sea,            // 10 海 622
+        Ocean,          // 11 遠洋 621
 }

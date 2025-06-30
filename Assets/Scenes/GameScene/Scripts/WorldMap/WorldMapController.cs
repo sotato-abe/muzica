@@ -47,6 +47,7 @@ public class WorldMapController : MonoBehaviour
         fieldGenerator.SetField(fieldData, tileSet, playerPosition.x + "," + playerPosition.y);
         SetFieldPlayerPosition(direction);
         SetWorldMapPlayerPosition();
+        Debug.Log($"Player position changed to {playerPosition}");
     }
 
     private FieldTileSet GetTileSet(Vector2Int targetPosition)
@@ -94,6 +95,7 @@ public class WorldMapController : MonoBehaviour
             if (pinMap != null)
             {
                 pinMap.SetTile(cell, playerIcon);
+                Debug.Log($"Player icon set at position {playerPosition.x}/{playerPosition.y} in pinMap.");
             }
             else
             {

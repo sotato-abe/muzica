@@ -9,12 +9,6 @@ using UnityEngine.Tilemaps;
 public class FieldGenerator : MonoBehaviour
 {
     #region Constants
-    private const string DEFAULT_SEED = "banana123";
-    private const int DEFAULT_WIDTH = 30; // フィールドマップの幅
-    private const int DEFAULT_HEIGHT = 20; // フィールドマップの高さ
-    private const float DEFAULT_GROUND_FILL_PERCENT = 0.4f; // 地面タイルの敷設率
-    private const float DEFAULT_AREA_FILL_PERCENT = 0.2f; // エンカウントエリアの敷設率
-    private const int DEFAULT_OBJECT_COUNT = 5; // オブジェクトの配置数
     private const int SMOOTHING_ITERATIONS = 3; // スムージングの反復回数
     private const int SURROUNDING_GROUND_THRESHOLD = 4; // 周囲の地面タイル数の閾値
     private const float GATE_OBJECT_Y_OFFSET = 0.1f;
@@ -32,15 +26,15 @@ public class FieldGenerator : MonoBehaviour
 
     #region Serialized Fields
     [Header("Field Configuration")]
-    [SerializeField] private FieldData fieldData;
+    [SerializeField] private FieldData defaultFieldData;
     [SerializeField] private GameObject gateObject;
     [SerializeField] private Tilemap tilemap;
-    [SerializeField] private string seed = DEFAULT_SEED;
+    private string seed;
 
     [Header("Tiles")]
-    [SerializeField] private TileBase groundTile;
-    [SerializeField] private TileBase grassTile;
-    [SerializeField] private TileBase gateTile;
+    private TileBase groundTile;
+    private TileBase grassTile;
+    private TileBase gateTile;
 
     [Header("Objects")]
     [SerializeField] private GameObject[] objectPrefabs;
@@ -49,11 +43,11 @@ public class FieldGenerator : MonoBehaviour
     #region Private Fields
     private int[,] mapBase;
     private int[,] areaMapBase;
-    private int width = DEFAULT_WIDTH;
-    private int height = DEFAULT_HEIGHT;
-    private float groundFillPercent = DEFAULT_GROUND_FILL_PERCENT;
-    private float areaFillPercent = DEFAULT_AREA_FILL_PERCENT;
-    private int objectCount = DEFAULT_OBJECT_COUNT;
+    private int width;
+    private int height;
+    private float groundFillPercent;
+    private float areaFillPercent;
+    private int objectCount;
     private HashSet<Vector2Int> placedGates = new HashSet<Vector2Int>();
 
     // ゲート位置
@@ -62,7 +56,7 @@ public class FieldGenerator : MonoBehaviour
 
     #region Public Properties
     public Tilemap Tilemap => tilemap;
-    public FieldData CurrentFieldData => fieldData;
+    public FieldData fieldData;
     #endregion
 
     #region Public Methods
@@ -72,14 +66,8 @@ public class FieldGenerator : MonoBehaviour
     /// <param name="fieldData">フィールドデータ</param>
     /// <param name="fieldTileSet">タイルセット</param>
     /// <param name="seed">生成シード</param>
-    public void SetField(FieldData fieldData, FieldTileSet fieldTileSet, string seed = DEFAULT_SEED)
+    public void SetField(FieldData fieldData, FieldTileSet fieldTileSet, string seed)
     {
-        if (fieldData == null)
-        {
-            Debug.LogError("FieldData is null!");
-            return;
-        }
-
         if (fieldTileSet == null)
         {
             Debug.LogError("FieldTileSet is null!");
@@ -146,18 +134,18 @@ public class FieldGenerator : MonoBehaviour
     /// </summary>
     private void InitializeField(FieldData fieldData, FieldTileSet fieldTileSet, string seed)
     {
-        this.fieldData = fieldData;
-        this.groundTile = fieldTileSet.GroundTile;
-        this.grassTile = fieldTileSet.GrassTile;
+        this.fieldData = fieldData ?? defaultFieldData;
+        this.groundTile = fieldTileSet.GroundTile ?? defaultFieldData.FieldTileSet.GroundTile;
+        this.grassTile = fieldTileSet.GrassTile ?? defaultFieldData.FieldTileSet.GrassTile;
 
         // フィールドのパラメータを設定
-        width = fieldData.FieldWidth;
-        height = fieldData.FieldHeight;
-        groundFillPercent = fieldData.GroundFillPercent;
-        areaFillPercent = fieldData.AreaFillPercent;
-        objectCount = fieldData.ObjectCount;
+        width = this.fieldData.FieldWidth;
+        height = this.fieldData.FieldHeight;
+        groundFillPercent = this.fieldData.GroundFillPercent;
+        areaFillPercent = this.fieldData.AreaFillPercent;
+        objectCount = this.fieldData.ObjectCount;
         this.objectPrefabs = new GameObject[0];
-        objectPrefabs = fieldTileSet.ObjectPrefabs;
+        objectPrefabs = fieldTileSet.ObjectPrefabs ?? defaultFieldData.FieldTileSet.ObjectPrefabs;
 
         this.seed = seed;
     }
@@ -296,7 +284,6 @@ public class FieldGenerator : MonoBehaviour
         if (fieldData.IsTopOpen)
         {
             Vector2Int topGate = new Vector2Int(Random.Range(width / 4, width * 3 / 4), height - 1);
-            Debug.Log($"Top gate created at {topGate}");
             CreateGate(topGate, Vector2Int.up);
             gatePositions[Vector2Int.up] = topGate;
         }
@@ -304,7 +291,6 @@ public class FieldGenerator : MonoBehaviour
         if (fieldData.IsBottomOpen)
         {
             Vector2Int bottomGate = new Vector2Int(Random.Range(width / 4, width * 3 / 4), 0);
-            Debug.Log($"Bottom gate created at {bottomGate}");
             CreateGate(bottomGate, Vector2Int.down);
             gatePositions[Vector2Int.down] = bottomGate;
         }
@@ -312,7 +298,6 @@ public class FieldGenerator : MonoBehaviour
         if (fieldData.IsRightOpen)
         {
             Vector2Int rightGate = new Vector2Int(width - 1, Random.Range(height / 4, height * 3 / 4));
-            Debug.Log($"Right gate created at {rightGate}");
             CreateGate(rightGate, Vector2Int.right);
             gatePositions[Vector2Int.right] = rightGate;
         }
@@ -320,7 +305,6 @@ public class FieldGenerator : MonoBehaviour
         if (fieldData.IsLeftOpen)
         {
             Vector2Int leftGate = new Vector2Int(0, Random.Range(height / 4, height * 3 / 4));
-            Debug.Log($"Left gate created at {leftGate}");
             CreateGate(leftGate, Vector2Int.left);
             gatePositions[Vector2Int.left] = leftGate;
         }

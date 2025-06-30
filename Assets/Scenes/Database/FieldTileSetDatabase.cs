@@ -87,4 +87,15 @@ public class FieldTileSetDatabase : MonoBehaviour
         }
         return GetTileSetFromByType(fieldType);
     }
+
+    public TileBase GetGroundTileByType(FieldType type)
+    {
+        FieldTileSet tileSet = GetTileSetFromByType(type);
+        if (tileSet != null)
+        {
+            return tileSet.GroundTile;
+        }
+        Debug.LogWarning($"No GroundTile found for FieldType: {type}");
+        return null;
+    }
 }

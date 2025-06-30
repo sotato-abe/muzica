@@ -56,6 +56,6 @@ public class FieldDatabase : MonoBehaviour
             }
         }
 
-        return fieldDataList.FirstOrDefault(); // 最初のデータを返すか、nullを返す
+        return null; // nullを返す
     }
 }
