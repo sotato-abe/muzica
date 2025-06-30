@@ -18,6 +18,9 @@ public class WorldMapRender : MonoBehaviour
         RenderFieldMap();
     }
 
+    /// <summary>
+    /// タイルマップのデータをJSON形式で読み込み、groundMapにタイルを配置
+    /// </summary>
     private void RenderGroundMap()
     {
         TileMapData mapData = LoadJsonMapData("GroundMapData");
@@ -38,6 +41,9 @@ public class WorldMapRender : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// JSONファイルからTileMapDataを読み込む
+    /// </summary>
     private TileMapData LoadJsonMapData(string fileName)
     {
         string filePath = Path.Combine(Application.persistentDataPath, fileName + ".json");
@@ -60,11 +66,12 @@ public class WorldMapRender : MonoBehaviour
             return null;
         }
     }
-
+    /// <summary>
+    /// FieldDatabaseに登録されているFieldDataを取得
+    /// 各FieldDataのPositionにをfieldMapにIconをタイルにして配置
+    /// </summary>
     private void RenderFieldMap()
     {
-        // FieldDatabaseに登録されているFieldDataを取得
-        // 各FieldDataのPositionにをfieldMapにIconをタイルにして配置
         foreach (var fieldData in FieldDatabase.Instance.fieldDataList)
         {
             if (fieldMap != null && fieldData.Icon != null)
@@ -77,6 +84,9 @@ public class WorldMapRender : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// FieldMapのタイルマップデータをJSON形式で出力
+    /// </summary>
     public void OutputTileMapData()
     {
         if (groundMap == null)

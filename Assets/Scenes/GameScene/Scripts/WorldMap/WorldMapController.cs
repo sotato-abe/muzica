@@ -8,7 +8,6 @@ public class WorldMapController : MonoBehaviour
     // プレイヤーのポジションを管理
     // ポイントデータの取得：pointMapからプレイヤーポジションのタイルを取得し、PointDatabaseから対応するfielddDataを取得
     // フィールドデータの取得：groundMapからプレイヤーポジションのタイルを取得し、タイルのFieldTypeから対応するFieldTileSetを取得
-    // FieldTransitionManagerの管理
 
     public static WorldMapController Instance { get; private set; }
     public TileBase playerIcon;
@@ -47,7 +46,6 @@ public class WorldMapController : MonoBehaviour
         fieldGenerator.SetField(fieldData, fieldTileSet, playerPosition.x + "," + playerPosition.y);
         SetFieldPlayerPosition(direction);
         SetWorldMapPlayerPosition();
-        Debug.Log($"Player position changed to {playerPosition}");
     }
 
     private FieldTileSet GetTileSet(Vector2Int targetPosition)
@@ -124,7 +122,5 @@ public class WorldMapController : MonoBehaviour
         // カメラの位置をプレイヤーのアイコンに移動（Zは固定）
         Vector3 camPos = new Vector3(worldPos.x, worldPos.y, worldMapCamera.transform.position.z);
         worldMapCamera.transform.position = camPos;
-
-        Debug.Log($"Camera moved to follow player at world pos {camPos}");
     }
 }
