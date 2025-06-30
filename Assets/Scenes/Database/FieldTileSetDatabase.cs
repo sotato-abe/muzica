@@ -81,6 +81,27 @@ public class FieldTileSetDatabase : MonoBehaviour
             case string name when name.Contains("Sea"):
                 fieldType = FieldType.Sea;
                 break;
+            case string name when name.Contains("Desert"):
+                fieldType = FieldType.Desert;
+                break;
+            case string name when name.Contains("Wetlands"):
+                fieldType = FieldType.Wetlands;
+                break;
+            case string name when name.Contains("Snow"):
+                fieldType = FieldType.Snow; // 未実装  
+                break;
+            case string name when name.Contains("Rock"):
+                fieldType = FieldType.Rock;
+                break;
+            case string name when name.Contains("Magma"):
+                fieldType = FieldType.Magma; // 未実装
+                break;
+            case string name when name.Contains("Pollution"):
+                fieldType = FieldType.Pollution; // 未実装
+                break;
+            case string name when name.Contains("Ocean"):
+                fieldType = FieldType.Ocean;
+                break;
             default:
                 Debug.LogWarning($"Unknown tile type: {tile.name}");
                 break;
