@@ -10395,6 +10395,57 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &228660185
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 228660186}
+  - component: {fileID: 228660187}
+  m_Layer: 0
+  m_Name: FieldMap
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &228660186
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 228660185}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 746391297}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &228660187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 228660185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 945add212dafdc9409bbafd7d6bcbc2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultFieldData: {fileID: 11400000, guid: 66ff32772e0207b4e8c681fefe716b1e, type: 2}
+  gateObject: {fileID: 6779465890414966303, guid: f382b421336f2c54cb37151fd400110c, type: 3}
+  tilemap: {fileID: 2049345914}
+  objectPrefabs:
+  - {fileID: 6779465890414966303, guid: 0754e8932db7b9c4f908ae2c2c22b5aa, type: 3}
+  fieldData: {fileID: 11400000, guid: 66ff32772e0207b4e8c681fefe716b1e, type: 2}
 --- !u!1 &256028469
 GameObject:
   m_ObjectHideFlags: 0
@@ -10706,7 +10757,7 @@ MonoBehaviour:
   groundMap: {fileID: 203233055}
   fieldMap: {fileID: 668620722}
   pinMap: {fileID: 547805391}
-  fieldGenerator: {fileID: 2049345915}
+  fieldGenerator: {fileID: 228660187}
   player: {fileID: 611831672}
   worldMapCamera: {fileID: 1520619788}
   worldMapRender: {fileID: 54019933}
@@ -11365,9 +11416,8 @@ GameObject:
   m_Component:
   - component: {fileID: 746391297}
   - component: {fileID: 746391296}
-  - component: {fileID: 746391298}
   m_Layer: 0
-  m_Name: FieldMap
+  m_Name: FieldTileGrid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11393,26 +11443,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 746391295}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2049345912}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 228660186}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &746391298
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 746391295}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2ccf9901489a4f49964edf3d7400163, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &854224267
 GameObject:
   m_ObjectHideFlags: 0
@@ -11912,7 +11950,6 @@ GameObject:
   - component: {fileID: 2049345918}
   - component: {fileID: 2049345917}
   - component: {fileID: 2049345916}
-  - component: {fileID: 2049345915}
   m_Layer: 0
   m_Name: FieldTilemap
   m_TagString: Untagged
@@ -12084,24 +12121,6 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!114 &2049345915
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2049345911}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 945add212dafdc9409bbafd7d6bcbc2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  defaultFieldData: {fileID: 11400000, guid: 66ff32772e0207b4e8c681fefe716b1e, type: 2}
-  gateObject: {fileID: 6779465890414966303, guid: f382b421336f2c54cb37151fd400110c, type: 3}
-  tilemap: {fileID: 2049345914}
-  objectPrefabs:
-  - {fileID: 6779465890414966303, guid: 0754e8932db7b9c4f908ae2c2c22b5aa, type: 3}
-  fieldData: {fileID: 11400000, guid: dbc1b5bf9366e9844afc1b1f76443859, type: 2}
 --- !u!66 &2049345916
 CompositeCollider2D:
   m_ObjectHideFlags: 0
@@ -12219,5 +12238,5 @@ SceneRoots:
   - {fileID: 256028470}
   - {fileID: 965851651}
   - {fileID: 854224271}
-  - {fileID: 746391297}
+  - {fileID: 228660186}
   - {fileID: 537608454}

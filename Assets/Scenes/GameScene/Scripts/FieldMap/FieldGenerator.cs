@@ -408,7 +408,7 @@ public class FieldGenerator : MonoBehaviour
 
         Vector3Int tilePosition = ConvertToTilePosition(entry);
         Vector3 worldPos = tilemap.GetCellCenterWorld(tilePosition) + new Vector3(0f, GATE_OBJECT_Y_OFFSET, 0f);
-        GameObject gateObj = Instantiate(gateObject, worldPos, Quaternion.identity);
+        GameObject gateObj = Instantiate(gateObject, worldPos, Quaternion.identity, this.transform);
 
         GateTrigger gateTrigger = gateObj.GetComponent<GateTrigger>();
         if (gateTrigger != null)
@@ -483,7 +483,7 @@ public class FieldGenerator : MonoBehaviour
         GameObject prefab = objectPrefabs[rand.Next(objectPrefabs.Length)];
         if (prefab != null)
         {
-            Instantiate(prefab, position, Quaternion.identity);
+            Instantiate(prefab, position, Quaternion.identity, this.transform);
         }
     }
 
