@@ -116,7 +116,10 @@ public class FieldTileSetDatabase : MonoBehaviour
         {
             return tileSet.GroundTile;
         }
-        Debug.LogWarning($"No GroundTile found for FieldType: {type}");
+        if (type != FieldType.None)
+        {
+            Debug.LogWarning($"No GroundTile found for FieldType: {type}");
+        }
         return null;
     }
 }

@@ -103,7 +103,7 @@ public class WorldMapController : MonoBehaviour
             {
                 pinMap.SetTile(cell, playerIcon);
                 SetWorldCameraPosition();
-                Debug.Log($"Player icon set at position {playerPosition.x}/{playerPosition.y} in pinMap.");
+                // Debug.Log($"Player icon set at position {playerPosition.x}/{playerPosition.y} in pinMap.");
             }
             else
             {
