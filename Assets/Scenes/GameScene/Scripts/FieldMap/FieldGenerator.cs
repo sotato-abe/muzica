@@ -111,8 +111,23 @@ public class FieldGenerator : MonoBehaviour
             return new Vector3Int(width / 2, height / 2, 0);
         }
         Vector2Int targetPos = GetGatePosition(direction);
-        // targetPosに進行方向の反対方向を加える
-        targetPos -= GetOppositeDirection(direction);
+        // targetPosの周囲から地面がある場所を返す
+        for (int x = -2; x <= 2; x++)
+        {
+            for (int y = -2; y <= 2; y++)
+            {
+                if ((-1 <= x && x <= 1) || (-1 <= y && y <= 1)) continue; // 自分自身は除外
+
+                Vector2Int checkPos = targetPos + new Vector2Int(x, y);
+                if (IsValidMapPosition(checkPos.x, checkPos.y) && IsGroundOrGrass(checkPos))
+                {
+                    targetPos = checkPos;
+                    targetPos += new Vector2Int(0, 1);
+                    break;
+                }
+            }
+        }
+
         return ConvertToTilePosition(targetPos);
     }
 
@@ -421,6 +436,7 @@ public class FieldGenerator : MonoBehaviour
             {
                 Vector3 worldPos = GetObjectWorldPosition(x, y);
                 InstantiateRandomObject(worldPos, rand);
+                Debug.Log($"Placed object at ({x}, {y})");
                 placed++;
             }
         }
@@ -431,6 +447,21 @@ public class FieldGenerator : MonoBehaviour
     /// </summary>
     private bool CanPlaceObject(int x, int y)
     {
+        // 周囲が地面または草であることを確認
+        for (int dx = -1; dx <= 1; dx++)
+        {
+            for (int dy = -1; dy <= 1; dy++)
+            {
+                if (dx == 0 && dy == 0) continue; // 自分自身は除外
+                int checkX = x + dx;
+                int checkY = y + dy;
+
+                if (!IsValidMapPosition(checkX, checkY) || !IsGroundOrGrass(new Vector2Int(checkX, checkY)))
+                {
+                    return false; // 周囲に地面または草がない場合は配置不可
+                }
+            }
+        }
         return mapBase[x, y] == (int)TileType.Ground || mapBase[x, y] == (int)TileType.Grass;
     }
 
