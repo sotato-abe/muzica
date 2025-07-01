@@ -436,7 +436,6 @@ public class FieldGenerator : MonoBehaviour
             {
                 Vector3 worldPos = GetObjectWorldPosition(x, y);
                 InstantiateRandomObject(worldPos, rand);
-                Debug.Log($"Placed object at ({x}, {y})");
                 placed++;
             }
         }
