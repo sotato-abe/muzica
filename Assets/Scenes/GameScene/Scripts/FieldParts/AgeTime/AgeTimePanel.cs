@@ -15,7 +15,6 @@ public class AgeTimePanel : MonoBehaviour
 
     private void Start()
     {
-        SetTimeSpeed(TimeState.Fast);  // 初期状態をFastに設定
         Init();
     }
 

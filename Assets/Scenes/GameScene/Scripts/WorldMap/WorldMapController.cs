@@ -19,6 +19,7 @@ public class WorldMapController : MonoBehaviour
     public Transform player;              // プレイヤー
     [SerializeField] private WorldMapCamera worldMapCamera;
     [SerializeField] WorldMapRender worldMapRender;
+    [SerializeField] WorldMapPanel worldMapPanel;
 
     private void Awake()
     {
@@ -50,6 +51,7 @@ public class WorldMapController : MonoBehaviour
         fieldData.isRightOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.right);
         fieldData.isLeftOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.left);
 
+        worldMapPanel.SetFieldName(fieldData.FieldName);
         fieldGenerator.SetField(fieldData, fieldTileSet, playerPosition.x + "," + playerPosition.y);
         SetFieldPlayerPosition(direction);
         SetWorldMapPlayerPosition();

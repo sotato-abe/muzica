@@ -8,6 +8,7 @@ public class FieldData : ScriptableObject
 {
     [SerializeField] Vector2Int position = new Vector2Int(0, 0); // フィールドの位置
     [SerializeField] Sprite icon; // ワールドマップで表示されるアイコン
+    [SerializeField] string fieldName = "";
     [SerializeField] int fieldHeight = 40;
     [SerializeField] int fieldWidth = 30;
     [SerializeField] FieldTileSet fieldTileSet;
@@ -21,6 +22,7 @@ public class FieldData : ScriptableObject
 
     public Vector2Int Position { get => position; }
     public Sprite Icon { get => icon; }
+    public string FieldName { get => fieldName; }
     public int FieldHeight { get => fieldHeight; }
     public int FieldWidth { get => fieldWidth; }
     public FieldTileSet FieldTileSet { get => fieldTileSet; }

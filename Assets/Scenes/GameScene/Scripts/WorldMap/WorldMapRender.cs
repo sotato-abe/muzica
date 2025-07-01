@@ -208,6 +208,7 @@ public class WorldMapRender : MonoBehaviour
         }
 
         // 指定位置にFieldMapがあるかどうかを確認
-        return groundMapBase[position.y, position.x] != (int)FieldType.None;
+        return groundMapBase[position.y, position.x] != (int)FieldType.None 
+            && groundMapBase[position.y, position.x] != (int)FieldType.Ocean;
     }
 }
