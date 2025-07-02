@@ -452,7 +452,9 @@ public class FieldGenerator : MonoBehaviour
         int placed = 0;
         System.Random trueRandom = new System.Random();
 
-        while (placed < TREASURE_BOX_COUNT)
+        int treasureCount = trueRandom.Next(0, TREASURE_BOX_COUNT);
+
+        while (placed < treasureCount)
         {
             int x = trueRandom.Next(0, width);
             int y = trueRandom.Next(0, height);
