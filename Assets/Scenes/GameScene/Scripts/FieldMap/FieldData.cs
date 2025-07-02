@@ -15,6 +15,7 @@ public class FieldData : ScriptableObject
     [SerializeField] float groundFillPercent = 0.4f; // マップの建蔽率
     [SerializeField] float areaFillPercent = 0.2f; // マップの建蔽率
     [SerializeField] int objectCount = 5;
+    [SerializeField] List<ItemBase> treasureBoxItems = new List<ItemBase>();
     public bool isTopOpen = false;
     public bool isBottomOpen = false;
     public bool isRightOpen = false;
@@ -29,4 +30,5 @@ public class FieldData : ScriptableObject
     public float GroundFillPercent { get => groundFillPercent; }
     public float AreaFillPercent { get => areaFillPercent; }
     public int ObjectCount { get => objectCount; }
+    public List<ItemBase> TreasureBoxItems { get => treasureBoxItems;}
 }

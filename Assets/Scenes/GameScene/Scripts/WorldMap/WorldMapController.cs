@@ -52,6 +52,7 @@ public class WorldMapController : MonoBehaviour
         fieldData.isLeftOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.left);
 
         worldMapPanel.SetFieldName(fieldData.FieldName);
+        FieldController.Instance.SetField(fieldData);
         fieldGenerator.SetField(fieldData, fieldTileSet, playerPosition.x + "," + playerPosition.y);
         SetFieldPlayerPosition(direction);
         SetWorldMapPlayerPosition();

@@ -13,6 +13,7 @@ public class FieldGenerator : MonoBehaviour
     private const int SURROUNDING_GROUND_THRESHOLD = 4; // 周囲の地面タイル数の閾値
     private const float GATE_OBJECT_Y_OFFSET = 0.25f;
     private const float OBJECT_POSITION_OFFSET = 0.5f;
+    private const int TREASURE_BOX_COUNT = 3;
 
     // 方向定数
     private static readonly Vector2Int[] DIRECTIONS =
@@ -28,6 +29,7 @@ public class FieldGenerator : MonoBehaviour
     [Header("Field Configuration")]
     [SerializeField] private FieldData defaultFieldData;
     [SerializeField] private GameObject gateObject;
+    [SerializeField] private GameObject treasureBoxObject;
     [SerializeField] private Tilemap tilemap;
     private string seed;
 
@@ -49,6 +51,7 @@ public class FieldGenerator : MonoBehaviour
     private float areaFillPercent;
     private int objectCount;
     private HashSet<Vector2Int> placedGates = new HashSet<Vector2Int>();
+    private HashSet<Vector2Int> placedObjects = new HashSet<Vector2Int>();
 
     // ゲート位置
     private readonly Dictionary<Vector2Int, Vector2Int> gatePositions = new Dictionary<Vector2Int, Vector2Int>();
@@ -96,6 +99,7 @@ public class FieldGenerator : MonoBehaviour
         CreateAllGates();
         RenderField();
         CreateFieldObjects();
+        CreateTreasureBoxObjects();
     }
 
     /// <summary>
@@ -441,10 +445,38 @@ public class FieldGenerator : MonoBehaviour
     }
 
     /// <summary>
+    /// 宝箱オブジェクトを作成
+    /// </summary>
+    private void CreateTreasureBoxObjects()
+    {
+        int placed = 0;
+        System.Random trueRandom = new System.Random();
+
+        while (placed < TREASURE_BOX_COUNT)
+        {
+            int x = trueRandom.Next(0, width);
+            int y = trueRandom.Next(0, height);
+
+            if (CanPlaceObject(x, y))
+            {
+                Vector3 fieldPos = GetObjectWorldPosition(x, y);
+                Instantiate(treasureBoxObject, fieldPos, Quaternion.identity, this.transform);
+                placedGates.Add(new Vector2Int(x, y));
+                placed++;
+            }
+        }
+    }
+
+    /// <summary>
     /// オブジェクトを配置可能かチェック
     /// </summary>
     private bool CanPlaceObject(int x, int y)
     {
+        //placedGates.Contains(new Vector2Int(x, y))は、すでにゲートが配置されている場所を除外
+        if (placedGates.Contains(new Vector2Int(x, y)) || placedObjects.Contains(new Vector2Int(x, y)))
+        {
+            return false; // すでにオブジェクトが配置されている場所は除外
+        }
         // 周囲が地面または草であることを確認
         for (int dx = -1; dx <= 1; dx++)
         {
