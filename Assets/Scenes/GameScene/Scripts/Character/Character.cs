@@ -7,20 +7,19 @@ using UnityEngine;
 public class Character
 {
     [SerializeField] CharacterBase _base;
-    int level = 1;
-    int soul = 0;
-    public int Exp = 0;
-
     public CharacterBase Base { get => _base; }
 
-    // CharacterStatus
+    // CharacterEnegy
     public int MaxLife { get; set; }
     public int ColLife { get; set; }
     public int Life { get; set; }
     public int MaxBattery { get; set; }
     public int ColBattery { get; set; }
     public int Battery { get; set; }
+    public int Soul { get; set; }
 
+    // CharacterStatus
+    public int Level { get; set; }
     public int Power { get; set; }
     public int Technique { get; set; }
     public int Defense { get; set; }
@@ -29,23 +28,23 @@ public class Character
     public int Memory { get; set; }
     public int Storage { get; set; }
     public int Pocket { get; set; }
+    public int ColPower { get; set; }
+    public int ColTechnique { get; set; }
+    public int ColDefense { get; set; }
+    public int ColSpeed { get; set; }
+    public int ColLuck { get; set; }
+    public int ColMemory { get; set; }
+    public int ColStorage { get; set; }
+    public int ColPocket { get; set; }
     public int Bag { get; set; }
 
-    public int ColPower = 0;
-    public int ColTechnique = 0;
-    public int ColDefense = 0;
-    public int ColSpeed = 0;
-    public int ColLuck = 0;
-    public int ColMemory = 0;
-    public int ColStorage = 0;
-    public int ColPocket = 0;
-
+    // Property
     public int Money { get; set; }
     public int Disk { get; set; }
     public int Key { get; set; }
-    public int Level { get => level; set => level = value; }
-    public int Soul { get => soul; set => soul = value; }
+    public int Exp { get; set; }
 
+    // Inventory
     public List<Equipment> EquipmentList { get; set; }
     public List<Consumable> PocketList { get; set; }
     public List<Item> BagItemList { get; set; }
@@ -74,6 +73,10 @@ public class Character
         Money = _base.Money;
         Disk = _base.Disk;
         Key = _base.Key;
+
+        Level = 1;
+        Soul = 0;
+        Exp = 0;
 
         EquipmentList = new List<Equipment>(_base.EquipmentList ?? new List<Equipment>());
         PocketList = new List<Consumable>(_base.PocketList ?? new List<Consumable>());
