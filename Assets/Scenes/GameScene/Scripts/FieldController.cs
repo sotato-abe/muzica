@@ -8,6 +8,8 @@ public class FieldController : MonoBehaviour
     private const int ITEM_GET_PROBABILITY = 30;
     public static FieldController Instance { get; private set; }
 
+    [SerializeField] MessagePanel messagePanel;
+
     private FieldData currentFieldData;
 
     void Awake()
@@ -29,13 +31,13 @@ public class FieldController : MonoBehaviour
     {
         if (Random.Range(0, 100f) < ITEM_GET_PROBABILITY)
         {
-            Debug.LogWarning("スカ");
+            messagePanel.AddMessage(MessageIconType.Treasure, $"宝ばこはカラだった。");
             return;
         }
 
         if (currentFieldData == null || currentFieldData.TreasureBoxItems.Count == 0)
         {
-            Debug.LogWarning("No treasures available in the current field.");
+            messagePanel.AddMessage(MessageIconType.Treasure, $"宝ばこはカラだった。");
             return;
         }
 
@@ -52,8 +54,8 @@ public class FieldController : MonoBehaviour
             cumulative += item.Rarity.GetProbability();
             if (randomValue <= cumulative)
             {
-                Debug.Log($"You found a treasure: {item.Name} (Rarity: {item.Rarity})");
                 // ここでインベントリに追加する処理を入れればOK
+                messagePanel.AddMessage(MessageIconType.Treasure, $"{item.Name}を手に入れた。 ({item.Rarity})");
                 return;
             }
         }
