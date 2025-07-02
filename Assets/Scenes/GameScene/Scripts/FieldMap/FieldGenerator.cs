@@ -111,8 +111,7 @@ public class FieldGenerator : MonoBehaviour
             return new Vector3Int(width / 2, height / 2, 0);
         }
         Vector2Int targetPos = GetGatePosition(direction);
-        Debug.Log($"Gate position: {targetPos.x}, {targetPos.y}");
-        // targetPosから２ます離れた場所の地面がある場所を返す
+        // targetPosから２マス離れた場所の地面がある場所を返す
         for (int x = -2; x <= 2; x++)
         {
             for (int y = -2; y <= 2; y++)
@@ -122,14 +121,12 @@ public class FieldGenerator : MonoBehaviour
                 Vector2Int checkPos = targetPos + new Vector2Int(x, y);
                 if (IsValidMapPosition(checkPos.x, checkPos.y) && IsGroundOrGrass(checkPos))
                 {
-                    Debug.Log($"Entrance position found at {checkPos.x}, {checkPos.y}");
                     targetPos = checkPos;
                     targetPos += new Vector2Int(0, 1);
                     return ConvertToTilePosition(targetPos);
                 }
             }
         }
-
         return ConvertToTilePosition(targetPos);
     }
 
