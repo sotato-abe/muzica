@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class WorldMapPanel : MonoBehaviour
+public class WorldMapPanel : SlidePanel
 {
     [SerializeField] WorldMapCamera worldMapCamera;
     [SerializeField] Title fieldName;

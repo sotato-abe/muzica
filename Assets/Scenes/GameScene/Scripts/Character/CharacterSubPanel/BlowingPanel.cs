@@ -15,7 +15,7 @@ public class BlowingPanel : MonoBehaviour
     [SerializeField] Sprite FearBackImage;
 
     private float paddingHeight = 90f;
-    private float paddingWidth = 50f;
+    private float paddingWidth = 60f;
     private float maxWidth = 250f;
     private float blowingWidth = 250f;
     private List<TalkMessage> messageList = new List<TalkMessage>();
@@ -136,15 +136,6 @@ public class BlowingPanel : MonoBehaviour
     public IEnumerator TypeDialog(string line)
     {
         messageText.SetText("");
-        // lineの文字数によって横幅を変える。（20文字以上ならmaxWidthでそれ以内なら。その時のサイズ）
-        if (line.Length > 15)
-        {
-            blowingWidth = maxWidth + paddingWidth;
-        }
-        else
-        {
-            blowingWidth = line.Length * 30f + paddingWidth;
-        }
         foreach (char letter in line)
         {
             messageText.text += letter;
@@ -161,12 +152,20 @@ public class BlowingPanel : MonoBehaviour
             return;
         }
 
-        // TextMeshProのTextにレイアウトを再計算させる
-        messageText.ForceMeshUpdate();
+        // 幅を先に確保（強制レイアウト前に必要）
+        float newWidth = Mathf.Min(messageText.preferredWidth, maxWidth) + paddingWidth;
+        backRectTransform.sizeDelta = new Vector2(newWidth, 100); // 仮高さ
+        messageText.ForceMeshUpdate(); // 再計算強制
 
-        // 横幅を最大値で制限
-        // float newWidth = Mathf.Min(messageText.preferredWidth, maxWidth) + paddingWidth;
-        float newHeight = messageText.preferredHeight + paddingHeight;
-        backRectTransform.sizeDelta = new Vector2(blowingWidth, newHeight);
+        // ★ 行数取得
+        int lineCount = messageText.textInfo.lineCount;
+
+        // ★ 行数 × フォントサイズ + padding とかで高さを調整
+        float lineHeight = messageText.fontSize * 1.2f; // 1.2 は行間
+        float newHeight = lineCount * lineHeight + paddingHeight;
+
+        // サイズを最終反映
+        backRectTransform.sizeDelta = new Vector2(newWidth, newHeight);
     }
+
 }
