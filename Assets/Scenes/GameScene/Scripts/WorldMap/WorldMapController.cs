@@ -20,6 +20,7 @@ public class WorldMapController : MonoBehaviour
     [SerializeField] private WorldMapCamera worldMapCamera;
     [SerializeField] WorldMapRender worldMapRender;
     [SerializeField] WorldMapPanel worldMapPanel;
+    [SerializeField] CharacterSubPanel characterSubPanel;
 
     private void Awake()
     {
@@ -50,8 +51,13 @@ public class WorldMapController : MonoBehaviour
         fieldData.isBottomOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.down);
         fieldData.isRightOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.right);
         fieldData.isLeftOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.left);
+        if (fieldData.FieldName != "")
+        {
+            worldMapPanel.SetFieldName(fieldData.FieldName);
+            TalkMessage talkMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Thinking, $"ここはなにかありそうだな。");
+            StartCoroutine(characterSubPanel.SetTalkMessage(talkMessage));
+        }
 
-        worldMapPanel.SetFieldName(fieldData.FieldName);
         FieldController.Instance.SetField(fieldData);
         fieldGenerator.SetField(fieldData, fieldTileSet, playerPosition.x + "," + playerPosition.y);
         SetFieldPlayerPosition(direction);
