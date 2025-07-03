@@ -29,22 +29,11 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         TalkMessage startMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "はじめるか、、");
-        StartCoroutine(SetPlayerBlowing(startMessage));
+        StartCoroutine(playerSubPanel.SetTalkMessage(startMessage));
     }
 
-    public IEnumerator SetPlayerBlowing(TalkMessage talkMessage)
+    public void SetPlayerBlowing(TalkMessage talkMessage)
     {
-        if (playerSubPanel != null)
-        {
-            playerSubPanel.SetActive(true);
-            yield return new WaitForSeconds(0.5f);
-            playerSubPanel.SetTalkMessage(talkMessage);
-            yield return new WaitForSeconds(3.0f);
-            playerSubPanel.SetActive(false);
-        }
-        else
-        {
-            Debug.LogError("PlayerSubPanel is not assigned in PlayerController.");
-        }
+        playerSubPanel.SetTalkMessage(talkMessage);
     }
 }

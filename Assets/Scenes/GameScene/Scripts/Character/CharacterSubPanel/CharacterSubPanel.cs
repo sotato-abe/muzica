@@ -14,10 +14,21 @@ public class CharacterSubPanel : SlidePanel
         characterImage.sprite = image;
     }
 
-    public void SetTalkMessage(TalkMessage talkMessage)
+    public IEnumerator SetTalkMessage(TalkMessage talkMessage)
     {
+        bool currentlyActive = isActive;
+        if (!currentlyActive)
+        {
+            SetActive(true);
+            yield return new WaitForSeconds(0.5f);
+        }
         blowingPanel.gameObject.SetActive(true);
-        blowingPanel.AddMessageList(talkMessage);
+        yield return blowingPanel.AddMessageList(talkMessage);
+        if (!currentlyActive)
+        {
+            yield return new WaitForSeconds(0.3f);
+            SetActive(false);
+        }
     }
 }
 

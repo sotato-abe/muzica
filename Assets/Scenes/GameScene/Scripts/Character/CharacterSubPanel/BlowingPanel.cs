@@ -35,6 +35,18 @@ public class BlowingPanel : MonoBehaviour
         }
     }
 
+    private void ClearMessage()
+    {
+        if (messageCoroutine != null)
+        {
+            StopCoroutine(messageCoroutine);
+            messageCoroutine = null;
+        }
+        messageText.SetText(""); // テキストをクリア
+        messageList.Clear(); // メッセージリストをクリア
+        ResizePlate();
+    }
+
     public IEnumerator AddMessage(TalkMessage talkMessage)
     {
         // 前のTypeDialogが動いていたら停止
@@ -63,14 +75,22 @@ public class BlowingPanel : MonoBehaviour
         gameObject.SetActive(false); // 表示終了後に非アクティブにする
     }
 
-    public void AddMessageList(TalkMessage talkMessage)
+    public IEnumerator AddMessageList(TalkMessage talkMessage)
     {
         messageList.Add(talkMessage);
         if (messageCoroutine == null)
         {
             if (gameObject.activeSelf)
             {
-                messageCoroutine = StartCoroutine(TypeMessageList());
+                yield return messageCoroutine = StartCoroutine(TypeMessageList());
+            }
+        }
+        else
+        {
+            // すでに動いてるなら終わるのを待つ
+            while (messageCoroutine != null)
+            {
+                yield return null;
             }
         }
     }
