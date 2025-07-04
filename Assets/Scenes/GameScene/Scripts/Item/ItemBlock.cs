@@ -9,7 +9,6 @@ using TMPro;
 // 装備、消耗品、トレジャーをすべて受け入れてバックに表示するためのクラス
 public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
 {
-    private FocusScaleUp scaleUp;
     public Item Item { get; set; }
     [SerializeField] Image image;
     [SerializeField] Image cursor;
@@ -31,7 +30,7 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
 
     protected override void Awake()
     {
-        scaleUp = GetComponent<FocusScaleUp>();
+        base.Awake(); 
     }
 
     public void Setup(Item item)
@@ -43,13 +42,11 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        scaleUp?.OnPointerEnter(eventData);
         SetTarget(true);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        scaleUp?.OnPointerExit(eventData);
         SetTarget(false);
     }
 

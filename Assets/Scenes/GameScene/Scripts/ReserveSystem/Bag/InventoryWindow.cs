@@ -107,4 +107,14 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
             SetCounter();
         }
     }
+
+    public void ArrengeItemBlocks()
+    {
+        GridLayoutGroup grid = itemList.GetComponent<GridLayoutGroup>();
+        if (grid != null)
+        {
+            grid.enabled = false;
+            grid.enabled = true;
+        }
+    }
 }
