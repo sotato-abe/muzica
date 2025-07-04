@@ -10,4 +10,9 @@ public class Consumable : Item
     public override ItemType itemType => ItemType.Consumable;
     public override ItemBase Base => _base;
     public ConsumableBase ConsumableBase { get => _base; }
+
+    public Consumable(ConsumableBase baseData)
+    {
+        _base = baseData;
+    }
 }

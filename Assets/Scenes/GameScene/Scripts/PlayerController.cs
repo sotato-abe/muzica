@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private CharacterSubPanel playerSubPanel;
     [SerializeField] private PlayerCharacter player;
 
+    public PlayerCharacter PlayerCharacter => player;
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -21,7 +23,6 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         player.Init();  // プレイヤーキャラクターの初期化
-        Debug.Log($"PlayerController Start: {player.Base.Name} initialized with Level {player.Level} and Exp {player.Exp}");
         StartCoroutine(GameStart());
     }
 
@@ -35,5 +36,16 @@ public class PlayerController : MonoBehaviour
     public void SetPlayerBlowing(TalkMessage talkMessage)
     {
         playerSubPanel.SetTalkMessage(talkMessage);
+    }
+
+    public void AddItemToBag(Item item)
+    {
+        // バッグの容量を超える場合はアイテムを入手しない
+        if (player.BagItemList.Count >= player.Bag)
+        {
+            Debug.LogWarning("バッグの容量を超えています。アイテムを追加できません。");
+            return;
+        }
+        player.AddItem(item);
     }
 }

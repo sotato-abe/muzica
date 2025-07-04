@@ -56,6 +56,28 @@ public class FieldController : MonoBehaviour
             {
                 // ここでインベントリに追加する処理を入れればOK
                 messagePanel.AddMessage(MessageIconType.Treasure, $"{item.Name}を手に入れた。 ({item.Rarity})");
+                // item newItem = new 
+
+                Item newItem;
+
+                if (item is EquipmentBase equipment)
+                {
+                    newItem = new Equipment(equipment);
+                }
+                else if (item is ConsumableBase consumable)
+                {
+                    newItem = new Consumable(consumable);
+                }
+                else if (item is TreasureBase treasure)
+                {
+                    newItem = new Treasure(treasure);
+                }
+                else
+                {
+                    Debug.LogWarning("未対応のItemBase型：" + item.GetType().Name);
+                    return;
+                }
+                PlayerController.Instance.AddItemToBag(newItem);
                 return;
             }
         }

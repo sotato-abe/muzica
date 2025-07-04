@@ -136,15 +136,16 @@ public class Character
         switch (item)
         {
             case Consumable consumable:
-                if (PocketList.Count < Pocket)
-                {
-                    PocketList.Add(consumable);
-                    return true;
-                }
-                else
-                {
-                    return TryAddToBag(consumable);
-                }
+                return TryAddToBag(consumable);
+                // if (PocketList.Count < Pocket)
+                // {
+                //     PocketList.Add(consumable);
+                //     return true;
+                // }
+                // else
+                // {
+                // return TryAddToBag(consumable);
+                // }
 
             case Equipment equipment:
                 return TryAddToBag(equipment);

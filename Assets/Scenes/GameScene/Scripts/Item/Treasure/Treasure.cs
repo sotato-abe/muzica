@@ -9,4 +9,9 @@ public class Treasure : Item
     public override ItemType itemType => ItemType.Treasure;
     public override ItemBase Base => _base;
     public TreasureBase TreasureBase { get => _base; }
+
+    public Treasure(TreasureBase baseData)
+    {
+        _base = baseData;
+    }
 }

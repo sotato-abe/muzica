@@ -26,9 +26,7 @@ public class ReserveSystem : MonoBehaviour
 
     public void ReserveStart()
     {
-        Debug.Log("ReserveStart");
         reserveActionBoard.SetActive(true); // リザーブアクションボードを表示
-        // characterSubPanel.SetActive(true); // キャラクターサブパネルを非表示
         TalkMessage talkMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "準備しよう");
         StartCoroutine(characterSubPanel.SetTalkMessage(talkMessage, true)); // リザーブアクションボードを開く
         messagePanel.SetActive(false); // メッセージパネルを表示
@@ -37,7 +35,6 @@ public class ReserveSystem : MonoBehaviour
 
     public void ResorveEnd()
     {
-        Debug.Log("ResorveEnd");
         int completed = 0;
         void CheckAllComplete()
         {
