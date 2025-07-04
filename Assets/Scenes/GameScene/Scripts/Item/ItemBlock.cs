@@ -15,8 +15,8 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
     [SerializeField] StatusText statusText;
     private bool isActive = true;
 
-    public delegate void DeleteItemDelegate(Item item);
-    public event DeleteItemDelegate OnDeleteItem;
+    public delegate void DropItemDelegate(ItemBlock itemBlock);
+    public event DropItemDelegate OnDropItem;
 
     public delegate void SellItemDelegate(Item item);
     public event SellItemDelegate OnSellItem;
@@ -60,9 +60,9 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
         cursor.color = bgColor;
     }
 
-    public void RemoveItem()
+    public void DropItem()
     {
-        OnDeleteItem?.Invoke(Item);
+        OnDropItem?.Invoke(this);
     }
 
     public void SellItem()

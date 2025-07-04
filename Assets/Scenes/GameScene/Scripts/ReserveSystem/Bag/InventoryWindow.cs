@@ -52,6 +52,7 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
             // 新規アイテムだけ生成
             ItemBlock itemBlock = Instantiate(itemBlockPrefab, itemList.transform);
             itemBlock.Setup(item);
+            itemBlock.OnDropItem += DropItem;
             itemBlockMap[item] = itemBlock;
         }
 
@@ -95,11 +96,13 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
         SetCounter();
     }
 
-    private void DeleteItem(ItemBlock itemBlock)
+    private void DropItem(ItemBlock itemBlock)
     {
         if (itemBlock == null || itemBlock.Item == null) return;
 
+        playerController.PlayerCharacter.DropItem(itemBlock.Item);
         Item item = itemBlock.Item;
+        itemBlock.RemovePlaceholder();
         if (itemBlockMap.ContainsKey(item))
         {
             itemBlockMap.Remove(item);

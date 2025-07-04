@@ -50,6 +50,15 @@ public class Block : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHan
         transform.SetAsLastSibling();
     }
 
+    public void RemovePlaceholder()
+    {
+        if (placeholder != null)
+        {
+            Destroy(placeholder);
+            placeholder = null;
+        }
+    }
+
     public void OnDrag(PointerEventData eventData)
     {
         transform.position = eventData.position;

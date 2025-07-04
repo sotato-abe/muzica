@@ -159,6 +159,18 @@ public class Character
         }
     }
 
+    public bool DropItem(Item item)
+    {
+        if (item == null || !BagItemList.Contains(item))
+        {
+            Debug.Log("アイテムが見つかりません。");
+            return false;
+        }
+
+        BagItemList.Remove(item);
+        return true;
+    }
+
     private bool TryAddToBag(Item item)
     {
         if (BagItemList.Count < Bag)
