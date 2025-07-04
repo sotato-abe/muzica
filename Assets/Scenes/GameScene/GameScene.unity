@@ -13347,6 +13347,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   messagePanel: {fileID: 651672342}
+  tilemap: {fileID: 2049345914}
+  dropItemPrefab: {fileID: 7505486062363512512, guid: 6871006123a066e4785828dafa8edf68, type: 3}
+  fieldPlayer: {fileID: 611831675}
 --- !u!1 &1350610333
 GameObject:
   m_ObjectHideFlags: 0
@@ -13972,24 +13975,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1617400830}
   m_CullTransparentMesh: 1
---- !u!1 &1696883826 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1413744503898686470, guid: b75abed02f745aa40888cf1a033fcd22, type: 3}
-  m_PrefabInstance: {fileID: 5637632413199746379}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1696883828
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1696883826}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2ebadba31e92a74482f58dc9df2e66f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scale: 1.2
 --- !u!1 &1752748082
 GameObject:
   m_ObjectHideFlags: 0
@@ -17053,10 +17038,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1413744503898686470, guid: b75abed02f745aa40888cf1a033fcd22, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1696883828}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b75abed02f745aa40888cf1a033fcd22, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

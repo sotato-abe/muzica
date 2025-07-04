@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.Tilemaps;
 
 public class FieldController : MonoBehaviour
 {
@@ -9,6 +10,9 @@ public class FieldController : MonoBehaviour
     public static FieldController Instance { get; private set; }
 
     [SerializeField] MessagePanel messagePanel;
+    [SerializeField] private Tilemap tilemap;
+    [SerializeField] DropItem dropItemPrefab; // ドロップアイテムのプレハブ
+    [SerializeField] FieldPlayer fieldPlayer; // プレイヤーコントローラー
 
     private FieldData currentFieldData;
 
@@ -84,5 +88,25 @@ public class FieldController : MonoBehaviour
 
         // 予備処理（念のため）
         Debug.LogWarning("抽選失敗（このメッセージは基本出ない）");
+    }
+
+    public void DropPlayerItem(Item item)
+    {
+        if (item == null) return;
+
+        // ドロップアイテムを生成し、フィールド上にドロップする
+        Vector2 position = fieldPlayer.transform.position;
+        DropItem(item, position);
+        // DropItem dropItem = Instantiate(dropItemPrefab, position, Quaternion.identity);
+    }
+
+    public void DropItem(Item item, Vector2 position)
+    {
+        Debug.Log($"DropItem: {item?.Base.Name} at {position}");
+        if (item == null) return;
+
+        // ドロップアイテムを生成し、フィールド上にドロップする
+        DropItem dropItem = Instantiate(dropItemPrefab, position, Quaternion.identity);
+        dropItem.Setup(item);
     }
 }

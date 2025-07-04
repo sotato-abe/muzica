@@ -100,7 +100,7 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
     {
         if (itemBlock == null || itemBlock.Item == null) return;
 
-        playerController.PlayerCharacter.DropItem(itemBlock.Item);
+        playerController.DropItemFromBag(itemBlock.Item);
         Item item = itemBlock.Item;
         itemBlock.RemovePlaceholder();
         if (itemBlockMap.ContainsKey(item))

@@ -89,4 +89,56 @@ public class PlayerCharacter : Character
             Debug.Log("スキルポイントが足りません。");
         }
     }
+
+    public bool AddItem(Item item)
+    {
+        switch (item)
+        {
+            case Consumable consumable:
+                return TryAddToBag(consumable);
+            // if (PocketList.Count < Pocket)
+            // {
+            //     PocketList.Add(consumable);
+            //     return true;
+            // }
+            // else
+            // {
+            // return TryAddToBag(consumable);
+            // }
+
+            case Equipment equipment:
+                return TryAddToBag(equipment);
+
+            case Treasure treasure:
+                return TryAddToBag(treasure);
+
+            default:
+                Debug.Log("Unknown item type.");
+                return false;
+        }
+    }
+
+    public bool RemoveItem(Item item)
+    {
+        if (item == null || !BagItemList.Contains(item))
+        {
+            Debug.Log("アイテムが見つかりません。");
+            return false;
+        }
+
+        BagItemList.Remove(item);
+        return true;
+    }
+
+    private bool TryAddToBag(Item item)
+    {
+        if (BagItemList.Count < Bag)
+        {
+            BagItemList.Add(item);
+            return true;
+        }
+
+        Debug.Log("バッグがいっぱいです。");
+        return false;
+    }
 }

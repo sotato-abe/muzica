@@ -7,7 +7,6 @@ public class PlayerController : MonoBehaviour
     public static PlayerController Instance { get; private set; }
     [SerializeField] private CharacterSubPanel playerSubPanel;
     [SerializeField] private PlayerCharacter player;
-
     public PlayerCharacter PlayerCharacter => player;
 
     void Awake()
@@ -47,5 +46,13 @@ public class PlayerController : MonoBehaviour
             return;
         }
         player.AddItem(item);
+    }
+
+    public void DropItemFromBag(Item item)
+    {
+        if (item == null) return;
+        FieldController.Instance.DropPlayerItem(item);
+        // アイテムをドロップする処理
+        PlayerCharacter.RemoveItem(item);
     }
 }
