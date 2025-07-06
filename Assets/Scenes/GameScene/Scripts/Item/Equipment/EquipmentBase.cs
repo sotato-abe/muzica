@@ -19,6 +19,8 @@ public class EquipmentBase : ItemBase
     [SerializeField] int memory;
     [SerializeField] int storage;
     [SerializeField] int pocket;
+    [SerializeField] List<EnegyCount> enegyCountList;
+    [SerializeField] List<EnegyCost> enegyCostList;
 
     public EquipmentType EquipmentType { get => equipmentType; }
     public int AttackPower { get => attackPower; }
@@ -34,4 +36,7 @@ public class EquipmentBase : ItemBase
     public int Memory { get => memory; }
     public int Storage { get => storage; }
     public int Pocket { get => pocket; }
+
+    public List<EnegyCount> EnegyCountList { get => enegyCountList; }
+    public List<EnegyCost> EnegyCostList { get => enegyCostList; }
 }
