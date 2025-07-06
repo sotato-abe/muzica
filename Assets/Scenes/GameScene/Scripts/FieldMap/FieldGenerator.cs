@@ -31,6 +31,7 @@ public class FieldGenerator : MonoBehaviour
     [SerializeField] private GameObject gateObject;
     [SerializeField] private GameObject treasureBoxObject;
     [SerializeField] private Tilemap tilemap;
+    [SerializeField] private Tilemap floorTilemap;
     private string seed;
 
     [Header("Tiles")]
@@ -59,6 +60,7 @@ public class FieldGenerator : MonoBehaviour
 
     #region Public Properties
     public Tilemap Tilemap => tilemap;
+    public Tilemap FloorTilemap => floorTilemap;
     public FieldData fieldData;
     #endregion
 
@@ -142,6 +144,7 @@ public class FieldGenerator : MonoBehaviour
         if (tilemap != null)
         {
             tilemap.ClearAllTiles();
+            floorTilemap.ClearAllTiles();
         }
 
         InitializeMaps();
@@ -536,6 +539,7 @@ public class FieldGenerator : MonoBehaviour
                 if (tileToPlace != null)
                 {
                     tilemap.SetTile(tilePosition, tileToPlace);
+                    floorTilemap.SetTile(tilePosition, tileToPlace);
                 }
             }
         }

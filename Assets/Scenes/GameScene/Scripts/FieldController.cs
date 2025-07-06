@@ -100,13 +100,40 @@ public class FieldController : MonoBehaviour
         // DropItem dropItem = Instantiate(dropItemPrefab, position, Quaternion.identity);
     }
 
-    public void DropItem(Item item, Vector2 position)
+    public void DropItem(Item item, Vector2 centerPosition)
     {
-        Debug.Log($"DropItem: {item?.Base.Name} at {position}");
         if (item == null) return;
 
-        // ドロップアイテムを生成し、フィールド上にドロップする
-        DropItem dropItem = Instantiate(dropItemPrefab, position, Quaternion.identity);
-        dropItem.Setup(item);
+        const int maxTries = 50;
+        float dropRadius = 1.0f;
+
+        for (int i = 0; i < maxTries; i++)
+        {
+            // ランダムなオフセットを生成（中心から最大半径内）
+            Vector2 offset = new Vector2(
+                Random.Range(-dropRadius, dropRadius),
+                Random.Range(-dropRadius, dropRadius)
+            );
+            Vector2 tryPosition = centerPosition + offset;
+
+            // タイルの存在チェック
+            Vector3Int cellPos = tilemap.WorldToCell(tryPosition);
+            bool hasTile = tilemap.HasTile(cellPos);
+
+            // コライダーとの当たり判定
+            bool overlap = Physics2D.OverlapPoint(tryPosition, LayerMask.GetMask("FieldGround")) != null;
+
+            // 両方OKならそこにドロップ
+            if (hasTile && overlap)
+            {
+                DropItem dropItem = Instantiate(dropItemPrefab, centerPosition, Quaternion.identity);
+                dropItem.Setup(item);
+                StartCoroutine(dropItem.JumpMoveMotion(tryPosition));
+                return;
+            }
+        }
+
+        // 落とせる場所が見つからなかった…
+        Debug.LogWarning("ドロップ場所が見つからんかった…");
     }
 }

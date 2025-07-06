@@ -9,26 +9,57 @@ public class DropItem : MonoBehaviour
 {
     private Item item;
     private bool canPickup = false;
+    private Coroutine openMotionCoroutine = null; // コルーチンの参照
+    private float groundY; // 初期位置を保存
+    private float duration = 0.4f;
 
     public void Setup(Item droppedItem)
     {
         item = droppedItem;
+    }
 
-        StartCoroutine(EnablePickupAfterDelay(1f));
-
+    public IEnumerator JumpMoveMotion(Vector2 targetPosition)
+    {
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        bool hadGravity = false;
+
         if (rb != null)
         {
-            Vector2 randomDir = new Vector2(
-                Random.value < 0.5f ? -1f : 1f,
-                Random.value < 0.5f ? -1f : 1f
-            ).normalized;
-
-            float power = Random.Range(1f, 2f);
-            rb.AddForce(randomDir * power, ForceMode2D.Impulse);
-
-            StartCoroutine(StopAfterDelay(rb, 0.4f));
+            hadGravity = rb.simulated;
+            rb.simulated = false;
         }
+
+        float elapsedTime = 0f;
+        Vector2 startPosition = transform.position;
+
+        float jumpHeight = 0.4f; // バウンドの高さ（必要に応じて調整）
+        int bounceCount = 1;     // バウンドの回数（複数回にしたい場合）
+
+        while (elapsedTime < duration)
+        {
+            float t = elapsedTime / duration;
+
+            // 水平方向はLerpで直線移動
+            Vector2 flatPos = Vector2.Lerp(startPosition, targetPosition, t);
+
+            // 垂直方向にバウンドを加える（sinカーブで上に跳ねる）
+            // πで1回の山、2πで2回跳ねる
+            float bounce = Mathf.Sin(t * Mathf.PI * bounceCount) * jumpHeight;
+
+            transform.position = new Vector2(flatPos.x, flatPos.y + bounce);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = targetPosition;
+
+        if (rb != null)
+        {
+            rb.simulated = hadGravity;
+        }
+
+        canPickup = true;
     }
 
     private IEnumerator EnablePickupAfterDelay(float delay)
@@ -48,11 +79,9 @@ public class DropItem : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (!canPickup) return;
-
-        if (other.CompareTag("Player"))
+        if (canPickup && other.CompareTag("Player"))
         {
-            Debug.Log($"Item {item.Base.Name} picked up by player.");
+            // アイテム取得処理
             PlayerController.Instance.AddItemToBag(item);
             Destroy(gameObject);
         }
