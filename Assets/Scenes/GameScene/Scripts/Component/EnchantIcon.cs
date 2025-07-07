@@ -18,6 +18,7 @@ public class EnchantIcon : MonoBehaviour
             Debug.LogWarning($"Enchant data not found for type: {enchant.Type}");
             return;
         }
+        
         iconImage.sprite = data.icon;
         valText.text = enchant.Val.ToString();
     }

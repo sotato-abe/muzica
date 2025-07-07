@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4df0297aa63da484a808cc403f00936b, type: 3}
-  m_Name: bat
+  m_Name: device
   m_EditorClassIdentifier: 
-  name: "\u30D0\u30C3\u30C8"
-  rarity: 0
-  sprite: {fileID: 21300000, guid: aac421fc0d7d3484e9649346b7e0e34c, type: 3}
-  description: "\u6728\u88FD\u30D0\u30C3\u30C8"
+  name: "\u30DD\u30B1\u30C3\u30C8\u30B2\u30FC\u30E0"
+  rarity: 1
+  sprite: {fileID: 21300000, guid: 6af178b885360b346bf96141e6f8d64e, type: 3}
+  description: "\u30B2\u30FC\u30E0\u6A5F"
   weight: 2
   price: 10
   equipmentType: 0
@@ -31,12 +31,14 @@ MonoBehaviour:
   pocket: 0
   targetType: 0
   enegyAttackList:
-  - type: 0
-    val: 10
+  - type: 1
+    val: 3
     times: 1
   enegyCostList:
-  - type: 0
+  - type: 1
     val: 2
   enchantList:
-  - type: 0
+  - type: 4
     val: 2
+  - type: 13
+    val: 3

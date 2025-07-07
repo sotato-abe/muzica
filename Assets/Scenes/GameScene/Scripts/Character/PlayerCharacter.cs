@@ -7,6 +7,7 @@ using TMPro;
 [System.Serializable]
 public class PlayerCharacter : Character
 {
+    private const int EQUIPMENT_COUNT = 3;
     public int SkillPoint { get; set; } = 0;
 
     public override void Init()
@@ -118,7 +119,20 @@ public class PlayerCharacter : Character
         }
     }
 
-    public bool RemoveItem(Item item)
+    public bool EquipItem(Equipment equipment)
+    {
+        EquipmentList.Add(equipment);
+        // 3つ以上ある場合は一番頭の装備を外しBagItemListに追加
+        if (EquipmentList.Count > EQUIPMENT_COUNT)
+        {
+            Equipment removedEquipment = EquipmentList[0];
+            EquipmentList.RemoveAt(0);
+            BagItemList.Add(removedEquipment);
+        }
+        return true;
+    }
+
+    public bool RemoveBagItem(Item item)
     {
         if (item == null || !BagItemList.Contains(item))
         {

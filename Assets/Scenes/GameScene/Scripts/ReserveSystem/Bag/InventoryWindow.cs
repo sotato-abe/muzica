@@ -53,6 +53,7 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
             ItemBlock itemBlock = Instantiate(itemBlockPrefab, itemList.transform);
             itemBlock.Setup(item);
             itemBlock.OnDropItem += DropItem;
+            itemBlock.OnEquipItem += EquipItem;
             itemBlockMap[item] = itemBlock;
         }
 
@@ -100,11 +101,26 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
     {
         if (itemBlock == null || itemBlock.Item == null) return;
 
-        playerController.DropItemFromBag(itemBlock.Item);
         Item item = itemBlock.Item;
-        itemBlock.RemovePlaceholder();
         if (itemBlockMap.ContainsKey(item))
         {
+            playerController.DropItemFromBag(itemBlock.Item);
+            itemBlock.RemovePlaceholder();
+            itemBlockMap.Remove(item);
+            Destroy(itemBlock.gameObject);
+            SetCounter();
+        }
+    }
+
+    private void EquipItem(ItemBlock itemBlock)
+    {
+        if (itemBlock == null || itemBlock.Item == null) return;
+        
+        Item item = itemBlock.Item;
+        if (itemBlockMap.ContainsKey(item))
+        {
+            playerController.EquipItemFromBag(itemBlock.Item);
+            itemBlock.RemovePlaceholder();
             itemBlockMap.Remove(item);
             Destroy(itemBlock.gameObject);
             SetCounter();

@@ -48,11 +48,24 @@ public class PlayerController : MonoBehaviour
         player.AddItem(item);
     }
 
+    public void EquipItemFromBag(Item item)
+    {
+        if (item is Equipment equipment)
+        {
+            bool idEquiped = PlayerCharacter.EquipItem(equipment);
+            if (idEquiped)
+            {
+                PlayerCharacter.RemoveBagItem(item);
+            }
+            Debug.Log($"装備アイテムをバッグから装備しました: {item.Base.Name}");
+        }
+    }
+
     public void DropItemFromBag(Item item)
     {
         if (item == null) return;
         FieldController.Instance.DropPlayerItem(item);
         // アイテムをドロップする処理
-        PlayerCharacter.RemoveItem(item);
+        PlayerCharacter.RemoveBagItem(item);
     }
 }

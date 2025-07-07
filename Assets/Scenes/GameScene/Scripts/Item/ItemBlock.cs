@@ -18,6 +18,9 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
     public delegate void DropItemDelegate(ItemBlock itemBlock);
     public event DropItemDelegate OnDropItem;
 
+    public delegate void EquipItemDelegate(ItemBlock itemBlock);
+    public event EquipItemDelegate OnEquipItem;
+
     public delegate void SellItemDelegate(Item item);
     public event SellItemDelegate OnSellItem;
 
@@ -30,7 +33,7 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
 
     protected override void Awake()
     {
-        base.Awake(); 
+        base.Awake();
     }
 
     public void Setup(Item item)
@@ -63,6 +66,11 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
     public void DropItem()
     {
         OnDropItem?.Invoke(this);
+    }
+
+    public void EquipItem()
+    {
+        OnEquipItem?.Invoke(this);
     }
 
     public void SellItem()

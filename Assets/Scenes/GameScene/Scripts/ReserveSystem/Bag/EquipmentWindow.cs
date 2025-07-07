@@ -8,12 +8,11 @@ using UnityEngine.EventSystems;
 
 public class EquipmentWindow : MonoBehaviour
 {
-    [SerializeField] EquipmentSlot equipmentSlot;
+    private const int EQUIPMENT_COUNT = 2;
+    [SerializeField] GameObject equipmentSlot;
     [SerializeField] GameObject equipmentList;
     PlayerController playerController;
-    List<EquipmentSlot> equipmentSlots = new List<EquipmentSlot>();
-
-    int equipmentCount = 1;
+    List<GameObject> equipmentSlots = new List<GameObject>();
 
     private void Awake()
     {
@@ -31,11 +30,9 @@ public class EquipmentWindow : MonoBehaviour
 
     private void DeleteAllSlot()
     {
-        if (equipmentSlots.Count == 0) return;
-
-        foreach (EquipmentSlot slot in equipmentSlots)
+        foreach (Transform child in equipmentList.transform)
         {
-            Destroy(slot.gameObject);
+            Destroy(child.gameObject);
         }
         equipmentSlots.Clear();
     }
@@ -47,12 +44,20 @@ public class EquipmentWindow : MonoBehaviour
         PlayerController playerController = PlayerController.Instance;
         if (playerController.PlayerCharacter == null) return;
 
-        for (int i = 0; i < equipmentCount; i++)
+        for (int i = 0; i < EQUIPMENT_COUNT; i++)
         {
-            // equipmentListにequipmentSlotを追加
-            EquipmentSlot slot = Instantiate(equipmentSlot, equipmentList.transform);
+            GameObject slot = Instantiate(equipmentSlot, equipmentList.transform);
             equipmentSlots.Add(slot);
-            slot.gameObject.name = $"EquipmentSlot_{i + 1}";
+            EquipmentArea slotComponent = slot.GetComponent<EquipmentArea>();
+
+            if (slotComponent != null)
+            {
+                slotComponent.OnEquipAction += SetEquipments;
+            }
+            else
+            {
+                Debug.LogError("EquipmentArea が見つかりませんでした");
+            }
         }
     }
 
@@ -61,21 +66,20 @@ public class EquipmentWindow : MonoBehaviour
         List<Equipment> equipmentList = PlayerController.Instance.PlayerCharacter.EquipmentList;
         if (equipmentList == null || equipmentList.Count == 0)
         {
-            Debug.LogWarning("装備リストが空です。");
             return;
         }
         if (equipmentList.Count > equipmentSlots.Count)
         {
-            Debug.LogWarning("装備スロットの数が装備リストの数より少ないです。");
             return;
         }
         for (int i = 0; i < equipmentList.Count; i++)
         {
             if (i < equipmentSlots.Count)
             {
-                EquipmentSlot slot = equipmentSlots[i];
+                GameObject slot = equipmentSlots[i];
                 Equipment equip = equipmentList[i];
-                slot.setEquipment(equip);
+                EquipmentSlot slotComponent = slot.GetComponent<EquipmentSlot>();
+                slotComponent.setEquipment(equip);
             }
             else
             {
@@ -83,5 +87,10 @@ public class EquipmentWindow : MonoBehaviour
                 break;
             }
         }
+    }
+
+    public void Equip()
+    {
+
     }
 }
