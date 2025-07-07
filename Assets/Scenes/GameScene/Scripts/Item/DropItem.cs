@@ -9,7 +9,6 @@ public class DropItem : MonoBehaviour
 {
     private Item item;
     private bool canPickup = false;
-    private Coroutine openMotionCoroutine = null; // コルーチンの参照
     private float groundY; // 初期位置を保存
     private float duration = 0.4f;
 

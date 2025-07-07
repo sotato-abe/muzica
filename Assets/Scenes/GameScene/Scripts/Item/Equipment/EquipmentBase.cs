@@ -6,9 +6,6 @@ using UnityEngine;
 public class EquipmentBase : ItemBase
 {
     [SerializeField] EquipmentType equipmentType; // 装備の種類
-    [SerializeField] int attackPower; // 攻撃力（武器やツールの場合）
-    [SerializeField] int defensePower; // 防御力（防具の場合）
-
     [SerializeField] int life;
     [SerializeField] int battery;
     [SerializeField] int power;
@@ -19,13 +16,14 @@ public class EquipmentBase : ItemBase
     [SerializeField] int memory;
     [SerializeField] int storage;
     [SerializeField] int pocket;
-    [SerializeField] List<EnegyCount> enegyCountList;
+
+    [SerializeField] TargetType targetType;
+    [SerializeField] List<EnegyCount> enegyAttackList;
     [SerializeField] List<EnegyCost> enegyCostList;
+    [SerializeField] List<Enchant> enchantList;
+
 
     public EquipmentType EquipmentType { get => equipmentType; }
-    public int AttackPower { get => attackPower; }
-    public int DefensePower { get => defensePower; }
-
     public int Life { get => life; }
     public int Battery { get => battery; }
     public int Power { get => power; }
@@ -37,6 +35,8 @@ public class EquipmentBase : ItemBase
     public int Storage { get => storage; }
     public int Pocket { get => pocket; }
 
-    public List<EnegyCount> EnegyCountList { get => enegyCountList; }
+    public TargetType TargetType { get => targetType; }
+    public List<EnegyCount> EnegyAttackList { get => enegyAttackList; }
     public List<EnegyCost> EnegyCostList { get => enegyCostList; }
+    public List<Enchant> EnchantList { get => enchantList; }
 }
