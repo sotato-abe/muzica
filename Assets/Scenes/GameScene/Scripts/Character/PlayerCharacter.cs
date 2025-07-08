@@ -103,6 +103,18 @@ public class PlayerCharacter : Character
         return false;
     }
 
+    public bool AddItemToPocket(Consumable consumable)
+    {
+        if (PocketList.Count < ColPocket)
+        {
+            PocketList.Add(consumable);
+            return true;
+        }
+
+        Debug.Log("ポケットがいっぱいです。");
+        return false;
+    }
+
     public bool EquipItem(Equipment equipment)
     {
         EquipmentList.Add(equipment);

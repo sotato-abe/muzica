@@ -48,6 +48,21 @@ public class PlayerController : MonoBehaviour
         }
         player.AddItemToBag(item);
     }
+    public void AddItemToPocket(Item item)
+    {
+        // バッグの容量を超える場合はアイテムを入手しない
+        if (player.PocketList.Count >= player.ColPocket)
+        {
+            Debug.LogWarning("バッグの容量を超えています。アイテムを追加できません。");
+            FieldController.Instance.DropPlayerItem(item);
+            return;
+        }
+        if (item is Consumable consumable)
+        {
+            player.AddItemToPocket(consumable);
+        }
+    }
+
     public void AddItemToEquip(Item item)
     {
         if (item == null) return;
@@ -66,6 +81,20 @@ public class PlayerController : MonoBehaviour
         if (item == null) return;
         player.RemoveBagItem(item);
         Debug.Log($"バッグからアイテムを削除しました: {item.Base.Name}");
+    }
+
+    public void RemoveItemFromPocket(Item item)
+    {
+        if (item == null) return;
+        if (item is Consumable consumable)
+        {
+            player.PocketList.Remove(consumable);
+            Debug.Log($"ポケットからアイテムを削除しました: {consumable.Base.Name}");
+        }
+        else
+        {
+            Debug.LogWarning("消費アイテム以外は削除できません。");
+        }
     }
 
     public void RemoveItemFromEquip(Item item)

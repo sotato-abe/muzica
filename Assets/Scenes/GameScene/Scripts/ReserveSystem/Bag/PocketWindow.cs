@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class InventoryWindow : MonoBehaviour, IDropHandler
+public class PocketWindow : MonoBehaviour, IDropHandler
 {
     [SerializeField] ItemBlock itemBlockPrefab;
     [SerializeField] GameObject refusalBlockPrefab;
@@ -19,7 +19,7 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
     public delegate void TargetItemDelegate(Item? item);
     public event TargetItemDelegate OnTargetItem;
 
-    private const int MAX_BAG_COUNT = 20;
+    private const int MAX_PPCKET_COUNT = 16;
     private int currentBlockCount = 0;
     private void Awake()
     {
@@ -45,7 +45,7 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
             Item item = droppedItemBlock.Item;
             if (droppedItemBlock.OriginalParent == this.transform)
                 return;
-            playerController.AddItemToBag(droppedItemBlock.Item);
+            playerController.AddItemToPocket(droppedItemBlock.Item);
             droppedItemBlock.RemoveItem();
             SetItems();
         }
@@ -57,7 +57,7 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
 
     public void SetItems()
     {
-        List<Item> items = playerController.PlayerCharacter.BagItemList;
+        List<Consumable> items = playerController.PlayerCharacter.PocketList;
 
         foreach (Item item in items)
         {
@@ -81,12 +81,12 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
 
     private void SetCounter()
     {
-        counterText.text = $"{itemBlockMap.Count} / {playerController.PlayerCharacter.Bag}";
+        counterText.text = $"{itemBlockMap.Count} / {playerController.PlayerCharacter.ColPocket}";
     }
 
     private void SetBlock()
     {
-        int newBlockCount = MAX_BAG_COUNT - playerController.PlayerCharacter.Bag;
+        int newBlockCount = MAX_PPCKET_COUNT - playerController.PlayerCharacter.ColPocket;
         if (currentBlockCount == newBlockCount)
             return;
 
@@ -123,7 +123,7 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
         Item item = itemBlock.Item;
         if (itemBlockMap.ContainsKey(item))
         {
-            playerController.RemoveItemFromBag(itemBlock.Item);
+            playerController.RemoveItemFromPocket(itemBlock.Item);
             itemBlock.RemovePlaceholder();
             itemBlockMap.Remove(item);
             Destroy(itemBlock.gameObject);
