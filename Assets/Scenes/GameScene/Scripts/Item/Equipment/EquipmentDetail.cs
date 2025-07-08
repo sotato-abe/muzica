@@ -45,7 +45,7 @@ public class EquipmentDetail : MonoBehaviour
         }
         // 装備アイテムのブロックを設定
         ItemBlock itemBlock = Instantiate(itemBlockPrefab, blockSlot.transform);
-        itemBlock.Setup(equipment);
+        itemBlock.Setup(equipment, this.transform);
     }
 
     private void SetCosts(List<EnegyCost> costs)

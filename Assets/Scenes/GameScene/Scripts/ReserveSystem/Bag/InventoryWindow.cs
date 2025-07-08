@@ -40,7 +40,7 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
         if (droppedItemBlock != null && droppedItemBlock.Item != null)
         {
             Item item = droppedItemBlock.Item;
-            if (itemBlockMap.ContainsKey(item))
+            if (droppedItemBlock.OriginalParent == this.transform)
                 return;
             playerController.AddItemToBag(droppedItemBlock.Item);
             droppedItemBlock.RemoveItem();
@@ -66,7 +66,7 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
 
             // 新規アイテムだけ生成
             ItemBlock itemBlock = Instantiate(itemBlockPrefab, itemList.transform);
-            itemBlock.Setup(item);
+            itemBlock.Setup(item, this.transform);
             itemBlock.SetStatustext("New");
             itemBlock.OnRemoveItem += RemoveItem;
             itemBlockMap[item] = itemBlock;

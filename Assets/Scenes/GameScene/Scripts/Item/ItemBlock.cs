@@ -14,7 +14,7 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
     [SerializeField] Image cursor;
     [SerializeField] StatusText statusText;
     private bool isActive = true;
-
+    public Transform OriginalParent { get; private set; }
     public delegate void RemoveItemDelegate(ItemBlock itemBlock);
     public event RemoveItemDelegate OnRemoveItem;
 
@@ -35,10 +35,11 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
         base.Awake();
     }
 
-    public void Setup(Item item)
+    public void Setup(Item item, Transform originalParent)
     {
         Item = item;
         image.sprite = Item.Base.Sprite;
+        this.OriginalParent = originalParent;
         SetTarget(false);
     }
 

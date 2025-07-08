@@ -20,7 +20,7 @@ public class EquipmentSlot : EquipmentDetail, IDropHandler
         // 装備アイテムのブロックを設定
         ItemBlock itemBlock = Instantiate(itemBlockPrefab, blockSlot.transform);
         itemBlock.OnRemoveItem += RemoveItem;
-        itemBlock.Setup(equipment);
+        itemBlock.Setup(equipment, this.transform);
         currentBlock = itemBlock;
     }
 
