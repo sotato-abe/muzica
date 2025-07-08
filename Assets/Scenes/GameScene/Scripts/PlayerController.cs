@@ -116,4 +116,60 @@ public class PlayerController : MonoBehaviour
         if (item == null) return;
         FieldController.Instance.DropPlayerItem(item);
     }
+
+    public void AddCommandToStorage(Command command)
+    {
+        if (command == null) return;
+        if (player.StorageList.Count >= player.ColStorage)
+        {
+            Debug.LogWarning("ストレージの容量を超えています。コマンドを追加できません。");
+            return;
+        }
+        player.StorageList.Add(command);
+    }
+
+    public void RemoveCommandFromStorage(Command command)
+    {
+        if (command == null) return;
+        if (player.StorageList.Contains(command))
+        {
+            player.StorageList.Remove(command);
+            Debug.Log($"ストレージからコマンドを削除しました: {command.Base.Name}");
+        }
+        else
+        {
+            Debug.LogWarning("ストレージに指定のコマンドが存在しません。");
+        }
+    }
+
+    public void AddCommandToTable(Command command)
+    {
+        if (command == null) return;
+        if (player.TableList.Count >= player.ColMemory)
+        {
+            Debug.LogWarning("テーブルの容量を超えています。コマンドを追加できません。");
+            return;
+        }
+        player.TableList.Add(command);
+    }
+
+    public void RemoveCommandFromTable(Command command)
+    {
+        if (command == null) return;
+        if (player.TableList.Contains(command))
+        {
+            player.TableList.Remove(command);
+            Debug.Log($"テーブルからコマンドを削除しました: {command.Base.Name}");
+        }
+        else
+        {
+            Debug.LogWarning("テーブルに指定のコマンドが存在しません。");
+        }
+    }
+
+    public void DropCommand(Command command)
+    {
+        if (command == null) return;
+        // FieldController.Instance.DropPlayerItem(command);
+    }
 }

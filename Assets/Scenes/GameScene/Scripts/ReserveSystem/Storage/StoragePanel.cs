@@ -6,10 +6,20 @@ using TMPro;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class StoragePanel : Panel, IDropHandler
+public class StoragePanel : Panel
 {
-    public void OnDrop(PointerEventData eventData)
+    [SerializeField] StorageWindow storageWindow;
+    [SerializeField] TableWindow tableWindow;
+    [SerializeField] TargetCommandWindow targetCommandWindow;
+
+    private void Start()
     {
-        Debug.Log($"OnDrop");
+        storageWindow.OnTargetCommand += TargetCommand;
+        tableWindow.OnTargetCommand += TargetCommand;
+    }
+
+    public void TargetCommand(Command? command)
+    {
+        targetCommandWindow.TargetCommand(command);
     }
 }

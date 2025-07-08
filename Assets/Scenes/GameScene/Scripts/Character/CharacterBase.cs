@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Character/CharacterBase")]
+[CreateAssetMenu(fileName = "NewCharacter", menuName = "Character/CharacterBase")]
 public class CharacterBase : ScriptableObject
 {
     [SerializeField] new string name;
@@ -40,6 +40,8 @@ public class CharacterBase : ScriptableObject
     [SerializeField] List<Consumable> bagConsumableList;
     [SerializeField] List<Equipment> bagEquipmentList;
     [SerializeField] List<Treasure> bagTreasureList;
+    [SerializeField] List<Command> storageList;
+    [SerializeField] List<Command> tableList;
 
     // キャラクターの会話メッセージ
     [SerializeField] List<TalkMessage> messageList;
@@ -73,6 +75,9 @@ public class CharacterBase : ScriptableObject
     public List<Consumable> BagConsumableList { get => bagConsumableList; }
     public List<Equipment> BagEquipmentList { get => bagEquipmentList; }
     public List<Treasure> BagTreasureList { get => bagTreasureList; }
+
+    public List<Command> StorageList { get => storageList; }
+    public List<Command> TableList { get => tableList; }
 
     public List<TalkMessage> MessageList { get => messageList; }
 }

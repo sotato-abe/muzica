@@ -11,11 +11,9 @@ public class BagCategory : MonoBehaviour
     public delegate void ChangeWindowDelegate(bool isEquipment);
     public event ChangeWindowDelegate OnChangeWindow;
 
-    bool isEquipmentActive = true;
 
     public void SetEquipmentButtonActive()
     {
-        isEquipmentActive = true;
         // backPanelの位置をequipmentButtonの位置に合わせる
         StartCoroutine(SlidePanel(equipmentButton));
         // ウィンドウの切り替えイベントを発火
@@ -24,7 +22,6 @@ public class BagCategory : MonoBehaviour
 
     public void SetPocketButtonActive()
     {
-        isEquipmentActive = false;
         // backPanelの位置をpocketButtonの位置に合わせる
         StartCoroutine(SlidePanel(pocketButton));
         OnChangeWindow?.Invoke(false);

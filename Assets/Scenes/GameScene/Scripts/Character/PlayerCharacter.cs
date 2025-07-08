@@ -139,4 +139,52 @@ public class PlayerCharacter : Character
         BagItemList.Remove(item);
         return true;
     }
+
+    public bool AddCommandToStorage(Command command)
+    {
+        if (StorageList.Count < ColStorage)
+        {
+            StorageList.Add(command);
+            return true;
+        }
+
+        Debug.Log("バッグがいっぱいです。");
+        return false;
+    }
+
+    public bool RemoveCommandFromStorage(Command command)
+    {
+        if (command == null || !StorageList.Contains(command))
+        {
+            Debug.Log("コマンドが見つかりません。");
+            return false;
+        }
+
+        StorageList.Remove(command);
+        return true;
+    }
+
+    public bool AddCommandToTable(Command command)
+    {
+        if (TableList.Count < ColMemory)
+        {
+            TableList.Add(command);
+            return true;
+        }
+
+        Debug.Log("バッグがいっぱいです。");
+        return false;
+    }
+
+    public bool RemoveCommandFromTable(Command command)
+    {
+        if (command == null || !TableList.Contains(command))
+        {
+            Debug.Log("コマンドが見つかりません。");
+            return false;
+        }
+
+        TableList.Remove(command);
+        return true;
+    }
 }
