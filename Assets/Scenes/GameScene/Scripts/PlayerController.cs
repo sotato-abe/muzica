@@ -62,11 +62,36 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void BagInItemFromEquip(Item item)
+    {
+        if (item is Equipment equipment)
+        {
+            PlayerCharacter.EquipmentList.Remove(equipment);
+            player.AddItem(equipment);
+        }
+    }
+
     public void DropItemFromBag(Item item)
     {
         if (item == null) return;
         FieldController.Instance.DropPlayerItem(item);
         // アイテムをドロップする処理
         PlayerCharacter.RemoveBagItem(item);
+    }
+
+    public void DropItemFromEquip(Item item)
+    {
+        if (item == null) return;
+        FieldController.Instance.DropPlayerItem(item);
+        // アイテムをドロップする処理
+        if (item is Equipment equipment)
+        {
+            PlayerCharacter.EquipmentList.Remove(equipment);
+        }
+        else
+        {
+            Debug.LogWarning("装備アイテム以外はドロップできません。");
+            return;
+        }
     }
 }

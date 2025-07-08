@@ -34,7 +34,21 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
 
     public void OnDrop(PointerEventData eventData)
     {
-        Debug.Log($"OnDrop");
+        // ドロップアイテムをバックに追加
+        ItemBlock droppedItemBlock = eventData.pointerDrag?.GetComponent<ItemBlock>();
+
+        if (droppedItemBlock != null && droppedItemBlock.Item != null)
+        {
+            Item item = droppedItemBlock.Item;
+            if (itemBlockMap.ContainsKey(item))
+                return;
+            droppedItemBlock.BagInItem();
+            SetItems();
+        }
+        else
+        {
+            Debug.LogWarning("ドロップされたアイテムが無効です。");
+        }
     }
 
     public void SetItems()
@@ -52,6 +66,7 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
             // 新規アイテムだけ生成
             ItemBlock itemBlock = Instantiate(itemBlockPrefab, itemList.transform);
             itemBlock.Setup(item);
+            itemBlock.SetStatustext("New");
             itemBlock.OnDropItem += DropItem;
             itemBlock.OnEquipItem += EquipItem;
             itemBlockMap[item] = itemBlock;
@@ -115,7 +130,7 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
     private void EquipItem(ItemBlock itemBlock)
     {
         if (itemBlock == null || itemBlock.Item == null) return;
-        
+
         Item item = itemBlock.Item;
         if (itemBlockMap.ContainsKey(item))
         {

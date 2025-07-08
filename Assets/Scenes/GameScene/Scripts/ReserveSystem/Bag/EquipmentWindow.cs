@@ -9,10 +9,10 @@ using UnityEngine.EventSystems;
 public class EquipmentWindow : MonoBehaviour
 {
     private const int EQUIPMENT_COUNT = 2;
-    [SerializeField] GameObject equipmentSlot;
+    [SerializeField] EquipmentSlot equipmentSlot;
     [SerializeField] GameObject equipmentList;
     PlayerController playerController;
-    List<GameObject> equipmentSlots = new List<GameObject>();
+    List<EquipmentSlot> equipmentSlots = new List<EquipmentSlot>();
 
     private void Awake()
     {
@@ -46,18 +46,9 @@ public class EquipmentWindow : MonoBehaviour
 
         for (int i = 0; i < EQUIPMENT_COUNT; i++)
         {
-            GameObject slot = Instantiate(equipmentSlot, equipmentList.transform);
+            EquipmentSlot slot = Instantiate(equipmentSlot, equipmentList.transform);
+            slot.OnEquipAction += SetEquipments;
             equipmentSlots.Add(slot);
-            EquipmentArea slotComponent = slot.GetComponent<EquipmentArea>();
-
-            if (slotComponent != null)
-            {
-                slotComponent.OnEquipAction += SetEquipments;
-            }
-            else
-            {
-                Debug.LogError("EquipmentArea が見つかりませんでした");
-            }
         }
     }
 
@@ -76,10 +67,10 @@ public class EquipmentWindow : MonoBehaviour
         {
             if (i < equipmentSlots.Count)
             {
-                GameObject slot = equipmentSlots[i];
+                EquipmentSlot slot = equipmentSlots[i];
                 Equipment equip = equipmentList[i];
                 EquipmentSlot slotComponent = slot.GetComponent<EquipmentSlot>();
-                slotComponent.setEquipment(equip);
+                slotComponent.SetEquipment(equip);
             }
             else
             {

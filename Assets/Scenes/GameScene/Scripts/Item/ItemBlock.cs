@@ -18,6 +18,9 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
     public delegate void DropItemDelegate(ItemBlock itemBlock);
     public event DropItemDelegate OnDropItem;
 
+    public delegate void BagInItemDelegate(ItemBlock itemBlock);
+    public event BagInItemDelegate OnBagInItem;
+
     public delegate void EquipItemDelegate(ItemBlock itemBlock);
     public event EquipItemDelegate OnEquipItem;
 
@@ -27,7 +30,11 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
     void Start()
     {
         SetTarget(false);
-        statusText.SetText("New");
+    }
+
+    public void SetStatustext(string text)
+    {
+        statusText.SetText(text);
         statusText.SetActive(true);
     }
 
@@ -66,6 +73,11 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
     public void DropItem()
     {
         OnDropItem?.Invoke(this);
+    }
+
+    public void BagInItem()
+    {
+        OnBagInItem?.Invoke(this);
     }
 
     public void EquipItem()
