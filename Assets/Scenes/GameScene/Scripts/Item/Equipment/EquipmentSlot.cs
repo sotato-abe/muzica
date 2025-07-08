@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class EquipmentSlot : EquipmentDetail, IDropHandler
 {
-    public UnityAction OnEquipAction;
+    public UnityAction OnUpdateInventory;
 
     ItemBlock currentBlock;
 
@@ -33,6 +33,7 @@ public class EquipmentSlot : EquipmentDetail, IDropHandler
             {
                 // 既に装備中のアイテムがある場合は、バックに戻す
                 PlayerController.Instance.AddItemToBag(currentBlock.Item);
+                OnUpdateInventory?.Invoke();
             }
             droppedItemBlock.RemoveItem();
             PlayerController.Instance.AddItemToEquip(equipment);

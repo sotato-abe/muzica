@@ -8,12 +8,15 @@ using UnityEngine.Events;
 public class BagPanel : Panel
 {
     [SerializeField] InventoryWindow inventoryWindow;
+    [SerializeField] EquipmentWindow equipmentWindow;
 
-    private void OnEnable()
+    private void Start()
     {
+        equipmentWindow.OnUpdateInventory += UpdateInvenotry;
     }
 
-    private void SetInventoryWindow()
+    public void UpdateInvenotry()
     {
+        inventoryWindow.SetItems();
     }
 }

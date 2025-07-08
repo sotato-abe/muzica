@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 
 public class EquipmentWindow : MonoBehaviour
 {
+    public UnityAction OnUpdateInventory;
     private const int EQUIPMENT_COUNT = 2;
     [SerializeField] EquipmentSlot equipmentSlot;
     [SerializeField] GameObject equipmentList;
@@ -19,12 +20,6 @@ public class EquipmentWindow : MonoBehaviour
         playerController = PlayerController.Instance;
         DeleteAllSlot();
         CreateEquipmentSlot();
-    }
-    private void OnEnable()
-    {
-        if (PlayerController.Instance == null) return;
-
-        playerController = PlayerController.Instance;
         SetEquipments();
     }
 
@@ -47,7 +42,7 @@ public class EquipmentWindow : MonoBehaviour
         for (int i = 0; i < EQUIPMENT_COUNT; i++)
         {
             EquipmentSlot slot = Instantiate(equipmentSlot, equipmentList.transform);
-            slot.OnEquipAction += SetEquipments;
+            slot.OnUpdateInventory += UpdateInventory;
             equipmentSlots.Add(slot);
         }
     }
@@ -78,5 +73,10 @@ public class EquipmentWindow : MonoBehaviour
                 break;
             }
         }
+    }
+
+    public void UpdateInventory()
+    {
+        OnUpdateInventory?.Invoke();
     }
 }

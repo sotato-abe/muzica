@@ -7,7 +7,7 @@ using TMPro;
 [System.Serializable]
 public class PlayerCharacter : Character
 {
-    private const int EQUIPMENT_COUNT = 3;
+    private const int EQUIPMENT_COUNT = 2;
     public int SkillPoint { get; set; } = 0;
 
     public override void Init()
@@ -91,39 +91,23 @@ public class PlayerCharacter : Character
         }
     }
 
-    public bool AddItem(Item item)
+    public bool AddItemToBag(Item item)
     {
-        switch (item)
+        if (BagItemList.Count < Bag)
         {
-            case Consumable consumable:
-                return TryAddToBag(consumable);
-            // if (PocketList.Count < Pocket)
-            // {
-            //     PocketList.Add(consumable);
-            //     return true;
-            // }
-            // else
-            // {
-            // return TryAddToBag(consumable);
-            // }
-
-            case Equipment equipment:
-                return TryAddToBag(equipment);
-
-            case Treasure treasure:
-                return TryAddToBag(treasure);
-
-            default:
-                Debug.Log("Unknown item type.");
-                return false;
+            BagItemList.Add(item);
+            return true;
         }
+
+        Debug.Log("バッグがいっぱいです。");
+        return false;
     }
 
     public bool EquipItem(Equipment equipment)
     {
         EquipmentList.Add(equipment);
         // 3つ以上ある場合は一番頭の装備を外しBagItemListに追加
-        if (EquipmentList.Count > EQUIPMENT_COUNT)
+        if (EquipmentList.Count >= EQUIPMENT_COUNT)
         {
             Equipment removedEquipment = EquipmentList[0];
             EquipmentList.RemoveAt(0);
@@ -142,17 +126,5 @@ public class PlayerCharacter : Character
 
         BagItemList.Remove(item);
         return true;
-    }
-
-    private bool TryAddToBag(Item item)
-    {
-        if (BagItemList.Count < Bag)
-        {
-            BagItemList.Add(item);
-            return true;
-        }
-
-        Debug.Log("バッグがいっぱいです。");
-        return false;
     }
 }

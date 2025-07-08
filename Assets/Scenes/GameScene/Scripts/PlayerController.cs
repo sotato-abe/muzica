@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour
             FieldController.Instance.DropPlayerItem(item);
             return;
         }
-        player.AddItem(item);
+        player.AddItemToBag(item);
     }
     public void AddItemToEquip(Item item)
     {
