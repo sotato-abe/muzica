@@ -79,9 +79,4 @@ public class EquipmentWindow : MonoBehaviour
             }
         }
     }
-
-    public void Equip()
-    {
-
-    }
 }

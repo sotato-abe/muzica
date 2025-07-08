@@ -5,16 +5,16 @@ using UnityEngine.UI;
 
 public class EquipmentDetail : MonoBehaviour
 {
-    [SerializeField] Image blockSlot;
-    [SerializeField] ItemBlock itemBlockPrefab;
-    [SerializeField] GameObject costList;
+    [SerializeField] public GameObject blockSlot;
     [SerializeField] TargetIcon targetIcon;
-    [SerializeField] EquipmentSlotCounter equipmentSlotCounter;
-    [SerializeField] EnegyCostIcon enegyCostIconPrefab;
-    [SerializeField] EnchantIcon enchantIconPrefab;
+    [SerializeField] GameObject costList;
     [SerializeField] GameObject counterArea;
     [SerializeField] GameObject counterList;
     [SerializeField] GameObject enchantList;
+    [SerializeField] public ItemBlock itemBlockPrefab;
+    [SerializeField] EquipmentAttackCounter attackCounterPrefab;
+    [SerializeField] EnegyCostIcon enegyCostIconPrefab;
+    [SerializeField] EnchantIcon enchantIconPrefab;
 
     private void Awake()
     {
@@ -26,11 +26,9 @@ public class EquipmentDetail : MonoBehaviour
     {
         if (equipment == null)
         {
-            // 装備がnullの場合はデフォルトの画像を設定
+            ResetSlot();
             return;
         }
-        // ここで装備スロットに装備アイテムを設定する処理を実装
-        // 例えば、装備リストのアイテムをUIに表示するなど
         SetEquipmentBlock(equipment);
         counterArea.SetActive(true);
         targetIcon.SetTargetType(equipment.EquipmentBase.TargetType);
@@ -39,7 +37,7 @@ public class EquipmentDetail : MonoBehaviour
         SetCosts(equipment.EquipmentBase.EnegyCostList);
     }
 
-    private void SetEquipmentBlock(Equipment equipment)
+    public virtual void SetEquipmentBlock(Equipment equipment)
     {
         foreach (Transform child in blockSlot.transform)
         {
@@ -47,8 +45,6 @@ public class EquipmentDetail : MonoBehaviour
         }
         // 装備アイテムのブロックを設定
         ItemBlock itemBlock = Instantiate(itemBlockPrefab, blockSlot.transform);
-        itemBlock.OnDropItem += DropItem;
-        itemBlock.OnBagInItem += MoveBagInItem;
         itemBlock.Setup(equipment);
     }
 
@@ -92,31 +88,9 @@ public class EquipmentDetail : MonoBehaviour
         // 装備のコストを表示する処理
         foreach (var attack in enegyCountList)
         {
-            EquipmentSlotCounter newSlot = Instantiate(equipmentSlotCounter, counterList.transform);
+            EquipmentAttackCounter newSlot = Instantiate(attackCounterPrefab, counterList.transform);
             newSlot.SetCounter(attack);
         }
-    }
-
-    public void MoveBagInItem(ItemBlock itemBlock)
-    {
-        // アイテムをドロップする処理
-        if (itemBlock == null || itemBlock.Item == null) return;
-
-        Item item = itemBlock.Item;
-        PlayerController.Instance.BagInItemFromEquip(item);
-        Destroy(itemBlock.gameObject);
-        ResetSlot();
-    }
-
-    public void DropItem(ItemBlock itemBlock)
-    {
-        // アイテムをドロップする処理
-        if (itemBlock == null || itemBlock.Item == null) return;
-
-        Item item = itemBlock.Item;
-        PlayerController.Instance.DropItemFromEquip(item);
-        Destroy(itemBlock.gameObject);
-        ResetSlot();
     }
 
     public void ResetSlot()

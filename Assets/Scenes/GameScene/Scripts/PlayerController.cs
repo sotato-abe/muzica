@@ -48,50 +48,43 @@ public class PlayerController : MonoBehaviour
         }
         player.AddItem(item);
     }
-
-    public void EquipItemFromBag(Item item)
-    {
-        if (item is Equipment equipment)
-        {
-            bool idEquiped = PlayerCharacter.EquipItem(equipment);
-            if (idEquiped)
-            {
-                PlayerCharacter.RemoveBagItem(item);
-            }
-            Debug.Log($"装備アイテムをバッグから装備しました: {item.Base.Name}");
-        }
-    }
-
-    public void BagInItemFromEquip(Item item)
-    {
-        if (item is Equipment equipment)
-        {
-            PlayerCharacter.EquipmentList.Remove(equipment);
-            player.AddItem(equipment);
-        }
-    }
-
-    public void DropItemFromBag(Item item)
+    public void AddItemToEquip(Item item)
     {
         if (item == null) return;
-        FieldController.Instance.DropPlayerItem(item);
-        // アイテムをドロップする処理
-        PlayerCharacter.RemoveBagItem(item);
-    }
-
-    public void DropItemFromEquip(Item item)
-    {
-        if (item == null) return;
-        FieldController.Instance.DropPlayerItem(item);
-        // アイテムをドロップする処理
         if (item is Equipment equipment)
         {
-            PlayerCharacter.EquipmentList.Remove(equipment);
+            player.EquipmentList.Add(equipment);
         }
         else
         {
-            Debug.LogWarning("装備アイテム以外はドロップできません。");
-            return;
+            Debug.LogWarning("装備アイテム以外は装備できません。");
         }
+    }
+
+    public void RemoveItemFromBag(Item item)
+    {
+        if (item == null) return;
+        player.RemoveBagItem(item);
+        Debug.Log($"バッグからアイテムを削除しました: {item.Base.Name}");
+    }
+
+    public void RemoveItemFromEquip(Item item)
+    {
+        if (item == null) return;
+        if (item is Equipment equipment)
+        {
+            player.EquipmentList.Remove(equipment);
+            Debug.Log($"装備からアイテムを削除しました: {equipment.Base.Name}");
+        }
+        else
+        {
+            Debug.LogWarning("装備アイテム以外は削除できません。");
+        }
+    }
+
+    public void DropItem(Item item)
+    {
+        if (item == null) return;
+        FieldController.Instance.DropPlayerItem(item);
     }
 }

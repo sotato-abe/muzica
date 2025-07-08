@@ -10,6 +10,7 @@ public class DropBox : FocusScaleUp, IDropHandler
     public virtual void OnDrop(PointerEventData eventData)
     {
         ItemBlock droppedItemBlock = eventData.pointerDrag?.GetComponent<ItemBlock>();
-        droppedItemBlock.DropItem();
+        PlayerController.Instance.DropItem(droppedItemBlock.Item);
+        droppedItemBlock.RemoveItem();
     }
 }

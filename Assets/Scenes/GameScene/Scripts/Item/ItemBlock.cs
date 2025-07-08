@@ -15,17 +15,9 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
     [SerializeField] StatusText statusText;
     private bool isActive = true;
 
-    public delegate void DropItemDelegate(ItemBlock itemBlock);
-    public event DropItemDelegate OnDropItem;
+    public delegate void RemoveItemDelegate(ItemBlock itemBlock);
+    public event RemoveItemDelegate OnRemoveItem;
 
-    public delegate void BagInItemDelegate(ItemBlock itemBlock);
-    public event BagInItemDelegate OnBagInItem;
-
-    public delegate void EquipItemDelegate(ItemBlock itemBlock);
-    public event EquipItemDelegate OnEquipItem;
-
-    public delegate void SellItemDelegate(Item item);
-    public event SellItemDelegate OnSellItem;
 
     void Start()
     {
@@ -70,23 +62,8 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
         cursor.color = bgColor;
     }
 
-    public void DropItem()
+    public void RemoveItem()
     {
-        OnDropItem?.Invoke(this);
-    }
-
-    public void BagInItem()
-    {
-        OnBagInItem?.Invoke(this);
-    }
-
-    public void EquipItem()
-    {
-        OnEquipItem?.Invoke(this);
-    }
-
-    public void SellItem()
-    {
-        OnSellItem?.Invoke(Item);
+        OnRemoveItem?.Invoke(this);
     }
 }

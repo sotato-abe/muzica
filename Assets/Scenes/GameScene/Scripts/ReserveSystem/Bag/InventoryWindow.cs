@@ -42,7 +42,8 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
             Item item = droppedItemBlock.Item;
             if (itemBlockMap.ContainsKey(item))
                 return;
-            droppedItemBlock.BagInItem();
+            playerController.AddItemToBag(droppedItemBlock.Item);
+            droppedItemBlock.RemoveItem();
             SetItems();
         }
         else
@@ -67,8 +68,7 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
             ItemBlock itemBlock = Instantiate(itemBlockPrefab, itemList.transform);
             itemBlock.Setup(item);
             itemBlock.SetStatustext("New");
-            itemBlock.OnDropItem += DropItem;
-            itemBlock.OnEquipItem += EquipItem;
+            itemBlock.OnRemoveItem += RemoveItem;
             itemBlockMap[item] = itemBlock;
         }
 
@@ -112,33 +112,18 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
         SetCounter();
     }
 
-    private void DropItem(ItemBlock itemBlock)
+    private void RemoveItem(ItemBlock itemBlock)
     {
         if (itemBlock == null || itemBlock.Item == null) return;
 
         Item item = itemBlock.Item;
         if (itemBlockMap.ContainsKey(item))
         {
-            playerController.DropItemFromBag(itemBlock.Item);
+            playerController.RemoveItemFromBag(itemBlock.Item);
             itemBlock.RemovePlaceholder();
             itemBlockMap.Remove(item);
             Destroy(itemBlock.gameObject);
-            SetCounter();
-        }
-    }
-
-    private void EquipItem(ItemBlock itemBlock)
-    {
-        if (itemBlock == null || itemBlock.Item == null) return;
-
-        Item item = itemBlock.Item;
-        if (itemBlockMap.ContainsKey(item))
-        {
-            playerController.EquipItemFromBag(itemBlock.Item);
-            itemBlock.RemovePlaceholder();
-            itemBlockMap.Remove(item);
-            Destroy(itemBlock.gameObject);
-            SetCounter();
+            SetItems();   
         }
     }
 
