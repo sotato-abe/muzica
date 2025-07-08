@@ -8,13 +8,9 @@ public class EquipmentDetail : MonoBehaviour
     [SerializeField] public GameObject blockSlot;
     [SerializeField] TargetIcon targetIcon;
     [SerializeField] GameObject costList;
-    [SerializeField] GameObject counterArea;
-    [SerializeField] GameObject counterList;
-    [SerializeField] GameObject enchantList;
+    [SerializeField] EquipmentInfo equipmentInfo;
     [SerializeField] public ItemBlock itemBlockPrefab;
-    [SerializeField] EquipmentAttackCounter attackCounterPrefab;
     [SerializeField] EnegyCostIcon enegyCostIconPrefab;
-    [SerializeField] EnchantIcon enchantIconPrefab;
 
     private void Awake()
     {
@@ -30,10 +26,7 @@ public class EquipmentDetail : MonoBehaviour
             return;
         }
         SetEquipmentBlock(equipment);
-        counterArea.SetActive(true);
-        targetIcon.SetTargetType(equipment.EquipmentBase.TargetType);
-        SetEnchants(equipment.EquipmentBase.EnchantList);
-        SetAttacks(equipment.EquipmentBase.EnegyAttackList);
+        equipmentInfo.SetInfo(equipment);
         SetCosts(equipment.EquipmentBase.EnegyCostList);
     }
 
@@ -63,36 +56,6 @@ public class EquipmentDetail : MonoBehaviour
         }
     }
 
-    private void SetEnchants(List<Enchant> enchants)
-    {
-        foreach (Transform child in enchantList.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
-        // エンチャントを表示する処理
-        foreach (var enchant in enchants)
-        {
-            EnchantIcon newIcon = Instantiate(enchantIconPrefab, enchantList.transform);
-            newIcon.SetEnchant(enchant);
-        }
-    }
-
-    private void SetAttacks(List<EnegyCount> enegyCountList)
-    {
-        // 既存のカウンターを削除
-        foreach (Transform child in counterList.transform)
-        {
-            Destroy(child.gameObject);
-        }
-        // 装備のコストを表示する処理
-        foreach (var attack in enegyCountList)
-        {
-            EquipmentAttackCounter newSlot = Instantiate(attackCounterPrefab, counterList.transform);
-            newSlot.SetCounter(attack);
-        }
-    }
-
     public void ResetSlot()
     {
         foreach (Transform child in blockSlot.transform)
@@ -103,6 +66,6 @@ public class EquipmentDetail : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-        counterArea.SetActive(false);
+        equipmentInfo.gameObject.SetActive(false);
     }
 }

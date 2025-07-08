@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using TMPro;
 
@@ -17,6 +18,9 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
     public Transform OriginalParent { get; private set; }
     public delegate void RemoveItemDelegate(ItemBlock itemBlock);
     public event RemoveItemDelegate OnRemoveItem;
+
+    public delegate void TargetItemDelegate(ItemBlock? itemBlock);
+    public event TargetItemDelegate OnTargetItem;
 
 
     void Start()
@@ -45,12 +49,15 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+
         SetTarget(true);
+        OnTargetItem?.Invoke(this);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         SetTarget(false);
+        OnTargetItem?.Invoke(null);
     }
 
     public void SetTarget(bool activeFlg)

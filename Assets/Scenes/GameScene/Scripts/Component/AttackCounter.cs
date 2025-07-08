@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
 
-public class EquipmentAttackCounter : MonoBehaviour
+public class AttackCounter : MonoBehaviour
 {
     [SerializeField] Image iconImage;
     [SerializeField] TextMeshProUGUI valText;

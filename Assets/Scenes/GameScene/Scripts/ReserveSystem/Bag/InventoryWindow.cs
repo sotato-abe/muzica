@@ -16,6 +16,9 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
     PlayerController playerController;
     Dictionary<Item, ItemBlock> itemBlockMap = new Dictionary<Item, ItemBlock>();
 
+    public delegate void TargetItemDelegate(Item? item);
+    public event TargetItemDelegate OnTargetItem;
+
     private const int MAX_BAG_COUNT = 20; // スムージングの反復回数
     private int currentBlockCount = 0;
     private void Awake()
@@ -69,6 +72,7 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
             itemBlock.Setup(item, this.transform);
             itemBlock.SetStatustext("New");
             itemBlock.OnRemoveItem += RemoveItem;
+            itemBlock.OnTargetItem += TargetItem;
             itemBlockMap[item] = itemBlock;
         }
 
@@ -125,6 +129,16 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
             Destroy(itemBlock.gameObject);
             SetItems();   
         }
+    }
+
+    public void TargetItem(ItemBlock itemBlock)
+    {
+        if (itemBlock == null || itemBlock.Item == null)
+        {
+            OnTargetItem?.Invoke(null);
+            return;
+        }
+        OnTargetItem?.Invoke(itemBlock.Item);
     }
 
     public void ArrengeItemBlocks()
