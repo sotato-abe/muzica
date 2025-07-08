@@ -19,11 +19,11 @@ public class CommandDetail : MonoBehaviour
 
     public void SetCommandDetail(Command command)
     {
+        this.gameObject.SetActive(true);
         commandNameText.text = command.Base.Name;
         commandDescriptionText.text = command.Base.Description;
         commandImage.sprite = command.Base.Sprite;
         commandImage.color = new Color(1, 1, 1, 1);
-        this.gameObject.SetActive(true);
         SetCosts(command.Base.EnegyCostList);
     }
 
