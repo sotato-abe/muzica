@@ -47,7 +47,8 @@ public class StorageWindow : MonoBehaviour, IDropHandler
                 return;
             playerController.AddCommandToStorage(droppedCommandBlock.Command);
             droppedCommandBlock.RemoveCommand();
-            SetCommands();
+            CreateCommandBlock(command, null);
+            SetCounter();
         }
         else
         {
@@ -58,7 +59,6 @@ public class StorageWindow : MonoBehaviour, IDropHandler
     public void SetCommands()
     {
         List<Command> commands = playerController.PlayerCharacter.StorageList;
-        Debug.Log($"SetCommands: {commands.Count} commands in storage.");
 
         foreach (Command command in commands)
         {
@@ -69,15 +69,28 @@ public class StorageWindow : MonoBehaviour, IDropHandler
             }
 
             // 新規アイテムだけ生成
-            CommandBlock commandBlock = Instantiate(commandBlockPrefab, commandList.transform);
-            commandBlock.Setup(command, this.transform);
-            commandBlock.SetStatustext("New");
-            commandBlock.OnRemoveCommand += RemoveCommand;
-            commandBlock.OnTargetCommand += TargetCommand;
-            commandBlockMap[command] = commandBlock;
+            CreateCommandBlock(command, "New");
+        }
+        SetCounter();
+    }
+
+    private void CreateCommandBlock(Command command, string? statusText)
+    {
+        if (commandBlockMap.ContainsKey(command))
+        {
+            // 既に表示済みならスキップ
+            return;
         }
 
-        SetCounter();
+        CommandBlock commandBlock = Instantiate(commandBlockPrefab, commandList.transform);
+        commandBlock.Setup(command, this.transform);
+        if (!string.IsNullOrEmpty(statusText))
+        {
+            commandBlock.SetStatustext(statusText);
+        }
+        commandBlock.OnRemoveCommand += RemoveCommand;
+        commandBlock.OnTargetCommand += TargetCommand;
+        commandBlockMap[command] = commandBlock;
     }
 
     private void SetCounter()
@@ -128,7 +141,7 @@ public class StorageWindow : MonoBehaviour, IDropHandler
             commandBlock.RemovePlaceholder();
             commandBlockMap.Remove(command);
             Destroy(commandBlock.gameObject);
-            SetCommands();   
+            SetCommands();
         }
     }
 

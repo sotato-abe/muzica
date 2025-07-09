@@ -12,6 +12,7 @@ public class FieldController : MonoBehaviour
     [SerializeField] MessagePanel messagePanel;
     [SerializeField] private Tilemap tilemap;
     [SerializeField] DropItem dropItemPrefab; // ドロップアイテムのプレハブ
+    [SerializeField] DropCommand dropCommandPrefab; // ドロップアイテムのプレハブ
     [SerializeField] FieldPlayer fieldPlayer; // プレイヤーコントローラー
 
     private FieldData currentFieldData;
@@ -97,13 +98,38 @@ public class FieldController : MonoBehaviour
         // ドロップアイテムを生成し、フィールド上にドロップする
         Vector2 position = fieldPlayer.transform.position;
         DropItem(item, position);
-        // DropItem dropItem = Instantiate(dropItemPrefab, position, Quaternion.identity);
+    }
+
+    public void DropPlayerCommand(Command command)
+    {
+        if (command == null) return;
+
+        // ドロップコマンドを生成し、フィールド上にドロップする
+        Vector2 position = fieldPlayer.transform.position;
+        DropCommand(command, position);
     }
 
     public void DropItem(Item item, Vector2 centerPosition)
     {
         if (item == null) return;
+        Vector2 dropPosition = FindDropPosition(centerPosition);
+        DropItem dropItem = Instantiate(dropItemPrefab, dropPosition, Quaternion.identity);
+        dropItem.Setup(item);
+        StartCoroutine(dropItem.JumpMoveMotion(dropPosition));
+    }
 
+    public void DropCommand(Command command, Vector2 centerPosition)
+    {
+        if (command == null) return;
+
+        Vector2 dropPosition = FindDropPosition(centerPosition);
+        DropCommand dropCommand = Instantiate(dropCommandPrefab, dropPosition, Quaternion.identity);
+        dropCommand.Setup(command);
+        StartCoroutine(dropCommand.JumpMoveMotion(dropPosition));
+    }
+
+    private Vector2 FindDropPosition(Vector2 centerPosition)
+    {
         const int maxTries = 50;
         float dropRadius = 1.0f;
 
@@ -118,22 +144,13 @@ public class FieldController : MonoBehaviour
 
             // タイルの存在チェック
             Vector3Int cellPos = tilemap.WorldToCell(tryPosition);
-            bool hasTile = tilemap.HasTile(cellPos);
-
-            // コライダーとの当たり判定
-            bool overlap = Physics2D.OverlapPoint(tryPosition, LayerMask.GetMask("FieldGround")) != null;
-
-            // 両方OKならそこにドロップ
-            if (hasTile && overlap)
+            if (tilemap.HasTile(cellPos))
             {
-                DropItem dropItem = Instantiate(dropItemPrefab, centerPosition, Quaternion.identity);
-                dropItem.Setup(item);
-                StartCoroutine(dropItem.JumpMoveMotion(tryPosition));
-                return;
+                return tryPosition;
             }
         }
 
-        // 落とせる場所が見つからなかった…
-        Debug.LogWarning("ドロップ場所が見つからんかった…");
+        // 落とせる場所が見つからなかった場合は中心位置を返す
+        return centerPosition;
     }
 }

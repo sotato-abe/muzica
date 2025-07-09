@@ -12,11 +12,6 @@ public class CommandDetail : MonoBehaviour
     [SerializeField] GameObject costList;
     [SerializeField] EnegyCostIcon enegyCostIconPrefab;
 
-    private void Awake()
-    {
-        ResetSlot();
-    }
-
     public void SetCommandDetail(Command command)
     {
         this.gameObject.SetActive(true);

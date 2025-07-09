@@ -122,6 +122,7 @@ public class PlayerController : MonoBehaviour
         if (command == null) return;
         if (player.StorageList.Count >= player.ColStorage)
         {
+            FieldController.Instance.DropPlayerCommand(command);
             Debug.LogWarning("ストレージの容量を超えています。コマンドを追加できません。");
             return;
         }
@@ -147,6 +148,7 @@ public class PlayerController : MonoBehaviour
         if (command == null) return;
         if (player.TableList.Count >= player.ColMemory)
         {
+            FieldController.Instance.DropPlayerCommand(command);
             Debug.LogWarning("テーブルの容量を超えています。コマンドを追加できません。");
             return;
         }
@@ -170,6 +172,6 @@ public class PlayerController : MonoBehaviour
     public void DropCommand(Command command)
     {
         if (command == null) return;
-        // FieldController.Instance.DropPlayerItem(command);
+        FieldController.Instance.DropPlayerCommand(command);
     }
 }

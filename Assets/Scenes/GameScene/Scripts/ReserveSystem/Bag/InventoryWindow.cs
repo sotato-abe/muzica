@@ -47,7 +47,8 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
                 return;
             playerController.AddItemToBag(droppedItemBlock.Item);
             droppedItemBlock.RemoveItem();
-            SetItems();
+            CreateItemBlock(item, null);
+            SetCounter();
         }
         else
         {
@@ -68,15 +69,26 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
             }
 
             // 新規アイテムだけ生成
-            ItemBlock itemBlock = Instantiate(itemBlockPrefab, itemList.transform);
-            itemBlock.Setup(item, this.transform);
-            itemBlock.SetStatustext("New");
-            itemBlock.OnRemoveItem += RemoveItem;
-            itemBlock.OnTargetItem += TargetItem;
-            itemBlockMap[item] = itemBlock;
+            CreateItemBlock(item, "New");
         }
 
         SetCounter();
+    }
+
+    private void CreateItemBlock(Item item, string? statusText)
+    {
+        if (itemBlockMap.ContainsKey(item))
+        {
+            // 既に表示済みならスキップ
+            return;
+        }
+
+        ItemBlock itemBlock = Instantiate(itemBlockPrefab, itemList.transform);
+        itemBlock.Setup(item, this.transform);
+        itemBlock.SetStatustext(statusText);
+        itemBlock.OnRemoveItem += RemoveItem;
+        itemBlock.OnTargetItem += TargetItem;
+        itemBlockMap[item] = itemBlock;
     }
 
     private void SetCounter()
@@ -127,7 +139,7 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
             itemBlock.RemovePlaceholder();
             itemBlockMap.Remove(item);
             Destroy(itemBlock.gameObject);
-            SetItems();   
+            SetItems();
         }
     }
 
