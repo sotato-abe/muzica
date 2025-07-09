@@ -33,6 +33,7 @@ public class CharacterBase : ScriptableObject
     [SerializeField] int money = 10;
     [SerializeField] int disk = 0;
     [SerializeField] int key = 0;
+    [SerializeField] int exp = 0;
 
     // キャラクターの所持品
     [SerializeField] List<Equipment> equipmentList;
@@ -69,6 +70,7 @@ public class CharacterBase : ScriptableObject
     public int Money { get => money; }
     public int Disk { get => disk; }
     public int Key { get => key; }
+    public int Exp { get => exp; }
 
     public List<Equipment> EquipmentList { get => equipmentList; }
     public List<Consumable> PocketList { get => pocketList; }

@@ -19,7 +19,7 @@ public class StorageWindow : MonoBehaviour, IDropHandler
     public delegate void TargetCommandDelegate(Command? command);
     public event TargetCommandDelegate OnTargetCommand;
 
-    private const int MAX_STORAGE_COUNT = 20;
+    private const int MAX_STORAGE_COUNT = 18;
     private int currentBlockCount = 0;
     private void Awake()
     {

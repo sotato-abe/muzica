@@ -75,10 +75,10 @@ public class Character
         Money = _base.Money;
         Disk = _base.Disk;
         Key = _base.Key;
+        Exp = _base.Exp;
 
         Level = 1;
         Soul = 0;
-        Exp = 0;
 
         EquipmentList = new List<Equipment>(_base.EquipmentList ?? new List<Equipment>());
         PocketList = new List<Consumable>(_base.PocketList ?? new List<Consumable>());
