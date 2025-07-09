@@ -24,7 +24,7 @@ public class CharacterBase : ScriptableObject
     [SerializeField] int luck = 1;
 
     // キャラクターの容量
-    [SerializeField] int memory = 5;
+    [SerializeField] int memory = 3;
     [SerializeField] int storage = 10;
     [SerializeField] int pocket = 5;
     [SerializeField] int bag = 10;
@@ -42,7 +42,7 @@ public class CharacterBase : ScriptableObject
     [SerializeField] List<Equipment> bagEquipmentList;
     [SerializeField] List<Treasure> bagTreasureList;
     [SerializeField] List<Command> storageList;
-    [SerializeField] List<Command> tableList;
+    [SerializeField] List<Command> tableList = new List<Command>(15);
 
     // キャラクターの会話メッセージ
     [SerializeField] List<TalkMessage> messageList;

@@ -28,12 +28,6 @@ public class CommandBlock : Block, IPointerEnterHandler, IPointerExitHandler
         SetTarget(false);
     }
 
-    public void SetStatustext(string text)
-    {
-        statusText.SetText(text);
-        statusText.SetActive(true);
-    }
-
     protected override void Awake()
     {
         base.Awake();
@@ -73,5 +67,11 @@ public class CommandBlock : Block, IPointerEnterHandler, IPointerExitHandler
     public void RemoveCommand()
     {
         OnRemoveCommand?.Invoke(this);
+    }
+
+    public void SetStatustext(string text)
+    {
+        statusText.SetText(text);
+        statusText.SetActive(true);
     }
 }

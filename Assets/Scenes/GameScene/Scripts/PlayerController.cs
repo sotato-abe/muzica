@@ -143,16 +143,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void AddCommandToTable(Command command)
+    public void AddCommandToTable(Command? command, int index)
     {
-        if (command == null) return;
-        if (player.TableList.Count >= player.ColMemory)
+        if (index >= player.ColMemory * 3)
         {
             FieldController.Instance.DropPlayerCommand(command);
             Debug.LogWarning("テーブルの容量を超えています。コマンドを追加できません。");
             return;
         }
-        player.TableList.Add(command);
+        player.TableList[index] = command;
     }
 
     public void RemoveCommandFromTable(Command command)

@@ -127,9 +127,6 @@ public class Character
             DiffDefense += equipment.EquipmentBase.Defense;
             DiffSpeed += equipment.EquipmentBase.Speed;
             DiffLuck += equipment.EquipmentBase.Luck;
-            DiffMemory += equipment.EquipmentBase.Memory;
-            DiffStorage += equipment.EquipmentBase.Storage;
-            DiffPocket += equipment.EquipmentBase.Pocket;
         }
 
         ColLife = MaxLife + DiffLife;

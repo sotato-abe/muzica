@@ -6,96 +6,78 @@ using TMPro;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class TableWindow : MonoBehaviour, IDropHandler
+public class TableWindow : MonoBehaviour
 {
-    [SerializeField] CommandBlock commandBlockPrefab;
-    [SerializeField] GameObject refusalBlockPrefab;
-    [SerializeField] GameObject commandList;
+    [SerializeField] CommandSlot commandSlotPrefab;
+    [SerializeField] GameObject slotList;
+    [SerializeField] RectTransform backRectTransform;
     PlayerController playerController;
-    Dictionary<Command, CommandBlock> commandBlockMap = new Dictionary<Command, CommandBlock>();
 
+    float tableHeight; // スロットの幅
+    float paddingWidth = 50f; // 横幅
+
+    List<CommandSlot> commandSlots = new List<CommandSlot>();
     public delegate void TargetCommandDelegate(Command? command);
     public event TargetCommandDelegate OnTargetCommand;
 
-    private int currentBlockCount = 0;
-    private void Awake()
+    private void Start()
     {
         playerController = PlayerController.Instance;
-        DeleteAllCommands();
-    }
-    private void OnEnable()
-    {
-        if (PlayerController.Instance == null) return;
-        SetCommands();
-    }
-
-    public void OnDrop(PointerEventData eventData)
-    {
-        // ドロップアイテムをバックに追加
-        CommandBlock droppedCommandBlock = eventData.pointerDrag?.GetComponent<CommandBlock>();
-
-        if (droppedCommandBlock != null && droppedCommandBlock.Command != null)
+        if (playerController == null)
         {
-            Command command = droppedCommandBlock.Command;
-            if (droppedCommandBlock.OriginalParent == this.transform)
-                return;
-            playerController.AddCommandToTable(droppedCommandBlock.Command);
-            droppedCommandBlock.RemoveCommand();
-            SetCommands();
+            Debug.LogError("PlayerController is not initialized.");
+            return;
         }
-        else
-        {
-            Debug.LogWarning("ドロップされたアイテムが無効です。");
-        }
+
+        tableHeight = backRectTransform.sizeDelta.y;
+        // コマンドスロットを初期化
+        InitializeCommandSlots();
+        SetCommandSlot();
+        SetTableSize();
     }
 
-    public void SetCommands()
+    private void SetTableSize()
     {
-        List<Command> commands = playerController.PlayerCharacter.TableList;
-        Debug.Log($"SetCommands: {commands.Count} commands in storage.");
+        // テーブルのサイズを設定
+        Debug.Log($"Setting table size: {playerController.PlayerCharacter.ColMemory}/{playerController.PlayerCharacter.Memory}");
+        float tableWidth = playerController.PlayerCharacter.ColMemory * 100 + paddingWidth;
+        backRectTransform.sizeDelta = new Vector2(tableWidth, tableHeight);
+    }
 
-        foreach (Command command in commands)
+    public void SetCommandSlot()
+    {
+        // 既存のコマンドスロットをクリア
+        foreach (CommandSlot slot in commandSlots)
         {
-            if (commandBlockMap.ContainsKey(command))
+            slot.ResetSlot();
+        }
+
+        // テーブルにコマンドをセット
+        for (int i = 0; i < playerController.PlayerCharacter.ColMemory * 3; i++)
+        {
+            Command command = playerController.PlayerCharacter.TableList[i];
+            if (command != null && command.Base != null)
             {
-                // 既に表示済みならスキップ
-                continue;
+                commandSlots[i].SetCommand(command);
             }
-
-            // 新規アイテムだけ生成
-            CommandBlock commandBlock = Instantiate(commandBlockPrefab, commandList.transform);
-            commandBlock.Setup(command, this.transform);
-            commandBlock.OnRemoveCommand += RemoveCommand;
-            commandBlock.OnTargetCommand += TargetCommand;
-            commandBlockMap[command] = commandBlock;
         }
     }
 
-    private void DeleteAllCommands()
+    private void InitializeCommandSlots()
     {
-        foreach (Transform child in commandList.transform)
+        // 既存のスロットをクリア
+        foreach (Transform child in slotList.transform)
         {
             Destroy(child.gameObject);
         }
-        foreach (var commandBlock in commandBlockMap.Values)
-        {
-            Destroy(commandBlock.gameObject);
-        }
-        commandBlockMap.Clear();
-    }
 
-    private void RemoveCommand(CommandBlock commandBlock)
-    {
-        if (commandBlock == null || commandBlock.Command == null) return;
-
-        Command command = commandBlock.Command;
-        if (commandBlockMap.ContainsKey(command))
+        // コマンドスロットを生成
+        for (int i = 0; i < playerController.PlayerCharacter.ColMemory * 3; i++)
         {
-            playerController.RemoveCommandFromTable(commandBlock.Command);
-            commandBlock.RemovePlaceholder();
-            commandBlockMap.Remove(command);
-            Destroy(commandBlock.gameObject);
-            SetCommands();   
+            CommandSlot newSlot = Instantiate(commandSlotPrefab, slotList.transform);
+            newSlot.SlotIndex = i; // スロットのインデックスを設定            
+            newSlot.OnTargetCommand += TargetCommand; // コマンド選択イベントを登録
+            commandSlots.Add(newSlot);
         }
     }
 

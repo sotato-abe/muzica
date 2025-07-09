@@ -13,9 +13,6 @@ public class EquipmentBase : ItemBase
     [SerializeField] int defense;
     [SerializeField] int speed;
     [SerializeField] int luck;
-    [SerializeField] int memory;
-    [SerializeField] int storage;
-    [SerializeField] int pocket;
 
     [SerializeField] TargetType targetType;
     [SerializeField] List<EnegyCost> enegyCostList;
@@ -30,9 +27,6 @@ public class EquipmentBase : ItemBase
     public int Defense { get => defense; }
     public int Speed { get => speed; }
     public int Luck { get => luck; }
-    public int Memory { get => memory; }
-    public int Storage { get => storage; }
-    public int Pocket { get => pocket; }
 
     public TargetType TargetType { get => targetType; }
     public List<EnegyCost> EnegyCostList { get => enegyCostList; }
