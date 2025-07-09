@@ -81,10 +81,20 @@ public class Character
         Soul = 0;
 
         EquipmentList = new List<Equipment>(_base.EquipmentList ?? new List<Equipment>());
-        PocketList = new List<Consumable>(_base.PocketList ?? new List<Consumable>());
+        PocketList = new List<Consumable>();
+        foreach (Consumable item in _base.PocketList)
+        {
+            item.Initialize();
+            PocketList.Add(item);
+        }
 
         BagItemList = new List<Item>();
-        BagItemList.AddRange(_base.BagConsumableList);
+        foreach (Consumable item in _base.BagConsumableList)
+        {
+            item.Initialize();
+            BagItemList.Add(item);
+        }
+
         BagItemList.AddRange(_base.BagEquipmentList);
         BagItemList.AddRange(_base.BagTreasureList);
 

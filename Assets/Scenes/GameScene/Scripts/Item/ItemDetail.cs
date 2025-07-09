@@ -10,7 +10,9 @@ public class ItemDetail : MonoBehaviour
     [SerializeField] ConsumableInfo consumableInfo;
     [SerializeField] TreasureInfo treasureInfo;
     [SerializeField] GameObject costList;
+    [SerializeField] GameObject countList;
     [SerializeField] EnegyCostIcon enegyCostIconPrefab;
+    [SerializeField] GameObject countIconPrefab;
 
     private void Awake()
     {
@@ -24,6 +26,7 @@ public class ItemDetail : MonoBehaviour
         if (item is Consumable consumable)
         {
             consumableInfo.SetInfo(consumable);
+            SetCount(consumable.UsableCount);
         }
         else if (item is Equipment equipment)
         {
@@ -61,11 +64,27 @@ public class ItemDetail : MonoBehaviour
         }
     }
 
+    private void SetCount(int count)
+    {
+        foreach (Transform child in countList.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        for(int i = 0; i < count; i++)
+        {
+            Instantiate(countIconPrefab, countList.transform);
+        }
+    }
+
     public void ResetSlot()
     {
         itemImage.color = new Color(1, 1, 1, 0);
 
         foreach (Transform child in costList.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        foreach (Transform child in countList.transform)
         {
             Destroy(child.gameObject);
         }
