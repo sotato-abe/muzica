@@ -18,10 +18,9 @@ public class EquipmentBase : ItemBase
     [SerializeField] int pocket;
 
     [SerializeField] TargetType targetType;
-    [SerializeField] List<EnegyCount> enegyAttackList;
     [SerializeField] List<EnegyCost> enegyCostList;
     [SerializeField] List<Enchant> enchantList;
-
+    [SerializeField] List<EnegyCount> enegyAttackList;
 
     public EquipmentType EquipmentType { get => equipmentType; }
     public int Life { get => life; }
@@ -36,7 +35,7 @@ public class EquipmentBase : ItemBase
     public int Pocket { get => pocket; }
 
     public TargetType TargetType { get => targetType; }
-    public List<EnegyCount> EnegyAttackList { get => enegyAttackList; }
     public List<EnegyCost> EnegyCostList { get => enegyCostList; }
     public List<Enchant> EnchantList { get => enchantList; }
+    public List<EnegyCount> EnegyAttackList { get => enegyAttackList; }
 }

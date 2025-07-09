@@ -8,12 +8,14 @@ using TMPro;
 public class EnegyCount
 {
     public EnegyType type;
+    public bool isRecovery = true; // trueならプラス、falseならマイナス
     public int val;
     public int times = 1;
 
-    public EnegyCount(EnegyType type, int val, int times = 1)
+    public EnegyCount(EnegyType type,bool isRecovery, int val, int times = 1)
     {
         this.type = type;
+        this.isRecovery = isRecovery;
         this.val = val;
         this.val = times;
     }

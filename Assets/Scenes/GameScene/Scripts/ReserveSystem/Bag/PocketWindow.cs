@@ -45,6 +45,11 @@ public class PocketWindow : MonoBehaviour, IDropHandler
             Item item = droppedItemBlock.Item;
             if (droppedItemBlock.OriginalParent == this.transform)
                 return;
+            if (item is Equipment || item is Treasure)
+            {
+                Debug.LogWarning("装備品や宝物はポケットにドロップできません。");
+                return;
+            }
             playerController.AddItemToPocket(droppedItemBlock.Item);
             droppedItemBlock.RemoveItem();
             SetItems();
@@ -70,7 +75,6 @@ public class PocketWindow : MonoBehaviour, IDropHandler
             // 新規アイテムだけ生成
             ItemBlock itemBlock = Instantiate(itemBlockPrefab, itemList.transform);
             itemBlock.Setup(item, this.transform);
-            itemBlock.SetStatustext("New");
             itemBlock.OnRemoveItem += RemoveItem;
             itemBlock.OnTargetItem += TargetItem;
             itemBlockMap[item] = itemBlock;
@@ -127,7 +131,7 @@ public class PocketWindow : MonoBehaviour, IDropHandler
             itemBlock.RemovePlaceholder();
             itemBlockMap.Remove(item);
             Destroy(itemBlock.gameObject);
-            SetItems();   
+            SetItems();
         }
     }
 

@@ -7,6 +7,8 @@ public class ItemDetail : MonoBehaviour
 {
     [SerializeField] Image itemImage;
     [SerializeField] EquipmentInfo equipmentInfo;
+    [SerializeField] ConsumableInfo consumableInfo;
+    [SerializeField] TreasureInfo treasureInfo;
     [SerializeField] GameObject costList;
     [SerializeField] EnegyCostIcon enegyCostIconPrefab;
 
@@ -21,7 +23,7 @@ public class ItemDetail : MonoBehaviour
         itemImage.color = new Color(1, 1, 1, 1);
         if (item is Consumable consumable)
         {
-            Debug.Log($"Consumable item: {consumable.Base.Name}");
+            consumableInfo.SetInfo(consumable);
         }
         else if (item is Equipment equipment)
         {
@@ -30,7 +32,7 @@ public class ItemDetail : MonoBehaviour
         }
         else if (item is Treasure treasure)
         {
-            Debug.Log($"Treasure item: {treasure.Base.Name}");
+            treasureInfo.SetInfo(treasure);
         }
         else
         {
@@ -68,5 +70,7 @@ public class ItemDetail : MonoBehaviour
             Destroy(child.gameObject);
         }
         equipmentInfo.gameObject.SetActive(false);
+        consumableInfo.gameObject.SetActive(false);
+        treasureInfo.gameObject.SetActive(false);
     }
 }

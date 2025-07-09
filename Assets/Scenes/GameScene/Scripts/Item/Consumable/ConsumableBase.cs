@@ -5,12 +5,13 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Item/Consumable")]
 public class ConsumableBase : ItemBase
 {
-    [SerializeField] ConsumableType consumableType; // 消耗品の種類
-    [SerializeField] int recoveryAmount; // 回復量（ポーションや食べ物の場合）
-    [SerializeField] int damageAmount; // ダメージ量（爆弾の場合）
+    [SerializeField] TargetType targetType;
+    [SerializeField] ConsumableType consumableType;
+    [SerializeField] List<Enchant> enchantList;
+    [SerializeField] List<EnegyCount> enegyAttackList;
 
+    public TargetType TargetType { get => targetType; }
     public ConsumableType ConsumableType { get => consumableType; }
-    public int RecoveryAmount { get => recoveryAmount; }
-    public int DamageAmount { get => damageAmount; }
-
+    public List<Enchant> EnchantList { get => enchantList; }
+    public List<EnegyCount> EnegyAttackList { get => enegyAttackList; }
 }

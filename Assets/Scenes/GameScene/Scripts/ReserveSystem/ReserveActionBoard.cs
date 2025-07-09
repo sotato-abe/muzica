@@ -48,26 +48,19 @@ public class ReserveActionBoard : SlidePanel
         {
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                currentAction = ReserveActionType.Bag;
-                ChangeActiveIcon();
-                ChangeActionPanel();
+                ChangeAction(ReserveActionType.Bag);
             }
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
-                currentAction = ReserveActionType.Storage;
-                ChangeActiveIcon();
-                ChangeActionPanel();
+                ChangeAction(ReserveActionType.Storage);
             }
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
-                currentAction = ReserveActionType.Status;
-                ChangeActiveIcon();
-                ChangeActionPanel();
+                ChangeAction(ReserveActionType.Status);
             }
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                currentAction = ReserveActionType.Quit;
-                ChangeActiveIcon();
+                ChangeAction(ReserveActionType.Quit);
             }
         }
         
@@ -77,6 +70,40 @@ public class ReserveActionBoard : SlidePanel
             {
                 OnReserveEnd?.Invoke(); // 予約終了イベントを呼び出す
             }
+        }
+    }
+
+    public void BagPanelOpen()
+    {
+        ChangeAction(ReserveActionType.Bag);
+    }
+
+    public void StoragePanelOpen()
+    {
+        ChangeAction(ReserveActionType.Storage);
+    }
+
+    public void StatusPanelOpen()
+    {
+        ChangeAction(ReserveActionType.Status);
+    }
+
+    public void QuitReserve()
+    {
+        OnReserveEnd?.Invoke();
+    }
+
+    public void ChangeAction(ReserveActionType actionType)
+    {
+        if (actionPanels.ContainsKey(actionType))
+        {
+            currentAction = actionType;
+            ChangeActiveIcon();
+            ChangeActionPanel();
+        }
+        else
+        {
+            Debug.LogWarning($"Action type {actionType} is not defined in action panels.");
         }
     }
 

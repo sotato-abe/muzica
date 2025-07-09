@@ -15,7 +15,7 @@ public class EquipmentWindow : MonoBehaviour
     PlayerController playerController;
     List<EquipmentSlot> equipmentSlots = new List<EquipmentSlot>();
 
-    private void Awake()
+    private void Start()
     {
         playerController = PlayerController.Instance;
         DeleteAllSlot();
@@ -45,6 +45,8 @@ public class EquipmentWindow : MonoBehaviour
             slot.OnUpdateInventory += UpdateInventory;
             equipmentSlots.Add(slot);
         }
+        // equipmentListのvertical layout groupを再計算
+        LayoutRebuilder.ForceRebuildLayoutImmediate(equipmentList.GetComponent<RectTransform>());
     }
 
     public void SetEquipments()

@@ -14,6 +14,9 @@ public class AttackCounter : MonoBehaviour
     [SerializeField] Sprite batteryIcon;
     [SerializeField] Sprite soulIcon;
 
+    Color32 damageColor = new Color32(255, 101, 0, 255);
+    Color32 recoveryColor = new Color32(0, 255, 219, 255);
+
     public void SetCounter(EnegyCount enegyCount)
     {
         valText.text = enegyCount.val.ToString();
@@ -31,6 +34,18 @@ public class AttackCounter : MonoBehaviour
             default:
                 Debug.LogError("Unknown EnegyType");
                 break;
+        }
+        if (enegyCount.isRecovery)
+        {
+            iconImage.color = recoveryColor;
+            valText.color = recoveryColor;
+            timesText.color = recoveryColor;
+        }
+        else
+        {
+            iconImage.color = damageColor;
+            valText.color = damageColor;
+            timesText.color = damageColor;
         }
 
         if (enegyCount.times > 1)
