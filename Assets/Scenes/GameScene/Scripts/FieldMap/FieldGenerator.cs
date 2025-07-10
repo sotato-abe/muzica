@@ -30,9 +30,9 @@ public class FieldGenerator : MonoBehaviour
     [SerializeField] private FieldData defaultFieldData;
     [SerializeField] private GameObject gateObject;
     [SerializeField] private GameObject treasureBoxObject;
+    [SerializeField] private GameObject pointObject;
     [SerializeField] private Tilemap tilemap;
     [SerializeField] private Tilemap floorTilemap;
-    private string seed;
 
     [Header("Tiles")]
     private TileBase groundTile;
@@ -53,6 +53,8 @@ public class FieldGenerator : MonoBehaviour
     private int objectCount;
     private HashSet<Vector2Int> placedGates = new HashSet<Vector2Int>();
     private HashSet<Vector2Int> placedObjects = new HashSet<Vector2Int>();
+    private HashSet<Vector2Int> placedPoints = new HashSet<Vector2Int>();
+    private System.Random consistentRandom;
 
     // ゲート位置
     private readonly Dictionary<Vector2Int, Vector2Int> gatePositions = new Dictionary<Vector2Int, Vector2Int>();
@@ -70,16 +72,18 @@ public class FieldGenerator : MonoBehaviour
     /// </summary>
     /// <param name="fieldData">フィールドデータ</param>
     /// <param name="fieldTileSet">タイルセット</param>
-    /// <param name="seed">生成シード</param>
-    public void SetField(FieldData fieldData, FieldTileSet fieldTileSet, string seed)
+    public void SetField(FieldData fieldData, FieldTileSet fieldTileSet)
     {
         if (fieldTileSet == null)
         {
             Debug.LogError("FieldTileSet is null!");
             return;
         }
-
-        InitializeField(fieldData, fieldTileSet, seed);
+        string seed = fieldData.Position.x + "," + fieldData.Position.y;
+        Debug.Log("seed : " + seed);
+        Random.InitState(seed.GetHashCode());
+        consistentRandom = new System.Random(seed.GetHashCode());
+        InitializeField(fieldData, fieldTileSet);
         GenerateField();
     }
 
@@ -95,12 +99,12 @@ public class FieldGenerator : MonoBehaviour
         }
 
         ClearField();
-        InitializeRandomSeed();
         GenerateTerrainMaps();
         ProcessTerrainMaps();
         CreateAllGates();
         RenderField();
         CreateFieldObjects();
+        CreatePointObjects();
         CreateTreasureBoxObjects();
     }
 
@@ -158,7 +162,7 @@ public class FieldGenerator : MonoBehaviour
     /// <summary>
     /// フィールドの初期化
     /// </summary>
-    private void InitializeField(FieldData fieldData, FieldTileSet fieldTileSet, string seed)
+    private void InitializeField(FieldData fieldData, FieldTileSet fieldTileSet)
     {
         this.fieldData = fieldData ?? defaultFieldData;
         this.groundTile = fieldTileSet.GroundTile ?? defaultFieldData.FieldTileSet.GroundTile;
@@ -172,16 +176,6 @@ public class FieldGenerator : MonoBehaviour
         objectCount = this.fieldData.ObjectCount;
         this.objectPrefabs = new GameObject[0];
         objectPrefabs = fieldTileSet.ObjectPrefabs ?? defaultFieldData.FieldTileSet.ObjectPrefabs;
-
-        this.seed = seed;
-    }
-
-    /// <summary>
-    /// ランダムシードを初期化
-    /// </summary>
-    private void InitializeRandomSeed()
-    {
-        Random.InitState(seed.GetHashCode());
     }
 
     /// <summary>
@@ -430,20 +424,58 @@ public class FieldGenerator : MonoBehaviour
     {
         if (objectPrefabs == null || objectPrefabs.Length == 0) return;
 
-        int placed = 0;
-        System.Random rand = new System.Random(seed.GetHashCode());
+        // 一意のシードを使用してランダムな位置を生成
+        System.Random objectRandom = new System.Random(GenerateObjectSeed());
+        List<Vector2Int> validPositions = GetValidObjectPositionsForObjects();
 
-        while (placed < objectCount)
+        if (validPositions.Count == 0) return;
+
+        // シャッフルして一貫性のある順序を確保
+        ShuffleList(validPositions, objectRandom);
+
+        int actualObjectCount = Mathf.Min(objectCount, validPositions.Count);
+
+        for (int i = 0; i < actualObjectCount; i++)
         {
-            int x = rand.Next(0, width);
-            int y = rand.Next(0, height);
+            Vector2Int pos = validPositions[i];
+            Vector3 position = GetObjectWorldPosition(pos.x, pos.y);
+            GameObject prefab = objectPrefabs[objectRandom.Next(0, objectPrefabs.Length)];
+            Instantiate(prefab, position, Quaternion.identity, this.transform);
+            placedObjects.Add(pos);
+        }
+    }
 
-            if (CanPlaceObject(x, y))
+    /// <summary>
+    /// ポイントオブジェクトを作成
+    /// </summary>
+    private void CreatePointObjects()
+    {
+        if (fieldData.Points == null || fieldData.Points.Count == 0) return;
+
+        // ポイント専用のシードを使用
+        System.Random pointRandom = new System.Random(GeneratePointSeed());
+        List<Vector2Int> validPositions = GetValidObjectPositionsForPoints();
+
+        if (validPositions.Count == 0) return;
+
+        // シャッフルして一貫性のある順序を確保
+        ShuffleList(validPositions, pointRandom);
+
+        int actualPointCount = Mathf.Min(fieldData.Points.Count, validPositions.Count);
+
+        for (int i = 0; i < actualPointCount; i++)
+        {
+            Vector2Int pos = validPositions[i];
+            Vector3 position = GetObjectWorldPosition(pos.x, pos.y);
+            Instantiate(pointObject, position, Quaternion.identity, this.transform);
+            PointTrigger pointTrigger = pointObject.GetComponent<PointTrigger>();
+            if (pointTrigger != null)
             {
-                Vector3 worldPos = GetObjectWorldPosition(x, y);
-                InstantiateRandomObject(worldPos, rand);
-                placed++;
+                pointTrigger.point = fieldData.Points[i];
             }
+            placedPoints.Add(pos);
+
+            Debug.Log($"Creating point: {fieldData.Points[i].Name} at position {pos}");
         }
     }
 
@@ -478,7 +510,7 @@ public class FieldGenerator : MonoBehaviour
     private bool CanPlaceObject(int x, int y)
     {
         //placedGates.Contains(new Vector2Int(x, y))は、すでにゲートが配置されている場所を除外
-        if (placedGates.Contains(new Vector2Int(x, y)) || placedObjects.Contains(new Vector2Int(x, y)))
+        if (placedGates.Contains(new Vector2Int(x, y)) || placedObjects.Contains(new Vector2Int(x, y)) || placedPoints.Contains(new Vector2Int(x, y)))
         {
             return false; // すでにオブジェクトが配置されている場所は除外
         }
@@ -508,18 +540,6 @@ public class FieldGenerator : MonoBehaviour
         Vector3Int tilePos = new Vector3Int(x, y, 0);
         return tilemap.CellToWorld(tilePos) +
                new Vector3(OBJECT_POSITION_OFFSET, OBJECT_POSITION_OFFSET, 0f);
-    }
-
-    /// <summary>
-    /// ランダムなオブジェクトをインスタンス化
-    /// </summary>
-    private void InstantiateRandomObject(Vector3 position, System.Random rand)
-    {
-        GameObject prefab = objectPrefabs[rand.Next(objectPrefabs.Length)];
-        if (prefab != null)
-        {
-            Instantiate(prefab, position, Quaternion.identity, this.transform);
-        }
     }
 
     /// <summary>
@@ -629,6 +649,132 @@ public class FieldGenerator : MonoBehaviour
     private Vector3Int ConvertToTilePosition(Vector2Int worldPos)
     {
         return new Vector3Int(worldPos.x, worldPos.y, 0);
+    }
+
+    /// <summary>
+    /// オブジェクト配置用のシードを生成
+    /// </summary>
+    private int GenerateObjectSeed()
+    {
+        // fieldDataの位置とオブジェクト数を組み合わせてシードを生成
+        string seedString = $"{fieldData.Position.x},{fieldData.Position.y},objects,{objectCount}";
+        return seedString.GetHashCode();
+    }
+
+    /// <summary>
+    /// ポイント配置用のシードを生成
+    /// </summary>
+    private int GeneratePointSeed()
+    {
+        // fieldDataの位置とポイント数を組み合わせてシードを生成
+        string seedString = $"{fieldData.Position.x},{fieldData.Position.y},points,{fieldData.Points?.Count ?? 0}";
+        return seedString.GetHashCode();
+    }
+
+    /// <summary>
+    /// 配置可能な位置のリストを取得
+    /// </summary>
+    private List<Vector2Int> GetValidObjectPositions()
+    {
+        List<Vector2Int> validPositions = new List<Vector2Int>();
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (CanPlaceObject(x, y))
+                {
+                    validPositions.Add(new Vector2Int(x, y));
+                }
+            }
+        }
+
+        return validPositions;
+    }
+
+    /// <summary>
+    /// オブジェクト配置用の有効な位置リストを取得（ゲートのみ考慮）
+    /// </summary>
+    private List<Vector2Int> GetValidObjectPositionsForObjects()
+    {
+        List<Vector2Int> validPositions = new List<Vector2Int>();
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (CanPlaceObjectBasic(x, y))
+                {
+                    validPositions.Add(new Vector2Int(x, y));
+                }
+            }
+        }
+
+        return validPositions;
+    }
+
+    /// <summary>
+    /// ポイント配置用の有効な位置リストを取得（ゲートのみ考慮）
+    /// </summary>
+    private List<Vector2Int> GetValidObjectPositionsForPoints()
+    {
+        List<Vector2Int> validPositions = new List<Vector2Int>();
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (CanPlaceObjectBasic(x, y))
+                {
+                    validPositions.Add(new Vector2Int(x, y));
+                }
+            }
+        }
+
+        return validPositions;
+    }
+
+    /// <summary>
+    /// 基本的なオブジェクト配置可能性をチェック（ゲートのみ考慮）
+    /// </summary>
+    private bool CanPlaceObjectBasic(int x, int y)
+    {
+        // ゲートが配置されている場所は除外
+        if (placedGates.Contains(new Vector2Int(x, y)))
+        {
+            return false;
+        }
+
+        // 周囲が地面または草であることを確認
+        for (int dx = -1; dx <= 1; dx++)
+        {
+            for (int dy = -1; dy <= 1; dy++)
+            {
+                if (dx == 0 && dy == 0) continue; // 自分自身は除外
+                int checkX = x + dx;
+                int checkY = y + dy;
+
+                if (!IsValidMapPosition(checkX, checkY) || !IsGroundOrGrass(new Vector2Int(checkX, checkY)))
+                {
+                    return false; // 周囲に地面または草がない場合は配置不可
+                }
+            }
+        }
+        return mapBase[x, y] == (int)TileType.Ground || mapBase[x, y] == (int)TileType.Grass;
+    }
+
+    /// <summary>
+    /// リストをシャッフル（Fisher-Yates shuffle）
+    /// </summary>
+    private void ShuffleList<T>(List<T> list, System.Random random)
+    {
+        for (int i = list.Count - 1; i > 0; i--)
+        {
+            int j = random.Next(0, i + 1);
+            T temp = list[i];
+            list[i] = list[j];
+            list[j] = temp;
+        }
     }
     #endregion
 }

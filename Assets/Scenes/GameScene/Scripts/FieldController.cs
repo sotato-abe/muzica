@@ -32,6 +32,18 @@ public class FieldController : MonoBehaviour
         currentFieldData = fieldData;
     }
 
+    public void EnterPoint(PointBase point)
+    {
+        if (point == null)
+        {
+            Debug.LogWarning("Point is null. Cannot enter point.");
+            return;
+        }
+
+        // メッセージパネルにメッセージを表示
+        messagePanel.AddMessage(MessageIconType.Field, $"{point.Name} にアクセス。");
+    }
+
     public void OpenTreasureBox()
     {
         if (Random.Range(0, 100f) < ITEM_GET_PROBABILITY)

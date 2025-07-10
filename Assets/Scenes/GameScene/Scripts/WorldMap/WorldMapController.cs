@@ -59,7 +59,7 @@ public class WorldMapController : MonoBehaviour
         }
 
         FieldController.Instance.SetField(fieldData);
-        fieldGenerator.SetField(fieldData, fieldTileSet, playerPosition.x + "," + playerPosition.y);
+        fieldGenerator.SetField(fieldData, fieldTileSet);
         SetFieldPlayerPosition(direction);
         SetWorldMapPlayerPosition();
     }
