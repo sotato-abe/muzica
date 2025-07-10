@@ -50,6 +50,7 @@ public class CharacterBase : ScriptableObject
     public string Name { get => name; }
     public RarityType Rarity { get => rarity; }
     public Sprite Sprite { get => sprite; }
+    public Sprite SquareSprite { get => squareSprite; }
     public string Description { get => description; }
     public FieldData Birthplace { get => birthplace; }
 

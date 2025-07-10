@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.Tilemaps;
+using UnityEngine;
+using UnityEngine.Events;
 
 public class FieldController : MonoBehaviour
 {
+    public delegate void PointEnterDelegate(PointBase point);
+    public event PointEnterDelegate OnPointEnter;
     private const int ITEM_GET_PROBABILITY = 30;
     public static FieldController Instance { get; private set; }
 
@@ -42,6 +46,7 @@ public class FieldController : MonoBehaviour
 
         // メッセージパネルにメッセージを表示
         messagePanel.AddMessage(MessageIconType.Field, $"{point.Name} にアクセス。");
+        OnPointEnter?.Invoke(point); // リザーブイベントを発火
     }
 
     public void OpenTreasureBox()
