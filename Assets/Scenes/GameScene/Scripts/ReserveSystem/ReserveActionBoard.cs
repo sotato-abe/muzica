@@ -95,7 +95,12 @@ public class ReserveActionBoard : SlidePanel
 
     public void ChangeAction(ReserveActionType actionType)
     {
-        if (actionPanels.ContainsKey(actionType))
+        if (actionType == ReserveActionType.Quit)
+        {
+            OnReserveEnd?.Invoke(); // 予約終了イベントを呼び出す
+            return;
+        }
+        else if (actionPanels.ContainsKey(actionType))
         {
             currentAction = actionType;
             ChangeActiveIcon();

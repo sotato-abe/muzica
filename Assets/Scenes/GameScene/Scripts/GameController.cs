@@ -39,6 +39,7 @@ public class GameController : MonoBehaviour
         tradeSystem.gameObject.SetActive(true); // リザーブシステムを非表示にする
         ageTimePanel.SetTimeSpeed(TimeState.Live);
         tradeSystem.TradeStart(point); // リザーブ開始処理を呼び出す
+        fieldPlayer.SetCanMove(false); // プレイヤーの移動を再開
     }
 
     public void TradeEnd()
