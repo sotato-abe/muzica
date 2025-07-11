@@ -11,6 +11,7 @@ public class SlidePanel : MonoBehaviour
     public Vector3 activePosition = new Vector3(0, 0, 0);
     public Vector3 inactivePosition = new Vector3(0, 0, 0);
     public bool isActive = false;
+    private Coroutine slideCoroutine;
 
     public virtual void SetActive(bool activeFlg, Action onComplete = null)
     {
@@ -21,14 +22,14 @@ public class SlidePanel : MonoBehaviour
         }
 
         isActive = activeFlg;
-        if (isActive)
+        // スライド中のときはその処理を中断して新しいスライドを開始
+        if (slideCoroutine != null)
         {
-            StartCoroutine(Slide(activePosition, onComplete));
+            StopCoroutine(slideCoroutine);
         }
-        else
-        {
-            StartCoroutine(Slide(inactivePosition, onComplete));
-        }
+
+        Vector3 targetPos = isActive ? activePosition : inactivePosition;
+        slideCoroutine = StartCoroutine(Slide(targetPos, onComplete));
     }
 
     private IEnumerator Slide(Vector3 targetPosition, Action onComplete)
@@ -46,5 +47,8 @@ public class SlidePanel : MonoBehaviour
 
         rectTransform.anchoredPosition = targetPosition;
         onComplete?.Invoke();
+        slideCoroutine = null;
     }
+
+
 }

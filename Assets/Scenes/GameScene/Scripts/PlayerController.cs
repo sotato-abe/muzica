@@ -23,12 +23,13 @@ public class PlayerController : MonoBehaviour
     {
         player.Init();  // プレイヤーキャラクターの初期化
         playerSubPanel.SetCharacter(player);
-        StartCoroutine(GameStart());
+        // StartCoroutine(GameStart());
+        GameStart();
     }
 
-    private IEnumerator GameStart()
+    private void GameStart()
     {
-        yield return new WaitForSeconds(1f);
+        // yield return new WaitForSeconds(1f);
         TalkMessage startMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "はじめるか、、");
         StartCoroutine(playerSubPanel.SetTalkMessage(startMessage));
     }

@@ -6,21 +6,16 @@ using TMPro;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class PocketWindow : MonoBehaviour, IDropHandler
+public class EquipmentSimpleWindow : MonoBehaviour, IDropHandler
 {
     [SerializeField] ItemBlock itemBlockPrefab;
-    [SerializeField] GameObject refusalBlockPrefab;
     [SerializeField] GameObject itemList;
-    [SerializeField] GameObject blockList;
-    [SerializeField] TextMeshProUGUI counterText;
     PlayerController playerController;
     Dictionary<Item, ItemBlock> itemBlockMap = new Dictionary<Item, ItemBlock>();
 
     public delegate void TargetItemDelegate(Item? item);
     public event TargetItemDelegate OnTargetItem;
-    public int adjustmentBlockCount = 0; // 調整用のブロック数
 
-    private const int MAX_PPCKET_COUNT = 16;
     private int currentBlockCount = 0;
     private void Awake()
     {
@@ -33,7 +28,6 @@ public class PocketWindow : MonoBehaviour, IDropHandler
 
         playerController = PlayerController.Instance;
         SetItems();
-        SetBlock();
     }
 
     public void OnDrop(PointerEventData eventData)
@@ -51,7 +45,7 @@ public class PocketWindow : MonoBehaviour, IDropHandler
                 Debug.LogWarning("装備品や宝物はポケットにドロップできません。");
                 return;
             }
-            playerController.AddItemToPocket(droppedItemBlock.Item);
+            playerController.AddItemToEquip(droppedItemBlock.Item);
             droppedItemBlock.RemoveItem();
             SetItems();
         }
@@ -63,7 +57,7 @@ public class PocketWindow : MonoBehaviour, IDropHandler
 
     public void SetItems()
     {
-        List<Consumable> items = playerController.PlayerCharacter.PocketList;
+        List<Equipment> items = playerController.PlayerCharacter.EquipmentList;
 
         foreach (Item item in items)
         {
@@ -81,30 +75,6 @@ public class PocketWindow : MonoBehaviour, IDropHandler
             itemBlockMap[item] = itemBlock;
         }
 
-        SetCounter();
-    }
-
-    private void SetCounter()
-    {
-        counterText.text = $"{itemBlockMap.Count} / {playerController.PlayerCharacter.ColPocket}";
-    }
-
-    private void SetBlock()
-    {
-        int newBlockCount = MAX_PPCKET_COUNT - playerController.PlayerCharacter.ColPocket + adjustmentBlockCount;
-        if (currentBlockCount == newBlockCount)
-            return;
-
-        currentBlockCount = newBlockCount;
-        foreach (Transform child in blockList.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
-        for (int i = 0; i < newBlockCount; i++)
-        {
-            Instantiate(refusalBlockPrefab, blockList.transform);
-        }
     }
 
     private void DeleteAllItems()
@@ -118,7 +88,6 @@ public class PocketWindow : MonoBehaviour, IDropHandler
             Destroy(itemBlock.gameObject);
         }
         itemBlockMap.Clear();
-        SetCounter();
     }
 
     private void RemoveItem(ItemBlock itemBlock)
@@ -128,7 +97,7 @@ public class PocketWindow : MonoBehaviour, IDropHandler
         Item item = itemBlock.Item;
         if (itemBlockMap.ContainsKey(item))
         {
-            playerController.RemoveItemFromPocket(itemBlock.Item);
+            playerController.RemoveItemFromEquip(itemBlock.Item);
             itemBlock.RemovePlaceholder();
             itemBlockMap.Remove(item);
             Destroy(itemBlock.gameObject);
