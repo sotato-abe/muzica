@@ -22,7 +22,7 @@ public class Command
     public string Description => _base.Description;
     public int Price => _base.Price;
 
-    public List<EnegyCount> EnegyAttackList => _base.EnegyAttackList;
-    public List<EnegyCost> EnegyCostList => _base.EnegyCostList;
+    public List<EnergyCount> EnergyAttackList => _base.EnergyAttackList;
+    public List<EnergyCost> EnergyCostList => _base.EnergyCostList;
     public List<Enchant> EnchantList => _base.EnchantList;
 }

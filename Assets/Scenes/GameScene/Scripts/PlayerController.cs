@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         player.Init();  // プレイヤーキャラクターの初期化
+        playerSubPanel.SetCharacter(player);
         StartCoroutine(GameStart());
     }
 

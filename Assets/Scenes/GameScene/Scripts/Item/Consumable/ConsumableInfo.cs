@@ -19,7 +19,7 @@ public class ConsumableInfo : MonoBehaviour
         gameObject.SetActive(true);
         targetIcon.SetTargetType(consumable.ConsumableBase.TargetType);
         SetEnchants(consumable.ConsumableBase.EnchantList);
-        SetAttacks(consumable.ConsumableBase.EnegyAttackList);
+        SetAttacks(consumable.ConsumableBase.EnergyAttackList);
     }
 
     private void SetEnchants(List<Enchant> enchants)
@@ -37,7 +37,7 @@ public class ConsumableInfo : MonoBehaviour
         }
     }
 
-    private void SetAttacks(List<EnegyCount> enegyCountList)
+    private void SetAttacks(List<EnergyCount> energyCountList)
     {
         // 既存のカウンターを削除
         foreach (Transform child in counterList.transform)
@@ -45,7 +45,7 @@ public class ConsumableInfo : MonoBehaviour
             Destroy(child.gameObject);
         }
         // 装備のコストを表示する処理
-        foreach (var attack in enegyCountList)
+        foreach (var attack in energyCountList)
         {
             AttackCounter newSlot = Instantiate(attackCounterPrefab, counterList.transform);
             newSlot.SetCounter(attack);

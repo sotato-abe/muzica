@@ -28,16 +28,16 @@ public class PlayerCharacter : Character
         }
     }
 
-    public void EnegyUp(EnegyType type)
+    public void EnergyUp(EnergyType type)
     {
         if (SkillPoint > 0)
         {
             switch (type)
             {
-                case EnegyType.Life:
+                case EnergyType.Life:
                     MaxLife += 10;
                     break;
-                case EnegyType.Battery:
+                case EnergyType.Battery:
                     MaxBattery += 5;
                     break;
             }

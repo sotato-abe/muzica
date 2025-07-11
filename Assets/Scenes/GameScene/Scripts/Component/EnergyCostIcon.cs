@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
 
-public class EnegyCostIcon : MonoBehaviour
+public class EnergyCostIcon : MonoBehaviour
 {
     [SerializeField] Image iconImage;
     [SerializeField] Image backImage;
@@ -18,27 +18,27 @@ public class EnegyCostIcon : MonoBehaviour
     Color32 batteryColor = new Color32(255, 164, 0, 255);
     Color32 soulColor = new Color32(154, 255, 0, 255);
 
-    public void SetCost(EnegyCost enegyCost)
+    public void SetCost(EnergyCost energyCost)
     {
-        switch (enegyCost.type)
+        switch (energyCost.type)
         {
-            case EnegyType.Life:
+            case EnergyType.Life:
                 iconImage.sprite = lifeIcon;
                 backImage.color = lifeColor;
                 break;
-            case EnegyType.Battery:
+            case EnergyType.Battery:
                 iconImage.sprite = batteryIcon;
                 backImage.color = batteryColor;
                 break;
-            case EnegyType.Soul:
+            case EnergyType.Soul:
                 iconImage.sprite = soulIcon;
                 backImage.color = soulColor;
                 break;
             default:
-                Debug.LogError("Unknown EnegyType");
+                Debug.LogError("Unknown EnergyType");
                 break;
         }
 
-        valText.text = enegyCost.val.ToString();
+        valText.text = energyCost.val.ToString();
     }
 }

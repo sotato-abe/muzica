@@ -17,25 +17,25 @@ public class AttackCounter : MonoBehaviour
     Color32 damageColor = new Color32(255, 101, 0, 255);
     Color32 recoveryColor = new Color32(0, 255, 219, 255);
 
-    public void SetCounter(EnegyCount enegyCount)
+    public void SetCounter(EnergyCount energyCount)
     {
-        valText.text = enegyCount.val.ToString();
-        switch (enegyCount.type)
+        valText.text = energyCount.val.ToString();
+        switch (energyCount.type)
         {
-            case EnegyType.Life:
+            case EnergyType.Life:
                 iconImage.sprite = lifeIcon;
                 break;
-            case EnegyType.Battery:
+            case EnergyType.Battery:
                 iconImage.sprite = batteryIcon;
                 break;
-            case EnegyType.Soul:
+            case EnergyType.Soul:
                 iconImage.sprite = soulIcon;
                 break;
             default:
-                Debug.LogError("Unknown EnegyType");
+                Debug.LogError("Unknown EnergyType");
                 break;
         }
-        if (enegyCount.isRecovery)
+        if (energyCount.isRecovery)
         {
             iconImage.color = recoveryColor;
             valText.color = recoveryColor;
@@ -48,9 +48,9 @@ public class AttackCounter : MonoBehaviour
             timesText.color = damageColor;
         }
 
-        if (enegyCount.times > 1)
+        if (energyCount.times > 1)
         {
-            timesText.text = "* " + enegyCount.times.ToString();
+            timesText.text = "* " + energyCount.times.ToString();
         }
         else
         {

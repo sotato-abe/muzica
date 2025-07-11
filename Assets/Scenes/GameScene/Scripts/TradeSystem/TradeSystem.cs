@@ -34,7 +34,7 @@ public class TradeSystem : MonoBehaviour
         TalkMessage talkMessage1 = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "いいものあるかな");
         TalkMessage talkMessage2 = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "いらっしゃい");
         StartCoroutine(leftcharacterSubPanel.SetTalkMessage(talkMessage1, true));
-        rightcharacterSubPanel.SetCharacter(point.Owner.Base.SquareSprite);
+        rightcharacterSubPanel.SetCharacter(point.Owner);
         StartCoroutine(rightcharacterSubPanel.SetTalkMessage(talkMessage2, true));
         messagePanel.SetActive(false); // メッセージパネルを表示
         worldMapPanel.SetActive(false); // ワールドマップパネルを非表示

@@ -11,7 +11,7 @@ public class ItemDetail : MonoBehaviour
     [SerializeField] TreasureInfo treasureInfo;
     [SerializeField] GameObject costList;
     [SerializeField] GameObject countList;
-    [SerializeField] EnegyCostIcon enegyCostIconPrefab;
+    [SerializeField] EnergyCostIcon energyCostIconPrefab;
     [SerializeField] GameObject countIconPrefab;
 
     private void Awake()
@@ -31,7 +31,7 @@ public class ItemDetail : MonoBehaviour
         else if (item is Equipment equipment)
         {
             equipmentInfo.SetInfo(equipment);
-            SetCosts(equipment.EquipmentBase.EnegyCostList);
+            SetCosts(equipment.EquipmentBase.EnergyCostList);
         }
         else if (item is Treasure treasure)
         {
@@ -49,17 +49,17 @@ public class ItemDetail : MonoBehaviour
         ResetSlot();
     }
 
-    private void SetCosts(List<EnegyCost> costs)
+    private void SetCosts(List<EnergyCost> costs)
     {
         foreach (Transform child in costList.transform)
         {
             Destroy(child.gameObject);
         }
 
-        // EnegyCostを表示する処理
+        // EnergyCostを表示する処理
         foreach (var cost in costs)
         {
-            EnegyCostIcon newIcon = Instantiate(enegyCostIconPrefab, costList.transform);
+            EnergyCostIcon newIcon = Instantiate(energyCostIconPrefab, costList.transform);
             newIcon.SetCost(cost);
         }
     }

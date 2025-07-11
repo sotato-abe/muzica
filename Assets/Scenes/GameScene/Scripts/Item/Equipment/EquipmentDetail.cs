@@ -10,7 +10,7 @@ public class EquipmentDetail : MonoBehaviour
     [SerializeField] GameObject costList;
     [SerializeField] EquipmentInfo equipmentInfo;
     [SerializeField] public ItemBlock itemBlockPrefab;
-    [SerializeField] EnegyCostIcon enegyCostIconPrefab;
+    [SerializeField] EnergyCostIcon energyCostIconPrefab;
 
     private void Awake()
     {
@@ -27,7 +27,7 @@ public class EquipmentDetail : MonoBehaviour
         }
         SetEquipmentBlock(equipment);
         equipmentInfo.SetInfo(equipment);
-        SetCosts(equipment.EquipmentBase.EnegyCostList);
+        SetCosts(equipment.EquipmentBase.EnergyCostList);
     }
 
     public virtual void SetEquipmentBlock(Equipment equipment)
@@ -41,17 +41,17 @@ public class EquipmentDetail : MonoBehaviour
         itemBlock.Setup(equipment, this.transform);
     }
 
-    private void SetCosts(List<EnegyCost> costs)
+    private void SetCosts(List<EnergyCost> costs)
     {
         foreach (Transform child in costList.transform)
         {
             Destroy(child.gameObject);
         }
 
-        // EnegyCostを表示する処理
+        // EnergyCostを表示する処理
         foreach (var cost in costs)
         {
-            EnegyCostIcon newIcon = Instantiate(enegyCostIconPrefab, costList.transform);
+            EnergyCostIcon newIcon = Instantiate(energyCostIconPrefab, costList.transform);
             newIcon.SetCost(cost);
         }
     }

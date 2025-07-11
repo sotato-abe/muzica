@@ -5,12 +5,12 @@ using UnityEngine.UI;
 using TMPro;
 
 [System.Serializable]
-public class EnegyCost
+public class EnergyCost
 {
-    public EnegyType type;
+    public EnergyType type;
     public int val;
 
-    public EnegyCost(EnegyType type, int val)
+    public EnergyCost(EnergyType type, int val)
     {
         this.type = type;
         this.val = val;

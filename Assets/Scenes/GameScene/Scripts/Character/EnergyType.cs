@@ -1,4 +1,4 @@
-public enum EnegyType
+public enum EnergyType
 {
     Life,
     Battery,

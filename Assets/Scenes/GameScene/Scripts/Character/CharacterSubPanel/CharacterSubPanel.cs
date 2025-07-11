@@ -10,9 +10,9 @@ public class CharacterSubPanel : SlidePanel
     [SerializeField] BlowingPanel blowingPanel;
     private bool isStayRequested = false;
 
-    public void SetCharacter(Sprite image)
+    public virtual void SetCharacter(Character character)
     {
-        characterImage.sprite = image;
+        characterImage.sprite = character.Base.SquareSprite;
     }
 
     public IEnumerator SetTalkMessage(TalkMessage talkMessage, bool isStay = false)

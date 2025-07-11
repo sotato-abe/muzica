@@ -6,5 +6,52 @@ using TMPro;
 
 public class EnergyGauge : MonoBehaviour
 {
+    [SerializeField] EnergyBar lifeBar;
+    [SerializeField] EnergyBar batteryBar;
+    [SerializeField] EnergyBar soulBar;
+
+    public void SetLifeGauge(int maxEnergy, int currentEnergy)
+    {
+        if (maxEnergy <= 0)
+        {
+            Debug.LogError("Max energy must be greater than zero.");
+            return;
+        }
+        lifeBar.SetEnergy(maxEnergy, currentEnergy);
+    }
+
+    public void SetBatteryGauge(int maxEnergy, int currentEnergy)
+    {
+        if (maxEnergy <= 0)
+        {
+            Debug.LogError("Max energy must be greater than zero.");
+            return;
+        }
+        batteryBar.SetEnergy(maxEnergy, currentEnergy);
+    }
+    public void SetSoulGauge(int maxEnergy, int currentEnergy)
+    {
+        if (maxEnergy <= 0)
+        {
+            Debug.LogError("Max energy must be greater than zero.");
+            return;
+        }
+        soulBar.SetEnergy(maxEnergy, currentEnergy);
+    }
+
+    public void SetLifeValue(int value)
+    {
+        lifeBar.SetValue(value);
+    }
+
+    public void SetBatteryValue(int value)
+    {
+        batteryBar.SetValue(value);
+    }
+
+    public void SetSoulValue(int value)
+    {
+        soulBar.SetValue(value);
+    }
 }
 

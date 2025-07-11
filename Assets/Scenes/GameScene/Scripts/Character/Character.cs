@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// TODO CharacterのライフとかをEnegyに変換
+// TODO CharacterのライフとかをEnergyに変換
 [System.Serializable]
 public class Character
 {
     [SerializeField] CharacterBase _base;
     public CharacterBase Base { get => _base; }
 
-    // CharacterEnegy
+    // Character
     public int MaxLife { get; set; }
     public int ColLife { get; set; }
     public int Life { get; set; }

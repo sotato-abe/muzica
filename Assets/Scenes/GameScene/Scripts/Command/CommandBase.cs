@@ -10,8 +10,8 @@ public class CommandBase : ScriptableObject
     [SerializeField] Sprite sprite;
     [SerializeField, TextArea] string description;
     [SerializeField] int price = 1;
-    [SerializeField] List<EnegyCount> enegyAttackList;
-    [SerializeField] List<EnegyCost> enegyCostList;
+    [SerializeField] List<EnergyCount> energyAttackList;
+    [SerializeField] List<EnergyCost> energyCostList;
     [SerializeField] List<Enchant> enchantList;
 
     public string Name { get => name; }
@@ -20,7 +20,7 @@ public class CommandBase : ScriptableObject
     public string Description { get => description; }
     public int Price { get => price; }
 
-    public List<EnegyCount> EnegyAttackList { get => enegyAttackList; }
-    public List<EnegyCost> EnegyCostList { get => enegyCostList; }
+    public List<EnergyCount> EnergyAttackList { get => energyAttackList; }
+    public List<EnergyCost> EnergyCostList { get => energyCostList; }
     public List<Enchant> EnchantList { get => enchantList; }
 }
