@@ -12,7 +12,7 @@ public class SlidePanel : MonoBehaviour
     public Vector3 inactivePosition = new Vector3(0, 0, 0);
     public bool isActive = false;
 
-    public void SetActive(bool activeFlg, Action onComplete = null)
+    public virtual void SetActive(bool activeFlg, Action onComplete = null)
     {
         if (isActive == activeFlg)
         {

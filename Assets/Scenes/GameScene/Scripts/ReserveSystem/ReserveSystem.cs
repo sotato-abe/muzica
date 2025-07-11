@@ -8,7 +8,7 @@ public class ReserveSystem : MonoBehaviour
     public UnityAction OnReserveEnd; // リザーブイベント
 
     [SerializeField] private ReserveActionBoard reserveActionBoard; // リザーブアクションボード
-    [SerializeField] private CharacterSubPanel characterSubPanel; // キャラクターサブパネル
+    [SerializeField] private CharacterSubPanel playerSubPanel; // キャラクターサブパネル
     [SerializeField] private MessagePanel messagePanel; // キャラクターサブパネル
     [SerializeField] WorldMapPanel worldMapPanel;
 
@@ -28,7 +28,8 @@ public class ReserveSystem : MonoBehaviour
     {
         reserveActionBoard.SetActive(true); // リザーブアクションボードを表示
         TalkMessage talkMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "準備しよう");
-        StartCoroutine(characterSubPanel.SetTalkMessage(talkMessage, true)); // リザーブアクションボードを開く
+        playerSubPanel.SetActive(true); // キャラクターサブパネルを表示
+        StartCoroutine(playerSubPanel.SetTalkMessage(talkMessage)); // リザーブアクションボードを開く
         messagePanel.SetActive(false); // メッセージパネルを表示
         worldMapPanel.SetActive(false); // ワールドマップパネルを非表示
     }
@@ -47,7 +48,7 @@ public class ReserveSystem : MonoBehaviour
         }
 
         reserveActionBoard.SetActive(false, CheckAllComplete); // リザーブアクションボードを表示
-        characterSubPanel.SetActive(false, CheckAllComplete); // キャラクターサブパネルを表示
+        playerSubPanel.SetActive(false, CheckAllComplete); // キャラクターサブパネルを表示
         messagePanel.SetActive(true, CheckAllComplete); // メッセージパネルを表示
         worldMapPanel.SetActive(true, CheckAllComplete); // ワールドマップパネルを表示
     }

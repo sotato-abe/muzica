@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,38 +9,35 @@ public class CharacterSubPanel : SlidePanel
 {
     [SerializeField] Image characterImage;
     [SerializeField] BlowingPanel blowingPanel;
-    private bool isStayRequested = false;
+
+    bool currentStay = false;
 
     public virtual void SetCharacter(Character character)
     {
         characterImage.sprite = character.Base.SquareSprite;
     }
 
-    public IEnumerator SetTalkMessage(TalkMessage talkMessage, bool isStay = false)
+    public override void SetActive(bool activeFlg, Action onComplete = null)
     {
-        if (isStay) isStayRequested = true; // stayがリクエストされたらマーク
+        base.SetActive(activeFlg, onComplete);
+        currentStay = activeFlg;
+    }
 
-        bool currentlyActive = isActive;
-        if (!currentlyActive)
+    public IEnumerator SetTalkMessage(TalkMessage talkMessage)
+    {
+        if (!currentStay)
         {
-            SetActive(true);
+            base.SetActive(true);
             yield return new WaitForSeconds(0.5f);
         }
 
-        blowingPanel.gameObject.SetActive(true);
         yield return blowingPanel.AddMessageList(talkMessage);
 
         // ★ 最新のstayリクエストを見てから判断する
-        if (!currentlyActive && !isStayRequested)
+        if (!currentStay)
         {
             yield return new WaitForSeconds(0.3f);
-            SetActive(false);
-        }
-
-        // 最後のリクエストだった場合にのみ解除（慎重にやるなら別管理してもいい）
-        if (!isStay)
-        {
-            isStayRequested = false;
+            base.SetActive(false);
         }
     }
 }

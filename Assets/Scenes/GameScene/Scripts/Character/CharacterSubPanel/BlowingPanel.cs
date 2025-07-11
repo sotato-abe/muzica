@@ -76,6 +76,7 @@ public class BlowingPanel : MonoBehaviour
 
     public IEnumerator AddMessageList(TalkMessage talkMessage)
     {
+        gameObject.SetActive(true);
         messageList.Add(talkMessage);
         if (messageCoroutine == null)
         {

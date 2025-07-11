@@ -8,7 +8,7 @@ public class TradeSystem : MonoBehaviour
     public UnityAction OnTradeEnd; // リザーブイベント
 
     [SerializeField] private TradeActionBoard tradeActionBoard; // リザーブアクションボード
-    [SerializeField] private CharacterSubPanel leftcharacterSubPanel; // キャラクターサブパネル
+    [SerializeField] private CharacterSubPanel playerSubPanel; // キャラクターサブパネル
     [SerializeField] private CharacterSubPanel rightcharacterSubPanel; // キャラクターサブパネル
     [SerializeField] private MessagePanel messagePanel; // キャラクターサブパネル
     [SerializeField] WorldMapPanel worldMapPanel;
@@ -33,9 +33,14 @@ public class TradeSystem : MonoBehaviour
         tradeActionBoard.SetActive(true); // リザーブアクションボードを表示
         TalkMessage talkMessage1 = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "いいものあるかな");
         TalkMessage talkMessage2 = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "いらっしゃい");
-        StartCoroutine(leftcharacterSubPanel.SetTalkMessage(talkMessage1, true));
+
+        playerSubPanel.SetActive(true); // キャラクターサブパネルを表示
+        StartCoroutine(playerSubPanel.SetTalkMessage(talkMessage1));
+
         rightcharacterSubPanel.SetCharacter(point.Owner);
-        StartCoroutine(rightcharacterSubPanel.SetTalkMessage(talkMessage2, true));
+        rightcharacterSubPanel.SetActive(true); // キャラクターサブパネルを表示
+        StartCoroutine(rightcharacterSubPanel.SetTalkMessage(talkMessage2));
+
         messagePanel.SetActive(false); // メッセージパネルを表示
         worldMapPanel.SetActive(false); // ワールドマップパネルを非表示
     }
@@ -54,7 +59,7 @@ public class TradeSystem : MonoBehaviour
         }
 
         tradeActionBoard.SetActive(false, CheckAllComplete); // リザーブアクションボードを表示
-        leftcharacterSubPanel.SetActive(false, CheckAllComplete); // キャラクターサブパネルを表示
+        playerSubPanel.SetActive(false, CheckAllComplete); // キャラクターサブパネルを表示
         rightcharacterSubPanel.SetActive(false, CheckAllComplete); // キャラクターサブパネルを表示
         messagePanel.SetActive(true, CheckAllComplete); // メッセージパネルを表示
         worldMapPanel.SetActive(true, CheckAllComplete); // ワールドマップパネルを表示
