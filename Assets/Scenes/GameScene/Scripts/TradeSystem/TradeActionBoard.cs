@@ -93,21 +93,9 @@ public class TradeActionBoard : SlidePanel
 
     public void ChangeAction(TradeActionType actionType)
     {
-        if (actionType == TradeActionType.Quit)
-        {
-            OnTradeEnd?.Invoke(); // 予約終了イベントを呼び出す
-            return;
-        }
-        else if (actionPanels.ContainsKey(actionType))
-        {
-            currentAction = actionType;
-            ChangeActiveIcon();
-            ChangeActionPanel();
-        }
-        else
-        {
-            Debug.LogWarning($"Action type {actionType} is not defined in action panels.");
-        }
+        currentAction = actionType;
+        ChangeActiveIcon();
+        ChangeActionPanel();
     }
 
     private void ChangeActiveIcon()
@@ -120,6 +108,11 @@ public class TradeActionBoard : SlidePanel
 
     private void ChangeActionPanel()
     {
+        if (currentAction == TradeActionType.Quit)
+        {
+            return;
+        }
+
         foreach (var kvp in actionPanels)
         {
             if (kvp.Key == currentAction)

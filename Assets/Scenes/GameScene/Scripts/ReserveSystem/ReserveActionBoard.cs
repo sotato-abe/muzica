@@ -63,7 +63,7 @@ public class ReserveActionBoard : SlidePanel
                 ChangeAction(ReserveActionType.Quit);
             }
         }
-        
+
         if (Input.GetKeyDown(KeyCode.Return))
         {
             if (currentAction == ReserveActionType.Quit)
@@ -90,26 +90,14 @@ public class ReserveActionBoard : SlidePanel
 
     public void QuitReserve()
     {
-        OnReserveEnd?.Invoke();
+        ChangeAction(ReserveActionType.Status);
     }
 
     public void ChangeAction(ReserveActionType actionType)
     {
-        if (actionType == ReserveActionType.Quit)
-        {
-            OnReserveEnd?.Invoke(); // 予約終了イベントを呼び出す
-            return;
-        }
-        else if (actionPanels.ContainsKey(actionType))
-        {
-            currentAction = actionType;
-            ChangeActiveIcon();
-            ChangeActionPanel();
-        }
-        else
-        {
-            Debug.LogWarning($"Action type {actionType} is not defined in action panels.");
-        }
+        currentAction = actionType;
+        ChangeActiveIcon();
+        ChangeActionPanel();
     }
 
     private void ChangeActiveIcon()
@@ -122,6 +110,11 @@ public class ReserveActionBoard : SlidePanel
 
     private void ChangeActionPanel()
     {
+        if (currentAction == ReserveActionType.Quit)
+        {
+            return;
+        }
+
         foreach (var kvp in actionPanels)
         {
             if (kvp.Key == currentAction)
