@@ -11,9 +11,10 @@ public class TradeSystem : MonoBehaviour
     [SerializeField] private CharacterSubPanel playerSubPanel; // キャラクターサブパネル
     [SerializeField] private CharacterSubPanel rightcharacterSubPanel; // キャラクターサブパネル
     [SerializeField] private MessagePanel messagePanel; // キャラクターサブパネル
+    [SerializeField] ItemTradePanel itemTradePanel;
     [SerializeField] WorldMapPanel worldMapPanel;
 
-    private PointBase currentPoint;
+    private Point currentPoint;
 
     private void Start()
     {
@@ -27,7 +28,7 @@ public class TradeSystem : MonoBehaviour
         }
     }
 
-    public void TradeStart(PointBase point)
+    public void TradeStart(Point point)
     {
         currentPoint = point; // 現在のポイントを保存
         tradeActionBoard.SetActive(true); // リザーブアクションボードを表示
@@ -37,9 +38,11 @@ public class TradeSystem : MonoBehaviour
         playerSubPanel.SetActive(true); // キャラクターサブパネルを表示
         StartCoroutine(playerSubPanel.SetTalkMessage(talkMessage1));
 
-        rightcharacterSubPanel.SetCharacter(point.Owner);
+        rightcharacterSubPanel.SetCharacter(point.Base.Owner);
         rightcharacterSubPanel.SetActive(true); // キャラクターサブパネルを表示
         StartCoroutine(rightcharacterSubPanel.SetTalkMessage(talkMessage2));
+
+        itemTradePanel.SetShopItems(point.ShopItems); // アイテムトレードパネルにショップアイテムを設定
 
         messagePanel.SetActive(false); // メッセージパネルを表示
         worldMapPanel.SetActive(false); // ワールドマップパネルを非表示

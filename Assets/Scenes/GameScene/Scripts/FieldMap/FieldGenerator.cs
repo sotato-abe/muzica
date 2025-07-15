@@ -467,14 +467,30 @@ public class FieldGenerator : MonoBehaviour
         {
             Vector2Int pos = validPositions[i];
             Vector3 position = GetObjectWorldPosition(pos.x, pos.y);
-            Instantiate(pointObject, position, Quaternion.identity, this.transform);
-            PointTrigger pointTrigger = pointObject.GetComponent<PointTrigger>();
+
+            // インスタンス化したオブジェクトを取得
+            GameObject instantiatedPointObject = Instantiate(pointObject, position, Quaternion.identity, this.transform);
+
+            // インスタンス化したオブジェクトからPointTriggerコンポーネントを取得
+            PointTrigger pointTrigger = instantiatedPointObject.GetComponent<PointTrigger>();
             if (pointTrigger != null)
             {
-                pointTrigger.point = fieldData.Points[i];
+                try
+                {
+                    // PointBaseをPointに実体化させて格納
+                    pointTrigger.point = fieldData.Points[i].ToPoint(); // PointBaseからPointに変換
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError($"Failed to convert PointBase to Point: {e.Message}");
+                }
             }
-            placedPoints.Add(pos);
+            else
+            {
+                Debug.LogError($"PointTrigger component not found on instantiated point object at position {pos}");
+            }
 
+            placedPoints.Add(pos);
             Debug.Log($"Creating point: {fieldData.Points[i].Name} at position {pos}");
         }
     }

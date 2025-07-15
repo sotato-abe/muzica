@@ -10,15 +10,36 @@ public class PointBase : ScriptableObject
     [SerializeField] Character owner;
     [SerializeField, TextArea] string description;
     [SerializeField] Sprite icon; // ワールドマップで表示されるアイコン
-    [SerializeField] Sprite image; // ワールドマップで表示されるアイコン
-    [SerializeField] List<ItemBase> shopItems = new List<ItemBase>();
-    [SerializeField] List<CommandBase> commandItems = new List<CommandBase>();
+    [SerializeField] Sprite image;
+    [SerializeField] List<Equipment> equipmentList;
+    [SerializeField] List<Consumable> consumableList;
+    [SerializeField] List<Treasure> treasureList;
+    [SerializeField] List<Command> commandList;
 
     public string Name { get => name; }
     public Character Owner { get => owner; }
     public string Description { get => description; }
     public Sprite Icon { get => icon; }
     public Sprite Image { get => image; }
-    public List<ItemBase> ShopItems { get => shopItems;}
-    public List<CommandBase> ComamndItems { get => commandItems;}
+
+    public List<Equipment> ShopEquipmentList { get => equipmentList; }
+    public List<Consumable> ShopConsumableList { get => consumableList; }
+    public List<Treasure> ShopTreasureList { get => treasureList; }
+    public List<Command> ShopCommandList { get => commandList; }
+
+    public Point ToPoint()
+    {
+        Point point = new Point();
+        point.Base = this; // PointBaseをPointに設定
+        point.ShopItems = new List<Item>();
+        point.ShopCommands = new List<Command>();
+
+        // アイテムとコマンドをショップリストに追加
+        point.ShopItems.AddRange(equipmentList);
+        point.ShopItems.AddRange(consumableList);
+        point.ShopItems.AddRange(treasureList);
+        point.ShopCommands.AddRange(commandList);
+
+        return point;
+    }
 }

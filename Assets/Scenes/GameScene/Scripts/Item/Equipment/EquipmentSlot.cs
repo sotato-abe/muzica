@@ -41,9 +41,9 @@ public class EquipmentSlot : EquipmentDetail, IDropHandler
         }
     }
 
-    public void RemoveItem(ItemBlock itemBlock)
+    public bool RemoveItem(ItemBlock itemBlock)
     {
-        if (itemBlock == null || itemBlock.Item == null) return;
+        if (itemBlock == null || itemBlock.Item == null) return false;
 
         Item item = itemBlock.Item;
         PlayerController.Instance.RemoveItemFromEquip(item);
@@ -51,5 +51,6 @@ public class EquipmentSlot : EquipmentDetail, IDropHandler
         Destroy(itemBlock.gameObject);
         currentBlock = null;
         ResetSlot();
+        return true;
     }
 }

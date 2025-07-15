@@ -16,7 +16,7 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
     [SerializeField] StatusText statusText;
     private bool isActive = true;
     public Transform OriginalParent { get; private set; }
-    public delegate void RemoveItemDelegate(ItemBlock itemBlock);
+    public delegate bool RemoveItemDelegate(ItemBlock itemBlock);
     public event RemoveItemDelegate OnRemoveItem;
 
     public delegate void TargetItemDelegate(ItemBlock? itemBlock);
@@ -70,8 +70,8 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
         cursor.color = bgColor;
     }
 
-    public void RemoveItem()
+    public bool RemoveItem()
     {
-        OnRemoveItem?.Invoke(this);
+        return OnRemoveItem?.Invoke(this) ?? false;
     }
 }

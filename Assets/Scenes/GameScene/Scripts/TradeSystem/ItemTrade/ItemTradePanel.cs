@@ -7,6 +7,7 @@ using UnityEngine.Events;
 
 public class ItemTradePanel : Panel
 {
+    [SerializeField] ShopItemWindow shopItemWindow;
     [SerializeField] TargetItemWindow targetItemWindow;
     [SerializeField] BagCategory bagCategory;
     [SerializeField] InventoryWindow inventoryWindow;
@@ -15,6 +16,7 @@ public class ItemTradePanel : Panel
 
     private void Start()
     {
+        shopItemWindow.OnTargetItem += TargetItem;
         inventoryWindow.OnTargetItem += TargetItem;
         equipmentWindow.OnTargetItem += TargetItem;
         pocketWindow.OnTargetItem += TargetItem;
@@ -32,5 +34,10 @@ public class ItemTradePanel : Panel
         inventoryWindow.gameObject.SetActive(isBag);
         equipmentWindow.gameObject.SetActive(!isBag);
         pocketWindow.gameObject.SetActive(!isBag);
+    }
+
+    public void SetShopItems(List<Item> items)
+    {
+        shopItemWindow.SetItems(items);
     }
 }

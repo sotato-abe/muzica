@@ -34,7 +34,7 @@ public class GameController : MonoBehaviour
         fieldPlayer.SetCanMove(true); // プレイヤーの移動を再開
     }
 
-    public void TradeStart(PointBase point)
+    public void TradeStart(Point point)
     {
         tradeSystem.gameObject.SetActive(true); // リザーブシステムを非表示にする
         ageTimePanel.SetTimeSpeed(TimeState.Live);

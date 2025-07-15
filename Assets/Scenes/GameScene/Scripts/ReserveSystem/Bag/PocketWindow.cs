@@ -121,19 +121,18 @@ public class PocketWindow : MonoBehaviour, IDropHandler
         SetCounter();
     }
 
-    private void RemoveItem(ItemBlock itemBlock)
+    private bool RemoveItem(ItemBlock itemBlock)
     {
-        if (itemBlock == null || itemBlock.Item == null) return;
+        if (itemBlock == null || itemBlock.Item == null) return false;
+        if (itemBlock.OriginalParent != this.transform) return false;
 
         Item item = itemBlock.Item;
-        if (itemBlockMap.ContainsKey(item))
-        {
-            playerController.RemoveItemFromPocket(itemBlock.Item);
-            itemBlock.RemovePlaceholder();
-            itemBlockMap.Remove(item);
-            Destroy(itemBlock.gameObject);
-            SetItems();
-        }
+        playerController.RemoveItemFromPocket(itemBlock.Item);
+        itemBlock.RemovePlaceholder();
+        itemBlockMap.Remove(item);
+        Destroy(itemBlock.gameObject);
+        SetItems();
+        return true;
     }
 
     public void TargetItem(ItemBlock itemBlock)

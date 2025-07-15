@@ -11,7 +11,6 @@ public class EquipmentSimpleWindow : MonoBehaviour, IDropHandler
     [SerializeField] ItemBlock itemBlockPrefab;
     [SerializeField] GameObject itemList;
     PlayerController playerController;
-    Dictionary<Item, ItemBlock> itemBlockMap = new Dictionary<Item, ItemBlock>();
 
     public delegate void TargetItemDelegate(Item? item);
     public event TargetItemDelegate OnTargetItem;
@@ -20,7 +19,6 @@ public class EquipmentSimpleWindow : MonoBehaviour, IDropHandler
     private void Awake()
     {
         playerController = PlayerController.Instance;
-        DeleteAllItems();
     }
     private void OnEnable()
     {
@@ -35,74 +33,50 @@ public class EquipmentSimpleWindow : MonoBehaviour, IDropHandler
         // ドロップアイテムをバックに追加
         ItemBlock droppedItemBlock = eventData.pointerDrag?.GetComponent<ItemBlock>();
 
-        if (droppedItemBlock != null && droppedItemBlock.Item != null)
+        if (droppedItemBlock == null && droppedItemBlock.Item == null) return;
+        if (droppedItemBlock.OriginalParent == this.transform) return;
+
+        Item item = droppedItemBlock.Item;
+        if (item is Equipment)
         {
-            Item item = droppedItemBlock.Item;
-            if (droppedItemBlock.OriginalParent == this.transform)
-                return;
-            if (item is Equipment || item is Treasure)
+            bool isBought = droppedItemBlock.RemoveItem();
+            if (isBought)
             {
-                Debug.LogWarning("装備品や宝物はポケットにドロップできません。");
-                return;
+                playerController.AddItemToEquip(droppedItemBlock.Item);
+                SetItems();
             }
-            playerController.AddItemToEquip(droppedItemBlock.Item);
-            droppedItemBlock.RemoveItem();
-            SetItems();
-        }
-        else
-        {
-            Debug.LogWarning("ドロップされたアイテムが無効です。");
         }
     }
 
     public void SetItems()
     {
         List<Equipment> items = playerController.PlayerCharacter.EquipmentList;
+        foreach (Transform child in itemList.transform)
+        {
+            Destroy(child.gameObject);
+        }
 
         foreach (Item item in items)
         {
-            if (itemBlockMap.ContainsKey(item))
-            {
-                // 既に表示済みならスキップ
-                continue;
-            }
-
             // 新規アイテムだけ生成
             ItemBlock itemBlock = Instantiate(itemBlockPrefab, itemList.transform);
             itemBlock.Setup(item, this.transform);
             itemBlock.OnRemoveItem += RemoveItem;
             itemBlock.OnTargetItem += TargetItem;
-            itemBlockMap[item] = itemBlock;
         }
 
     }
 
-    private void DeleteAllItems()
+    private bool RemoveItem(ItemBlock itemBlock)
     {
-        foreach (Transform child in itemList.transform)
-        {
-            Destroy(child.gameObject);
-        }
-        foreach (var itemBlock in itemBlockMap.Values)
-        {
-            Destroy(itemBlock.gameObject);
-        }
-        itemBlockMap.Clear();
-    }
+        if (itemBlock == null || itemBlock.Item == null) return false;
+        if (itemBlock.OriginalParent != this.transform) return false;
 
-    private void RemoveItem(ItemBlock itemBlock)
-    {
-        if (itemBlock == null || itemBlock.Item == null) return;
-
-        Item item = itemBlock.Item;
-        if (itemBlockMap.ContainsKey(item))
-        {
-            playerController.RemoveItemFromEquip(itemBlock.Item);
-            itemBlock.RemovePlaceholder();
-            itemBlockMap.Remove(item);
-            Destroy(itemBlock.gameObject);
-            SetItems();
-        }
+        playerController.RemoveItemFromEquip(itemBlock.Item);
+        itemBlock.RemovePlaceholder();
+        Destroy(itemBlock.gameObject);
+        SetItems();
+        return true;
     }
 
     public void TargetItem(ItemBlock itemBlock)

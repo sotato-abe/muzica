@@ -39,20 +39,16 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
     {
         // ドロップアイテムをバックに追加
         ItemBlock droppedItemBlock = eventData.pointerDrag?.GetComponent<ItemBlock>();
+        if (droppedItemBlock == null || droppedItemBlock.Item == null) return;
+        if (droppedItemBlock.OriginalParent == this.transform) return;
 
-        if (droppedItemBlock != null && droppedItemBlock.Item != null)
+        Item item = droppedItemBlock.Item;
+        bool isRemoved = droppedItemBlock.RemoveItem();
+        if (isRemoved)
         {
-            Item item = droppedItemBlock.Item;
-            if (droppedItemBlock.OriginalParent == this.transform)
-                return;
-            playerController.AddItemToBag(droppedItemBlock.Item);
-            droppedItemBlock.RemoveItem();
+            playerController.AddItemToBag(item);
             CreateItemBlock(item, null);
             SetCounter();
-        }
-        else
-        {
-            Debug.LogWarning("ドロップされたアイテムが無効です。");
         }
     }
 
@@ -128,19 +124,18 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
         SetCounter();
     }
 
-    private void RemoveItem(ItemBlock itemBlock)
+    private bool RemoveItem(ItemBlock itemBlock)
     {
-        if (itemBlock == null || itemBlock.Item == null) return;
+        if (itemBlock == null || itemBlock.Item == null) return false;
+        if (itemBlock.OriginalParent != this.transform) return false;
 
         Item item = itemBlock.Item;
-        if (itemBlockMap.ContainsKey(item))
-        {
-            playerController.RemoveItemFromBag(itemBlock.Item);
-            itemBlock.RemovePlaceholder();
-            itemBlockMap.Remove(item);
-            Destroy(itemBlock.gameObject);
-            SetItems();
-        }
+        playerController.RemoveItemFromBag(itemBlock.Item);
+        itemBlock.RemovePlaceholder();
+        itemBlockMap.Remove(item);
+        Destroy(itemBlock.gameObject);
+        SetItems();
+        return true;
     }
 
     public void TargetItem(ItemBlock itemBlock)

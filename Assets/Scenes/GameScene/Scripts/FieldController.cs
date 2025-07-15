@@ -8,7 +8,7 @@ using UnityEngine.Events;
 
 public class FieldController : MonoBehaviour
 {
-    public delegate void PointEnterDelegate(PointBase point);
+    public delegate void PointEnterDelegate(Point point);
     public event PointEnterDelegate OnPointEnter;
     private const int ITEM_GET_PROBABILITY = 30;
     public static FieldController Instance { get; private set; }
@@ -36,7 +36,7 @@ public class FieldController : MonoBehaviour
         currentFieldData = fieldData;
     }
 
-    public void EnterPoint(PointBase point)
+    public void EnterPoint(Point point)
     {
         if (point == null)
         {
@@ -45,7 +45,7 @@ public class FieldController : MonoBehaviour
         }
 
         // メッセージパネルにメッセージを表示
-        messagePanel.AddMessage(MessageIconType.Field, $"{point.Name} にアクセス。");
+        messagePanel.AddMessage(MessageIconType.Field, $"{point.Base.Name} にアクセス。");
         OnPointEnter?.Invoke(point); // リザーブイベントを発火
     }
 

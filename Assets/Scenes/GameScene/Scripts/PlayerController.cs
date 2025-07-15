@@ -175,4 +175,25 @@ public class PlayerController : MonoBehaviour
         if (command == null) return;
         FieldController.Instance.DropPlayerCommand(command);
     }
+
+    public void AddMoney(int amount)
+    {
+        player.Money += amount;
+        Debug.Log($"プレイヤーの所持金が増加しました: {amount} (現在の所持金: {player.Money})");
+    }
+
+    public bool SpendMoney(int amount)
+    {
+        if (player.Money >= amount)
+        {
+            player.Money -= amount;
+            Debug.Log($"プレイヤーの所持金が減少しました: {amount} (現在の所持金: {player.Money})");
+            return true;
+        }
+        else
+        {
+            Debug.LogWarning($"所持金が不足しています。:{amount} (現在の所持金: {player.Money})");
+            return false;
+        }
+    }
 }
