@@ -6,6 +6,7 @@ public class GameController : MonoBehaviour
 {
     [SerializeField] private AgeTimePanel ageTimePanel;
     [SerializeField] ReserveSystem reserveSystem;
+    [SerializeField] BattleSystem battleSystem;
     [SerializeField] TradeSystem tradeSystem;
     [SerializeField] FieldPlayer fieldPlayer;
     [SerializeField] FieldController fieldController;
@@ -15,6 +16,7 @@ public class GameController : MonoBehaviour
         // ゲーム開始時にエージェントの初期化を行う
         ageTimePanel.SetTimeSpeed(TimeState.Fast);  // 初期状態をFastに設定
         fieldPlayer.OnReserveStart += ReserveStart; // リザーブ開始イベントを登録
+        fieldPlayer.OnBattleStart += BattleStart; // バトル開始イベントを登録
         reserveSystem.OnReserveEnd += ReserveEnd; // リザーブ終了イベントを登録
         tradeSystem.OnTradeEnd += TradeEnd; // リザーブ終了イベントを登録
         fieldController.OnPointEnter += TradeStart;
@@ -30,6 +32,19 @@ public class GameController : MonoBehaviour
     public void ReserveEnd()
     {
         reserveSystem.gameObject.SetActive(false); // リザーブシステムを非表示にする
+        ageTimePanel.SetTimeSpeed(TimeState.Fast);
+        fieldPlayer.SetCanMove(true); // プレイヤーの移動を再開
+    }
+    public void BattleStart()
+    {
+        battleSystem.gameObject.SetActive(true); // リザーブシステムを非表示にする
+        ageTimePanel.SetTimeSpeed(TimeState.Live);
+        battleSystem.BattleStart(); // リザーブ開始処理を呼び出す
+    }
+
+    public void BattleEnd()
+    {
+        battleSystem.gameObject.SetActive(false); // リザーブシステムを非表示にする
         ageTimePanel.SetTimeSpeed(TimeState.Fast);
         fieldPlayer.SetCanMove(true); // プレイヤーの移動を再開
     }

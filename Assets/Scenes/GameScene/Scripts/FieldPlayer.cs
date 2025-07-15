@@ -6,8 +6,12 @@ using UnityEngine.Events;
 public class FieldPlayer : MonoBehaviour
 {
     public UnityAction OnReserveStart; // リザーブイベント
+    public UnityAction OnBattleStart; // バトルイベント
+    [SerializeField] private LayerMask encountLayer;
     Animator playerAnimator;
     private float moveSpeed = 2f;
+    private float encountRadius = 0.1f;
+    private float encountChance = 0.01f; // 10% の確率
     Rigidbody2D rb;
     Vector2 moveInput;
 
@@ -50,10 +54,29 @@ public class FieldPlayer : MonoBehaviour
     {
         Vector2 moveAmount = moveInput * moveSpeed;
         rb.MovePosition(rb.position + moveAmount * Time.fixedDeltaTime);
+
+        if (moveInput != Vector2.zero)
+        {
+            CheckForEncounter();
+        }
     }
 
     public void SetCanMove(bool value)
     {
         canMove = value;
+    }
+
+    private void CheckForEncounter()
+    {
+        // EncountLayer上にいる時に確率でエンカウントを発生させる
+        //　Encount時はひとまずDebug.Logで「エンカウント」と表示
+        Collider2D hit = Physics2D.OverlapCircle(transform.position, encountRadius, encountLayer);
+        if (hit != null)
+        {
+            if (Random.value < encountChance)
+            {
+                OnBattleStart?.Invoke();
+            }
+        }
     }
 }

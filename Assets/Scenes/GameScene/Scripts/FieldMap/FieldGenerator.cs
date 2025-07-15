@@ -32,7 +32,7 @@ public class FieldGenerator : MonoBehaviour
     [SerializeField] private GameObject treasureBoxObject;
     [SerializeField] private GameObject pointObject;
     [SerializeField] private Tilemap tilemap;
-    [SerializeField] private Tilemap floorTilemap;
+    [SerializeField] private Tilemap encountTilemap;
 
     [Header("Tiles")]
     private TileBase groundTile;
@@ -62,7 +62,7 @@ public class FieldGenerator : MonoBehaviour
 
     #region Public Properties
     public Tilemap Tilemap => tilemap;
-    public Tilemap FloorTilemap => floorTilemap;
+    public Tilemap EncountTilemap => encountTilemap;
     public FieldData fieldData;
     #endregion
 
@@ -148,7 +148,7 @@ public class FieldGenerator : MonoBehaviour
         if (tilemap != null)
         {
             tilemap.ClearAllTiles();
-            floorTilemap.ClearAllTiles();
+            encountTilemap.ClearAllTiles();
         }
 
         InitializeMaps();
@@ -572,10 +572,14 @@ public class FieldGenerator : MonoBehaviour
                 TileType tileType = (TileType)mapBase[x, y];
                 TileBase tileToPlace = GetTileForType(tileType);
 
+                if (tileType == TileType.Grass)
+                {
+                    encountTilemap.SetTile(tilePosition, tileToPlace);
+                }
+
                 if (tileToPlace != null)
                 {
                     tilemap.SetTile(tilePosition, tileToPlace);
-                    floorTilemap.SetTile(tilePosition, tileToPlace);
                 }
             }
         }
