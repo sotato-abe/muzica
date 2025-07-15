@@ -15,7 +15,7 @@ public class EquipmentWindow : MonoBehaviour
     PlayerController playerController;
     List<EquipmentSlot> equipmentSlots = new List<EquipmentSlot>();
 
-    private void Start()
+    private void Awake()
     {
         playerController = PlayerController.Instance;
         DeleteAllSlot();

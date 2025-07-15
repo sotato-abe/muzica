@@ -16,7 +16,6 @@ public class EquipPanel : Panel
     }
     private void OnEnable()
     {
-        Debug.Log($"EquipPanel OnEnable called with equipmentNum: {equipmentNum}");
         if (PlayerController.Instance == null) return;
 
         playerController = PlayerController.Instance;
@@ -26,7 +25,6 @@ public class EquipPanel : Panel
         if (equipmentNum < equipmentCount)
         {
             equipment = playerController.PlayerCharacter.EquipmentList[equipmentNum];
-            Debug.Log($"EquipPanel OnEnable: {equipmentNum}: {equipment.Base.Name}");
         }
         SetEquipment(equipment);
     }

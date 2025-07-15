@@ -19,7 +19,6 @@ public class EquipmentDetail : MonoBehaviour
             ResetSlot();
             return;
         }
-        Debug.Log($"Setting equipment: {equipment.Base.Name}");
         SetEquipmentBlock(equipment);
         equipmentInfo.SetInfo(equipment);
         SetCosts(equipment.EquipmentBase.EnergyCostList);
@@ -53,7 +52,6 @@ public class EquipmentDetail : MonoBehaviour
 
     public void ResetSlot()
     {
-        Debug.Log($"ResetSlot");
         foreach (Transform child in blockSlot.transform)
         {
             Destroy(child.gameObject);
