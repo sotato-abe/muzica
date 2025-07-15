@@ -43,6 +43,7 @@ public class EquipmentWindow : MonoBehaviour
         {
             EquipmentSlot slot = Instantiate(equipmentSlot, equipmentList.transform);
             slot.OnUpdateInventory += UpdateInventory;
+            slot.SetEquipment(null);
             equipmentSlots.Add(slot);
         }
         // equipmentListのvertical layout groupを再計算

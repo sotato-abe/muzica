@@ -11,7 +11,7 @@ public class FieldPlayer : MonoBehaviour
     Animator playerAnimator;
     private float moveSpeed = 2f;
     private float encountRadius = 0.1f;
-    private float encountChance = 0.01f; // 1% の確率
+    private float encountChance = 0.05f; // 1% の確率
     private float encounterCheckInterval = 0.2f; // チェック間隔（秒）
     private float encounterCheckTimer = 0f;
     Rigidbody2D rb;

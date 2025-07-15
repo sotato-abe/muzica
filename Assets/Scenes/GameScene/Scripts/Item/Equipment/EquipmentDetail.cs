@@ -12,12 +12,6 @@ public class EquipmentDetail : MonoBehaviour
     [SerializeField] public ItemBlock itemBlockPrefab;
     [SerializeField] EnergyCostIcon energyCostIconPrefab;
 
-    private void Awake()
-    {
-        // 初期化処理
-        ResetSlot();
-    }
-
     public void SetEquipment(Equipment equipment)
     {
         if (equipment == null)
@@ -25,6 +19,7 @@ public class EquipmentDetail : MonoBehaviour
             ResetSlot();
             return;
         }
+        Debug.Log($"Setting equipment: {equipment.Base.Name}");
         SetEquipmentBlock(equipment);
         equipmentInfo.SetInfo(equipment);
         SetCosts(equipment.EquipmentBase.EnergyCostList);
@@ -58,6 +53,7 @@ public class EquipmentDetail : MonoBehaviour
 
     public void ResetSlot()
     {
+        Debug.Log($"ResetSlot");
         foreach (Transform child in blockSlot.transform)
         {
             Destroy(child.gameObject);
