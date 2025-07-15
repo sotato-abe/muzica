@@ -84,7 +84,6 @@ public class FieldPlayer : MonoBehaviour
             {
                 SetCanMove(false); // プレイヤーの移動を停止
                 playerAnimator.SetBool("isRunning", false);
-                Debug.Log("エンカウント");
                 OnBattleStart?.Invoke();
             }
         }

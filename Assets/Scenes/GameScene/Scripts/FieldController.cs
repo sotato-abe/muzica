@@ -18,6 +18,19 @@ public class FieldController : MonoBehaviour
     [SerializeField] DropItem dropItemPrefab; // ドロップアイテムのプレハブ
     [SerializeField] DropCommand dropCommandPrefab; // ドロップアイテムのプレハブ
     [SerializeField] FieldPlayer fieldPlayer; // プレイヤーコントローラー
+    [SerializeField] List<CharacterGroup> defaultEnemyGroups = new List<CharacterGroup>();
+    [SerializeField] List<CharacterGroup> desertEnemyGroups = new List<CharacterGroup>();
+    [SerializeField] List<CharacterGroup> wildernessEnemyGroups = new List<CharacterGroup>();
+    [SerializeField] List<CharacterGroup> grasslandsEnemyGroups = new List<CharacterGroup>();
+    [SerializeField] List<CharacterGroup> wetlandsEnemyGroups = new List<CharacterGroup>();
+    [SerializeField] List<CharacterGroup> snowEnemyGroups = new List<CharacterGroup>();
+    [SerializeField] List<CharacterGroup> rockEnemyGroups = new List<CharacterGroup>();
+    [SerializeField] List<CharacterGroup> magmaEnemyGroups = new List<CharacterGroup>();
+    [SerializeField] List<CharacterGroup> pollutionEnemyGroups = new List<CharacterGroup>();
+    [SerializeField] List<CharacterGroup> seaEnemyGroups = new List<CharacterGroup>();
+    [SerializeField] List<CharacterGroup> oceanEnemyGroups = new List<CharacterGroup>();
+
+    private Dictionary<FieldType, List<CharacterGroup>> fieldTypeEnemyGroups;
 
     private FieldData currentFieldData;
 
@@ -29,6 +42,21 @@ public class FieldController : MonoBehaviour
             return;
         }
         Instance = this;
+
+        fieldTypeEnemyGroups = new Dictionary<FieldType, List<CharacterGroup>>
+        {
+            { FieldType.Default, defaultEnemyGroups },
+            { FieldType.Desert, desertEnemyGroups },
+            { FieldType.Wilderness, wildernessEnemyGroups },
+            { FieldType.Grasslands, grasslandsEnemyGroups },
+            { FieldType.Wetlands, wetlandsEnemyGroups },
+            { FieldType.Snow, snowEnemyGroups },
+            { FieldType.Rock, rockEnemyGroups },
+            { FieldType.Magma, magmaEnemyGroups },
+            { FieldType.Pollution, pollutionEnemyGroups },
+            { FieldType.Sea, seaEnemyGroups },
+            { FieldType.Ocean, oceanEnemyGroups }
+        };
     }
 
     public void SetField(FieldData fieldData)
@@ -44,10 +72,30 @@ public class FieldController : MonoBehaviour
             Debug.LogWarning("Current field data is null. Cannot get enemies.");
             return new List<Character>();
         }
+
         List<Character> enemies = new List<Character>();
+        CharacterGroup targetGroup = null; // ← new は使わない
+
         int groupCount = currentFieldData.EnemyGroups.Count;
-        CharacterGroup randomGroup = currentFieldData.EnemyGroups[Random.Range(0, groupCount)];
-        enemies.AddRange(randomGroup.GetRandomCharacterList());
+        if (groupCount == 0)
+        {
+            List<CharacterGroup> targetGroups = fieldTypeEnemyGroups[currentFieldData.fieldType];
+            targetGroup = targetGroups[Random.Range(0, targetGroups.Count)];
+        }
+        else
+        {
+            targetGroup = currentFieldData.EnemyGroups[Random.Range(0, groupCount)];
+        }
+
+        if (targetGroup != null)
+        {
+            enemies.AddRange(targetGroup.GetRandomCharacterList());
+        }
+        else
+        {
+            Debug.LogWarning("No target group found for enemies.");
+        }
+
         return enemies;
     }
 

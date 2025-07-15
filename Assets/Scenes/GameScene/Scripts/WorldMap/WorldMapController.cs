@@ -47,6 +47,7 @@ public class WorldMapController : MonoBehaviour
         FieldData fieldData = GetFieldData(playerPosition);
 
         // WorldMapで周りのfieldを確認して、fieldがあればfieldDataのisTopOpenとかを設定する
+        fieldData.fieldType = fieldTileSet.FieldType;
         fieldData.isTopOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.up);
         fieldData.isBottomOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.down);
         fieldData.isRightOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.right);

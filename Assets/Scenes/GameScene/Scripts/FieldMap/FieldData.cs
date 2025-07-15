@@ -18,10 +18,12 @@ public class FieldData : ScriptableObject
     [SerializeField] List<PointBase> points = new List<PointBase>();
     [SerializeField] List<ItemBase> treasureBoxItems = new List<ItemBase>();
     [SerializeField] List<CharacterGroup> enemyGroups = new List<CharacterGroup>();
+    public FieldType fieldType = FieldType.Default; // フィールドの種類
     public bool isTopOpen = false;
     public bool isBottomOpen = false;
     public bool isRightOpen = false;
     public bool isLeftOpen = false;
+
 
     public Vector2Int Position { get => position; }
     public Sprite Icon { get => icon; }
