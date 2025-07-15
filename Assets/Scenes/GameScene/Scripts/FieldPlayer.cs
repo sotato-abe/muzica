@@ -12,6 +12,8 @@ public class FieldPlayer : MonoBehaviour
     private float moveSpeed = 2f;
     private float encountRadius = 0.1f;
     private float encountChance = 0.01f; // 1% の確率
+    private float encounterCheckInterval = 0.2f; // チェック間隔（秒）
+    private float encounterCheckTimer = 0f;
     Rigidbody2D rb;
     Vector2 moveInput;
 
@@ -61,7 +63,17 @@ public class FieldPlayer : MonoBehaviour
 
         if (moveInput != Vector2.zero && canMove)
         {
-            CheckForEncounter();
+            encounterCheckTimer += Time.fixedDeltaTime;
+            if (encounterCheckTimer >= encounterCheckInterval)
+            {
+                CheckForEncounter();
+                encounterCheckTimer = 0f;
+            }
+        }
+        else
+        {
+            // 止まっている時はタイマーをリセットしてもいい（連続チェックを防ぐ）
+            encounterCheckTimer = 0f;
         }
     }
 
