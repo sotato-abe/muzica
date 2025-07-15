@@ -16,7 +16,7 @@ public class CommandBlock : Block, IPointerEnterHandler, IPointerExitHandler
     [SerializeField] StatusText statusText;
     private bool isActive = true;
     public Transform OriginalParent { get; private set; }
-    public delegate void RemoveCommandDelegate(CommandBlock commandBlock);
+    public delegate bool RemoveCommandDelegate(CommandBlock commandBlock);
     public event RemoveCommandDelegate OnRemoveCommand;
 
     public delegate void TargetCommandDelegate(CommandBlock? commandBlock);
@@ -64,9 +64,9 @@ public class CommandBlock : Block, IPointerEnterHandler, IPointerExitHandler
         cursor.color = bgColor;
     }
 
-    public void RemoveCommand()
+    public bool RemoveCommand()
     {
-        OnRemoveCommand?.Invoke(this);
+        return OnRemoveCommand?.Invoke(this) ?? false;
     }
 
     public void SetStatustext(string text)

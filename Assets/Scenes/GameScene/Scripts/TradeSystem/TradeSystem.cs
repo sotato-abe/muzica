@@ -12,6 +12,7 @@ public class TradeSystem : MonoBehaviour
     [SerializeField] private CharacterSubPanel rightcharacterSubPanel; // キャラクターサブパネル
     [SerializeField] private MessagePanel messagePanel; // キャラクターサブパネル
     [SerializeField] ItemTradePanel itemTradePanel;
+    [SerializeField] CommandTradePanel commandTradePanel;
     [SerializeField] WorldMapPanel worldMapPanel;
 
     private Point currentPoint;
@@ -43,6 +44,7 @@ public class TradeSystem : MonoBehaviour
         StartCoroutine(rightcharacterSubPanel.SetTalkMessage(talkMessage2));
 
         itemTradePanel.SetShopItems(point.ShopItems); // アイテムトレードパネルにショップアイテムを設定
+        commandTradePanel.SetShopCommands(point.ShopCommands); // コマンドトレードパネルにショップコマンドを設定
 
         messagePanel.SetActive(false); // メッセージパネルを表示
         worldMapPanel.SetActive(false); // ワールドマップパネルを非表示

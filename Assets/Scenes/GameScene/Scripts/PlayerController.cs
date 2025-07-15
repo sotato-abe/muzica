@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     public static PlayerController Instance { get; private set; }
     [SerializeField] private CharacterSubPanel playerSubPanel;
     [SerializeField] private PlayerCharacter player;
+    [SerializeField] PropertyPanel propertyPanel;
     public PlayerCharacter PlayerCharacter => player;
 
     void Awake()
@@ -23,7 +24,7 @@ public class PlayerController : MonoBehaviour
     {
         player.Init();  // プレイヤーキャラクターの初期化
         playerSubPanel.SetCharacter(player);
-        // StartCoroutine(GameStart());
+        UpdatePropertyPanel();
         GameStart();
     }
 
@@ -156,18 +157,14 @@ public class PlayerController : MonoBehaviour
         player.TableList[index] = command;
     }
 
-    public void RemoveCommandFromTable(Command command)
+    public void RemoveCommandFromTable(int index)
     {
-        if (command == null) return;
-        if (player.TableList.Contains(command))
+        if (index < 0 || index >= player.ColMemory * 3)
         {
-            player.TableList.Remove(command);
-            Debug.Log($"テーブルからコマンドを削除しました: {command.Base.Name}");
+            Debug.LogWarning("無効なインデックスです。コマンドを削除できません。");
+            return;
         }
-        else
-        {
-            Debug.LogWarning("テーブルに指定のコマンドが存在しません。");
-        }
+        player.TableList[index] = null;
     }
 
     public void DropCommand(Command command)
@@ -179,7 +176,22 @@ public class PlayerController : MonoBehaviour
     public void AddMoney(int amount)
     {
         player.Money += amount;
+        UpdatePropertyPanel();
         Debug.Log($"プレイヤーの所持金が増加しました: {amount} (現在の所持金: {player.Money})");
+    }
+
+    public void AddDisk(int amount)
+    {
+        player.Disk += amount;
+        UpdatePropertyPanel();
+        Debug.Log($"プレイヤーのディスクが増加しました: {amount} (現在のディスク: {player.Disk})");
+    }
+
+    public void AddKey(int amount)
+    {
+        player.Key += amount;
+        UpdatePropertyPanel();
+        Debug.Log($"プレイヤーのキーが増加しました: {amount} (現在のキー: {player.Key})");
     }
 
     public bool SpendMoney(int amount)
@@ -188,6 +200,7 @@ public class PlayerController : MonoBehaviour
         {
             player.Money -= amount;
             Debug.Log($"プレイヤーの所持金が減少しました: {amount} (現在の所持金: {player.Money})");
+            UpdatePropertyPanel();
             return true;
         }
         else
@@ -195,5 +208,44 @@ public class PlayerController : MonoBehaviour
             Debug.LogWarning($"所持金が不足しています。:{amount} (現在の所持金: {player.Money})");
             return false;
         }
+    }
+
+    public bool SpendDisk(int amount)
+    {
+        if (player.Disk >= amount)
+        {
+            player.Disk -= amount;
+            Debug.Log($"プレイヤーのディスクが減少しました: {amount} (現在のディスク: {player.Disk})");
+            UpdatePropertyPanel();
+            return true;
+        }
+        else
+        {
+            Debug.LogWarning($"ディスクが不足しています。:{amount} (現在のディスク: {player.Disk})");
+            return false;
+        }
+    }
+
+    public bool SpendKey(int amount)
+    {
+        if (player.Key >= amount)
+        {
+            player.Key -= amount;
+            Debug.Log($"プレイヤーのキーが減少しました: {amount} (現在のキー: {player.Key})");
+            UpdatePropertyPanel();
+            return true;
+        }
+        else
+        {
+            Debug.LogWarning($"キーが不足しています。:{amount} (現在のキー: {player.Key})");
+            return false;
+        }
+    }
+
+    private void UpdatePropertyPanel()
+    {
+        propertyPanel.SetMoney(player.Money);
+        propertyPanel.SetDisk(player.Disk);
+        propertyPanel.SetKey(player.Key);
     }
 }

@@ -55,14 +55,17 @@ public class CommandSlot : MonoBehaviour, IDropHandler
         }
     }
 
-    private void RemoveCommand(CommandBlock commandBlock)
+    private bool RemoveCommand(CommandBlock commandBlock)
     {
-        if (commandBlock == null || commandBlock.Command == null) return;
+        if (commandBlock == null || commandBlock.Command == null) return false;
+        if (commandBlock.OriginalParent != this.transform) return false;
 
         Command command = commandBlock.Command;
         PlayerController.Instance.AddCommandToTable(null, SlotIndex);
+        commandBlock.RemoveCommand();
         commandBlock.RemovePlaceholder();
         Destroy(commandBlock.gameObject);
+        return true;
     }
 
     public void TargetCommand(CommandBlock commandBlock)

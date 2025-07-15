@@ -19,7 +19,7 @@ public class StorageWindow : MonoBehaviour, IDropHandler
     public delegate void TargetCommandDelegate(Command? command);
     public event TargetCommandDelegate OnTargetCommand;
 
-    private const int MAX_STORAGE_COUNT = 18;
+    private const int MAX_STORAGE_COUNT = 20;
     private int currentBlockCount = 0;
     private void Awake()
     {
@@ -28,9 +28,11 @@ public class StorageWindow : MonoBehaviour, IDropHandler
     }
     private void OnEnable()
     {
+        Debug.Log("test1");
         if (PlayerController.Instance == null) return;
+        Debug.Log("test2");
 
-        // playerController = PlayerController.Instance;
+        playerController = PlayerController.Instance;
         SetCommands();
         SetBlock();
     }
@@ -39,21 +41,14 @@ public class StorageWindow : MonoBehaviour, IDropHandler
     {
         // ドロップアイテムをバックに追加
         CommandBlock droppedCommandBlock = eventData.pointerDrag?.GetComponent<CommandBlock>();
+        if (droppedCommandBlock == null || droppedCommandBlock.Command == null) return;
+        if (droppedCommandBlock.OriginalParent == this.transform) return;
 
-        if (droppedCommandBlock != null && droppedCommandBlock.Command != null)
-        {
-            Command command = droppedCommandBlock.Command;
-            if (droppedCommandBlock.OriginalParent == this.transform)
-                return;
-            playerController.AddCommandToStorage(droppedCommandBlock.Command);
-            droppedCommandBlock.RemoveCommand();
-            CreateCommandBlock(command, null);
-            SetCounter();
-        }
-        else
-        {
-            Debug.LogWarning("ドロップされたアイテムが無効です。");
-        }
+        Command command = droppedCommandBlock.Command;
+        playerController.AddCommandToStorage(droppedCommandBlock.Command);
+        droppedCommandBlock.RemoveCommand();
+        CreateCommandBlock(command, null);
+        SetCounter();
     }
 
     public void SetCommands()
@@ -84,13 +79,11 @@ public class StorageWindow : MonoBehaviour, IDropHandler
 
         CommandBlock commandBlock = Instantiate(commandBlockPrefab, commandList.transform);
         commandBlock.Setup(command, this.transform);
-        if (!string.IsNullOrEmpty(statusText))
-        {
-            commandBlock.SetStatustext(statusText);
-        }
+        commandBlock.SetStatustext(statusText);
         commandBlock.OnRemoveCommand += RemoveCommand;
         commandBlock.OnTargetCommand += TargetCommand;
         commandBlockMap[command] = commandBlock;
+        Debug.Log($"CommandBlock created for command: {command.Base.Name}");
     }
 
     private void SetCounter()
@@ -130,19 +123,18 @@ public class StorageWindow : MonoBehaviour, IDropHandler
         SetCounter();
     }
 
-    private void RemoveCommand(CommandBlock commandBlock)
+    private bool RemoveCommand(CommandBlock commandBlock)
     {
-        if (commandBlock == null || commandBlock.Command == null) return;
+        if (commandBlock == null || commandBlock.Command == null) return false;
+        if (commandBlock.OriginalParent != this.transform) return false;
 
         Command command = commandBlock.Command;
-        if (commandBlockMap.ContainsKey(command))
-        {
-            playerController.RemoveCommandFromStorage(commandBlock.Command);
-            commandBlock.RemovePlaceholder();
-            commandBlockMap.Remove(command);
-            Destroy(commandBlock.gameObject);
-            SetCommands();
-        }
+        playerController.RemoveCommandFromStorage(commandBlock.Command);
+        commandBlock.RemovePlaceholder();
+        commandBlockMap.Remove(command);
+        Destroy(commandBlock.gameObject);
+        SetCommands();
+        return true;
     }
 
     public void TargetCommand(CommandBlock commandBlock)
