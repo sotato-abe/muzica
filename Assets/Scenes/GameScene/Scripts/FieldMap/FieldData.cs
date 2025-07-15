@@ -23,6 +23,7 @@ public class FieldData : ScriptableObject
     public bool isBottomOpen = false;
     public bool isRightOpen = false;
     public bool isLeftOpen = false;
+    public Vector2Int currentPosition;
 
 
     public Vector2Int Position { get => position; }

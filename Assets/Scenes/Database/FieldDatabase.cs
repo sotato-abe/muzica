@@ -55,6 +55,7 @@ public class FieldDatabase : MonoBehaviour
                 return data;
             }
         }
+        defaultFieldData.currentPosition = targetPosition;
 
         return defaultFieldData;
     }

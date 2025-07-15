@@ -79,7 +79,8 @@ public class FieldGenerator : MonoBehaviour
             Debug.LogError("FieldTileSet is null!");
             return;
         }
-        string seed = fieldData.Position.x + "," + fieldData.Position.y;
+        string seed = fieldData.currentPosition.x + "," + fieldData.currentPosition.y;
+        Debug.Log($"Setting field with seed: {seed}");
         Random.InitState(seed.GetHashCode());
         consistentRandom = new System.Random(seed.GetHashCode());
         InitializeField(fieldData, fieldTileSet);
