@@ -11,7 +11,7 @@ public class FieldPlayer : MonoBehaviour
     Animator playerAnimator;
     private float moveSpeed = 2f;
     private float encountRadius = 0.1f;
-    private float encountChance = 0.01f; // 10% の確率
+    private float encountChance = 0.01f; // 1% の確率
     Rigidbody2D rb;
     Vector2 moveInput;
 
@@ -27,8 +27,11 @@ public class FieldPlayer : MonoBehaviour
     {
         if (!canMove)
         {
+            moveInput = Vector2.zero; // ← 追加: 入力をリセット
+            playerAnimator.SetBool("isRunning", false); // ← 走りアニメーションも止める
             return;
         }
+
         moveInput.x = Input.GetAxisRaw("Horizontal");
         moveInput.y = Input.GetAxisRaw("Vertical");
         moveInput = moveInput.normalized;
@@ -46,6 +49,7 @@ public class FieldPlayer : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Return))
         {
             canMove = false;
+            moveInput = Vector2.zero; // ← ここでも念のためリセット
             OnReserveStart?.Invoke();
         }
     }
@@ -55,7 +59,7 @@ public class FieldPlayer : MonoBehaviour
         Vector2 moveAmount = moveInput * moveSpeed;
         rb.MovePosition(rb.position + moveAmount * Time.fixedDeltaTime);
 
-        if (moveInput != Vector2.zero)
+        if (moveInput != Vector2.zero && canMove)
         {
             CheckForEncounter();
         }
@@ -64,17 +68,23 @@ public class FieldPlayer : MonoBehaviour
     public void SetCanMove(bool value)
     {
         canMove = value;
+        if (!canMove)
+        {
+            moveInput = Vector2.zero;
+            playerAnimator.SetBool("isRunning", false);
+        }
     }
 
     private void CheckForEncounter()
     {
-        // EncountLayer上にいる時に確率でエンカウントを発生させる
-        //　Encount時はひとまずDebug.Logで「エンカウント」と表示
         Collider2D hit = Physics2D.OverlapCircle(transform.position, encountRadius, encountLayer);
         if (hit != null)
         {
             if (Random.value < encountChance)
             {
+                SetCanMove(false); // プレイヤーの移動を停止
+                playerAnimator.SetBool("isRunning", false);
+                Debug.Log("エンカウント");
                 OnBattleStart?.Invoke();
             }
         }

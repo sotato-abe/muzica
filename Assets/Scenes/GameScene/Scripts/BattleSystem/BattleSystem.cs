@@ -9,6 +9,7 @@ public class BattleSystem : MonoBehaviour
 
     [SerializeField] private BattleActionBoard battleActionBoard;
     [SerializeField] private CharacterSubPanel playerSubPanel; // キャラクターサブパネル
+    [SerializeField] private CharacterSubPanel enemySubPanel; // キャラクターサブパネル
     [SerializeField] private MessagePanel messagePanel; // キャラクターサブパネル
     [SerializeField] WorldMapPanel worldMapPanel;
 
@@ -32,6 +33,14 @@ public class BattleSystem : MonoBehaviour
         StartCoroutine(playerSubPanel.SetTalkMessage(talkMessage)); // リザーブアクションボードを開く
         messagePanel.SetActive(false); // メッセージパネルを表示
         worldMapPanel.SetActive(false); // ワールドマップパネルを非表示
+        SetEnemy();
+    }
+
+    private void SetEnemy()
+    {
+        List<Character> enemies = FieldController.Instance.GetEnemies();
+        enemySubPanel.SetCharacter(enemies[0]);
+        enemySubPanel.SetActive(true); // キャラクターサブパネルを表示
     }
 
     public void BattleEnd()
@@ -40,7 +49,7 @@ public class BattleSystem : MonoBehaviour
         void CheckAllComplete()
         {
             completed++;
-            if (completed >= 4)
+            if (completed >= 5)
             {
                 OnBattleEnd?.Invoke();
                 transform.gameObject.SetActive(false);
@@ -49,6 +58,7 @@ public class BattleSystem : MonoBehaviour
 
         battleActionBoard.SetActive(false, CheckAllComplete); // リザーブアクションボードを表示
         playerSubPanel.SetActive(false, CheckAllComplete); // キャラクターサブパネルを表示
+        enemySubPanel.SetActive(false, CheckAllComplete); // キャラクターサブパネルを表示
         messagePanel.SetActive(true, CheckAllComplete); // メッセージパネルを表示
         worldMapPanel.SetActive(true, CheckAllComplete); // ワールドマップパネルを表示
     }

@@ -80,7 +80,6 @@ public class FieldGenerator : MonoBehaviour
             return;
         }
         string seed = fieldData.Position.x + "," + fieldData.Position.y;
-        Debug.Log("seed : " + seed);
         Random.InitState(seed.GetHashCode());
         consistentRandom = new System.Random(seed.GetHashCode());
         InitializeField(fieldData, fieldTileSet);
@@ -491,7 +490,6 @@ public class FieldGenerator : MonoBehaviour
             }
 
             placedPoints.Add(pos);
-            Debug.Log($"Creating point: {fieldData.Points[i].Name} at position {pos}");
         }
     }
 

@@ -17,6 +17,7 @@ public class FieldData : ScriptableObject
     [SerializeField] int objectCount = 5;
     [SerializeField] List<PointBase> points = new List<PointBase>();
     [SerializeField] List<ItemBase> treasureBoxItems = new List<ItemBase>();
+    [SerializeField] List<CharacterGroup> enemyGroups = new List<CharacterGroup>();
     public bool isTopOpen = false;
     public bool isBottomOpen = false;
     public bool isRightOpen = false;
@@ -31,6 +32,7 @@ public class FieldData : ScriptableObject
     public float GroundFillPercent { get => groundFillPercent; }
     public float AreaFillPercent { get => areaFillPercent; }
     public int ObjectCount { get => objectCount; }
-    public List<PointBase> Points { get => points;}
-    public List<ItemBase> TreasureBoxItems { get => treasureBoxItems;}
+    public List<PointBase> Points { get => points; }
+    public List<ItemBase> TreasureBoxItems { get => treasureBoxItems; }
+    public List<CharacterGroup> EnemyGroups { get => enemyGroups; }
 }

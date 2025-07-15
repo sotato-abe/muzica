@@ -18,6 +18,7 @@ public class GameController : MonoBehaviour
         fieldPlayer.OnReserveStart += ReserveStart; // リザーブ開始イベントを登録
         fieldPlayer.OnBattleStart += BattleStart; // バトル開始イベントを登録
         reserveSystem.OnReserveEnd += ReserveEnd; // リザーブ終了イベントを登録
+        battleSystem.OnBattleEnd += BattleEnd; // バトル終了イベントを登録
         tradeSystem.OnTradeEnd += TradeEnd; // リザーブ終了イベントを登録
         fieldController.OnPointEnter += TradeStart;
     }
@@ -54,7 +55,7 @@ public class GameController : MonoBehaviour
         tradeSystem.gameObject.SetActive(true); // リザーブシステムを非表示にする
         ageTimePanel.SetTimeSpeed(TimeState.Live);
         tradeSystem.TradeStart(point); // リザーブ開始処理を呼び出す
-        fieldPlayer.SetCanMove(false); // プレイヤーの移動を再開
+        fieldPlayer.SetCanMove(false); // プレイヤーの移動を停止
     }
 
     public void TradeEnd()

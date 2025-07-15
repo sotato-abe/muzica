@@ -36,6 +36,21 @@ public class FieldController : MonoBehaviour
         currentFieldData = fieldData;
     }
 
+    // 複数の敵をグループから取得するように変更する
+    public List<Character> GetEnemies()
+    {
+        if (currentFieldData == null)
+        {
+            Debug.LogWarning("Current field data is null. Cannot get enemies.");
+            return new List<Character>();
+        }
+        List<Character> enemies = new List<Character>();
+        int groupCount = currentFieldData.EnemyGroups.Count;
+        CharacterGroup randomGroup = currentFieldData.EnemyGroups[Random.Range(0, groupCount)];
+        enemies.AddRange(randomGroup.GetRandomCharacterList());
+        return enemies;
+    }
+
     public void EnterPoint(Point point)
     {
         if (point == null)
