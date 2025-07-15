@@ -62,7 +62,6 @@ public class CommandSlot : MonoBehaviour, IDropHandler
 
         Command command = commandBlock.Command;
         PlayerController.Instance.AddCommandToTable(null, SlotIndex);
-        commandBlock.RemoveCommand();
         commandBlock.RemovePlaceholder();
         Destroy(commandBlock.gameObject);
         return true;
