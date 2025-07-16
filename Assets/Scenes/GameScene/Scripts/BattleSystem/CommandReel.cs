@@ -38,6 +38,13 @@ public class CommandReel : Panel
         }
     }
 
+    private void OnEnable()
+    {
+        isSpinning = true; // パネルが有効になったら回転を開始
+        SetCommands(); // コマンドを再設定
+        StartReel(); // リールを開始
+    }
+
     private void Update()
     {
         if (isSpinning)
