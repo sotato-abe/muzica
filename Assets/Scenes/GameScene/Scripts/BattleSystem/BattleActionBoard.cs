@@ -90,7 +90,7 @@ public class BattleActionBoard : SlidePanel
         ChangeAction(BattleActionType.Pocket);
     }
 
-    public void EscapeBattle()
+    public void EscapePanelOpen()
     {
         ChangeAction(BattleActionType.Escape);
     }
@@ -112,11 +112,6 @@ public class BattleActionBoard : SlidePanel
 
     private void ChangeActionPanel()
     {
-        if (currentAction == BattleActionType.Escape)
-        {
-            return;
-        }
-
         foreach (var kvp in actionPanels)
         {
             if (kvp.Key == currentAction)

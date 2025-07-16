@@ -20,7 +20,7 @@ public class PocketWindow : MonoBehaviour, IDropHandler
     public event TargetItemDelegate OnTargetItem;
     public int adjustmentBlockCount = 0; // 調整用のブロック数
 
-    private const int MAX_PPCKET_COUNT = 15;
+    private const int MAX_PPCKET_COUNT = 20;
     private int currentBlockCount = 0;
     private void Awake()
     {

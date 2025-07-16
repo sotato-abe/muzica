@@ -5,7 +5,8 @@ using UnityEngine.Events;
 
 public class EquipPanel : Panel
 {
-    [SerializeField] EquipmentSlot equipmentSlot;
+    [SerializeField] TargetCommandWindow targetCommandWindow;
+    [SerializeField] EquipWindow equipWindow;
     [SerializeField] SlotPanel slotPanel;
     PlayerController playerController;
     public int equipmentNum = 0;
@@ -33,14 +34,19 @@ public class EquipPanel : Panel
     {
         if (equipment == null)
         {
-            equipmentSlot.ResetSlot();
+            equipWindow.ResetSlot();
             return;
         }
-        equipmentSlot.SetEquipment(equipment);
+        equipWindow.SetEquipment(equipment);
     }
 
     public void ResetEquipment()
     {
-        equipmentSlot.ResetSlot();
+        equipWindow.ResetSlot();
+    }
+
+    public void TargetCommand(Command Command)
+    {
+        targetCommandWindow.TargetCommand(Command);
     }
 }
