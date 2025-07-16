@@ -8,13 +8,25 @@ public class SlotWindow : Panel
     [SerializeField] CommandReel commandReel1;
     [SerializeField] CommandReel commandReel2;
     [SerializeField] CommandReel commandReel3;
+    List<Command> resultList;
 
-    public List<Command> StopReels()
+    public void StopReels(System.Action<List<Command>> onComplete)
     {
-        List<Command> commands = new List<Command>();
-        commands.Add(commandReel1.StopReel());
-        commands.Add(commandReel2.StopReel());
-        commands.Add(commandReel3.StopReel());
-        return commands;
+        StartCoroutine(GetReelCommands(onComplete));
+    }
+
+    private IEnumerator GetReelCommands(System.Action<List<Command>> onComplete)
+    {
+        resultList = new List<Command>();
+
+        resultList.Add(commandReel1.StopReel());
+        yield return new WaitForSeconds(0.3f);
+
+        resultList.Add(commandReel2.StopReel());
+        yield return new WaitForSeconds(0.3f);
+
+        resultList.Add(commandReel3.StopReel());
+
+        onComplete?.Invoke(resultList); // 完了時に結果を返す
     }
 }

@@ -73,13 +73,20 @@ public class EquipPanel : Panel
 
     private void StopReels()
     {
-        List<Command> activeCommands = new List<Command>();
-        activeCommands.AddRange(slotWindow.StopReels());
-
-        foreach (Command command in activeCommands)
+        slotWindow.StopReels(result =>
         {
-            if (command == null) continue;
-            Debug.Log($"コマンドを実行: {command.Base.Name}");
-        }
+            foreach (var cmd in result)
+            {
+                if (cmd == null)
+                {
+                    Debug.LogWarning("止まったコマンドが null です。");
+                    continue;
+                }
+
+                Debug.Log($"止まったコマンド: {cmd.Base?.Name ?? "Baseが未設定"}");
+            }
+
+            // 結果を使って次の処理へ
+        });
     }
 }
