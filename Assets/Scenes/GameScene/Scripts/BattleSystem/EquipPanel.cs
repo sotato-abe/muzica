@@ -84,7 +84,7 @@ public class EquipPanel : Panel
             {
                 if (cmd == null)
                 {
-                    Debug.LogWarning("止まったコマンドが null です。");
+                    Debug.Log("止まったコマンドが null です。");
                     continue;
                 }
 

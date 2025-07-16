@@ -90,7 +90,7 @@ public class CommandReel : Panel
         CommandImage closestSlot = GetClosestSlotToCenter();
         if (closestSlot.command == null)
         {
-            Debug.LogWarning("コマンドが設定されていません。");
+            Debug.Log("スカ");
             return null;
         }
 
