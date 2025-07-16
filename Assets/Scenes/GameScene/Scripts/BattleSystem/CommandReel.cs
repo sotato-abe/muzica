@@ -63,13 +63,13 @@ public class CommandReel : Panel
         for (int i = 0; i < slotRects.Length; i++)
         {
             Vector2 pos = slotRects[i].anchoredPosition;
-            pos.y += scrollSpeed * Time.deltaTime;
+            pos.y -= scrollSpeed * Time.deltaTime; // 下方向へスクロール
             slotRects[i].anchoredPosition = pos;
 
-            // 上に抜けたら下に回す
-            if (pos.y > slotHeight * 1.5f)
+            // 下に抜けたら上に回す
+            if (pos.y < -(slotHeight * 1.5f))
             {
-                pos.y -= (slotHeight + padding) * reelSlots.Count;
+                pos.y += (slotHeight + padding) * reelSlots.Count;
                 slotRects[i].anchoredPosition = pos;
 
                 // 順番にスプライトを変更
@@ -83,10 +83,10 @@ public class CommandReel : Panel
     public Command StopReel()
     {
         isSpinning = false; // 回転を停止
-        
+
         // スムーズな移動でスロットを中央に配置
         StartCoroutine(SmoothMoveToCenter());
-        
+
         CommandImage closestSlot = GetClosestSlotToCenter();
         if (closestSlot.command == null)
         {
@@ -168,13 +168,13 @@ public class CommandReel : Panel
     {
         CommandImage closestSlot = null;
         float minDistance = float.MaxValue;
-        float centerY = 0f;
+        float centerY = 75f;
 
         // 各スロットの中央からの距離を計算
         for (int i = 0; i < reelSlots.Count; i++)
         {
             float slotCenterY = slotRects[i].anchoredPosition.y;
-            float distance = Mathf.Abs(slotCenterY - centerY);
+            float distance = Mathf.Abs(slotCenterY + centerY);
 
             if (distance < minDistance)
             {

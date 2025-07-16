@@ -10,6 +10,15 @@ public class SlotWindow : Panel
     [SerializeField] CommandReel commandReel3;
     List<Command> resultList;
 
+    public IEnumerator StartReels()
+    {
+        commandReel1.StartReel();
+        yield return new WaitForSeconds(0.1f);
+        commandReel2.StartReel();
+        yield return new WaitForSeconds(0.1f);
+        commandReel3.StartReel();
+    }
+
     public void StopReels(System.Action<List<Command>> onComplete)
     {
         StartCoroutine(GetReelCommands(onComplete));

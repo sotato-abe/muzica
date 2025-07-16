@@ -38,9 +38,14 @@ public class EquipPanel : Panel
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))
         {
             StopReels();
+        }
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            StartReels();
         }
     }
 
@@ -88,5 +93,10 @@ public class EquipPanel : Panel
 
             // 結果を使って次の処理へ
         });
+    }
+
+    private void StartReels()
+    {
+        StartCoroutine(slotWindow.StartReels());
     }
 }
