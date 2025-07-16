@@ -7,9 +7,15 @@ public class EquipPanel : Panel
 {
     [SerializeField] TargetCommandWindow targetCommandWindow;
     [SerializeField] EquipWindow equipWindow;
-    [SerializeField] SlotPanel slotPanel;
+    [SerializeField] SlotWindow slotWindow;
     PlayerController playerController;
     public int equipmentNum = 0;
+    private Equipment currentEquipment;
+
+    private List<EnergyCount> energyAttackList;
+    private TargetType TargetType;
+    private List<EnergyCost> EnergyCostList;
+    private List<Enchant> EnchantList;
 
     private void Start()
     {
@@ -30,23 +36,50 @@ public class EquipPanel : Panel
         SetEquipment(equipment);
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            StopReels();
+        }
+    }
+
     public void SetEquipment(Equipment equipment)
     {
         if (equipment == null)
         {
             equipWindow.ResetSlot();
+            currentEquipment = null;
             return;
         }
         equipWindow.SetEquipment(equipment);
-    }
-
-    public void ResetEquipment()
-    {
-        equipWindow.ResetSlot();
+        currentEquipment = equipment;
     }
 
     public void TargetCommand(Command Command)
     {
         targetCommandWindow.TargetCommand(Command);
+    }
+
+    public void ExecuteAttack()
+    {
+        if (currentEquipment == null)
+        {
+            Debug.LogWarning("現在の装備が設定されていません。");
+            return;
+        }
+
+    }
+
+    private void StopReels()
+    {
+        List<Command> activeCommands = new List<Command>();
+        activeCommands.AddRange(slotWindow.StopReels());
+
+        foreach (Command command in activeCommands)
+        {
+            if (command == null) continue;
+            Debug.Log($"コマンドを実行: {command.Base.Name}");
+        }
     }
 }

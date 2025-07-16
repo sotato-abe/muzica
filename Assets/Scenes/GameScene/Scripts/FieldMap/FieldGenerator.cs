@@ -80,7 +80,6 @@ public class FieldGenerator : MonoBehaviour
             return;
         }
         string seed = fieldData.currentPosition.x + "," + fieldData.currentPosition.y;
-        Debug.Log($"Setting field with seed: {seed}");
         Random.InitState(seed.GetHashCode());
         consistentRandom = new System.Random(seed.GetHashCode());
         InitializeField(fieldData, fieldTileSet);

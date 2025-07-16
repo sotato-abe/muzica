@@ -28,9 +28,7 @@ public class StorageWindow : MonoBehaviour, IDropHandler
     }
     private void OnEnable()
     {
-        Debug.Log("test1");
         if (PlayerController.Instance == null) return;
-        Debug.Log("test2");
 
         playerController = PlayerController.Instance;
         SetCommands();
@@ -83,7 +81,6 @@ public class StorageWindow : MonoBehaviour, IDropHandler
         commandBlock.OnRemoveCommand += RemoveCommand;
         commandBlock.OnTargetCommand += TargetCommand;
         commandBlockMap[command] = commandBlock;
-        Debug.Log($"CommandBlock created for command: {command.Base.Name}");
     }
 
     private void SetCounter()

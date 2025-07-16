@@ -39,7 +39,6 @@ public class TableWindow : MonoBehaviour
     private void SetTableSize()
     {
         // テーブルのサイズを設定
-        Debug.Log($"Setting table size: {playerController.PlayerCharacter.ColMemory}/{playerController.PlayerCharacter.Memory}");
         float tableWidth = playerController.PlayerCharacter.ColMemory * 100 + paddingWidth;
         backRectTransform.sizeDelta = new Vector2(tableWidth, tableHeight);
     }
