@@ -40,7 +40,7 @@ public class EquipPanel : Panel
     {
         if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))
         {
-            StopReels();
+            ExecuteAttack();
         }
 
         if (Input.GetKeyDown(KeyCode.L))
@@ -73,7 +73,7 @@ public class EquipPanel : Panel
             Debug.LogWarning("現在の装備が設定されていません。");
             return;
         }
-
+        StopReels();
     }
 
     private void StopReels()
