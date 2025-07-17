@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         player.Init();  // プレイヤーキャラクターの初期化
-        playerSubPanel.SetCharacter(player);
+        playerSubPanel.SetCharacter(player, true);
         UpdatePropertyPanel();
         GameStart();
     }

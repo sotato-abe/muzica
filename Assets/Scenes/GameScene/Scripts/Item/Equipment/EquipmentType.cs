@@ -1,7 +1,7 @@
 public enum EquipmentType
 {
     Weapon, // 武器
-    Tool,   // ツール
+    Medical,   // 医療
     Device, // デバイス
     Armor,  // 防具
     Accessory // アクセサリー

@@ -9,12 +9,26 @@ public class CharacterSubPanel : SlidePanel
 {
     [SerializeField] Image characterImage;
     [SerializeField] BlowingPanel blowingPanel;
+    [SerializeField] EnergyGauge energyGauge;
+
 
     bool currentStay = false;
 
-    public virtual void SetCharacter(Character character)
+    public virtual void SetCharacter(Character character, bool setEnergy = false)
     {
+        character.Init();
         characterImage.sprite = character.Base.SquareSprite;
+        if (setEnergy)
+        {
+            energyGauge.gameObject.SetActive(true);
+            energyGauge.SetLifeGauge(character.MaxLife, character.Life);
+            energyGauge.SetBatteryGauge(character.MaxBattery, character.Battery);
+            energyGauge.SetSoulGauge(100, character.Soul);
+        }
+        else
+        {
+            energyGauge.gameObject.SetActive(false);
+        }
     }
 
     public override void SetActive(bool activeFlg, Action onComplete = null)

@@ -77,7 +77,7 @@ public class BattleSystem : MonoBehaviour
     {
         if (index < 0 || index >= enemySubPanels.Count) return; // インデックスが範囲外の場合は何もしない
         CharacterSubPanel subPanel = enemySubPanels[index];
-        subPanel.SetCharacter(enemy);
+        subPanel.SetCharacter(enemy, true); // 敵のキャラクターを設定
         subPanel.SetActive(true); // キャラクターサブパネルを表示
     }
 
