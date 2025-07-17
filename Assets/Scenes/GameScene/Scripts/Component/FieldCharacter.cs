@@ -11,10 +11,6 @@ public class FieldCharacter : MonoBehaviour
     public void SetUp(Character character)
     {
         this.character = character;
-        // キャラクターの設定を行う
-        // ここではキャラクターの情報をフィールドキャラクターに適用する処理を実装します
-        // 例: this.character = character;
-        Debug.Log($"FieldCharacter set up with character: {character.Base.Name}");
         StartCoroutine(JumpMotion());
     }
 
