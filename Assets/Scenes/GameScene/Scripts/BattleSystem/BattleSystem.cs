@@ -9,13 +9,23 @@ public class BattleSystem : MonoBehaviour
 
     [SerializeField] private BattleActionBoard battleActionBoard;
     [SerializeField] private CharacterSubPanel playerSubPanel; // キャラクターサブパネル
-    [SerializeField] private CharacterSubPanel enemySubPanel; // キャラクターサブパネル
+    [SerializeField] private CharacterSubPanel enemySubPanel1; // キャラクターサブパネル
+    [SerializeField] private CharacterSubPanel enemySubPanel2; // キャラクターサブパネル
+    [SerializeField] private CharacterSubPanel enemySubPanel3; // キャラクターサブパネル
     [SerializeField] private MessagePanel messagePanel; // キャラクターサブパネル
     [SerializeField] WorldMapPanel worldMapPanel;
+    [SerializeField] FieldPlayer fieldPlayer; //キャラクター
+    [SerializeField] FieldCharacter fieldEnemyPrefab; //敵キャラクター
+    [SerializeField] private GameObject enemyGroupArea; // 敵キャラクターの親オブジェクト
+    List<FieldCharacter> fieldEnemies = new List<FieldCharacter>(); // フィールドの敵リスト
+    List<CharacterSubPanel> enemySubPanels = new List<CharacterSubPanel>(); // 敵のサブパネルリスト
 
-    private void Start()
+    private void Awake()
     {
         battleActionBoard.OnBattleEnd += BattleEnd; // リザーブアクションボードの終了イベントを登録
+        enemySubPanels.Add(enemySubPanel1);
+        enemySubPanels.Add(enemySubPanel2);
+        enemySubPanels.Add(enemySubPanel3);
     }
     private void Update()
     {
@@ -39,17 +49,51 @@ public class BattleSystem : MonoBehaviour
     private void SetEnemy()
     {
         List<Character> enemies = FieldController.Instance.GetEnemies();
-        enemySubPanel.SetCharacter(enemies[0]);
-        enemySubPanel.SetActive(true); // キャラクターサブパネルを表示
+        StartCoroutine(AppearanceEnemies(enemies));
+    }
+
+    private IEnumerator AppearanceEnemies(List<Character> enemies)
+    {
+        int index = 0;
+        // count分の敵をフィールドに出現させる
+        foreach (Character enemy in enemies)
+        {
+            // ランダムな位置を取得
+            (Vector3 targetPos, bool isRight, bool isFront) = GetRundomArroundFloorPosition();
+            int reversal = isRight ? -1 : 1; // 向きの設定
+            FieldCharacter fieldEnemy = Instantiate(fieldEnemyPrefab, targetPos, Quaternion.identity, enemyGroupArea.transform);
+            fieldEnemy.SetUp(enemy); // バトラーの設定を行う
+            fieldEnemy.transform.localScale = new Vector3(reversal, 1, 1); // 左向きにする
+            fieldPlayer.transform.localScale = new Vector3(reversal * -1, 1, 1); // 左向きにする
+            SetEnemySubPanel(enemy, index); // 敵のサブパネルを設定
+            fieldEnemies.Add(fieldEnemy); // 生成した敵をリストに追加
+            yield return new WaitForSeconds(0.3f);
+            index++;
+        }
+        yield break; // 全ての敵を出現させたらnullを返す
+    }
+
+    private void SetEnemySubPanel(Character enemy, int index)
+    {
+        if (index < 0 || index >= enemySubPanels.Count) return; // インデックスが範囲外の場合は何もしない
+        CharacterSubPanel subPanel = enemySubPanels[index];
+        subPanel.SetCharacter(enemy);
+        subPanel.SetActive(true); // キャラクターサブパネルを表示
     }
 
     public void BattleEnd()
     {
         int completed = 0;
+        foreach (FieldCharacter fieldEnemy in fieldEnemies)
+        {
+            Destroy(fieldEnemy.gameObject); // 敵キャラクターを削除
+        }
+        fieldEnemies.Clear(); // 敵キャラクターのリストをクリア
+
         void CheckAllComplete()
         {
             completed++;
-            if (completed >= 5)
+            if (completed >= 7)
             {
                 OnBattleEnd?.Invoke();
                 transform.gameObject.SetActive(false);
@@ -58,8 +102,36 @@ public class BattleSystem : MonoBehaviour
 
         battleActionBoard.SetActive(false, CheckAllComplete); // リザーブアクションボードを表示
         playerSubPanel.SetActive(false, CheckAllComplete); // キャラクターサブパネルを表示
-        enemySubPanel.SetActive(false, CheckAllComplete); // キャラクターサブパネルを表示
+        enemySubPanel1.SetActive(false, CheckAllComplete); // キャラクターサブパネルを表示
+        enemySubPanel2.SetActive(false, CheckAllComplete); // キャラクターサブパネルを表示
+        enemySubPanel3.SetActive(false, CheckAllComplete); // キャラクターサブパネルを表示
         messagePanel.SetActive(true, CheckAllComplete); // メッセージパネルを表示
         worldMapPanel.SetActive(true, CheckAllComplete); // ワールドマップパネルを表示
+    }
+
+    private (Vector3, bool, bool) GetRundomArroundFloorPosition(int range = 1)
+    {
+        // フィールドのランダムな位置を取得
+        Vector3 pos = fieldPlayer.transform.position;
+        // 0 は除外、-range ~ rangeの範囲でランダムな座標を取得
+        int x = 0;
+        int y = 0;
+        bool isFront = true;
+        bool isRight = true;
+
+        // (0,0) 以外になるまでランダムに取得
+        while (x == 0 && y == 0)
+        {
+            x = Random.Range(-range, range + 1); // 上限は含まれないので +1
+            y = Random.Range(-range, range + 1);
+        }
+        if (y < 0)
+            isFront = false;
+        if (x < 0)
+            isRight = false;
+
+        Vector3 targetPos = new Vector3(pos.x + x, pos.y + y, 0); // プレイヤーの位置にランダムなオフセットを加算
+
+        return (targetPos, isRight, isFront);
     }
 }
