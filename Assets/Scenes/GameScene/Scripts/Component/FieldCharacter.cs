@@ -7,11 +7,18 @@ public class FieldCharacter : MonoBehaviour
 {
     Character character;
     public Animator animator;
+    [SerializeField] SpriteRenderer CharacterImage; // スプライトイメージパネル
+    [SerializeField] public SpriteRenderer IconImage; // スプライトイメージパネル
 
     public void SetUp(Character character)
     {
         this.character = character;
         StartCoroutine(JumpMotion());
+    }
+
+    public void Inversion(bool isLeft)
+    {
+        CharacterImage.flipX = isLeft; // キャラクターのスプライトを反転
     }
 
     public virtual void SetAnimation(AnimationType animationType)

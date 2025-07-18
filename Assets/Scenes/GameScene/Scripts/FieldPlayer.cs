@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class FieldPlayer : MonoBehaviour
+public class FieldPlayer : FieldCharacter
 {
     public UnityAction OnReserveStart; // リザーブイベント
     public UnityAction OnBattleStart; // バトルイベント
     [SerializeField] private LayerMask encountLayer;
-    Animator playerAnimator;
     private float moveSpeed = 2f;
     private float encountRadius = 0.1f;
     private float encountChance = 0.05f; // 1% の確率
@@ -19,9 +18,9 @@ public class FieldPlayer : MonoBehaviour
 
     bool canMove = true;
 
-    void Start()
+    private void Start()
     {
-        playerAnimator = GetComponent<Animator>();
+        animator = GetComponent<Animator>(); // ← 基底クラスの animator を使用
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -30,7 +29,7 @@ public class FieldPlayer : MonoBehaviour
         if (!canMove)
         {
             moveInput = Vector2.zero; // ← 追加: 入力をリセット
-            playerAnimator.SetBool("isRunning", false); // ← 走りアニメーションも止める
+            animator.SetBool("isRunning", false); // ← 走りアニメーションも止める
             return;
         }
 
@@ -39,13 +38,15 @@ public class FieldPlayer : MonoBehaviour
         moveInput = moveInput.normalized;
 
         bool isMoving = moveInput.sqrMagnitude > 0;
-        playerAnimator.SetBool("isRunning", isMoving);
+        animator.SetBool("isRunning", isMoving);
 
-        if (moveInput.x != 0)
+        if (moveInput.x < 0)
         {
-            Vector3 currentScale = transform.localScale;
-            currentScale.x = Mathf.Abs(currentScale.x) * Mathf.Sign(moveInput.x);
-            transform.localScale = currentScale;
+            Inversion(true); // 左向き
+        }
+        else if (moveInput.x > 0)
+        {
+            Inversion(false); // 右向き
         }
 
         if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Return))
@@ -83,7 +84,7 @@ public class FieldPlayer : MonoBehaviour
         if (!canMove)
         {
             moveInput = Vector2.zero;
-            playerAnimator.SetBool("isRunning", false);
+            animator.SetBool("isRunning", false);
         }
     }
 
@@ -95,7 +96,7 @@ public class FieldPlayer : MonoBehaviour
             if (Random.value < encountChance)
             {
                 SetCanMove(false); // プレイヤーの移動を停止
-                playerAnimator.SetBool("isRunning", false);
+                animator.SetBool("isRunning", false);
                 OnBattleStart?.Invoke();
             }
         }

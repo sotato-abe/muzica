@@ -13407,6 +13407,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2db427eadc90bf343a7b473cc1503d5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &611831679 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7822615783668530030, guid: d0e0c2bab747b4f47b9b16b84808799c, type: 3}
+  m_PrefabInstance: {fileID: 5898800146862851243}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &611831680 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 4171498951685194594, guid: d0e0c2bab747b4f47b9b16b84808799c, type: 3}
+  m_PrefabInstance: {fileID: 5898800146862851243}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &625110207
 GameObject:
   m_ObjectHideFlags: 0
@@ -22030,7 +22040,7 @@ MonoBehaviour:
   messagePanel: {fileID: 651672342}
   worldMapPanel: {fileID: 527113198}
   fieldPlayer: {fileID: 611831675}
-  fieldEnemyPrefab: {fileID: -3447188398660737139, guid: 407dda52eb45ea84da292391278706ed, type: 3}
+  fieldEnemyPrefab: {fileID: 4201339511437261550, guid: 407dda52eb45ea84da292391278706ed, type: 3}
   enemyGroupArea: {fileID: 1206671408}
 --- !u!1 &2088335282
 GameObject:
@@ -26471,6 +26481,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 854224271}
     m_Modifications:
+    - target: {fileID: 193606391163853245, guid: d0e0c2bab747b4f47b9b16b84808799c, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 611831679}
+    - target: {fileID: 193606391163853245, guid: d0e0c2bab747b4f47b9b16b84808799c, type: 3}
+      propertyPath: CharacterImage
+      value: 
+      objectReference: {fileID: 611831680}
     - target: {fileID: 3664315489540305426, guid: d0e0c2bab747b4f47b9b16b84808799c, type: 3}
       propertyPath: m_Name
       value: FieldPlayer

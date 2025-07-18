@@ -15,7 +15,7 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] private MessagePanel messagePanel; // キャラクターサブパネル
     [SerializeField] WorldMapPanel worldMapPanel;
     [SerializeField] FieldPlayer fieldPlayer; //キャラクター
-    [SerializeField] FieldCharacter fieldEnemyPrefab; //敵キャラクター
+    [SerializeField] FieldEnemy fieldEnemyPrefab; //敵キャラクター
     [SerializeField] private GameObject enemyGroupArea; // 敵キャラクターの親オブジェクト
     List<FieldCharacter> fieldEnemies = new List<FieldCharacter>(); // フィールドの敵リスト
     List<CharacterSubPanel> enemySubPanels = new List<CharacterSubPanel>(); // 敵のサブパネルリスト
@@ -59,12 +59,12 @@ public class BattleSystem : MonoBehaviour
         foreach (Character enemy in enemies)
         {
             // ランダムな位置を取得
-            (Vector3 targetPos, bool isRight, bool isFront) = GetRundomArroundFloorPosition();
-            int reversal = isRight ? -1 : 1; // 向きの設定
-            FieldCharacter fieldEnemy = Instantiate(fieldEnemyPrefab, targetPos, Quaternion.identity, enemyGroupArea.transform);
+            (Vector3 targetPos, bool isLeft, bool isFront) = GetRundomArroundFloorPosition();
+            FieldEnemy fieldEnemy = Instantiate(fieldEnemyPrefab, targetPos, Quaternion.identity, enemyGroupArea.transform);
             fieldEnemy.SetUp(enemy); // バトラーの設定を行う
-            fieldEnemy.transform.localScale = new Vector3(reversal, 1, 1); // 左向きにする
-            fieldPlayer.transform.localScale = new Vector3(reversal * -1, 1, 1); // 左向きにする
+            fieldEnemy.Inversion(isLeft); // 向きを反転
+            fieldEnemy.SetNumIcon(index + 1); // 敵の番号アイコンを設定
+            fieldPlayer.Inversion(!isLeft); // プレイヤーの向きを反転
             SetEnemySubPanel(enemy, index); // 敵のサブパネルを設定
             fieldEnemies.Add(fieldEnemy); // 生成した敵をリストに追加
             yield return new WaitForSeconds(0.3f);
@@ -117,7 +117,7 @@ public class BattleSystem : MonoBehaviour
         int x = 0;
         int y = 0;
         bool isFront = true;
-        bool isRight = true;
+        bool isLeft = true;
 
         // (0,0) 以外になるまでランダムに取得
         while (x == 0 && y == 0)
@@ -127,11 +127,11 @@ public class BattleSystem : MonoBehaviour
         }
         if (y < 0)
             isFront = false;
-        if (x < 0)
-            isRight = false;
+        if (x > 0)
+            isLeft = false;
 
         Vector3 targetPos = new Vector3(pos.x + x, pos.y + y, 0); // プレイヤーの位置にランダムなオフセットを加算
 
-        return (targetPos, isRight, isFront);
+        return (targetPos, isLeft, isFront);
     }
 }
