@@ -9,8 +9,8 @@ public class CharacterSubPanel : SlidePanel
 {
     [SerializeField] Image characterImage;
     [SerializeField] BlowingPanel blowingPanel;
-    [SerializeField] EnergyGauge energyGauge;
-    [SerializeField] Image turnBar;
+    [SerializeField] public EnergyGauge energyGauge;
+    [SerializeField] public Image turnBar;
     Character character;
     bool currentStay = false;
     float fillAmount = 0f;
@@ -25,22 +25,35 @@ public class CharacterSubPanel : SlidePanel
         turnBar.gameObject.SetActive(false);
     }
 
-    public virtual void SetCharacter(Character character, bool isEnergy = false)
+    public virtual void SetCharacter(Character character)
     {
         character.Init();
         this.character = character;
         characterImage.sprite = character.Base.SquareSprite;
-        if (isEnergy)
+        energyGauge.gameObject.SetActive(false);
+        turnBar.gameObject.SetActive(false);
+    }
+
+    public virtual void SetBattleCharacter(Character character)
+    {
+        character.Init();
+        this.character = character;
+        characterImage.sprite = character.Base.SquareSprite;
+        energyGauge.gameObject.SetActive(true);
+        turnBar.gameObject.SetActive(true);
+        SetEnergy();
+    }
+
+    public void SetEnergy()
+    {
+        if (character == null)
         {
-            energyGauge.gameObject.SetActive(true);
-            energyGauge.SetLifeGauge(character.MaxLife, character.Life);
-            energyGauge.SetBatteryGauge(character.MaxBattery, character.Battery);
-            energyGauge.SetSoulGauge(100, character.Soul);
+            Debug.LogWarning("Character is not set.");
+            return;
         }
-        else
-        {
-            energyGauge.gameObject.SetActive(false);
-        }
+        energyGauge.SetLifeGauge(character.MaxLife, character.Life);
+        energyGauge.SetBatteryGauge(character.MaxBattery, character.Battery);
+        energyGauge.SetSoulGauge(100, character.Soul);
     }
 
     public override void SetActive(bool activeFlg, Action onComplete = null)

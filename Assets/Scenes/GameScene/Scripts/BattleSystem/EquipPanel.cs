@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class EquipPanel : Panel
+public class EquipPanel : BattleActionPanel
 {
     public UnityAction OnActionEnd;
 
@@ -18,7 +18,6 @@ public class EquipPanel : Panel
     private TargetType TargetType;
     private List<EnergyCost> EnergyCostList;
     private List<Enchant> EnchantList;
-    public bool canExecuteActionFlg = false;
 
     private void Start()
     {
@@ -41,7 +40,7 @@ public class EquipPanel : Panel
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Return))
         {
             ExecuteAttack();
         }
@@ -123,7 +122,7 @@ public class EquipPanel : Panel
 
     public void RestartReels()
     {
-        if (currentEquipment == null)
+        if (currentEquipment == null || !gameObject.activeInHierarchy)
         {
             Debug.LogWarning("現在の装備が設定されていません。");
             return;
@@ -131,13 +130,13 @@ public class EquipPanel : Panel
         StartCoroutine(slotWindow.StartReels());
     }
 
-    public void CanExecuteAction(bool canExecute)
+    public override void ChangeExecuteActionFlg(bool canExecute)
     {
         if (currentEquipment == null)
         {
             Debug.LogWarning("現在の装備が設定されていません。");
             return;
         }
-        canExecuteActionFlg = canExecute;
+        base.ChangeExecuteActionFlg(canExecute);
     }
 }

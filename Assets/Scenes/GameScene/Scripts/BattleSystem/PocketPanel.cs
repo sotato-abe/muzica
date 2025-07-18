@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class PocketPanel : Panel
+public class PocketPanel : BattleActionPanel
 {
     [SerializeField] TargetItemWindow targetItemWindow;
     [SerializeField] PocketWindow pocketWindow;
-    public bool canExecuteActionFlg = false;
 
     private void Start()
     {
@@ -17,10 +16,5 @@ public class PocketPanel : Panel
     public void TargetItem(Item item)
     {
         targetItemWindow.TargetItem(item);
-    }
-
-    public void CanExecuteAction(bool canExecute)
-    {
-        canExecuteActionFlg = canExecute;
     }
 }

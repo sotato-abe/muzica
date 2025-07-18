@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         player.Init();  // プレイヤーキャラクターの初期化
-        playerSubPanel.SetCharacter(player, true);
+        playerSubPanel.SetCharacter(player);
         UpdatePropertyPanel();
         GameStart();
     }
@@ -247,5 +247,10 @@ public class PlayerController : MonoBehaviour
         propertyPanel.SetMoney(player.Money);
         propertyPanel.SetDisk(player.Disk);
         propertyPanel.SetKey(player.Key);
+    }
+
+    public void UpdatePlayerEnergy()
+    {
+        playerSubPanel.SetEnergy();
     }
 }

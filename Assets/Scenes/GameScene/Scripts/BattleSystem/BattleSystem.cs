@@ -29,15 +29,9 @@ public class BattleSystem : MonoBehaviour
         enemySubPanels.Add(enemySubPanel3);
 
         playerSubPanel.OnActiveTurn += ActivePlayerTurn;
-        enemySubPanel1.OnActiveTurn += ActiveEnemyTurn;
-        enemySubPanel2.OnActiveTurn += ActiveEnemyTurn;
-        enemySubPanel3.OnActiveTurn += ActiveEnemyTurn;
-    }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.E))
+        foreach (CharacterSubPanel enemySubPanel in enemySubPanels)
         {
-            BattleEnd();
+            enemySubPanel.OnActiveTurn += ActiveEnemyTurn;
         }
     }
 
@@ -56,6 +50,7 @@ public class BattleSystem : MonoBehaviour
     private void SetEnemy()
     {
         List<Character> enemies = FieldController.Instance.GetEnemies();
+        battleActionBoard.SetEnemyList(enemies);
         StartCoroutine(AppearanceEnemies(enemies));
     }
 
@@ -84,7 +79,7 @@ public class BattleSystem : MonoBehaviour
     {
         if (index < 0 || index >= enemySubPanels.Count) return; // インデックスが範囲外の場合は何もしない
         CharacterSubPanel subPanel = enemySubPanels[index];
-        subPanel.SetCharacter(enemy, true); // 敵のキャラクターを設定
+        subPanel.SetBattleCharacter(enemy); // 敵のキャラクターを設定
         subPanel.BattleStart(); // ターンバーを開始
         subPanel.SetActive(true); // キャラクターサブパネルを表示
     }
@@ -97,6 +92,7 @@ public class BattleSystem : MonoBehaviour
             Destroy(fieldEnemy.gameObject); // 敵キャラクターを削除
         }
         fieldEnemies.Clear(); // 敵キャラクターのリストをクリア
+        playerSubPanel.BattleEnd(); // プレイヤーのサブパネルを非表示
 
         void CheckAllComplete()
         {
@@ -147,12 +143,12 @@ public class BattleSystem : MonoBehaviour
     {
         Debug.Log("プレイヤーのターンがアクティブになりました");
         StopAllPayerTurnBar();
-        battleActionBoard.CanExecuteAction(true); // アクションを実行可能にする
+        battleActionBoard.ChangeExecuteActionFlg(true); // アクションを実行可能にする
     }
 
     public void EndPlayerTurn()
     {
-        battleActionBoard.CanExecuteAction(false); // アクションを実行不可能にする
+        battleActionBoard.ChangeExecuteActionFlg(false); // アクションを実行不可能にする
     }
 
     public void ActiveEnemyTurn(Character character)

@@ -43,6 +43,8 @@ public class BattleActionBoard : SlidePanel
 
         equip1Panel.OnActionEnd += ActionEnd;
         equip2Panel.OnActionEnd += ActionEnd;
+        escapePanel.OnActionEnd += ActionEnd;
+        escapePanel.OnEscape += BattleEnd; // 逃げるイベントを登録
 
         ChangeActiveIcon();
         ChangeActionPanel();
@@ -67,14 +69,6 @@ public class BattleActionBoard : SlidePanel
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
                 ChangeAction(BattleActionType.Escape);
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            if (currentAction == BattleActionType.Escape)
-            {
-                OnBattleEnd?.Invoke(); // 予約終了イベントを呼び出す
             }
         }
     }
@@ -129,12 +123,12 @@ public class BattleActionBoard : SlidePanel
         }
     }
 
-    public void CanExecuteAction(bool canExecute = true)
+    public void ChangeExecuteActionFlg(bool canExecute = true)
     {
-        equip1Panel.CanExecuteAction(canExecute);
-        equip2Panel.CanExecuteAction(canExecute);
-        pocketPanel.CanExecuteAction(canExecute);
-        escapePanel.CanExecuteAction(canExecute);
+        equip1Panel.ChangeExecuteActionFlg(canExecute);
+        equip2Panel.ChangeExecuteActionFlg(canExecute);
+        pocketPanel.ChangeExecuteActionFlg(canExecute);
+        escapePanel.ChangeExecuteActionFlg(canExecute);
     }
 
     public void RestartReels()
@@ -145,7 +139,20 @@ public class BattleActionBoard : SlidePanel
 
     public void ActionEnd()
     {
-        CanExecuteAction(false); // アクションを実行不可能にする
+        ChangeExecuteActionFlg(false); // アクションを実行不可能にする
         OnActionEnd?.Invoke();
+    }
+
+    public void SetEnemyList(List<Character> enemyList)
+    {
+        // equip1Panel.SetEnemyList(enemyList);
+        // equip2Panel.SetEnemyList(enemyList);
+        // pocketPanel.SetEnemyList(enemyList);
+        escapePanel.SetEnemyList(enemyList);
+    }
+
+    public void BattleEnd()
+    {
+        OnBattleEnd?.Invoke(); // バトル終了イベントを呼び出す
     }
 }
