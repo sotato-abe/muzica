@@ -113,7 +113,6 @@ public class BattleSystem : MonoBehaviour
 
     public void ActivePlayerTurn(Character character)
     {
-        Debug.Log("プレイヤーのターンがアクティブになりました");
         StopAllPlayerTurnBar();
         battleActionBoard.ChangeExecuteActionFlg(true); // アクションを実行可能にする
     }
@@ -121,9 +120,16 @@ public class BattleSystem : MonoBehaviour
     // TODO：敵の攻撃を実装する
     public void ActiveEnemyTurn(Character character)
     {
-        Debug.Log($"敵のターンがアクティブになりました:{character.Base.Name}");
         StopAllPlayerTurnBar();
-        StartCoroutine(ReStartTurn()); // ターンを再開
+        StartCoroutine(EnemyTurn()); // ターンを再開
+    }
+
+    // 仮の敵ターン
+    private IEnumerator EnemyTurn()
+    {
+        yield return new WaitForSeconds(3f);
+        // 敵の行動を実行
+        OnActionEnd(); // アクション終了イベントを呼び出す
     }
 
     private void StopAllPlayerTurnBar()
@@ -137,15 +143,8 @@ public class BattleSystem : MonoBehaviour
 
     private void OnActionEnd()
     {
-        Debug.Log("アクションが終了しました");
-        StartCoroutine(ReStartTurn()); // ターンを再開
-    }
-
-    private IEnumerator ReStartTurn()
-    {
-        yield return new WaitForSeconds(1.5f);
+        Debug.Log("BattleSystem：アクションが終了しました");
         playerSubPanel.ReStartTurnBar();
-        battleActionBoard.RestartReels(); // リールを再起動
         foreach (CharacterSubPanel enemySubPanel in enemySubPanels)
         {
             enemySubPanel.ReStartTurnBar();

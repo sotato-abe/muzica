@@ -131,12 +131,6 @@ public class BattleActionBoard : SlidePanel
         escapePanel.ChangeExecuteActionFlg(canExecute);
     }
 
-    public void RestartReels()
-    {
-        equip1Panel.RestartReels();
-        equip2Panel.RestartReels();
-    }
-
     public void ActionEnd()
     {
         ChangeExecuteActionFlg(false); // アクションを実行不可能にする

@@ -14,42 +14,137 @@ public class EquipmentInfo : MonoBehaviour
     [SerializeField] EnchantIcon enchantIconPrefab;
     [SerializeField] AttackCounter attackCounterPrefab;
 
+    private Equipment equipment = new Equipment(null); // 初期化のためにnullを渡す
+    private TargetType TargetType = TargetType.Individual; // 初期値を設定
+    private List<EnergyCount> EnergyAttackList = new List<EnergyCount>();
+    private List<Enchant> EnchantList = new List<Enchant>();
+
     public void SetInfo(Equipment equipment)
     {
         gameObject.SetActive(true);
-        targetIcon.SetTargetType(equipment.EquipmentBase.TargetType);
-        SetEnchants(equipment.EquipmentBase.EnchantList);
-        SetAttacks(equipment.EquipmentBase.EnergyAttackList);
+
+        this.equipment = equipment;
+        TargetType = equipment.EquipmentBase.TargetType;
+        EnchantList = new List<Enchant>();
+        foreach (var enchant in equipment.EquipmentBase.EnchantList)
+        {
+            EnchantList.Add(new Enchant(enchant)); // コピーコンストラクタを使う（後述）
+        }
+
+        EnergyAttackList = new List<EnergyCount>();
+        foreach (var attack in equipment.EquipmentBase.EnergyAttackList)
+        {
+            EnergyAttackList.Add(new EnergyCount(attack)); // コピーコンストラクタを使う（後述）
+        }
+
+        SetTargetIcon();
+        SetEnchants();
+        SetAttacks();
     }
 
-    private void SetEnchants(List<Enchant> enchants)
+    private void SetTargetIcon()
     {
+        targetIcon.SetTargetType(TargetType);
+    }
+
+    private void SetEnchants()
+    {
+
         foreach (Transform child in enchantList.transform)
         {
             Destroy(child.gameObject);
         }
 
         // エンチャントを表示する処理
-        foreach (var enchant in enchants)
+        foreach (var enchant in EnchantList)
         {
             EnchantIcon newIcon = Instantiate(enchantIconPrefab, enchantList.transform);
             newIcon.SetEnchant(enchant);
         }
     }
 
-    private void SetAttacks(List<EnergyCount> energyCountList)
+    private void SetAttacks()
     {
+
         // 既存のカウンターを削除
         foreach (Transform child in counterList.transform)
         {
             Destroy(child.gameObject);
         }
         // 装備のコストを表示する処理
-        foreach (var attack in energyCountList)
+        foreach (var attack in EnergyAttackList)
         {
-            AttackCounter newSlot = Instantiate(attackCounterPrefab, counterList.transform);
-            newSlot.SetCounter(attack);
+            AttackCounter attackCounter = Instantiate(attackCounterPrefab, counterList.transform);
+            attackCounter.SetCounter(attack);
         }
     }
 
+    public void CommandUpdate(Command command)
+    {
+        if (command == null || command.Base == null)
+        {
+            Debug.LogWarning("Command base is null, cannot update info.");
+            return;
+        }
+
+        // コマンドの情報を更新する処理
+        MergeEnchantList(command.EnchantList);
+        MergeAttackList(command.EnergyAttackList);
+        UpdateInfo();
+    }
+
+    private void MergeEnchantList(List<Enchant> newEnchants)
+    {
+        // EnchantList.AddRange(newEnchants);
+        // EnchantListに新しいエンチャントを追加する同じタイプはまとめる
+        foreach (var newEnchant in newEnchants)
+        {
+            bool found = false;
+            foreach (var existingEnchant in EnchantList)
+            {
+                if (existingEnchant.Type == newEnchant.Type)
+                {
+                    existingEnchant.Val += newEnchant.Val; // 値を加算
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                EnchantList.Add(newEnchant); // 新しいエンチャントを追加
+            }
+        }
+    }
+
+    private void MergeAttackList(List<EnergyCount> newAttacks)
+    {
+        // EnergyAttackList.AddRange(newAttacks);
+        // EnergyAttackListに新しい攻撃を追加する同じタイプはまとめる
+        foreach (var newAttack in newAttacks)
+        {
+            bool found = false;
+            foreach (var existingAttack in EnergyAttackList)
+            {
+                if (existingAttack.type == newAttack.type)
+                {
+                    existingAttack.val += newAttack.val; // 値を加算
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                EnergyAttackList.Add(newAttack); // 新しい攻撃を追加
+            }
+        }
+    }
+
+
+
+    private void UpdateInfo()
+    {
+        SetTargetIcon();
+        SetEnchants();
+        SetAttacks();
+    }
 }

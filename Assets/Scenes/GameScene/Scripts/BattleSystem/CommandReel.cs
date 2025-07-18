@@ -97,7 +97,6 @@ public class CommandReel : Panel
         CommandImage closestSlot = GetClosestSlotToCenter();
         if (closestSlot.command == null)
         {
-            Debug.Log("スカ");
             return null;
         }
 

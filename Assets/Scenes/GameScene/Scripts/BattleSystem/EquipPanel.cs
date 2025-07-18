@@ -10,6 +10,8 @@ public class EquipPanel : BattleActionPanel
     [SerializeField] TargetCommandWindow targetCommandWindow;
     [SerializeField] EquipWindow equipWindow;
     [SerializeField] SlotWindow slotWindow;
+    [SerializeField] EquipmentInfo equipmentInfo;
+
     PlayerController playerController;
     public int equipmentNum = 0;
     private Equipment currentEquipment;
@@ -89,39 +91,59 @@ public class EquipPanel : BattleActionPanel
             {
                 if (cmd == null)
                 {
-                    Debug.Log("止まったコマンドが null です。");
                     continue;
                 }
 
-                Debug.Log($"止まったコマンド: {cmd.Base?.Name ?? "Baseが未設定"}");
                 activeCommands.Add(cmd);
             }
             ExecuteAction(activeCommands);
 
-            OnActionEnd?.Invoke();
         });
     }
 
     private void ExecuteAction(List<Command> commands = null)
     {
-        if (commands == null || commands.Count == 0)
+        Debug.Log($"EquipPanel：アクションを実行: {currentEquipment?.Base?.Name ?? "未設定"}");
+        if (commands.Count != 0)
         {
-            Debug.LogWarning("実行するコマンドがありません。");
-            return;
-        }
+            // コマンドの効果をequipmentInfoに適用
+            // currentEquipmentを使い捨てのコピー
+            // Equipment equipment = new Equipment(currentEquipment);
 
-        // アクションの実行ロジックをここに追加
-        Debug.Log("アクションを実行中...");
-        foreach (var command in commands)
-        {
-            Debug.Log($"コマンド: {command.Base?.Name ?? "Baseが未設定"}");
-        }
 
+            foreach (var command in commands)
+            {
+                if (command == null || command.Base == null)
+                {
+                    Debug.LogWarning("コマンドのBaseが未設定です。");
+                    continue;
+                }
+
+                // コマンドの効果を適用する処理
+                // ここではコマンドの効果を適用するためのメソッドを呼び出す
+                equipmentInfo.CommandUpdate(command);
+            }
+
+            // Infoの数値を実行
+
+        }
         // 結果を使って次の処理へ
+        StartCoroutine(ActionEnd());
+    }
+
+    private IEnumerator ActionEnd()
+    {
+        yield return new WaitForSeconds(1f);
+        Debug.Log("EquipPanel：アクションが終了しました");
+        OnActionEnd?.Invoke();
+        RestartReels();
     }
 
     public void RestartReels()
     {
+        Debug.Log($"EquipPanel：リールを再起動: {currentEquipment?.Base?.Name ?? "未設定"}");
+        equipmentInfo.SetInfo(currentEquipment); // 装備情報を更新
+
         if (currentEquipment == null || !gameObject.activeInHierarchy)
         {
             Debug.LogWarning("現在の装備が設定されていません。");

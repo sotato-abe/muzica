@@ -10,13 +10,19 @@ public class Enchant
     [SerializeField] EnchantType type;
     [SerializeField] int val;
 
-    public EnchantType Type { get => type; }
+    public EnchantType Type { get => type; set => type = value; }
     public int Val { get => val; set => val = value; }
 
     public Enchant(EnchantType type, int val)
     {
         this.type = type;
         this.val = val;
+    }
+
+    public Enchant(Enchant other)
+    {
+        Type = other.Type;
+        Val = other.Val;
     }
 
 }
