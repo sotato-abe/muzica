@@ -14,6 +14,8 @@ public class CharacterSubPanel : SlidePanel
     Character character;
     bool currentStay = false;
     float fillAmount = 0f;
+    Color runningColor = new Color(255f / 255f, 0f / 255f, 74f / 255f, 1f);
+    Color activeColor = new Color(189f / 255f, 255f / 255f, 0f / 255f, 1f);
 
     public delegate void ActiveTurnDelegate(Character? character);
     public event ActiveTurnDelegate OnActiveTurn;
@@ -70,8 +72,7 @@ public class CharacterSubPanel : SlidePanel
             Debug.LogWarning("キャラクターが設定されていません。");
             yield break;
         }
-        // character.Base.Speedに応じてターンバーの速度を変更
-        // fullになったらOnActiveTurnを呼び出す
+        turnBar.color = runningColor;
         float speed = character.Base.Speed / 5f; // 速度を調整
         while (fillAmount < 1f)
         {
@@ -79,8 +80,8 @@ public class CharacterSubPanel : SlidePanel
             turnBar.fillAmount = fillAmount;
             yield return null;
         }
+        turnBar.color = activeColor;
         OnActiveTurn?.Invoke(character);
-        fillAmount = 0f;
     }
 
     // ターンバーを一時停止
@@ -96,6 +97,10 @@ public class CharacterSubPanel : SlidePanel
         {
             Debug.LogWarning("キャラクターが設定されていません。");
             return;
+        }
+        if (fillAmount >= 1f)
+        {
+            fillAmount = 0f; // ターンバーが満タンの場合はリセット
         }
         StartCoroutine(StartTurnBar());
     }
