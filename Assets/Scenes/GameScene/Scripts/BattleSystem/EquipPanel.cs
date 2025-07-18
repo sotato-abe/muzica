@@ -5,6 +5,8 @@ using UnityEngine.Events;
 
 public class EquipPanel : Panel
 {
+    public UnityAction OnActionEnd;
+
     [SerializeField] TargetCommandWindow targetCommandWindow;
     [SerializeField] EquipWindow equipWindow;
     [SerializeField] SlotWindow slotWindow;
@@ -16,6 +18,7 @@ public class EquipPanel : Panel
     private TargetType TargetType;
     private List<EnergyCost> EnergyCostList;
     private List<Enchant> EnchantList;
+    public bool canExecuteActionFlg = false;
 
     private void Start()
     {
@@ -41,11 +44,6 @@ public class EquipPanel : Panel
         if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))
         {
             ExecuteAttack();
-        }
-
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            StartReels();
         }
     }
 
@@ -73,11 +71,19 @@ public class EquipPanel : Panel
             Debug.LogWarning("現在の装備が設定されていません。");
             return;
         }
+
+        if (!canExecuteActionFlg)
+        {
+            Debug.LogWarning("アクションが実行できません。");
+            return;
+        }
+
         StopReels();
     }
 
     private void StopReels()
     {
+        List<Command> activeCommands = new List<Command>();
         slotWindow.StopReels(result =>
         {
             foreach (var cmd in result)
@@ -89,14 +95,49 @@ public class EquipPanel : Panel
                 }
 
                 Debug.Log($"止まったコマンド: {cmd.Base?.Name ?? "Baseが未設定"}");
+                activeCommands.Add(cmd);
             }
+            ExecuteAction(activeCommands);
 
-            // 結果を使って次の処理へ
+            OnActionEnd?.Invoke();
         });
     }
 
-    private void StartReels()
+    private void ExecuteAction(List<Command> commands = null)
     {
+        if (commands == null || commands.Count == 0)
+        {
+            Debug.LogWarning("実行するコマンドがありません。");
+            return;
+        }
+
+        // アクションの実行ロジックをここに追加
+        Debug.Log("アクションを実行中...");
+        foreach (var command in commands)
+        {
+            Debug.Log($"コマンド: {command.Base?.Name ?? "Baseが未設定"}");
+        }
+
+        // 結果を使って次の処理へ
+    }
+
+    public void RestartReels()
+    {
+        if (currentEquipment == null)
+        {
+            Debug.LogWarning("現在の装備が設定されていません。");
+            return;
+        }
         StartCoroutine(slotWindow.StartReels());
+    }
+
+    public void CanExecuteAction(bool canExecute)
+    {
+        if (currentEquipment == null)
+        {
+            Debug.LogWarning("現在の装備が設定されていません。");
+            return;
+        }
+        canExecuteActionFlg = canExecute;
     }
 }

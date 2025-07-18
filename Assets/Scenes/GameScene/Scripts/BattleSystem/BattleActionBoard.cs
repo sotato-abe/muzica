@@ -5,6 +5,7 @@ using UnityEngine.Events;
 // BattlePanelとIconの表示と切り替えを管理するクラス
 public class BattleActionBoard : SlidePanel
 {
+    public UnityAction OnActionEnd;
     public UnityAction OnBattleEnd;
     [SerializeField] private EquipPanel equip1Panel;
     [SerializeField] private EquipPanel equip2Panel;
@@ -39,6 +40,9 @@ public class BattleActionBoard : SlidePanel
         };
 
         actionTypeList = new List<BattleActionType>(actionPanels.Keys);
+
+        equip1Panel.OnActionEnd += ActionEnd;
+        equip2Panel.OnActionEnd += ActionEnd;
 
         ChangeActiveIcon();
         ChangeActionPanel();
@@ -123,5 +127,25 @@ public class BattleActionBoard : SlidePanel
                 kvp.Value.ClosePanel();
             }
         }
+    }
+
+    public void CanExecuteAction(bool canExecute = true)
+    {
+        equip1Panel.CanExecuteAction(canExecute);
+        equip2Panel.CanExecuteAction(canExecute);
+        pocketPanel.CanExecuteAction(canExecute);
+        escapePanel.CanExecuteAction(canExecute);
+    }
+
+    public void RestartReels()
+    {
+        equip1Panel.RestartReels();
+        equip2Panel.RestartReels();
+    }
+
+    public void ActionEnd()
+    {
+        CanExecuteAction(false); // アクションを実行不可能にする
+        OnActionEnd?.Invoke();
     }
 }

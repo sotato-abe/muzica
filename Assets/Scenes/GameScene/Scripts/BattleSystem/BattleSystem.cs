@@ -23,9 +23,15 @@ public class BattleSystem : MonoBehaviour
     private void Awake()
     {
         battleActionBoard.OnBattleEnd += BattleEnd; // リザーブアクションボードの終了イベントを登録
+        battleActionBoard.OnActionEnd += OnActionEnd; // リザーブアクションボードのアクション結果イベントを登録
         enemySubPanels.Add(enemySubPanel1);
         enemySubPanels.Add(enemySubPanel2);
         enemySubPanels.Add(enemySubPanel3);
+
+        playerSubPanel.OnActiveTurn += ActivePlayerTurn;
+        enemySubPanel1.OnActiveTurn += ActiveEnemyTurn;
+        enemySubPanel2.OnActiveTurn += ActiveEnemyTurn;
+        enemySubPanel3.OnActiveTurn += ActiveEnemyTurn;
     }
     private void Update()
     {
@@ -38,9 +44,10 @@ public class BattleSystem : MonoBehaviour
     public void BattleStart()
     {
         battleActionBoard.SetActive(true); // リザーブアクションボードを表示
-        TalkMessage talkMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "なんだよ");
         playerSubPanel.SetActive(true); // キャラクターサブパネルを表示
+        TalkMessage talkMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "なんだよ");
         StartCoroutine(playerSubPanel.SetTalkMessage(talkMessage)); // リザーブアクションボードを開く
+        playerSubPanel.BattleStart(); // ターンバーを開始
         messagePanel.SetActive(false); // メッセージパネルを表示
         worldMapPanel.SetActive(false); // ワールドマップパネルを非表示
         SetEnemy();
@@ -78,6 +85,7 @@ public class BattleSystem : MonoBehaviour
         if (index < 0 || index >= enemySubPanels.Count) return; // インデックスが範囲外の場合は何もしない
         CharacterSubPanel subPanel = enemySubPanels[index];
         subPanel.SetCharacter(enemy, true); // 敵のキャラクターを設定
+        subPanel.BattleStart(); // ターンバーを開始
         subPanel.SetActive(true); // キャラクターサブパネルを表示
     }
 
@@ -133,5 +141,50 @@ public class BattleSystem : MonoBehaviour
         Vector3 targetPos = new Vector3(pos.x + x, pos.y + y, 0); // プレイヤーの位置にランダムなオフセットを加算
 
         return (targetPos, isLeft, isFront);
+    }
+
+    public void ActivePlayerTurn(Character character)
+    {
+        Debug.Log("プレイヤーのターンがアクティブになりました");
+        StopAllPayerTurnBar();
+        battleActionBoard.CanExecuteAction(true); // アクションを実行可能にする
+    }
+
+    public void EndPlayerTurn()
+    {
+        battleActionBoard.CanExecuteAction(false); // アクションを実行不可能にする
+    }
+
+    public void ActiveEnemyTurn(Character character)
+    {
+        Debug.Log($"敵のターンがアクティブになりました:{character.Base.Name}");
+        StopAllPayerTurnBar();
+        StartCoroutine(ReStartTurn()); // ターンを再開
+    }
+
+    private void StopAllPayerTurnBar()
+    {
+        playerSubPanel.StopTurnBar(); // プレイヤーのターンバーを停止
+        foreach (CharacterSubPanel enemySubPanel in enemySubPanels)
+        {
+            enemySubPanel.StopTurnBar(); // 敵のターンバーを停止
+        }
+    }
+
+    private void OnActionEnd()
+    {
+        Debug.Log("アクションが終了しました");
+        StartCoroutine(ReStartTurn()); // ターンを再開
+    }
+
+    private IEnumerator ReStartTurn()
+    {
+        yield return new WaitForSeconds(1.5f);
+        playerSubPanel.ReStartTurnBar();
+        battleActionBoard.RestartReels(); // リールを再起動
+        foreach (CharacterSubPanel enemySubPanel in enemySubPanels)
+        {
+            enemySubPanel.ReStartTurnBar();
+        }
     }
 }

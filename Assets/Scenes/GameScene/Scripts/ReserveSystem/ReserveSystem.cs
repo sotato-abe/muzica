@@ -30,8 +30,8 @@ public class ReserveSystem : MonoBehaviour
     public void ReserveStart()
     {
         footer.SetActive(true); // フッターを非表示にする
-        TalkMessage talkMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "準備しよう");
         playerSubPanel.SetActive(true); // キャラクターサブパネルを表示
+        TalkMessage talkMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "準備しよう");
         StartCoroutine(playerSubPanel.SetTalkMessage(talkMessage)); // リザーブアクションボードを開く
         messagePanel.SetActive(false); // メッセージパネルを表示
         worldMapPanel.SetActive(false); // ワールドマップパネルを非表示
