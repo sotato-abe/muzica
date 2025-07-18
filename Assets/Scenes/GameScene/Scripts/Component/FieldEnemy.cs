@@ -13,13 +13,13 @@ public class FieldEnemy : FieldCharacter
     {
         switch (num)
         {
-            case 1:
+            case 0:
                 IconImage.sprite = Number1;
                 break;
-            case 2:
+            case 1:
                 IconImage.sprite = Number2;
                 break;
-            case 3:
+            case 2:
                 IconImage.sprite = Number3;
                 break;
             default:

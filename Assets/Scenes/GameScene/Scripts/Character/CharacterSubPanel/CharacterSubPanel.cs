@@ -12,8 +12,9 @@ public class CharacterSubPanel : SlidePanel
     [SerializeField] public EnergyGauge energyGauge;
     [SerializeField] public Image turnBar;
     Character character;
-    bool currentStay = false;
-    float fillAmount = 0f;
+    bool fixedDisplayFlg = false; // Panelの固定表示フラグ
+    bool isActive = false; // Panelがアクティブかどうか
+    float turnBarFillAmount = 0f;
     Color runningColor = new Color(255f / 255f, 0f / 255f, 74f / 255f, 1f);
     Color activeColor = new Color(189f / 255f, 255f / 255f, 0f / 255f, 1f);
 
@@ -34,6 +35,30 @@ public class CharacterSubPanel : SlidePanel
         turnBar.gameObject.SetActive(false);
     }
 
+    public override void SetActive(bool activeFlg, Action onComplete = null)
+    {
+        base.SetActive(activeFlg, onComplete);
+        fixedDisplayFlg = activeFlg;
+    }
+
+    public IEnumerator SetTalkMessage(TalkMessage talkMessage)
+    {
+        if (!fixedDisplayFlg)
+        {
+            base.SetActive(true);
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        yield return blowingPanel.AddMessageList(talkMessage);
+
+        if (!fixedDisplayFlg)
+        {
+            yield return new WaitForSeconds(0.3f);
+            base.SetActive(false);
+        }
+    }
+
+    // Battle用のキャラクターを設定
     public virtual void SetBattleCharacter(Character character)
     {
         character.Init();
@@ -56,19 +81,13 @@ public class CharacterSubPanel : SlidePanel
         energyGauge.SetSoulGauge(100, character.Soul);
     }
 
-    public override void SetActive(bool activeFlg, Action onComplete = null)
-    {
-        base.SetActive(activeFlg, onComplete);
-        currentStay = activeFlg;
-    }
-
     public void BattleStart()
     {
         if (character == null) return;
         // ターンバーを開始
-        currentStay = true;
+        fixedDisplayFlg = true;
         turnBar.gameObject.SetActive(true);
-        fillAmount = 0f;
+        turnBarFillAmount = 0f;
         StartCoroutine(StartTurnBar());
     }
 
@@ -87,18 +106,19 @@ public class CharacterSubPanel : SlidePanel
         }
         turnBar.color = runningColor;
         float speed = character.Base.Speed / 5f; // 速度を調整
-        while (fillAmount < 1f)
+        while (turnBarFillAmount < 1f)
         {
-            fillAmount += Time.deltaTime * speed;
-            turnBar.fillAmount = fillAmount;
+            turnBarFillAmount += Time.deltaTime * speed;
+            turnBar.fillAmount = turnBarFillAmount;
             yield return null;
         }
         turnBar.color = activeColor;
+        isActive = true;
         OnActiveTurn?.Invoke(character);
     }
 
     // ターンバーを一時停止
-    public void StopTurnBar()
+    public void PauseTurnBar()
     {
         StopAllCoroutines();
     }
@@ -111,29 +131,12 @@ public class CharacterSubPanel : SlidePanel
             Debug.LogWarning("キャラクターが設定されていません。");
             return;
         }
-        if (fillAmount >= 1f)
+        if (isActive)
         {
-            fillAmount = 0f; // ターンバーが満タンの場合はリセット
+            turnBarFillAmount = 0f; // ターンバーが満タンの場合はリセット
+            isActive = false;
         }
         StartCoroutine(StartTurnBar());
-    }
-
-    public IEnumerator SetTalkMessage(TalkMessage talkMessage)
-    {
-        if (!currentStay)
-        {
-            base.SetActive(true);
-            yield return new WaitForSeconds(0.5f);
-        }
-
-        yield return blowingPanel.AddMessageList(talkMessage);
-
-        // ★ 最新のstayリクエストを見てから判断する
-        if (!currentStay)
-        {
-            yield return new WaitForSeconds(0.3f);
-            base.SetActive(false);
-        }
     }
 }
 

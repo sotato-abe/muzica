@@ -47,6 +47,7 @@ public class BattleSystem : MonoBehaviour
         SetEnemy();
     }
 
+    // TODO 敵を倒した時に更新で使用する
     private void SetEnemy()
     {
         List<Character> enemies = FieldController.Instance.GetEnemies();
@@ -54,18 +55,17 @@ public class BattleSystem : MonoBehaviour
         StartCoroutine(AppearanceEnemies(enemies));
     }
 
+    // 敵をフィールドに出現させる
     private IEnumerator AppearanceEnemies(List<Character> enemies)
     {
         int index = 0;
-        // count分の敵をフィールドに出現させる
         foreach (Character enemy in enemies)
         {
-            // ランダムな位置を取得
-            (Vector3 targetPos, bool isLeft, bool isFront) = GetRundomArroundFloorPosition();
+            (Vector3 targetPos, bool isLeft, bool isFront) = GetRandomAroundFloorPosition();
             FieldEnemy fieldEnemy = Instantiate(fieldEnemyPrefab, targetPos, Quaternion.identity, enemyGroupArea.transform);
             fieldEnemy.SetUp(enemy); // バトラーの設定を行う
             fieldEnemy.Inversion(isLeft); // 向きを反転
-            fieldEnemy.SetNumIcon(index + 1); // 敵の番号アイコンを設定
+            fieldEnemy.SetNumIcon(index); // 敵の番号アイコンを設定
             fieldPlayer.Inversion(!isLeft); // プレイヤーの向きを反転
             SetEnemySubPanel(enemy, index); // 敵のサブパネルを設定
             fieldEnemies.Add(fieldEnemy); // 生成した敵をリストに追加
@@ -75,6 +75,7 @@ public class BattleSystem : MonoBehaviour
         yield break; // 全ての敵を出現させたらnullを返す
     }
 
+    // 敵をサブパネルに出現させる
     private void SetEnemySubPanel(Character enemy, int index)
     {
         if (index < 0 || index >= enemySubPanels.Count) return; // インデックスが範囲外の場合は何もしない
@@ -82,6 +83,73 @@ public class BattleSystem : MonoBehaviour
         subPanel.SetBattleCharacter(enemy); // 敵のキャラクターを設定
         subPanel.BattleStart(); // ターンバーを開始
         subPanel.SetActive(true); // キャラクターサブパネルを表示
+    }
+
+    private (Vector3, bool, bool) GetRandomAroundFloorPosition(int range = 1)
+    {
+        // フィールドのランダムな位置を取得
+        Vector3 pos = fieldPlayer.transform.position;
+        // 0 は除外、-range ~ rangeの範囲でランダムな座標を取得
+        int x = 0;
+        int y = 0;
+        bool isFront = true;
+        bool isLeft = true;
+
+        // (0,0) 以外になるまでランダムに取得
+        while (x == 0 && y == 0)
+        {
+            x = Random.Range(-range, range + 1); // 上限は含まれないので +1
+            y = Random.Range(-range, range + 1);
+        }
+        if (y < 0)
+            isFront = false;
+        if (x > 0)
+            isLeft = false;
+
+        Vector3 targetPos = new Vector3(pos.x + x, pos.y + y, 0); // プレイヤーの位置にランダムなオフセットを加算
+
+        return (targetPos, isLeft, isFront);
+    }
+
+    public void ActivePlayerTurn(Character character)
+    {
+        Debug.Log("プレイヤーのターンがアクティブになりました");
+        StopAllPlayerTurnBar();
+        battleActionBoard.ChangeExecuteActionFlg(true); // アクションを実行可能にする
+    }
+
+    // TODO：敵の攻撃を実装する
+    public void ActiveEnemyTurn(Character character)
+    {
+        Debug.Log($"敵のターンがアクティブになりました:{character.Base.Name}");
+        StopAllPlayerTurnBar();
+        StartCoroutine(ReStartTurn()); // ターンを再開
+    }
+
+    private void StopAllPlayerTurnBar()
+    {
+        playerSubPanel.PauseTurnBar(); // プレイヤーのターンバーを停止
+        foreach (CharacterSubPanel enemySubPanel in enemySubPanels)
+        {
+            enemySubPanel.PauseTurnBar(); // 敵のターンバーを停止
+        }
+    }
+
+    private void OnActionEnd()
+    {
+        Debug.Log("アクションが終了しました");
+        StartCoroutine(ReStartTurn()); // ターンを再開
+    }
+
+    private IEnumerator ReStartTurn()
+    {
+        yield return new WaitForSeconds(1.5f);
+        playerSubPanel.ReStartTurnBar();
+        battleActionBoard.RestartReels(); // リールを再起動
+        foreach (CharacterSubPanel enemySubPanel in enemySubPanels)
+        {
+            enemySubPanel.ReStartTurnBar();
+        }
     }
 
     public void BattleEnd()
@@ -111,76 +179,5 @@ public class BattleSystem : MonoBehaviour
         enemySubPanel3.SetActive(false, CheckAllComplete); // キャラクターサブパネルを表示
         messagePanel.SetActive(true, CheckAllComplete); // メッセージパネルを表示
         worldMapPanel.SetActive(true, CheckAllComplete); // ワールドマップパネルを表示
-    }
-
-    private (Vector3, bool, bool) GetRundomArroundFloorPosition(int range = 1)
-    {
-        // フィールドのランダムな位置を取得
-        Vector3 pos = fieldPlayer.transform.position;
-        // 0 は除外、-range ~ rangeの範囲でランダムな座標を取得
-        int x = 0;
-        int y = 0;
-        bool isFront = true;
-        bool isLeft = true;
-
-        // (0,0) 以外になるまでランダムに取得
-        while (x == 0 && y == 0)
-        {
-            x = Random.Range(-range, range + 1); // 上限は含まれないので +1
-            y = Random.Range(-range, range + 1);
-        }
-        if (y < 0)
-            isFront = false;
-        if (x > 0)
-            isLeft = false;
-
-        Vector3 targetPos = new Vector3(pos.x + x, pos.y + y, 0); // プレイヤーの位置にランダムなオフセットを加算
-
-        return (targetPos, isLeft, isFront);
-    }
-
-    public void ActivePlayerTurn(Character character)
-    {
-        Debug.Log("プレイヤーのターンがアクティブになりました");
-        StopAllPayerTurnBar();
-        battleActionBoard.ChangeExecuteActionFlg(true); // アクションを実行可能にする
-    }
-
-    public void EndPlayerTurn()
-    {
-        battleActionBoard.ChangeExecuteActionFlg(false); // アクションを実行不可能にする
-    }
-
-    public void ActiveEnemyTurn(Character character)
-    {
-        Debug.Log($"敵のターンがアクティブになりました:{character.Base.Name}");
-        StopAllPayerTurnBar();
-        StartCoroutine(ReStartTurn()); // ターンを再開
-    }
-
-    private void StopAllPayerTurnBar()
-    {
-        playerSubPanel.StopTurnBar(); // プレイヤーのターンバーを停止
-        foreach (CharacterSubPanel enemySubPanel in enemySubPanels)
-        {
-            enemySubPanel.StopTurnBar(); // 敵のターンバーを停止
-        }
-    }
-
-    private void OnActionEnd()
-    {
-        Debug.Log("アクションが終了しました");
-        StartCoroutine(ReStartTurn()); // ターンを再開
-    }
-
-    private IEnumerator ReStartTurn()
-    {
-        yield return new WaitForSeconds(1.5f);
-        playerSubPanel.ReStartTurnBar();
-        battleActionBoard.RestartReels(); // リールを再起動
-        foreach (CharacterSubPanel enemySubPanel in enemySubPanels)
-        {
-            enemySubPanel.ReStartTurnBar();
-        }
     }
 }
