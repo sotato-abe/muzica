@@ -6,6 +6,7 @@ using UnityEngine.Events;
 public class FieldCharacter : MonoBehaviour
 {
     Character character;
+    public Character Character => character;
     public Animator animator;
     [SerializeField] SpriteRenderer CharacterImage; // スプライトイメージパネル
     [SerializeField] public SpriteRenderer IconImage; // スプライトイメージパネル

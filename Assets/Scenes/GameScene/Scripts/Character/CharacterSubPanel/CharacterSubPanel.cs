@@ -8,10 +8,13 @@ using TMPro;
 public class CharacterSubPanel : SlidePanel
 {
     [SerializeField] Image characterImage;
+    [SerializeField] TextMeshProUGUI characterNameText;
     [SerializeField] BlowingPanel blowingPanel;
     [SerializeField] public EnergyGauge energyGauge;
     [SerializeField] public Image turnBar;
+
     Character character;
+    public Character Character => character;
     bool fixedDisplayFlg = false; // Panelの固定表示フラグ
     bool isActive = false; // Panelがアクティブかどうか
     float turnBarFillAmount = 0f;
@@ -20,6 +23,9 @@ public class CharacterSubPanel : SlidePanel
 
     public delegate void ActiveTurnDelegate(Character? character);
     public event ActiveTurnDelegate OnActiveTurn;
+
+    public delegate void LifeOutDelegate(CharacterSubPanel characterSubPanel);
+    public event LifeOutDelegate OnLifeOutAction;
 
     private void Awake()
     {
@@ -31,6 +37,7 @@ public class CharacterSubPanel : SlidePanel
         character.Init();
         this.character = character;
         characterImage.sprite = character.Base.SquareSprite;
+        characterNameText.text = character.Base.Name;
         energyGauge.gameObject.SetActive(false);
         turnBar.gameObject.SetActive(false);
     }
@@ -64,6 +71,7 @@ public class CharacterSubPanel : SlidePanel
         character.Init();
         this.character = character;
         characterImage.sprite = character.Base.SquareSprite;
+        characterNameText.text = character.Base.Name;
         energyGauge.gameObject.SetActive(true);
         turnBar.gameObject.SetActive(true);
         SetEnergy();
@@ -91,10 +99,30 @@ public class CharacterSubPanel : SlidePanel
         StartCoroutine(StartTurnBar());
     }
 
-    public void BattleEnd()
+    public void TakeAttack(TotalAttackCount totalCount)
     {
-        // ターンバーを停止
-        turnBar.gameObject.SetActive(false);
+        if (character == null) return;
+
+        // ダメージを与える処理
+        character.TakeAttack(totalCount);
+        SetEnergy();
+        // TODO: キャラにモーションを付ける
+        CheckEnergy();
+    }
+
+    private void CheckEnergy()
+    {
+        // if (character == null) return;
+
+        // エネルギーが足りない場合の処理
+        if (character.Life <= 0)
+        {
+            Debug.LogWarning("エネルギーが不足しています。");
+            turnBar.gameObject.SetActive(false);
+            StopAllCoroutines();
+            OnLifeOutAction?.Invoke(this);
+            return;
+        }
     }
 
     private IEnumerator StartTurnBar()

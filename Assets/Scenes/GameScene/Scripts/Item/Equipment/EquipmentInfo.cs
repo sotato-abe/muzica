@@ -139,7 +139,16 @@ public class EquipmentInfo : MonoBehaviour
         }
     }
 
-
+    public TotalAttackCount GetTotalCount()
+    {
+        TotalAttackCount totalCount = new TotalAttackCount
+        {
+            TargetType = TargetType,
+            EnergyAttackList = new List<EnergyCount>(EnergyAttackList),
+            EnchantList = new List<Enchant>(EnchantList)
+        };
+        return totalCount;
+    }
 
     private void UpdateInfo()
     {

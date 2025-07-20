@@ -142,4 +142,31 @@ public class Character
         ColStorage = Storage + DiffStorage;
         ColPocket = Pocket + DiffPocket;
     }
+
+    public void TakeAttack(TotalAttackCount totalCount)
+    {
+        List<EnergyCount> energyAttackList = totalCount.EnergyAttackList;
+        foreach (var energyAttack in energyAttackList)
+        {
+            // エネルギー攻撃の処理
+            int isRecovery = energyAttack.isRecovery ? -1 : 1;
+            int colEnergy = energyAttack.val * energyAttack.times * isRecovery;
+            switch (energyAttack.type)
+            {
+                case EnergyType.Life:
+                    Life -= colEnergy;
+                    break;
+                case EnergyType.Battery:
+                    Battery -= colEnergy;
+                    break;
+                case EnergyType.Soul:
+                    Soul -= colEnergy;
+                    break;
+                default:
+                    Debug.LogWarning($"Unknown energy type: {energyAttack.type}");
+                    break;
+            }
+
+        }
+    }
 }

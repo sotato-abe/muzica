@@ -24,6 +24,9 @@ public class BattleSystem : MonoBehaviour
     {
         battleActionBoard.OnBattleEnd += BattleEnd; // リザーブアクションボードの終了イベントを登録
         battleActionBoard.OnActionEnd += OnActionEnd; // リザーブアクションボードのアクション結果イベントを登録
+        enemySubPanel1.OnLifeOutAction += LifeOutCharacter; // 敵のサブパネルのライフアウトイベントを登録
+        enemySubPanel2.OnLifeOutAction += LifeOutCharacter; // 敵のサブパネルのライフアウトイベントを登録
+        enemySubPanel3.OnLifeOutAction += LifeOutCharacter; // 敵のサブパネルのライフアウトイベントを登録
         enemySubPanels.Add(enemySubPanel1);
         enemySubPanels.Add(enemySubPanel2);
         enemySubPanels.Add(enemySubPanel3);
@@ -121,6 +124,11 @@ public class BattleSystem : MonoBehaviour
     public void ActiveEnemyTurn(Character character)
     {
         StopAllPlayerTurnBar();
+        if (fieldEnemies.Count == 0)
+        {
+            Debug.LogWarning("敵がいません。");
+            return;
+        }
         StartCoroutine(EnemyTurn()); // ターンを再開
     }
 
@@ -151,6 +159,34 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
+    public void LifeOutCharacter(CharacterSubPanel characterSubPanel)
+    {
+        if (characterSubPanel == null) return;
+        characterSubPanel.SetActive(false); // キャラクターサブパネルを非表示
+                                            // フィールドの敵リストからランダムに一体削除
+        FieldCharacter fieldEnemy = fieldEnemies.Find(e => e.Character == characterSubPanel.Character);
+        if (fieldEnemy != null)
+        {
+            fieldEnemies.Remove(fieldEnemy); // フィールドの敵リストから削除
+            Destroy(fieldEnemy.gameObject); // 敵キャラクターを削除
+        }
+
+        // ターンバーを停止
+        StartCoroutine(CheckEnemies());
+    }
+
+    private IEnumerator CheckEnemies()
+    {
+        if (fieldEnemies.Count == 0)
+        {
+            yield return new WaitForSeconds(1f); // 少し待機してから処理を続行
+            Debug.Log("全ての敵を倒しました。");
+            BattleEnd(); // 全ての敵を倒した場合はバトル終了
+        }
+        yield break; // 全ての敵を倒した場合はnullを返す
+    }
+
+
     public void BattleEnd()
     {
         int completed = 0;
@@ -159,7 +195,6 @@ public class BattleSystem : MonoBehaviour
             Destroy(fieldEnemy.gameObject); // 敵キャラクターを削除
         }
         fieldEnemies.Clear(); // 敵キャラクターのリストをクリア
-        playerSubPanel.BattleEnd(); // プレイヤーのサブパネルを非表示
 
         void CheckAllComplete()
         {

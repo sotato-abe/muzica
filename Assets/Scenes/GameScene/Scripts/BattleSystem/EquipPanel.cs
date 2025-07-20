@@ -12,6 +12,11 @@ public class EquipPanel : BattleActionPanel
     [SerializeField] SlotWindow slotWindow;
     [SerializeField] EquipmentInfo equipmentInfo;
 
+    [SerializeField] private CharacterSubPanel playerSubPanel; // キャラクターサブパネル
+    [SerializeField] private CharacterSubPanel enemySubPanel1; // キャラクターサブパネル
+    [SerializeField] private CharacterSubPanel enemySubPanel2; // キャラクターサブパネル
+    [SerializeField] private CharacterSubPanel enemySubPanel3; // キャラクターサブパネル
+
     PlayerController playerController;
     public int equipmentNum = 0;
     private Equipment currentEquipment;
@@ -96,14 +101,13 @@ public class EquipPanel : BattleActionPanel
 
                 activeCommands.Add(cmd);
             }
-            ExecuteAction(activeCommands);
+            ActionStart(activeCommands);
 
         });
     }
 
-    private void ExecuteAction(List<Command> commands = null)
+    private void ActionStart(List<Command> commands = null)
     {
-        Debug.Log($"EquipPanel：アクションを実行: {currentEquipment?.Base?.Name ?? "未設定"}");
         if (commands.Count != 0)
         {
             // コマンドの効果をequipmentInfoに適用
@@ -123,25 +127,90 @@ public class EquipPanel : BattleActionPanel
                 // ここではコマンドの効果を適用するためのメソッドを呼び出す
                 equipmentInfo.CommandUpdate(command);
             }
-
-            // Infoの数値を実行
-
+            AttackVector();
+            return;
         }
-        // 結果を使って次の処理へ
+        AttackVector();
+    }
+
+    private void AttackVector()
+    {
+        // activeなパネルを取得
+        TotalAttackCount totalCount = equipmentInfo.GetTotalCount();
+        List<CharacterSubPanel> activePanels = new List<CharacterSubPanel>();
+        if (enemySubPanel1.isActive)
+        {
+            activePanels.Add(enemySubPanel1);
+        }
+        if (enemySubPanel2.isActive)
+        {
+            activePanels.Add(enemySubPanel2);
+        }
+        if (enemySubPanel3.isActive)
+        {
+            activePanels.Add(enemySubPanel3);
+        }
+
+
+        // return activePanels;
+        switch (totalCount.TargetType)
+        {
+            case TargetType.Individual:
+                // 個別攻撃の処理
+                if (activePanels.Count > 0)
+                {
+                    CharacterSubPanel targetPanel = activePanels[activePanels.Count - 1];
+                    ExecuteAction(targetPanel, totalCount);
+                }
+                else
+                {
+                    Debug.LogWarning("攻撃対象のキャラクターサブパネルがありません。");
+                }
+                break;
+            case TargetType.Group:
+                // 一方攻撃の処理 
+                if (activePanels.Count > 0)
+                {
+                    CharacterSubPanel targetPanel = activePanels[Random.Range(0, activePanels.Count)];
+                    ExecuteAction(targetPanel, totalCount);
+                }
+                break;
+            case TargetType.All:
+                // 全体攻撃の処理
+                foreach (var subPanel in activePanels)
+                {
+                    ExecuteAction(subPanel, totalCount);
+                }
+                break;
+            case TargetType.Random:
+                // ランダム攻撃の処理
+                if (activePanels.Count > 0)
+                {
+                    CharacterSubPanel targetPanel = activePanels[Random.Range(0, activePanels.Count)];
+                    ExecuteAction(targetPanel, totalCount);
+                }
+                break;
+            default:
+                Debug.LogWarning("不明なターゲットタイプです。");
+                break;
+        }
+    }
+
+    private void ExecuteAction(CharacterSubPanel characterSubPanel, TotalAttackCount totalCount)
+    {
+        characterSubPanel.TakeAttack(totalCount); // キャラクターサブパネルに攻撃を実行
         StartCoroutine(ActionEnd());
     }
 
     private IEnumerator ActionEnd()
     {
         yield return new WaitForSeconds(1f);
-        Debug.Log("EquipPanel：アクションが終了しました");
         OnActionEnd?.Invoke();
         RestartReels();
     }
 
     public void RestartReels()
     {
-        Debug.Log($"EquipPanel：リールを再起動: {currentEquipment?.Base?.Name ?? "未設定"}");
         equipmentInfo.SetInfo(currentEquipment); // 装備情報を更新
 
         if (currentEquipment == null || !gameObject.activeInHierarchy)
