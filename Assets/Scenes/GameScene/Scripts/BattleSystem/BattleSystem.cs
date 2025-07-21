@@ -155,7 +155,8 @@ public class BattleSystem : MonoBehaviour
         playerSubPanel.ReStartTurnBar();
         foreach (CharacterSubPanel enemySubPanel in enemySubPanels)
         {
-            enemySubPanel.ReStartTurnBar();
+            if (enemySubPanel.isActive)
+                enemySubPanel.ReStartTurnBar();
         }
     }
 
@@ -169,9 +170,9 @@ public class BattleSystem : MonoBehaviour
         {
             fieldEnemies.Remove(fieldEnemy); // フィールドの敵リストから削除
             Destroy(fieldEnemy.gameObject); // 敵キャラクターを削除
+            characterSubPanel.gameObject.SetActive(false); // キャラクターサブパネルを非表示
         }
 
-        // ターンバーを停止
         StartCoroutine(CheckEnemies());
     }
 
@@ -185,7 +186,6 @@ public class BattleSystem : MonoBehaviour
         }
         yield break; // 全ての敵を倒した場合はnullを返す
     }
-
 
     public void BattleEnd()
     {

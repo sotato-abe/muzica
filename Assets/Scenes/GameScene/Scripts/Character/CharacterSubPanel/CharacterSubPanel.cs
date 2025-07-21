@@ -93,6 +93,7 @@ public class CharacterSubPanel : SlidePanel
     {
         if (character == null) return;
         // ターンバーを開始
+        this.gameObject.SetActive(true);
         fixedDisplayFlg = true;
         turnBar.gameObject.SetActive(true);
         turnBarFillAmount = 0f;
@@ -105,15 +106,15 @@ public class CharacterSubPanel : SlidePanel
 
         // ダメージを与える処理
         character.TakeAttack(totalCount);
-        SetEnergy();
+        energyGauge.SetLifeValue(character.Life);
+        energyGauge.SetBatteryValue(character.Battery);
+        energyGauge.SetSoulValue(character.Soul);
         // TODO: キャラにモーションを付ける
         CheckEnergy();
     }
 
     private void CheckEnergy()
     {
-        // if (character == null) return;
-
         // エネルギーが足りない場合の処理
         if (character.Life <= 0)
         {
