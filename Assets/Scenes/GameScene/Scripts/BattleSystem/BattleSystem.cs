@@ -20,6 +20,11 @@ public class BattleSystem : MonoBehaviour
     List<FieldCharacter> fieldEnemies = new List<FieldCharacter>(); // フィールドの敵リスト
     List<CharacterSubPanel> enemySubPanels = new List<CharacterSubPanel>(); // 敵のサブパネルリスト
 
+    int RewardExp = 0; // 経験値のカウント
+    int RewardMoney = 0; // ゴールドのカウント
+    string RewardItemListText = ""; // アイテムのカウント
+    List<Item> RewardItems = new List<Item>(); // アイテムのカウント
+
     private void Awake()
     {
         battleActionBoard.OnBattleEnd += BattleEnd; // リザーブアクションボードの終了イベントを登録
@@ -162,9 +167,20 @@ public class BattleSystem : MonoBehaviour
     public void LifeOutCharacter(CharacterSubPanel characterSubPanel)
     {
         if (characterSubPanel == null) return;
-        characterSubPanel.SetActive(false); // キャラクターサブパネルを非表示
-                                            // フィールドの敵リストからランダムに一体削除
+        characterSubPanel.SetActive(false);
+
         FieldCharacter fieldEnemy = fieldEnemies.Find(e => e.Character == characterSubPanel.Character);
+        RewardExp += fieldEnemy.Character.Exp; // 経験値を加算
+        RewardMoney += fieldEnemy.Character.Money; // ゴールドを加算
+        foreach (Item item in characterSubPanel.Character.BagItemList)
+        {
+            if (Random.Range(0, 100) < item.Base.Rarity.GetProbability())
+            {
+                RewardItems.Add(item); // アイテムを加算
+                RewardItemListText += $"{item.Base.Name},";
+            }
+        }
+
         if (fieldEnemy != null)
         {
             fieldEnemies.Remove(fieldEnemy); // フィールドの敵リストから削除
@@ -180,7 +196,15 @@ public class BattleSystem : MonoBehaviour
         if (fieldEnemies.Count == 0)
         {
             yield return new WaitForSeconds(1f); // 少し待機してから処理を続行
-            messagePanel.AddMessage(MessageIconType.Battle, $"バトルに勝利した");
+            string RewardText = "バトルに勝利した\n";
+            if (RewardItemListText != "")
+            {
+                RewardItemListText = RewardItemListText.TrimEnd(','); // 最後のカンマを削除
+                RewardText += $"アイテム: {RewardItemListText}\n";
+            }
+            RewardText += $"EXP: {RewardExp}, マネー: {RewardMoney}";
+            messagePanel.AddMessage(MessageIconType.Battle, RewardText);
+            PlayerController.Instance.AddBattleReword(RewardExp, RewardMoney, RewardItems); // バトル報酬を追加
             BattleEnd(); // 全ての敵を倒した場合はバトル終了
         }
         yield break; // 全ての敵を倒した場合はnullを返す
@@ -204,6 +228,10 @@ public class BattleSystem : MonoBehaviour
                 transform.gameObject.SetActive(false);
             }
         }
+        RewardExp = 0; // 経験値のリセット
+        RewardMoney = 0; // ゴールドのリセット
+        RewardItems.Clear(); // アイテムのリセット
+        RewardItemListText = ""; // アイテムリストのリセット
 
         battleActionBoard.SetActive(false, CheckAllComplete); // リザーブアクションボードを表示
         playerSubPanel.SetActive(false, CheckAllComplete); // キャラクターサブパネルを表示

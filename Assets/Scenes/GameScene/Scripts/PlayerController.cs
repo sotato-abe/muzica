@@ -40,6 +40,20 @@ public class PlayerController : MonoBehaviour
         playerSubPanel.SetTalkMessage(talkMessage);
     }
 
+    public void AddBattleReword(int exp, int money, List<Item> items)
+    {
+        player.AddExp(exp);
+        player.AddMoney(money);
+        foreach (Item item in items)
+        {
+            if (item != null)
+            {
+                AddItemToBag(item);
+            }
+        }
+        UpdatePropertyPanel();
+    }
+
     public void AddItemToBag(Item item)
     {
         // バッグの容量を超える場合はアイテムを入手しない
