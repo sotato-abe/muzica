@@ -110,11 +110,6 @@ public class EquipPanel : BattleActionPanel
     {
         if (commands.Count != 0)
         {
-            // コマンドの効果をequipmentInfoに適用
-            // currentEquipmentを使い捨てのコピー
-            // Equipment equipment = new Equipment(currentEquipment);
-
-
             foreach (var command in commands)
             {
                 if (command == null || command.Base == null)
@@ -122,13 +117,8 @@ public class EquipPanel : BattleActionPanel
                     Debug.LogWarning("コマンドのBaseが未設定です。");
                     continue;
                 }
-
-                // コマンドの効果を適用する処理
-                // ここではコマンドの効果を適用するためのメソッドを呼び出す
                 equipmentInfo.CommandUpdate(command);
             }
-            AttackVector();
-            return;
         }
         AttackVector();
     }
@@ -155,12 +145,23 @@ public class EquipPanel : BattleActionPanel
         // return activePanels;
         switch (totalCount.TargetType)
         {
+            case TargetType.Self:
+                // 自分自身への攻撃
+                if (playerSubPanel.isActive)
+                {
+                    StartCoroutine(ExecuteAction(playerSubPanel, totalCount));
+                }
+                else
+                {
+                    Debug.LogWarning("プレイヤーのキャラクターサブパネルがアクティブではありません。");
+                }
+                break;
             case TargetType.Individual:
                 // 個別攻撃の処理
                 if (activePanels.Count > 0)
                 {
                     CharacterSubPanel targetPanel = activePanels[activePanels.Count - 1];
-                    ExecuteAction(targetPanel, totalCount);
+                    StartCoroutine(ExecuteAction(targetPanel, totalCount));
                 }
                 else
                 {
@@ -169,25 +170,25 @@ public class EquipPanel : BattleActionPanel
                 break;
             case TargetType.Group:
                 // 一方攻撃の処理 
-                if (activePanels.Count > 0)
+                foreach (var subPanel in activePanels)
                 {
-                    CharacterSubPanel targetPanel = activePanels[Random.Range(0, activePanels.Count)];
-                    ExecuteAction(targetPanel, totalCount);
+                    StartCoroutine(ExecuteAction(subPanel, totalCount));
                 }
                 break;
             case TargetType.All:
                 // 全体攻撃の処理
                 foreach (var subPanel in activePanels)
                 {
-                    ExecuteAction(subPanel, totalCount);
+                    StartCoroutine(ExecuteAction(subPanel, totalCount));
                 }
+                StartCoroutine(ExecuteAction(playerSubPanel, totalCount));
                 break;
             case TargetType.Random:
                 // ランダム攻撃の処理
                 if (activePanels.Count > 0)
                 {
                     CharacterSubPanel targetPanel = activePanels[Random.Range(0, activePanels.Count)];
-                    ExecuteAction(targetPanel, totalCount);
+                    StartCoroutine(ExecuteAction(targetPanel, totalCount));
                 }
                 break;
             default:
@@ -196,15 +197,9 @@ public class EquipPanel : BattleActionPanel
         }
     }
 
-    private void ExecuteAction(CharacterSubPanel characterSubPanel, TotalAttackCount totalCount)
+    private IEnumerator ExecuteAction(CharacterSubPanel characterSubPanel, TotalAttackCount totalCount)
     {
-        characterSubPanel.TakeAttack(totalCount); // キャラクターサブパネルに攻撃を実行
-        StartCoroutine(ActionEnd());
-    }
-
-    private IEnumerator ActionEnd()
-    {
-        yield return new WaitForSeconds(1f);
+        yield return StartCoroutine(characterSubPanel.TakeAttack(totalCount)); // キャラクターサブパネルに攻撃を実行
         OnActionEnd?.Invoke();
         RestartReels();
     }

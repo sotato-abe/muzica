@@ -28,7 +28,7 @@ public class EnergyBar : MonoBehaviour
         counterText.text = $"{currentEnergy}/{maxEnergy}";
     }
 
-    public void SetValue(int value)
+    public IEnumerator SetValueCoroutine(int value)
     {
         if (value < 0) value = 0;
 
@@ -43,7 +43,7 @@ public class EnergyBar : MonoBehaviour
         {
             // アクティブじゃない場合は即時反映にフォールバック
             barImage.fillAmount = targetFill;
-            return;
+            yield break;
         }
 
         if (fillCoroutine != null)
@@ -51,7 +51,7 @@ public class EnergyBar : MonoBehaviour
             StopCoroutine(fillCoroutine);
         }
 
-        fillCoroutine = StartCoroutine(SmoothFillCoroutine(targetFill));
+        yield return fillCoroutine = StartCoroutine(SmoothFillCoroutine(targetFill));
     }
 
 

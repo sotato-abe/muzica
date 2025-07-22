@@ -39,19 +39,19 @@ public class EnergyGauge : MonoBehaviour
         soulBar.SetEnergy(maxEnergy, currentEnergy);
     }
 
-    public void SetLifeValue(int value)
+    public IEnumerator SetLifeValueCoroutine(int value)
     {
-        lifeBar.SetValue(value);
+        yield return lifeBar.SetValueCoroutine(value);
     }
 
-    public void SetBatteryValue(int value)
+    public IEnumerator SetBatteryValueCoroutine(int value)
     {
-        batteryBar.SetValue(value);
+        yield return batteryBar.SetValueCoroutine(value);
     }
 
-    public void SetSoulValue(int value)
+    public IEnumerator SetSoulValueCoroutine(int value)
     {
-        soulBar.SetValue(value);
+        yield return soulBar.SetValueCoroutine(value);
     }
 }
 

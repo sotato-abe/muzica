@@ -135,7 +135,7 @@ public class BattleSystem : MonoBehaviour
     // 仮の敵ターン
     private IEnumerator EnemyTurn()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
         // 敵の行動を実行
         OnActionEnd(); // アクション終了イベントを呼び出す
     }
@@ -151,7 +151,6 @@ public class BattleSystem : MonoBehaviour
 
     private void OnActionEnd()
     {
-        Debug.Log("BattleSystem：アクションが終了しました");
         playerSubPanel.ReStartTurnBar();
         foreach (CharacterSubPanel enemySubPanel in enemySubPanels)
         {
@@ -181,7 +180,7 @@ public class BattleSystem : MonoBehaviour
         if (fieldEnemies.Count == 0)
         {
             yield return new WaitForSeconds(1f); // 少し待機してから処理を続行
-            Debug.Log("全ての敵を倒しました。");
+            messagePanel.AddMessage(MessageIconType.Battle, $"バトルに勝利した");
             BattleEnd(); // 全ての敵を倒した場合はバトル終了
         }
         yield break; // 全ての敵を倒した場合はnullを返す

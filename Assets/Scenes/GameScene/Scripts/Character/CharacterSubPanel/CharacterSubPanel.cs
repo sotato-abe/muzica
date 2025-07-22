@@ -9,13 +9,13 @@ public class CharacterSubPanel : SlidePanel
 {
     [SerializeField] Image characterImage;
     [SerializeField] TextMeshProUGUI characterNameText;
-    [SerializeField] BlowingPanel blowingPanel;
+    [SerializeField] public BlowingPanel blowingPanel;
     [SerializeField] public EnergyGauge energyGauge;
     [SerializeField] public Image turnBar;
 
     Character character;
     public Character Character => character;
-    bool fixedDisplayFlg = false; // Panelの固定表示フラグ
+    public bool fixedDisplayFlg = false; // Panelの固定表示フラグ
     bool isActive = false; // Panelがアクティブかどうか
     float turnBarFillAmount = 0f;
     Color runningColor = new Color(255f / 255f, 0f / 255f, 74f / 255f, 1f);
@@ -44,8 +44,14 @@ public class CharacterSubPanel : SlidePanel
 
     public override void SetActive(bool activeFlg, Action onComplete = null)
     {
-        base.SetActive(activeFlg, onComplete);
         fixedDisplayFlg = activeFlg;
+        if (!activeFlg)
+        {
+            StopAllCoroutines();
+            turnBar.gameObject.SetActive(false);
+            blowingPanel.gameObject.SetActive(false);
+        }
+        base.SetActive(activeFlg, onComplete);
     }
 
     public IEnumerator SetTalkMessage(TalkMessage talkMessage)
@@ -100,30 +106,35 @@ public class CharacterSubPanel : SlidePanel
         StartCoroutine(StartTurnBar());
     }
 
-    public void TakeAttack(TotalAttackCount totalCount)
+    public IEnumerator TakeAttack(TotalAttackCount totalCount)
     {
-        if (character == null) return;
+        if (character == null) yield return null;
 
-        // ダメージを与える処理
+        StartCoroutine(JumpMotion());
         character.TakeAttack(totalCount);
-        energyGauge.SetLifeValue(character.Life);
-        energyGauge.SetBatteryValue(character.Battery);
-        energyGauge.SetSoulValue(character.Soul);
-        // TODO: キャラにモーションを付ける
-        CheckEnergy();
-    }
+        yield return StartCoroutine(UpdateEnergyGauges());
 
-    private void CheckEnergy()
-    {
-        // エネルギーが足りない場合の処理
         if (character.Life <= 0)
         {
             Debug.LogWarning("エネルギーが不足しています。");
             turnBar.gameObject.SetActive(false);
             StopAllCoroutines();
             OnLifeOutAction?.Invoke(this);
-            return;
         }
+        yield return new WaitForSeconds(0.5f);
+    }
+
+    private IEnumerator UpdateEnergyGauges()
+    {
+        // 各ゲージの更新コルーチンを並行実行
+        Coroutine lifeCoroutine = StartCoroutine(energyGauge.SetLifeValueCoroutine(character.Life));
+        Coroutine batteryCoroutine = StartCoroutine(energyGauge.SetBatteryValueCoroutine(character.Battery));
+        Coroutine soulCoroutine = StartCoroutine(energyGauge.SetSoulValueCoroutine(character.Soul));
+
+        // すべてのコルーチンが完了するまで待機
+        yield return lifeCoroutine;
+        yield return batteryCoroutine;
+        yield return soulCoroutine;
     }
 
     private IEnumerator StartTurnBar()
@@ -166,6 +177,39 @@ public class CharacterSubPanel : SlidePanel
             isActive = false;
         }
         StartCoroutine(StartTurnBar());
+    }
+
+    private IEnumerator JumpMotion()
+    {
+        float groundY = transform.position.y;
+        float bounceHeight = 40f;
+        float damping = 0.4f;
+        float gravity = 5000f;
+
+        while (bounceHeight >= 0.1f)
+        {
+            float verticalVelocity = Mathf.Sqrt(2 * gravity * bounceHeight);
+            bool isFalling = false;
+
+            // 上昇と下降のループ
+            while (transform.position.y >= groundY || !isFalling)
+            {
+                verticalVelocity -= gravity * Time.deltaTime;
+                transform.position += Vector3.up * verticalVelocity * Time.deltaTime;
+
+                if (transform.position.y <= groundY)
+                {
+                    isFalling = true;
+                    break;
+                }
+
+                yield return null;
+            }
+
+            bounceHeight *= damping; // バウンドを減衰させる
+        }
+
+        transform.position = new Vector3(transform.position.x, groundY, transform.position.z); // 最後に位置を調整
     }
 }
 
