@@ -7,10 +7,12 @@ using TMPro;
 public class EquipWindow : MonoBehaviour
 {
     [SerializeField] Image equipImage;
+    [SerializeField] Image equipStatusImage;
     [SerializeField] TextMeshProUGUI costLifeText;
     [SerializeField] TextMeshProUGUI costBatteryText;
     [SerializeField] TextMeshProUGUI costSoulText;
     [SerializeField] EquipmentInfo equipmentInfo;
+    // [SerializeField] Sprite butteryOutImage; // TODO: ステータスを増やす
 
     public void SetEquipment(Equipment equipment)
     {
@@ -56,5 +58,18 @@ public class EquipWindow : MonoBehaviour
         costBatteryText.text = "0";
         costSoulText.text = "0";
         equipmentInfo.gameObject.SetActive(false);
+    }
+
+    public void SetStatusImage(bool canUse)
+    {
+        Debug.Log("Setting status image: " + canUse);
+        if (canUse)
+        {
+            equipStatusImage.gameObject.SetActive(false);
+        }
+        else
+        {
+            equipStatusImage.gameObject.SetActive(true);
+        }
     }
 }

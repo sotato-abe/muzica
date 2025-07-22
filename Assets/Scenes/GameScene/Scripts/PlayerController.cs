@@ -267,4 +267,74 @@ public class PlayerController : MonoBehaviour
     {
         playerSubPanel.SetEnergy();
     }
+
+    public bool UseEquipmentEnergyCost(Equipment equipment)
+    {
+        if (equipment == null) return false;
+
+        bool canUse = CheckEquipmentEnergyCost(equipment);
+
+        if (!canUse)
+        {
+            return false;
+        }
+
+        foreach (EnergyCost energyCost in equipment.EquipmentBase.EnergyCostList)
+        {
+            switch (energyCost.type)
+            {
+                case EnergyType.Life:
+                    player.Life -= energyCost.val;
+                    break;
+                case EnergyType.Battery:
+                    player.Battery -= energyCost.val;
+                    break;
+                case EnergyType.Soul:
+                    player.Soul -= energyCost.val;
+                    break;
+            }
+        }
+        StartCoroutine(playerSubPanel.UpdateEnergyGauges());
+        return true;
+    }
+
+    public bool CheckEquipmentEnergyCost(Equipment equipment)
+    {
+        if (equipment == null)
+        {
+            Debug.LogWarning("現在の装備が設定されていません。");
+            return false;
+        }
+
+        bool canUse = true;
+
+        foreach (EnergyCost energyCost in equipment.EquipmentBase.EnergyCostList)
+        {
+            switch (energyCost.type)
+            {
+                case EnergyType.Life:
+                    if (player.Life < energyCost.val)
+                    {
+                        Debug.LogWarning("ライフが不足しています。");
+                        canUse = false;
+                    }
+                    break;
+                case EnergyType.Battery:
+                    if (player.Battery < energyCost.val)
+                    {
+                        Debug.LogWarning("バッテリーが不足しています。");
+                        canUse = false;
+                    }
+                    break;
+                case EnergyType.Soul:
+                    if (player.Soul < energyCost.val)
+                    {
+                        Debug.LogWarning("ソウルが不足しています。");
+                        canUse = false;
+                    }
+                    break;
+            }
+        }
+        return canUse;
+    }
 }

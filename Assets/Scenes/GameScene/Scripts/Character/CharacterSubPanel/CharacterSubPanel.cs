@@ -124,7 +124,7 @@ public class CharacterSubPanel : SlidePanel
         yield return new WaitForSeconds(0.5f);
     }
 
-    private IEnumerator UpdateEnergyGauges()
+    public IEnumerator UpdateEnergyGauges()
     {
         // 各ゲージの更新コルーチンを並行実行
         Coroutine lifeCoroutine = StartCoroutine(energyGauge.SetLifeValueCoroutine(character.Life));
