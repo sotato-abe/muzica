@@ -20,6 +20,7 @@ public class Character
 
     // CharacterStatus
     public int Level { get; set; }
+    public int SkillPoint { get; set; }
     public int Power { get; set; }
     public int Technique { get; set; }
     public int Defense { get; set; }
@@ -168,25 +169,5 @@ public class Character
             }
 
         }
-    }
-
-    public void AddExp(int exp)
-    {
-        if (exp <= 0) return;
-
-        Exp += exp;
-
-        while (Exp >= 100)
-        {
-            Level++;
-            Exp -= 100;
-        }
-    }
-
-    public void AddMoney(int money)
-    {
-        if (money <= 0) return;
-
-        Money += money;
     }
 }

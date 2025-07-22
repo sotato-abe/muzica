@@ -8,6 +8,8 @@ using UnityEngine.EventSystems;
 
 public class StatusCounter : MonoBehaviour
 {
+    public UnityAction OnStatusUp;
+    [SerializeField] StatusType statusType;
     [SerializeField] TextMeshProUGUI valText;
     [SerializeField] TextMeshProUGUI diffText;
     [SerializeField] Image updownImage;
@@ -20,6 +22,25 @@ public class StatusCounter : MonoBehaviour
     [SerializeField] GameObject smallCell;
     [SerializeField] GameObject singleCell;
     [SerializeField] GameObject cellGroup;
+
+    private void Start()
+    {
+        // クリック時の処理を登録
+        statusUpButton.onClick.AddListener(OnStatusUpButtonClick);
+    }
+    private void OnStatusUpButtonClick()
+    {
+        // スキルポイントが足りない場合は何もしない
+        if (PlayerController.Instance.PlayerCharacter.SkillPoint <= 0)
+        {
+            Debug.LogWarning("スキルポイントが足りません。");
+            return;
+        }
+
+        // ステータスをアップデート
+        PlayerController.Instance.PlayerCharacter.StatusUp(statusType);
+        OnStatusUp?.Invoke();
+    }
     public void SetCounter(int val, int col)
     {
         valText.text = val.ToString();

@@ -19,6 +19,15 @@ public class StatusWindow : MonoBehaviour
     [SerializeField] StatusCounter luckCounter;
     [SerializeField] SkillPoint skillPoint;
 
+    private void Start()
+    {
+        powerCounter.OnStatusUp += RestateWindow;
+        techniqueCounter.OnStatusUp += RestateWindow;
+        defenseCounter.OnStatusUp += RestateWindow;
+        speedCounter.OnStatusUp += RestateWindow;
+        luckCounter.OnStatusUp += RestateWindow;
+    }
+
     public void SetCharacter(PlayerCharacter playerCharacter)
     {
         this.playerCharacter = playerCharacter;
@@ -49,5 +58,11 @@ public class StatusWindow : MonoBehaviour
         speedCounter.SetCounter(playerCharacter.Speed, playerCharacter.ColSpeed);
         luckCounter.SetCounter(playerCharacter.Luck, playerCharacter.ColLuck);
         // 他のステータスも同様に設定
+    }
+
+    public void RestateWindow()
+    {
+        SetStatusCounters();
+        skillPoint.SetPoint(playerCharacter.SkillPoint);
     }
 }

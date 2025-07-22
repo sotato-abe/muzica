@@ -139,4 +139,25 @@ public class PlayerCharacter : Character
         BagItemList.Remove(item);
         return true;
     }
+
+    public void AddExp(int exp)
+    {
+        if (exp <= 0) return;
+
+        Exp += exp;
+
+        while (Exp >= 100)
+        {
+            Level++;
+            SkillPoint++; // レベルアップ時にスキルポイントを追加
+            Exp -= 100;
+        }
+    }
+
+    public void AddMoney(int money)
+    {
+        if (money <= 0) return;
+
+        Money += money;
+    }
 }
