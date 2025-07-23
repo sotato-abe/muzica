@@ -1,5 +1,7 @@
 public enum StatusType
 {
+    LIFE, // ライフ
+    BTRY, // バッテリー
     POW, // アタック
     DEF, // ディフェンス
     TEC, // テクニック

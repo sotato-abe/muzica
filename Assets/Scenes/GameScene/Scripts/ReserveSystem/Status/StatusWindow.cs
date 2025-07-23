@@ -12,6 +12,7 @@ public class StatusWindow : MonoBehaviour
     [SerializeField] TextMeshProUGUI lvText;
     [SerializeField] Image lvBar;
     [SerializeField] TextMeshProUGUI expCountText;
+    [SerializeField] StatusCounter lifeCounter;
     [SerializeField] StatusCounter powerCounter;
     [SerializeField] StatusCounter techniqueCounter;
     [SerializeField] StatusCounter defenseCounter;
@@ -21,6 +22,7 @@ public class StatusWindow : MonoBehaviour
 
     private void Start()
     {
+        lifeCounter.OnStatusUp += RestateWindow;
         powerCounter.OnStatusUp += RestateWindow;
         techniqueCounter.OnStatusUp += RestateWindow;
         defenseCounter.OnStatusUp += RestateWindow;
@@ -52,6 +54,7 @@ public class StatusWindow : MonoBehaviour
 
     private void SetStatusCounters()
     {
+        lifeCounter.SetCounter(playerCharacter.Life, playerCharacter.ColLife);
         powerCounter.SetCounter(playerCharacter.Power, playerCharacter.ColPower);
         techniqueCounter.SetCounter(playerCharacter.Technique, playerCharacter.ColTechnique);
         defenseCounter.SetCounter(playerCharacter.Defense, playerCharacter.ColDefense);

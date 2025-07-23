@@ -22,6 +22,7 @@ public class StatusCounter : MonoBehaviour
     [SerializeField] GameObject smallCell;
     [SerializeField] GameObject singleCell;
     [SerializeField] GameObject cellGroup;
+    [SerializeField] int scale = 1; // ステータスのスケール
 
     private void Start()
     {
@@ -70,10 +71,10 @@ public class StatusCounter : MonoBehaviour
         // 10でmiddleCell：1,
         // 5でsmallCell：1,
         // 1でsingleCell：1,(gridで)
-        int bigCount = col / 50;
-        int middleCount = (col % 50) / 10;
-        int smallCount = (col % 10) / 5;
-        int singleCount = col % 5;
+        int bigCount = col / (50 * scale);
+        int middleCount = (col % (50 * scale)) / (10 * scale);
+        int smallCount = (col % (10 * scale)) / (5 * scale);
+        int singleCount = col % (5 * scale) / (1 * scale);
 
         // 既存のセルを削除
         foreach (Transform child in statusBar.transform)

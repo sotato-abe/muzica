@@ -57,6 +57,12 @@ public class PlayerCharacter : Character
         {
             switch (type)
             {
+                case StatusType.LIFE:
+                    Life += 10;
+                    break;
+                case StatusType.BTRY:
+                    Battery += 10;
+                    break;
                 case StatusType.POW:
                     Power += 1;
                     break;

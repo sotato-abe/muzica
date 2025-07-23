@@ -8,30 +8,30 @@ using UnityEngine.EventSystems;
 
 public class StatusPanel : Panel
 {
-    PlayerCharacter playerCharacter;
+    PlayerCharacter player;
     [SerializeField] CharacterCard characterCard;
     [SerializeField] StatusWindow statusWindow;
 
     private void Start()
     {
-        this.playerCharacter = PlayerController.Instance.PlayerCharacter;
-        characterCard.Setup(this.playerCharacter);
-        statusWindow.SetCharacter(this.playerCharacter);
+        this.player = PlayerController.Instance.PlayerCharacter;
+        characterCard.Setup(this.player);
+        statusWindow.SetCharacter(this.player);
     }
 
     private void OnEnable()
     {
-        if (playerCharacter == null)
+        if (player == null)
         {
-            playerCharacter = PlayerController.Instance?.PlayerCharacter;
-            if (playerCharacter == null)
+            player = PlayerController.Instance?.PlayerCharacter;
+            if (player == null)
             {
-                Debug.LogWarning("OnEnable: PlayerCharacter がまだ初期化されていません。");
+                Debug.LogWarning("OnEnable: player がまだ初期化されていません。");
                 return;
             }
         }
 
-        characterCard.Setup(playerCharacter);
-        statusWindow.SetCharacter(playerCharacter);
+        characterCard.Setup(player);
+        statusWindow.SetCharacter(player);
     }
 }
