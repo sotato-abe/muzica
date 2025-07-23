@@ -89,11 +89,11 @@ public class EscapePanel : BattleActionPanel
 
     private IEnumerator Escape()
     {
-        isEscaping = true;
-        player.Life -= lifeCost;
-        player.Battery -= batteryCost;
-        player.Soul -= soulCost;
-        PlayerController.Instance.UpdatePlayerEnergy();
+        EnergyCost lifeEnergyCost = new EnergyCost(EnergyType.Life, lifeCost);
+        EnergyCost batteryEnergyCost = new EnergyCost(EnergyType.Battery, batteryCost);
+        EnergyCost soulEnergyCost = new EnergyCost(EnergyType.Soul, soulCost);
+        List<EnergyCost> energyCosts = new List<EnergyCost> { lifeEnergyCost, batteryEnergyCost, soulEnergyCost };
+        PlayerController.Instance.UseEnergyCost(energyCosts);
 
         yield return StartCoroutine(RunningCoroutine());
 

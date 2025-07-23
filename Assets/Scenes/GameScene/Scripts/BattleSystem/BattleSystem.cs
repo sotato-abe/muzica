@@ -204,7 +204,7 @@ public class BattleSystem : MonoBehaviour
             }
             RewardText += $"EXP: {RewardExp}, マネー: {RewardMoney}";
             messagePanel.AddMessage(MessageIconType.Battle, RewardText);
-            PlayerController.Instance.AddBattleReword(RewardExp, RewardMoney, RewardItems); // バトル報酬を追加
+            PlayerController.Instance.AddBattleReward(RewardExp, RewardMoney, RewardItems); // バトル報酬を追加
             BattleEnd(); // 全ての敵を倒した場合はバトル終了
         }
         yield break; // 全ての敵を倒した場合はnullを返す

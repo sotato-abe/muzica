@@ -2,48 +2,80 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// プレイヤーの状態とアクションを管理するシングルトンクラス
+/// </summary>
 public class PlayerController : MonoBehaviour
 {
+    #region Singleton
     public static PlayerController Instance { get; private set; }
+    #endregion
+
+    #region Serialized Fields
+    [Header("Player Components")]
     [SerializeField] private CharacterSubPanel playerSubPanel;
     [SerializeField] private PlayerCharacter player;
-    [SerializeField] PropertyPanel propertyPanel;
-    public PlayerCharacter PlayerCharacter => player;
+    [SerializeField] private PropertyPanel propertyPanel;
+    #endregion
 
+    #region Properties
+    public PlayerCharacter PlayerCharacter => player;
+    #endregion
+
+    #region Unity Lifecycle
     void Awake()
+    {
+        InitializeSingleton();
+    }
+
+    private void Start()
+    {
+        InitializePlayer();
+        GameStart();
+    }
+    #endregion
+
+    #region Initialization
+    private void InitializeSingleton()
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(gameObject); // 重複防止
+            Destroy(gameObject);
             return;
         }
         Instance = this;
     }
 
-    private void Start()
+    private void InitializePlayer()
     {
-        player.Init();  // プレイヤーキャラクターの初期化
+        player.Init();
         playerSubPanel.SetCharacter(player);
         UpdatePropertyPanel();
-        GameStart();
     }
 
     private void GameStart()
     {
-        // yield return new WaitForSeconds(1f);
         TalkMessage startMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "はじめるか、、");
         StartCoroutine(playerSubPanel.SetTalkMessage(startMessage));
     }
+    #endregion
 
+    #region Player Communication
     public void SetPlayerBlowing(TalkMessage talkMessage)
     {
-        playerSubPanel.SetTalkMessage(talkMessage);
+        StartCoroutine(playerSubPanel.SetTalkMessage(talkMessage));
     }
+    #endregion
 
-    public void AddBattleReword(int exp, int money, List<Item> items)
+    #region Battle System
+    /// <summary>
+    /// バトル報酬を追加
+    /// </summary>
+    public void AddBattleReward(int exp, int money, List<Item> items)
     {
         player.AddExp(exp);
         player.AddMoney(money);
+        
         foreach (Item item in items)
         {
             if (item != null)
@@ -51,104 +83,146 @@ public class PlayerController : MonoBehaviour
                 AddItemToBag(item);
             }
         }
+        
         UpdatePropertyPanel();
     }
+    #endregion
 
+    #region Inventory Management
+    /// <summary>
+    /// アイテムをバッグに追加
+    /// </summary>
     public void AddItemToBag(Item item)
     {
-        // バッグの容量を超える場合はアイテムを入手しない
-        if (player.BagItemList.Count >= player.Bag)
+        if (!CanAddToBag())
         {
-            Debug.LogWarning("バッグの容量を超えています。アイテムを追加できません。");
-            FieldController.Instance.DropPlayerItem(item);
+            HandleBagOverflow(item);
             return;
         }
         player.AddItemToBag(item);
     }
+
+    /// <summary>
+    /// アイテムをポケットに追加
+    /// </summary>
     public void AddItemToPocket(Item item)
     {
-        // バッグの容量を超える場合はアイテムを入手しない
-        if (player.PocketList.Count >= player.ColPocket)
+        if (!CanAddToPocket())
         {
-            Debug.LogWarning("バッグの容量を超えています。アイテムを追加できません。");
-            FieldController.Instance.DropPlayerItem(item);
+            HandlePocketOverflow(item);
             return;
         }
+        
         if (item is Consumable consumable)
         {
             player.AddItemToPocket(consumable);
         }
     }
 
+    /// <summary>
+    /// 装備を追加
+    /// </summary>
     public void AddItemToEquip(Item item)
     {
         if (item == null) return;
+        
         if (item is Equipment equipment)
         {
             player.EquipmentList.Add(equipment);
         }
-        else
-        {
-            Debug.LogWarning("装備アイテム以外は装備できません。");
-        }
     }
 
+    /// <summary>
+    /// バッグからアイテムを削除
+    /// </summary>
     public void RemoveItemFromBag(Item item)
     {
         if (item == null) return;
         player.RemoveBagItem(item);
-        Debug.Log($"バッグからアイテムを削除しました: {item.Base.Name}");
     }
 
+    /// <summary>
+    /// ポケットからアイテムを削除
+    /// </summary>
     public void RemoveItemFromPocket(Item item)
     {
         if (item == null) return;
+        
         if (item is Consumable consumable)
         {
             player.PocketList.Remove(consumable);
-            Debug.Log($"ポケットからアイテムを削除しました: {consumable.Base.Name}");
-        }
-        else
-        {
-            Debug.LogWarning("消費アイテム以外は削除できません。");
         }
     }
 
+    /// <summary>
+    /// 装備を削除
+    /// </summary>
     public void RemoveItemFromEquip(Item item)
     {
         if (item == null) return;
+        
         if (item is Equipment equipment)
         {
             player.EquipmentList.Remove(equipment);
-            Debug.Log($"装備からアイテムを削除しました: {equipment.Base.Name}");
-        }
-        else
-        {
-            Debug.LogWarning("装備アイテム以外は削除できません。");
         }
     }
 
+    /// <summary>
+    /// アイテムをドロップ
+    /// </summary>
     public void DropItem(Item item)
     {
         if (item == null) return;
         FieldController.Instance.DropPlayerItem(item);
     }
 
+    private bool CanAddToBag()
+    {
+        return player.BagItemList.Count < player.Bag;
+    }
+
+    private bool CanAddToPocket()
+    {
+        return player.PocketList.Count < player.ColPocket;
+    }
+
+    private void HandleBagOverflow(Item item)
+    {
+        Debug.LogWarning("バッグの容量を超えています。アイテムを追加できません。");
+        FieldController.Instance.DropPlayerItem(item);
+    }
+
+    private void HandlePocketOverflow(Item item)
+    {
+        Debug.LogWarning("ポケットの容量を超えています。アイテムを追加できません。");
+        FieldController.Instance.DropPlayerItem(item);
+    }
+    #endregion
+
+    #region Command Management
+    /// <summary>
+    /// コマンドをストレージに追加
+    /// </summary>
     public void AddCommandToStorage(Command command)
     {
         if (command == null) return;
-        if (player.StorageList.Count >= player.ColStorage)
+        
+        if (!CanAddToStorage())
         {
-            FieldController.Instance.DropPlayerCommand(command);
-            Debug.LogWarning("ストレージの容量を超えています。コマンドを追加できません。");
+            HandleStorageOverflow(command);
             return;
         }
+        
         player.StorageList.Add(command);
     }
 
+    /// <summary>
+    /// ストレージからコマンドを削除
+    /// </summary>
     public void RemoveCommandFromStorage(Command command)
     {
         if (command == null) return;
+        
         if (player.StorageList.Contains(command))
         {
             player.StorageList.Remove(command);
@@ -160,102 +234,135 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// コマンドをテーブルに追加
+    /// </summary>
     public void AddCommandToTable(Command? command, int index)
     {
-        if (index >= player.ColMemory * 3)
+        if (!IsValidTableIndex(index))
         {
-            FieldController.Instance.DropPlayerCommand(command);
-            Debug.LogWarning("テーブルの容量を超えています。コマンドを追加できません。");
+            HandleInvalidTableIndex(command);
             return;
         }
+        
         player.TableList[index] = command;
     }
 
+    /// <summary>
+    /// テーブルからコマンドを削除
+    /// </summary>
     public void RemoveCommandFromTable(int index)
     {
-        if (index < 0 || index >= player.ColMemory * 3)
+        if (!IsValidTableIndex(index))
         {
             Debug.LogWarning("無効なインデックスです。コマンドを削除できません。");
             return;
         }
+        
         player.TableList[index] = null;
     }
 
+    /// <summary>
+    /// コマンドをドロップ
+    /// </summary>
     public void DropCommand(Command command)
     {
         if (command == null) return;
         FieldController.Instance.DropPlayerCommand(command);
     }
 
+    private bool CanAddToStorage()
+    {
+        return player.StorageList.Count < player.ColStorage;
+    }
+
+    private bool IsValidTableIndex(int index)
+    {
+        return index >= 0 && index < player.ColMemory * 3;
+    }
+
+    private void HandleStorageOverflow(Command command)
+    {
+        FieldController.Instance.DropPlayerCommand(command);
+        Debug.LogWarning("ストレージの容量を超えています。コマンドを追加できません。");
+    }
+
+    private void HandleInvalidTableIndex(Command command)
+    {
+        FieldController.Instance.DropPlayerCommand(command);
+        Debug.LogWarning("無効なインデックスです。コマンドを追加できません。");
+    }
+    #endregion
+
+    #region Currency Management
+    /// <summary>
+    /// お金を追加
+    /// </summary>
     public void AddMoney(int amount)
     {
         player.Money += amount;
         UpdatePropertyPanel();
-        Debug.Log($"プレイヤーの所持金が増加しました: {amount} (現在の所持金: {player.Money})");
     }
 
+    /// <summary>
+    /// ディスクを追加
+    /// </summary>
     public void AddDisk(int amount)
     {
         player.Disk += amount;
         UpdatePropertyPanel();
-        Debug.Log($"プレイヤーのディスクが増加しました: {amount} (現在のディスク: {player.Disk})");
     }
 
+    /// <summary>
+    /// キーを追加
+    /// </summary>
     public void AddKey(int amount)
     {
         player.Key += amount;
         UpdatePropertyPanel();
-        Debug.Log($"プレイヤーのキーが増加しました: {amount} (現在のキー: {player.Key})");
     }
 
+    /// <summary>
+    /// お金を消費
+    /// </summary>
     public bool SpendMoney(int amount)
     {
-        if (player.Money >= amount)
-        {
-            player.Money -= amount;
-            Debug.Log($"プレイヤーの所持金が減少しました: {amount} (現在の所持金: {player.Money})");
-            UpdatePropertyPanel();
-            return true;
-        }
-        else
-        {
-            Debug.LogWarning($"所持金が不足しています。:{amount} (現在の所持金: {player.Money})");
-            return false;
-        }
+        if (player.Money < amount) return false;
+
+        player.Money -= amount;
+        UpdatePropertyPanel();
+        return true;
     }
 
+    /// <summary>
+    /// ディスクを消費
+    /// </summary>
     public bool SpendDisk(int amount)
     {
-        if (player.Disk >= amount)
-        {
-            player.Disk -= amount;
-            Debug.Log($"プレイヤーのディスクが減少しました: {amount} (現在のディスク: {player.Disk})");
-            UpdatePropertyPanel();
-            return true;
-        }
-        else
-        {
-            Debug.LogWarning($"ディスクが不足しています。:{amount} (現在のディスク: {player.Disk})");
-            return false;
-        }
+        if (player.Disk < amount) return false;
+
+        player.Disk -= amount;
+        UpdatePropertyPanel();
+        return true;
     }
 
+    /// <summary>
+    /// キーを消費
+    /// </summary>
     public bool SpendKey(int amount)
     {
-        if (player.Key >= amount)
-        {
-            player.Key -= amount;
-            Debug.Log($"プレイヤーのキーが減少しました: {amount} (現在のキー: {player.Key})");
-            UpdatePropertyPanel();
-            return true;
-        }
-        else
-        {
-            Debug.LogWarning($"キーが不足しています。:{amount} (現在のキー: {player.Key})");
-            return false;
-        }
-    }
+        if (player.Key < amount) return false;
 
+        player.Key -= amount;
+        UpdatePropertyPanel();
+        return true;
+    }
+    #endregion
+
+    #region UI Management
+    /// <summary>
+    /// プロパティパネルを更新
+    /// </summary>
     private void UpdatePropertyPanel()
     {
         propertyPanel.SetMoney(player.Money);
@@ -263,78 +370,86 @@ public class PlayerController : MonoBehaviour
         propertyPanel.SetKey(player.Key);
     }
 
+    /// <summary>
+    /// プレイヤーエネルギーを更新
+    /// </summary>
     public void UpdatePlayerEnergy()
     {
-        playerSubPanel.SetEnergy();
+        StartCoroutine(playerSubPanel.UpdateEnergyGauges());
     }
+    #endregion
 
-    public bool UseEquipmentEnergyCost(Equipment equipment)
+    #region Energy Management
+    /// <summary>
+    /// エネルギーコストをチェック
+    /// </summary>
+    public bool CheckEnergyCost(List<EnergyCost> energyCosts)
     {
-        if (equipment == null) return false;
-
-        bool canUse = CheckEquipmentEnergyCost(equipment);
-
-        if (!canUse)
+        if (energyCosts == null || energyCosts.Count == 0)
         {
+            Debug.LogWarning("エネルギーコストが設定されていません。");
             return false;
         }
 
-        foreach (EnergyCost energyCost in equipment.EquipmentBase.EnergyCostList)
+        foreach (EnergyCost energyCost in energyCosts)
         {
-            switch (energyCost.type)
+            int currentVal = GetEnergyValue(energyCost.type);
+            if (currentVal < energyCost.val)
             {
-                case EnergyType.Life:
-                    player.Life -= energyCost.val;
-                    break;
-                case EnergyType.Battery:
-                    player.Battery -= energyCost.val;
-                    break;
-                case EnergyType.Soul:
-                    player.Soul -= energyCost.val;
-                    break;
+                Debug.LogWarning($"{energyCost.type} が不足しています。");
+                return false;
             }
         }
-        StartCoroutine(playerSubPanel.UpdateEnergyGauges());
         return true;
     }
 
-    public bool CheckEquipmentEnergyCost(Equipment equipment)
+    /// <summary>
+    /// エネルギーコストを消費
+    /// </summary>
+    public bool UseEnergyCost(List<EnergyCost> energyCosts)
     {
-        if (equipment == null)
+        if (!CheckEnergyCost(energyCosts)) return false;
+
+        foreach (EnergyCost energyCost in energyCosts)
         {
-            Debug.LogWarning("現在の装備が設定されていません。");
-            return false;
+            ReduceEnergy(energyCost.type, energyCost.val);
         }
 
-        bool canUse = true;
-
-        foreach (EnergyCost energyCost in equipment.EquipmentBase.EnergyCostList)
-        {
-            switch (energyCost.type)
-            {
-                case EnergyType.Life:
-                    if (player.Life < energyCost.val)
-                    {
-                        Debug.LogWarning("ライフが不足しています。");
-                        canUse = false;
-                    }
-                    break;
-                case EnergyType.Battery:
-                    if (player.Battery < energyCost.val)
-                    {
-                        Debug.LogWarning("バッテリーが不足しています。");
-                        canUse = false;
-                    }
-                    break;
-                case EnergyType.Soul:
-                    if (player.Soul < energyCost.val)
-                    {
-                        Debug.LogWarning("ソウルが不足しています。");
-                        canUse = false;
-                    }
-                    break;
-            }
-        }
-        return canUse;
+        UpdatePlayerEnergy();
+        return true;
     }
+
+    /// <summary>
+    /// エネルギー値を取得
+    /// </summary>
+    private int GetEnergyValue(EnergyType type)
+    {
+        return type switch
+        {
+            EnergyType.Life => player.Life,
+            EnergyType.Battery => player.Battery,
+            EnergyType.Soul => player.Soul,
+            _ => 0,
+        };
+    }
+
+    /// <summary>
+    /// エネルギーを減少
+    /// </summary>
+    private void ReduceEnergy(EnergyType type, int amount)
+    {
+        switch (type)
+        {
+            case EnergyType.Life:
+                player.Life = Mathf.Max(player.Life - amount, 0);
+                break;
+            case EnergyType.Battery:
+                player.Battery = Mathf.Max(player.Battery - amount, 0);
+                break;
+            case EnergyType.Soul:
+                player.Soul = Mathf.Max(player.Soul - amount, 0);
+                break;
+        }
+    }
+    #endregion
 }

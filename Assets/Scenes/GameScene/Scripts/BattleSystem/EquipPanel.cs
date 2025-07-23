@@ -73,7 +73,7 @@ public class EquipPanel : BattleActionPanel
             Debug.LogWarning("現在の装備が設定されていません。");
             return;
         }
-        bool canUse = playerController.CheckEquipmentEnergyCost(currentEquipment);
+        bool canUse = playerController.CheckEnergyCost(currentEquipment.EquipmentBase.EnergyCostList);
         equipWindow.SetStatusImage(canUse);
     }
 
@@ -89,7 +89,7 @@ public class EquipPanel : BattleActionPanel
             Debug.LogWarning("現在の装備が設定されていません。");
             return;
         }
-        bool isUsed = playerController.UseEquipmentEnergyCost(currentEquipment);
+        bool isUsed = playerController.UseEnergyCost(currentEquipment.EquipmentBase.EnergyCostList);
         CheckEnegryCost();
         if (!isUsed)
         {
