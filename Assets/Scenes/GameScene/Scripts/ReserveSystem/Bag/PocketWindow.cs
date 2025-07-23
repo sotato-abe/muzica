@@ -76,6 +76,7 @@ public class PocketWindow : MonoBehaviour, IDropHandler
             // 新規アイテムだけ生成
             ItemBlock itemBlock = Instantiate(itemBlockPrefab, itemList.transform);
             itemBlock.Setup(item, this.transform);
+            itemBlock.isOwned = true; // 所有フラグを設定
             itemBlock.OnRemoveItem += RemoveItem;
             itemBlock.OnTargetItem += TargetItem;
             itemBlockMap[item] = itemBlock;

@@ -82,6 +82,7 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
         ItemBlock itemBlock = Instantiate(itemBlockPrefab, itemList.transform);
         itemBlock.Setup(item, this.transform);
         itemBlock.SetStatustext(statusText);
+        itemBlock.isOwned = true; // 所有フラグを設定
         itemBlock.OnRemoveItem += RemoveItem;
         itemBlock.OnTargetItem += TargetItem;
         itemBlockMap[item] = itemBlock;

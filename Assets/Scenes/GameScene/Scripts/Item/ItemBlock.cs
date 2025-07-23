@@ -15,6 +15,7 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
     [SerializeField] Image cursor;
     [SerializeField] StatusText statusText;
     private bool isActive = true;
+    public bool isOwned = false;
     public Transform OriginalParent { get; private set; }
     public delegate bool RemoveItemDelegate(ItemBlock itemBlock);
     public event RemoveItemDelegate OnRemoveItem;

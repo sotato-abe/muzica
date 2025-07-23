@@ -412,7 +412,7 @@ public class PlayerController : MonoBehaviour
 
         foreach (EnergyCost energyCost in energyCosts)
         {
-            ReduceEnergy(energyCost.type, energyCost.val);
+            CalculationEnergy(energyCost.type, energyCost.val);
         }
 
         UpdatePlayerEnergy();
@@ -436,18 +436,18 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// エネルギーを減少
     /// </summary>
-    private void ReduceEnergy(EnergyType type, int amount)
+    private void CalculationEnergy(EnergyType type, int amount)
     {
         switch (type)
         {
             case EnergyType.Life:
-                player.Life = Mathf.Max(player.Life - amount, 0);
+                player.Life = Mathf.Clamp(player.Life - amount, 0, player.MaxLife);
                 break;
             case EnergyType.Battery:
-                player.Battery = Mathf.Max(player.Battery - amount, 0);
+                player.Battery = Mathf.Clamp(player.Battery - amount, 0, player.MaxBattery);
                 break;
             case EnergyType.Soul:
-                player.Soul = Mathf.Max(player.Soul - amount, 0);
+                player.Soul = Mathf.Clamp(player.Soul - amount, 0, 100);
                 break;
         }
     }

@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
-public class CharacterSubPanel : SlidePanel
+public class CharacterSubPanel : SlidePanel, IDropHandler
 {
     [SerializeField] Image characterImage;
     [SerializeField] TextMeshProUGUI characterNameText;
@@ -32,6 +34,35 @@ public class CharacterSubPanel : SlidePanel
         turnBar.gameObject.SetActive(false);
     }
 
+    public void OnDrop(PointerEventData eventData)
+    {
+        // ドロップアイテムをバックに追加
+        ItemBlock droppedItemBlock = eventData.pointerDrag?.GetComponent<ItemBlock>();
+
+        if (droppedItemBlock != null && droppedItemBlock.Item != null)
+        {
+            Item item = droppedItemBlock.Item;
+            if (item is Consumable && droppedItemBlock.isOwned)
+            {
+                UseConsumable(item as Consumable);
+                droppedItemBlock.RemoveItem();
+                return;
+            }
+        }
+    }
+
+    private void UseConsumable(Consumable consumable)
+    {
+        TotalAttackCount totalCount = new TotalAttackCount
+        {
+            TargetType = consumable.ConsumableBase.TargetType,
+            EnergyAttackList = consumable.ConsumableBase.EnergyAttackList,
+            EnchantList = consumable.ConsumableBase.EnchantList
+        };
+        character.TakeAttack(totalCount);
+        StartCoroutine(UpdateEnergyGauges());
+    }
+
     public virtual void SetCharacter(Character character)
     {
         character.Init();
@@ -51,6 +82,7 @@ public class CharacterSubPanel : SlidePanel
             turnBar.gameObject.SetActive(false);
             blowingPanel.gameObject.SetActive(false);
         }
+        this.gameObject.SetActive(true);
         base.SetActive(activeFlg, onComplete);
     }
 
