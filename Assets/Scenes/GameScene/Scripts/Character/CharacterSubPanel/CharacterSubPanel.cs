@@ -106,7 +106,7 @@ public class CharacterSubPanel : SlidePanel
         StartCoroutine(StartTurnBar());
     }
 
-    public IEnumerator TakeAttack(TotalAttackCount totalCount)
+    public IEnumerator TakeAttackCoroutine(TotalAttackCount totalCount)
     {
         if (character == null) yield return null;
 
