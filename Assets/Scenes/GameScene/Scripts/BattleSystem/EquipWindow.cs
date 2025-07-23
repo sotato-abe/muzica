@@ -62,7 +62,6 @@ public class EquipWindow : MonoBehaviour
 
     public void SetStatusImage(bool canUse)
     {
-        Debug.Log("Setting status image: " + canUse);
         if (canUse)
         {
             equipStatusImage.gameObject.SetActive(false);

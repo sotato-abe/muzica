@@ -75,7 +75,7 @@ public class BattleSystem : MonoBehaviour
             fieldEnemy.Inversion(isLeft); // 向きを反転
             fieldEnemy.SetNumIcon(index); // 敵の番号アイコンを設定
             fieldPlayer.Inversion(!isLeft); // プレイヤーの向きを反転
-            SetEnemySubPanel(enemy, index); // 敵のサブパネルを設定
+            SetEnemySubPanel(enemy, enemies.Count - (index + 1)); // 敵のサブパネルを設定
             fieldEnemies.Add(fieldEnemy); // 生成した敵をリストに追加
             yield return new WaitForSeconds(0.3f);
             index++;
@@ -185,7 +185,7 @@ public class BattleSystem : MonoBehaviour
         {
             fieldEnemies.Remove(fieldEnemy); // フィールドの敵リストから削除
             Destroy(fieldEnemy.gameObject); // 敵キャラクターを削除
-            characterSubPanel.gameObject.SetActive(false); // キャラクターサブパネルを非表示
+            // characterSubPanel.gameObject.SetActive(false); // キャラクターサブパネルを非表示
         }
 
         StartCoroutine(CheckEnemies());

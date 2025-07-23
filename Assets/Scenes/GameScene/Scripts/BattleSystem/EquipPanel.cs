@@ -29,7 +29,7 @@ public class EquipPanel : BattleActionPanel
     #region Private Fields
     private PlayerController playerController;
     private Equipment currentEquipment;
-    
+
     [Header("Equipment Settings")]
     public int equipmentNum = 0;
 
@@ -75,12 +75,12 @@ public class EquipPanel : BattleActionPanel
     private Equipment GetCurrentEquipment()
     {
         int equipmentCount = playerController.PlayerCharacter.EquipmentList.Count;
-        
+
         if (equipmentNum < equipmentCount)
         {
             return playerController.PlayerCharacter.EquipmentList[equipmentNum];
         }
-        
+
         return null;
     }
     #endregion
@@ -166,8 +166,8 @@ public class EquipPanel : BattleActionPanel
     /// </summary>
     public void ExecuteAttack()
     {
+        if (!canExecuteActionFlg) return;
         if (!IsEquipmentValid()) return;
-
         if (!TryUseEnergy()) return;
 
         StopReels();

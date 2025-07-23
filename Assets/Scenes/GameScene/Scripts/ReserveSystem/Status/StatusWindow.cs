@@ -54,7 +54,7 @@ public class StatusWindow : MonoBehaviour
 
     private void SetStatusCounters()
     {
-        lifeCounter.SetCounter(playerCharacter.Life, playerCharacter.ColLife);
+        lifeCounter.SetCounter(playerCharacter.MaxLife, playerCharacter.ColLife);
         powerCounter.SetCounter(playerCharacter.Power, playerCharacter.ColPower);
         techniqueCounter.SetCounter(playerCharacter.Technique, playerCharacter.ColTechnique);
         defenseCounter.SetCounter(playerCharacter.Defense, playerCharacter.ColDefense);
