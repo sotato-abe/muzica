@@ -6,7 +6,7 @@ using UnityEngine.Events;
 public class BattleSystem : MonoBehaviour
 {
     public UnityAction OnBattleEnd;
-
+    [SerializeField] private CameraManager cameraManager;
     [SerializeField] private BattleActionBoard battleActionBoard;
     [SerializeField] private CharacterSubPanel playerSubPanel; // キャラクターサブパネル
     [SerializeField] private CharacterSubPanel enemySubPanel1; // キャラクターサブパネル
@@ -45,13 +45,16 @@ public class BattleSystem : MonoBehaviour
 
     public void BattleStart()
     {
-        battleActionBoard.SetActive(true); // リザーブアクションボードを表示
+        cameraManager.SetCameraType(CameraType.Battle); // バトル時のカメラ位置を設定
+
+        messagePanel.SetActive(false); // メッセージパネルを表示
+        worldMapPanel.SetActive(false); // ワールドマップパネルを非表示
+
         playerSubPanel.SetActive(true); // キャラクターサブパネルを表示
+        battleActionBoard.SetActive(true); // リザーブアクションボードを表示
         TalkMessage talkMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "なんだよ");
         StartCoroutine(playerSubPanel.SetTalkMessage(talkMessage)); // リザーブアクションボードを開く
         playerSubPanel.BattleStart(); // ターンバーを開始
-        messagePanel.SetActive(false); // メッセージパネルを表示
-        worldMapPanel.SetActive(false); // ワールドマップパネルを非表示
         SetEnemy();
     }
 
@@ -233,12 +236,14 @@ public class BattleSystem : MonoBehaviour
         RewardItems.Clear(); // アイテムのリセット
         RewardItemListText = ""; // アイテムリストのリセット
 
-        battleActionBoard.SetActive(false, CheckAllComplete); // リザーブアクションボードを表示
-        playerSubPanel.SetActive(false, CheckAllComplete); // キャラクターサブパネルを表示
-        enemySubPanel1.SetActive(false, CheckAllComplete); // キャラクターサブパネルを表示
-        enemySubPanel2.SetActive(false, CheckAllComplete); // キャラクターサブパネルを表示
-        enemySubPanel3.SetActive(false, CheckAllComplete); // キャラクターサブパネルを表示
+        battleActionBoard.SetActive(false, CheckAllComplete); // リザーブアクションボードを非表示にする
+        playerSubPanel.SetActive(false, CheckAllComplete); // キャラクターサブパネルを非表示にする
+        enemySubPanel1.SetActive(false, CheckAllComplete); // キャラクターサブパネルを非表示にする
+        enemySubPanel2.SetActive(false, CheckAllComplete); // キャラクターサブパネルを非表示にする
+        enemySubPanel3.SetActive(false, CheckAllComplete); // キャラクターサブパネルを非表示にする
+
         messagePanel.SetActive(true, CheckAllComplete); // メッセージパネルを表示
         worldMapPanel.SetActive(true, CheckAllComplete); // ワールドマップパネルを表示
+        cameraManager.SetCameraType(CameraType.Default); // バトル時のカメラ位置を設定
     }
 }

@@ -8,17 +8,39 @@ public class CameraManager : MonoBehaviour
     public float smoothSpeed = 5f; // 追従のなめらかさ
     public Vector3 offset; // 追跡位置のズレ
 
+    private CameraType cameraType = CameraType.Default; // カメラの種類
+    private Vector3 defaultPosition = new Vector3(0, 0, 0); // 通常時のカメラ位置
+    private Vector3 battlePosition = new Vector3(0, -1, 0); // バトル時のカメラ位置
+    private Vector3 tradePosition = new Vector3(0, 4, 0); // 取引時のカメラ位置
+    private Vector3 reservePosition = new Vector3(0, 4, 0); // 準備時のカメラ位置
+
     void LateUpdate()
     {
         if (target == null) return;
 
-
         Vector3 desiredPosition = target.position + offset;
-
-        // Z軸だけ固定してカメラが後ろに回らないようにする
         desiredPosition.z = transform.position.z;
 
         Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
         transform.position = smoothedPosition;
+    }
+
+    public void SetCameraType(CameraType type)
+    {
+        switch (type)
+        {
+            case CameraType.Battle:
+                offset = battlePosition;
+                break;
+            case CameraType.Trade:
+                offset = tradePosition;
+                break;
+            case CameraType.Reserve:
+                offset = reservePosition;
+                break;
+            default:
+                offset = defaultPosition;
+                break;
+        }
     }
 }

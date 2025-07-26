@@ -6,7 +6,7 @@ using UnityEngine.Events;
 public class TradeSystem : MonoBehaviour
 {
     public UnityAction OnTradeEnd; // リザーブイベント
-
+    [SerializeField] private CameraManager cameraManager;
     [SerializeField] private TradeActionBoard tradeActionBoard; // リザーブアクションボード
     [SerializeField] private CharacterSubPanel playerSubPanel; // キャラクターサブパネル
     [SerializeField] private CharacterSubPanel rightcharacterSubPanel; // キャラクターサブパネル
@@ -32,6 +32,8 @@ public class TradeSystem : MonoBehaviour
     public void TradeStart(Point point)
     {
         currentPoint = point; // 現在のポイントを保存
+        cameraManager.SetCameraType(CameraType.Reserve); // バトル時のカメラ位置を設定
+
         tradeActionBoard.SetActive(true); // リザーブアクションボードを表示
         TalkMessage talkMessage1 = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "いいものあるかな");
         TalkMessage talkMessage2 = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "いらっしゃい");
@@ -68,5 +70,6 @@ public class TradeSystem : MonoBehaviour
         rightcharacterSubPanel.SetActive(false, CheckAllComplete); // キャラクターサブパネルを表示
         messagePanel.SetActive(true, CheckAllComplete); // メッセージパネルを表示
         worldMapPanel.SetActive(true, CheckAllComplete); // ワールドマップパネルを表示
+        cameraManager.SetCameraType(CameraType.Default); // バトル時のカメラ位置を設定
     }
 }

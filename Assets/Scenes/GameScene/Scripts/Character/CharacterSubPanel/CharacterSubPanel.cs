@@ -21,7 +21,7 @@ public class CharacterSubPanel : SlidePanel, IDropHandler
     bool isActive = false; // Panelがアクティブかどうか
     float turnBarFillAmount = 0f;
     Color runningColor = new Color(255f / 255f, 0f / 255f, 74f / 255f, 1f);
-    Color activeColor = new Color(189f / 255f, 255f / 255f, 0f / 255f, 1f);
+    Color activeColor = new Color(0f / 255f, 175f / 255f, 255f / 255f, 1f);
 
     public delegate void ActiveTurnDelegate(Character? character);
     public event ActiveTurnDelegate OnActiveTurn;

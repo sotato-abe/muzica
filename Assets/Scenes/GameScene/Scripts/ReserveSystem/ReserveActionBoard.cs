@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 // BattlePanelとIconの表示と切り替えを管理するクラス
-public class ReserveActionBoard : MonoBehaviour
+public class ReserveActionBoard : SlidePanel
 {
     public UnityAction OnReserveEnd;
     [SerializeField] private BagPanel bagPanel;

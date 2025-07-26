@@ -7,6 +7,7 @@ public class ReserveSystem : MonoBehaviour
 {
     public UnityAction OnReserveEnd;
 
+    [SerializeField] private CameraManager cameraManager;
     [SerializeField] private ReserveActionBoard reserveActionBoard; // リザーブアクションボード
     [SerializeField] SlidePanel footer;
 
@@ -29,12 +30,16 @@ public class ReserveSystem : MonoBehaviour
 
     public void ReserveStart()
     {
-        footer.SetActive(true); // フッターを非表示にする
-        playerSubPanel.SetActive(true); // キャラクターサブパネルを表示
-        TalkMessage talkMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "準備しよう");
-        StartCoroutine(playerSubPanel.SetTalkMessage(talkMessage)); // リザーブアクションボードを開く
+        cameraManager.SetCameraType(CameraType.Reserve); // 準備時のカメラ位置を設定
+
         messagePanel.SetActive(false); // メッセージパネルを表示
         worldMapPanel.SetActive(false); // ワールドマップパネルを非表示
+
+        footer.SetActive(true); // フッターを非表示にする
+        playerSubPanel.SetActive(true); // キャラクターサブパネルを表示
+        reserveActionBoard.SetActive(true); // リザーブアクションボードを表示
+        TalkMessage talkMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "準備しよう");
+        StartCoroutine(playerSubPanel.SetTalkMessage(talkMessage)); // リザーブアクションボードを開く
     }
 
     public void ResorveEnd()
@@ -43,16 +48,18 @@ public class ReserveSystem : MonoBehaviour
         void CheckAllComplete()
         {
             completed++;
-            if (completed >= 4)
+            if (completed >= 5)
             {
                 OnReserveEnd?.Invoke();
                 transform.gameObject.SetActive(false);
             }
         }
-
+        reserveActionBoard.SetActive(false, CheckAllComplete); // リザーブアクションボードを非表示にする
         footer.SetActive(false, CheckAllComplete); // フッターを非表示にする
-        playerSubPanel.SetActive(false, CheckAllComplete); // キャラクターサブパネルを表示
+        playerSubPanel.SetActive(false, CheckAllComplete); // キャラクターサブパネルを非表示にする
+
         messagePanel.SetActive(true, CheckAllComplete); // メッセージパネルを表示
         worldMapPanel.SetActive(true, CheckAllComplete); // ワールドマップパネルを表示
+        cameraManager.SetCameraType(CameraType.Default); // 通常時のカメラ位置を設定
     }
 }
