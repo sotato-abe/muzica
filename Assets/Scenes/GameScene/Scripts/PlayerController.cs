@@ -75,7 +75,7 @@ public class PlayerController : MonoBehaviour
     {
         player.AddExp(exp);
         player.AddMoney(money);
-        
+
         foreach (Item item in items)
         {
             if (item != null)
@@ -83,7 +83,7 @@ public class PlayerController : MonoBehaviour
                 AddItemToBag(item);
             }
         }
-        
+
         UpdatePropertyPanel();
     }
     #endregion
@@ -112,7 +112,7 @@ public class PlayerController : MonoBehaviour
             HandlePocketOverflow(item);
             return;
         }
-        
+
         if (item is Consumable consumable)
         {
             player.AddItemToPocket(consumable);
@@ -125,7 +125,7 @@ public class PlayerController : MonoBehaviour
     public void AddItemToEquip(Item item)
     {
         if (item == null) return;
-        
+
         if (item is Equipment equipment)
         {
             player.EquipmentList.Add(equipment);
@@ -147,7 +147,7 @@ public class PlayerController : MonoBehaviour
     public void RemoveItemFromPocket(Item item)
     {
         if (item == null) return;
-        
+
         if (item is Consumable consumable)
         {
             player.PocketList.Remove(consumable);
@@ -160,7 +160,7 @@ public class PlayerController : MonoBehaviour
     public void RemoveItemFromEquip(Item item)
     {
         if (item == null) return;
-        
+
         if (item is Equipment equipment)
         {
             player.EquipmentList.Remove(equipment);
@@ -206,13 +206,13 @@ public class PlayerController : MonoBehaviour
     public void AddCommandToStorage(Command command)
     {
         if (command == null) return;
-        
+
         if (!CanAddToStorage())
         {
             HandleStorageOverflow(command);
             return;
         }
-        
+
         player.StorageList.Add(command);
     }
 
@@ -222,7 +222,7 @@ public class PlayerController : MonoBehaviour
     public void RemoveCommandFromStorage(Command command)
     {
         if (command == null) return;
-        
+
         if (player.StorageList.Contains(command))
         {
             player.StorageList.Remove(command);
@@ -244,7 +244,7 @@ public class PlayerController : MonoBehaviour
             HandleInvalidTableIndex(command);
             return;
         }
-        
+
         player.TableList[index] = command;
     }
 
@@ -258,7 +258,7 @@ public class PlayerController : MonoBehaviour
             Debug.LogWarning("無効なインデックスです。コマンドを削除できません。");
             return;
         }
-        
+
         player.TableList[index] = null;
     }
 
@@ -449,6 +449,54 @@ public class PlayerController : MonoBehaviour
             case EnergyType.Soul:
                 player.Soul = Mathf.Clamp(player.Soul - amount, 0, 100);
                 break;
+        }
+    }
+
+    public void StatusUp(StatusType type)
+    {
+        if (player.SkillPoint > 0)
+        {
+            switch (type)
+            {
+                case StatusType.LIFE:
+                    player.MaxLife += 10;
+                    break;
+                case StatusType.BTRY:
+                    player.MaxBattery += 10;
+                    break;
+                case StatusType.POW:
+                    player.Power += 1;
+                    break;
+                case StatusType.TEC:
+                    player.Technique += 1;
+                    break;
+                case StatusType.DEF:
+                    player.Defense += 1;
+                    break;
+                case StatusType.SPD:
+                    player.Speed += 1;
+                    break;
+                case StatusType.LUK:
+                    player.Luck += 1;
+                    break;
+                case StatusType.MMR:
+                    player.Memory += 1;
+                    break;
+                case StatusType.STG:
+                    player.Storage += 1;
+                    break;
+                case StatusType.POC:
+                    player.Pocket += 1;
+                    break;
+            }
+            player.SkillPoint -= 1;
+            player.CoLStatus();
+            playerSubPanel.SetEnergy();
+            playerSubPanel.UpdateEnergyGauges2();
+        }
+        else
+        {
+            Debug.Log("スキルポイントが足りません。");
         }
     }
     #endregion

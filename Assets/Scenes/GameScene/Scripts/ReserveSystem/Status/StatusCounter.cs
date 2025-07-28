@@ -39,7 +39,7 @@ public class StatusCounter : MonoBehaviour
         }
 
         // ステータスをアップデート
-        PlayerController.Instance.PlayerCharacter.StatusUp(statusType);
+        PlayerController.Instance.StatusUp(statusType);
         OnStatusUp?.Invoke();
     }
     public void SetCounter(int val, int col)

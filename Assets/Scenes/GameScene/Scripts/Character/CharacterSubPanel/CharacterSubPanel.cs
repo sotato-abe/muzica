@@ -18,10 +18,10 @@ public class CharacterSubPanel : SlidePanel, IDropHandler
     Character character;
     public Character Character => character;
     public bool fixedDisplayFlg = false; // Panelの固定表示フラグ
-    bool isActive = false; // Panelがアクティブかどうか
+    bool inProgress = false; // Panelがアクティブかどうか
     float turnBarFillAmount = 0f;
     Color runningColor = new Color(255f / 255f, 0f / 255f, 74f / 255f, 1f);
-    Color activeColor = new Color(0f / 255f, 175f / 255f, 255f / 255f, 1f);
+    Color activeColor = new Color(196f / 255f, 255f / 255f, 0 / 255f, 1f);
 
     public delegate void ActiveTurnDelegate(Character? character);
     public event ActiveTurnDelegate OnActiveTurn;
@@ -169,6 +169,15 @@ public class CharacterSubPanel : SlidePanel, IDropHandler
         yield return soulCoroutine;
     }
 
+    public void UpdateEnergyGauges2()
+    {
+        if (character == null) return;
+
+        energyGauge.UpdateLifeGauge(character.MaxLife, character.Life);
+        energyGauge.UpdateBatteryGauge(character.MaxBattery, character.Battery);
+        energyGauge.UpdateSoulGauge(100, character.Soul);
+    }
+
     private IEnumerator StartTurnBar()
     {
         if (character == null)
@@ -185,7 +194,7 @@ public class CharacterSubPanel : SlidePanel, IDropHandler
             yield return null;
         }
         turnBar.color = activeColor;
-        isActive = true;
+        inProgress = true;
         OnActiveTurn?.Invoke(character);
     }
 
@@ -203,10 +212,10 @@ public class CharacterSubPanel : SlidePanel, IDropHandler
             Debug.LogWarning("キャラクターが設定されていません。");
             return;
         }
-        if (isActive)
+        if (inProgress)
         {
             turnBarFillAmount = 0f; // ターンバーが満タンの場合はリセット
-            isActive = false;
+            inProgress = false;
         }
         StartCoroutine(StartTurnBar());
     }

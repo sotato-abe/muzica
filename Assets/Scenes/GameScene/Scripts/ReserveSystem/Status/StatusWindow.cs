@@ -18,7 +18,7 @@ public class StatusWindow : MonoBehaviour
     [SerializeField] StatusCounter defenseCounter;
     [SerializeField] StatusCounter speedCounter;
     [SerializeField] StatusCounter luckCounter;
-    [SerializeField] SkillPoint skillPoint;
+    [SerializeField] SkillPointParts skillPoint;
 
     private void Start()
     {

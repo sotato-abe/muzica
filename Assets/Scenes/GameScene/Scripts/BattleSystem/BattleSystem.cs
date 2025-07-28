@@ -162,7 +162,7 @@ public class BattleSystem : MonoBehaviour
         playerSubPanel.ReStartTurnBar();
         foreach (CharacterSubPanel enemySubPanel in enemySubPanels)
         {
-            if (enemySubPanel.isActive)
+            if (enemySubPanel.isOpen)
                 enemySubPanel.ReStartTurnBar();
         }
     }
@@ -215,6 +215,8 @@ public class BattleSystem : MonoBehaviour
 
     public void BattleEnd()
     {
+        Debug.Log("Battle Ended");
+
         int completed = 0;
         foreach (FieldCharacter fieldEnemy in fieldEnemies)
         {
@@ -231,6 +233,7 @@ public class BattleSystem : MonoBehaviour
                 transform.gameObject.SetActive(false);
             }
         }
+
         RewardExp = 0; // 経験値のリセット
         RewardMoney = 0; // ゴールドのリセット
         RewardItems.Clear(); // アイテムのリセット

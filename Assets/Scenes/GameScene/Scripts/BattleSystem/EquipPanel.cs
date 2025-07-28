@@ -259,9 +259,9 @@ public class EquipPanel : BattleActionPanel
     {
         List<CharacterSubPanel> activePanels = new List<CharacterSubPanel>();
 
-        if (enemySubPanel1.isActive) activePanels.Add(enemySubPanel1);
-        if (enemySubPanel2.isActive) activePanels.Add(enemySubPanel2);
-        if (enemySubPanel3.isActive) activePanels.Add(enemySubPanel3);
+        if (enemySubPanel1.isOpen) activePanels.Add(enemySubPanel1);
+        if (enemySubPanel2.isOpen) activePanels.Add(enemySubPanel2);
+        if (enemySubPanel3.isOpen) activePanels.Add(enemySubPanel3);
 
         return activePanels;
     }
@@ -302,7 +302,7 @@ public class EquipPanel : BattleActionPanel
     /// </summary>
     private void ExecuteSelfAttack(TotalAttackCount totalCount)
     {
-        if (playerSubPanel.isActive)
+        if (playerSubPanel.isOpen)
         {
             StartCoroutine(ExecuteAction(playerSubPanel, totalCount));
         }

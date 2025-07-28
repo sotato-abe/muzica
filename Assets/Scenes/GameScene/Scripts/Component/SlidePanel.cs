@@ -10,25 +10,25 @@ public class SlidePanel : MonoBehaviour
     public RectTransform rectTransform;
     public Vector3 activePosition = new Vector3(0, 0, 0);
     public Vector3 inactivePosition = new Vector3(0, 0, 0);
-    public bool isActive = false;
+    public bool isOpen = false;
     private Coroutine slideCoroutine;
 
     public virtual void SetActive(bool activeFlg, Action onComplete = null)
     {
-        if (isActive == activeFlg)
+        if (isOpen == activeFlg)
         {
             onComplete?.Invoke();
             return;
         }
 
-        isActive = activeFlg;
+        isOpen = activeFlg;
         // スライド中のときはその処理を中断して新しいスライドを開始
         if (slideCoroutine != null)
         {
             StopCoroutine(slideCoroutine);
         }
 
-        Vector3 targetPos = isActive ? activePosition : inactivePosition;
+        Vector3 targetPos = isOpen ? activePosition : inactivePosition;
         slideCoroutine = StartCoroutine(Slide(targetPos, onComplete));
     }
 

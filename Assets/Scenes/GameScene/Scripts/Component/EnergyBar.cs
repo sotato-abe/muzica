@@ -28,6 +28,18 @@ public class EnergyBar : MonoBehaviour
         counterText.text = $"{currentEnergy}/{maxEnergy}";
     }
 
+    public void UpdateEnergey(int maxEnergy, int currentEnergy)
+    {
+        if (maxEnergy <= 0)
+        {
+            Debug.LogError("Max energy must be greater than zero.");
+            return;
+        }
+
+        this.maxEnergy = maxEnergy;
+        StartCoroutine(SetValueCoroutine(currentEnergy));
+    }
+
     public IEnumerator SetValueCoroutine(int value)
     {
         if (value < 0) value = 0;

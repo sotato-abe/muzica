@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class SkillPoint : MonoBehaviour
+public class SkillPointParts : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI pointText;
     public void SetPoint(int point)

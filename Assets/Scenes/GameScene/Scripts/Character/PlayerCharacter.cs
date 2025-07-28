@@ -8,7 +8,7 @@ using TMPro;
 public class PlayerCharacter : Character
 {
     private const int EQUIPMENT_COUNT = 2;
-    public int SkillPoint { get; set; } = 0;
+    // public int SkillPoint { get; set; } = 0;
 
     public override void Init()
     {
@@ -49,52 +49,6 @@ public class PlayerCharacter : Character
             Debug.Log("スキルポイントが足りません。");
         }
         Debug.Log($"スキルポイント: {ColLife},{MaxLife}/{Life}");
-    }
-
-    public void StatusUp(StatusType type)
-    {
-        if (SkillPoint > 0)
-        {
-            switch (type)
-            {
-                case StatusType.LIFE:
-                    Life += 10;
-                    break;
-                case StatusType.BTRY:
-                    Battery += 10;
-                    break;
-                case StatusType.POW:
-                    Power += 1;
-                    break;
-                case StatusType.TEC:
-                    Technique += 1;
-                    break;
-                case StatusType.DEF:
-                    Defense += 1;
-                    break;
-                case StatusType.SPD:
-                    Speed += 1;
-                    break;
-                case StatusType.LUK:
-                    Luck += 1;
-                    break;
-                case StatusType.MMR:
-                    Memory += 1;
-                    break;
-                case StatusType.STG:
-                    Storage += 1;
-                    break;
-                case StatusType.POC:
-                    Pocket += 1;
-                    break;
-            }
-            SkillPoint -= 1;
-            CoLStatus();
-        }
-        else
-        {
-            Debug.Log("スキルポイントが足りません。");
-        }
     }
 
     public bool AddItemToBag(Item item)
