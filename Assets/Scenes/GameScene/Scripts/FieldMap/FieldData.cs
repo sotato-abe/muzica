@@ -15,6 +15,7 @@ public class FieldData : ScriptableObject
     [SerializeField] float groundFillPercent = 0.4f; // マップの建蔽率
     [SerializeField] float areaFillPercent = 0.2f; // マップの建蔽率
     [SerializeField] int objectCount = 5;
+    [SerializeField] string seed;
     [SerializeField] List<PointBase> points = new List<PointBase>();
     [SerializeField] List<ItemBase> treasureBoxItems = new List<ItemBase>();
     [SerializeField] List<CharacterGroup> enemyGroups = new List<CharacterGroup>();
@@ -34,6 +35,7 @@ public class FieldData : ScriptableObject
     public FieldTileSet FieldTileSet { get => fieldTileSet; }
     public float GroundFillPercent { get => groundFillPercent; }
     public float AreaFillPercent { get => areaFillPercent; }
+    public string Seed { get => seed; }
     public int ObjectCount { get => objectCount; }
     public List<PointBase> Points { get => points; }
     public List<ItemBase> TreasureBoxItems { get => treasureBoxItems; }

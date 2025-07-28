@@ -79,7 +79,15 @@ public class FieldGenerator : MonoBehaviour
             Debug.LogError("FieldTileSet is null!");
             return;
         }
-        string seed = fieldData.currentPosition.x + "," + fieldData.currentPosition.y;
+        string seed = "";
+        if (fieldData.FieldName != null && fieldData.FieldName != "")
+        {
+            seed = fieldData.Seed;
+        }
+        else
+        {
+            seed = $"{fieldData.Position.x},{fieldData.Position.y}";
+        }
         Random.InitState(seed.GetHashCode());
         consistentRandom = new System.Random(seed.GetHashCode());
         InitializeField(fieldData, fieldTileSet);
@@ -675,7 +683,15 @@ public class FieldGenerator : MonoBehaviour
     private int GenerateObjectSeed()
     {
         // fieldDataの位置とオブジェクト数を組み合わせてシードを生成
-        string seedString = $"{fieldData.Position.x},{fieldData.Position.y},objects,{objectCount}";
+        string seedString = "";
+        if (fieldData.FieldName != null && fieldData.FieldName != "")
+        {
+            seedString = fieldData.Seed;
+        }
+        else
+        {
+            seedString = $"{fieldData.Position.x},{fieldData.Position.y}";
+        }
         return seedString.GetHashCode();
     }
 
