@@ -86,7 +86,7 @@ public class FieldGenerator : MonoBehaviour
         }
         else
         {
-            seed = $"{fieldData.Position.x},{fieldData.Position.y}";
+            seed = fieldData.currentPosition.x + "," + fieldData.currentPosition.y;
         }
         Random.InitState(seed.GetHashCode());
         consistentRandom = new System.Random(seed.GetHashCode());
