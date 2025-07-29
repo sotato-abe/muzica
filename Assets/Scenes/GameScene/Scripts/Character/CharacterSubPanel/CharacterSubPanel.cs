@@ -23,7 +23,7 @@ public class CharacterSubPanel : SlidePanel, IDropHandler
     Color runningColor = new Color(255f / 255f, 0f / 255f, 74f / 255f, 1f);
     Color activeColor = new Color(196f / 255f, 255f / 255f, 0 / 255f, 1f);
 
-    public delegate void ActiveTurnDelegate(Character? character);
+    public delegate void ActiveTurnDelegate(CharacterSubPanel? characterSubPanel);
     public event ActiveTurnDelegate OnActiveTurn;
 
     public delegate void LifeOutDelegate(CharacterSubPanel characterSubPanel);
@@ -195,7 +195,7 @@ public class CharacterSubPanel : SlidePanel, IDropHandler
         }
         turnBar.color = activeColor;
         inProgress = true;
-        OnActiveTurn?.Invoke(character);
+        OnActiveTurn?.Invoke(this);
     }
 
     // ターンバーを一時停止

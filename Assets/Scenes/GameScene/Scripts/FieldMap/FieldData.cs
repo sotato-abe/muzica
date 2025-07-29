@@ -18,7 +18,7 @@ public class FieldData : ScriptableObject
     [SerializeField] string seed;
     [SerializeField] List<PointBase> points = new List<PointBase>();
     [SerializeField] List<ItemBase> treasureBoxItems = new List<ItemBase>();
-    [SerializeField] List<CharacterGroup> enemyGroups = new List<CharacterGroup>();
+    [SerializeField] List<EnemyGroup> enemyGroups = new List<EnemyGroup>();
     public FieldType fieldType = FieldType.Default; // フィールドの種類
     public bool isTopOpen = false;
     public bool isBottomOpen = false;
@@ -39,5 +39,5 @@ public class FieldData : ScriptableObject
     public int ObjectCount { get => objectCount; }
     public List<PointBase> Points { get => points; }
     public List<ItemBase> TreasureBoxItems { get => treasureBoxItems; }
-    public List<CharacterGroup> EnemyGroups { get => enemyGroups; }
+    public List<EnemyGroup> EnemyGroups { get => enemyGroups; }
 }

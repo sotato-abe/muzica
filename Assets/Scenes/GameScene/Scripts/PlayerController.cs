@@ -394,7 +394,7 @@ public class PlayerController : MonoBehaviour
         foreach (EnergyCost energyCost in energyCosts)
         {
             int currentVal = GetEnergyValue(energyCost.type);
-            if (currentVal < energyCost.val)
+            if (currentVal <= energyCost.val)
             {
                 Debug.LogWarning($"{energyCost.type} が不足しています。");
                 return false;
@@ -498,6 +498,12 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("スキルポイントが足りません。");
         }
+    }
+
+    public void TakeAttack(TotalAttackCount totalCount)
+    {
+        player.TakeAttack(totalCount);
+        UpdatePlayerEnergy();
     }
     #endregion
 }

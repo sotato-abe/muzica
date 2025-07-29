@@ -122,14 +122,14 @@ public class BattleSystem : MonoBehaviour
         return (targetPos, isLeft, isFront);
     }
 
-    public void ActivePlayerTurn(Character character)
+    public void ActivePlayerTurn(CharacterSubPanel playerSubPanel)
     {
         StopAllPlayerTurnBar();
         battleActionBoard.ChangeExecuteActionFlg(true); // アクションを実行可能にする
     }
 
     // TODO：敵の攻撃を実装する
-    public void ActiveEnemyTurn(Character character)
+    public void ActiveEnemyTurn(CharacterSubPanel enemySubPanel)
     {
         StopAllPlayerTurnBar();
         if (fieldEnemies.Count == 0)
@@ -137,14 +137,16 @@ public class BattleSystem : MonoBehaviour
             Debug.LogWarning("敵がいません。");
             return;
         }
-        StartCoroutine(EnemyTurn()); // ターンを再開
+        EnemyCharacter enemyCharacter = enemySubPanel.Character as EnemyCharacter;
+        TotalAttackCount totalAttackCount = enemyCharacter.EnemyAttack();
+        StartCoroutine(enemySubPanel.UpdateEnergyGauges());
+        StartCoroutine(EnemyTurn(totalAttackCount)); // ターンを再開
     }
 
     // 仮の敵ターン
-    private IEnumerator EnemyTurn()
+    private IEnumerator EnemyTurn(TotalAttackCount totalAttackCount)
     {
-        yield return new WaitForSeconds(2f);
-        // 敵の行動を実行
+        yield return StartCoroutine(playerSubPanel.TakeAttackCoroutine(totalAttackCount));
         OnActionEnd(); // アクション終了イベントを呼び出す
     }
 

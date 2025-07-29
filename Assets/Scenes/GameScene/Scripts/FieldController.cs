@@ -18,19 +18,19 @@ public class FieldController : MonoBehaviour
     [SerializeField] DropItem dropItemPrefab; // ドロップアイテムのプレハブ
     [SerializeField] DropCommand dropCommandPrefab; // ドロップアイテムのプレハブ
     [SerializeField] FieldPlayer fieldPlayer; // プレイヤーコントローラー
-    [SerializeField] List<CharacterGroup> defaultEnemyGroups = new List<CharacterGroup>();
-    [SerializeField] List<CharacterGroup> desertEnemyGroups = new List<CharacterGroup>();
-    [SerializeField] List<CharacterGroup> wildernessEnemyGroups = new List<CharacterGroup>();
-    [SerializeField] List<CharacterGroup> grasslandsEnemyGroups = new List<CharacterGroup>();
-    [SerializeField] List<CharacterGroup> wetlandsEnemyGroups = new List<CharacterGroup>();
-    [SerializeField] List<CharacterGroup> snowEnemyGroups = new List<CharacterGroup>();
-    [SerializeField] List<CharacterGroup> rockEnemyGroups = new List<CharacterGroup>();
-    [SerializeField] List<CharacterGroup> magmaEnemyGroups = new List<CharacterGroup>();
-    [SerializeField] List<CharacterGroup> pollutionEnemyGroups = new List<CharacterGroup>();
-    [SerializeField] List<CharacterGroup> seaEnemyGroups = new List<CharacterGroup>();
-    [SerializeField] List<CharacterGroup> oceanEnemyGroups = new List<CharacterGroup>();
+    [SerializeField] List<EnemyGroup> defaultEnemyGroups = new List<EnemyGroup>();
+    [SerializeField] List<EnemyGroup> desertEnemyGroups = new List<EnemyGroup>();
+    [SerializeField] List<EnemyGroup> wildernessEnemyGroups = new List<EnemyGroup>();
+    [SerializeField] List<EnemyGroup> grasslandsEnemyGroups = new List<EnemyGroup>();
+    [SerializeField] List<EnemyGroup> wetlandsEnemyGroups = new List<EnemyGroup>();
+    [SerializeField] List<EnemyGroup> snowEnemyGroups = new List<EnemyGroup>();
+    [SerializeField] List<EnemyGroup> rockEnemyGroups = new List<EnemyGroup>();
+    [SerializeField] List<EnemyGroup> magmaEnemyGroups = new List<EnemyGroup>();
+    [SerializeField] List<EnemyGroup> pollutionEnemyGroups = new List<EnemyGroup>();
+    [SerializeField] List<EnemyGroup> seaEnemyGroups = new List<EnemyGroup>();
+    [SerializeField] List<EnemyGroup> oceanEnemyGroups = new List<EnemyGroup>();
 
-    private Dictionary<FieldType, List<CharacterGroup>> fieldTypeEnemyGroups;
+    private Dictionary<FieldType, List<EnemyGroup>> fieldTypeEnemyGroups;
 
     private FieldData currentFieldData;
 
@@ -43,7 +43,7 @@ public class FieldController : MonoBehaviour
         }
         Instance = this;
 
-        fieldTypeEnemyGroups = new Dictionary<FieldType, List<CharacterGroup>>
+        fieldTypeEnemyGroups = new Dictionary<FieldType, List<EnemyGroup>>
         {
             { FieldType.Default, defaultEnemyGroups },
             { FieldType.Desert, desertEnemyGroups },
@@ -74,12 +74,12 @@ public class FieldController : MonoBehaviour
         }
 
         List<Character> enemies = new List<Character>();
-        CharacterGroup targetGroup = null; // ← new は使わない
+        EnemyGroup targetGroup = null; // ← new は使わない
 
         int groupCount = currentFieldData.EnemyGroups.Count;
         if (groupCount == 0)
         {
-            List<CharacterGroup> targetGroups = fieldTypeEnemyGroups[currentFieldData.fieldType];
+            List<EnemyGroup> targetGroups = fieldTypeEnemyGroups[currentFieldData.fieldType];
             targetGroup = targetGroups[Random.Range(0, targetGroups.Count)];
         }
         else

@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Character/CharacterGroup")]
-public class CharacterGroup : ScriptableObject
+[CreateAssetMenu(menuName = "Character/EnemyGroup")]
+public class EnemyGroup : ScriptableObject
 {
-    [SerializeField] List<Character> CharacterList;
+    [SerializeField] List<EnemyCharacter> CharacterList;
 
-    public List<Character> GetCharacterList()
+    public List<EnemyCharacter> GetCharacterList()
     {
         return CharacterList;
     }
 
-    public List<Character> GetRandomCharacterList()
+    public List<EnemyCharacter> GetRandomCharacterList()
     {
-        List<Character> copy = new List<Character>(CharacterList);
+        List<EnemyCharacter> copy = new List<EnemyCharacter>(CharacterList);
 
         if (copy.Count == 0)
-            return new List<Character>();
+            return new List<EnemyCharacter>();
 
         int count = Random.Range(1, copy.Count + 1);
 
