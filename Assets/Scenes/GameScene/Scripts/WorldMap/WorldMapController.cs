@@ -20,7 +20,6 @@ public class WorldMapController : MonoBehaviour
     [SerializeField] private WorldMapCamera worldMapCamera;
     [SerializeField] WorldMapRender worldMapRender;
     [SerializeField] WorldMapPanel worldMapPanel;
-    [SerializeField] CharacterSubPanel characterSubPanel;
 
     private void Awake()
     {
@@ -42,6 +41,9 @@ public class WorldMapController : MonoBehaviour
 
     public void ChangePlayerCoordinate(Vector2Int direction)
     {
+        // すでにイベント実行中のときはワールド移動をスキップする。
+        if (PlayerController.Instance.CurrentEventType != EventType.Default)
+            return;
         playerPosition = playerPosition + direction;
         FieldTileSet fieldTileSet = GetTileSet(playerPosition);
         FieldData fieldData = GetFieldData(playerPosition);
@@ -56,7 +58,7 @@ public class WorldMapController : MonoBehaviour
         {
             worldMapPanel.SetFieldName(fieldData.FieldName);
             TalkMessage talkMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Thinking, $"ここはなにかありそうだな。");
-            StartCoroutine(characterSubPanel.SetTalkMessage(talkMessage));
+            PlayerController.Instance.SetPlayerBlowing(talkMessage);
         }
 
         FieldController.Instance.SetField(fieldData);

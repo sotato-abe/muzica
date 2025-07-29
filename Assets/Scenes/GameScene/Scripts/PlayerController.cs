@@ -22,6 +22,10 @@ public class PlayerController : MonoBehaviour
     public PlayerCharacter PlayerCharacter => player;
     #endregion
 
+    #region Events
+    public EventType CurrentEventType { get; private set; } = EventType.Default;
+    #endregion
+
     #region Unity Lifecycle
     void Awake()
     {
@@ -59,6 +63,11 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(playerSubPanel.SetTalkMessage(startMessage));
     }
     #endregion
+
+    public void ChangeEventType(EventType eventType)
+    {
+        CurrentEventType = eventType;
+    }
 
     #region Player Communication
     public void SetPlayerBlowing(TalkMessage talkMessage)

@@ -31,8 +31,12 @@ public class TradeSystem : MonoBehaviour
 
     public void TradeStart(Point point)
     {
+        if (PlayerController.Instance.CurrentEventType != EventType.Default)
+            return;
+        PlayerController.Instance.ChangeEventType(EventType.Trade); // イベントタイプをトレードに変更
+
         currentPoint = point; // 現在のポイントを保存
-        cameraManager.SetCameraType(CameraType.Reserve); // バトル時のカメラ位置を設定
+        cameraManager.SetEventType(EventType.Trade); // トレード時のカメラ位置を設定
 
         tradeActionBoard.SetActive(true); // リザーブアクションボードを表示
         TalkMessage talkMessage1 = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "いいものあるかな");
@@ -70,6 +74,7 @@ public class TradeSystem : MonoBehaviour
         rightcharacterSubPanel.SetActive(false, CheckAllComplete); // キャラクターサブパネルを表示
         messagePanel.SetActive(true, CheckAllComplete); // メッセージパネルを表示
         worldMapPanel.SetActive(true, CheckAllComplete); // ワールドマップパネルを表示
-        cameraManager.SetCameraType(CameraType.Default); // バトル時のカメラ位置を設定
+        cameraManager.SetEventType(EventType.Default); // バトル時のカメラ位置を設定
+        PlayerController.Instance.ChangeEventType(EventType.Default); // イベントタイプをデフォルトに変更
     }
 }

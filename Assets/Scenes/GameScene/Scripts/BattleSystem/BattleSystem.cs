@@ -45,8 +45,11 @@ public class BattleSystem : MonoBehaviour
 
     public void BattleStart()
     {
-        cameraManager.SetCameraType(CameraType.Battle); // バトル時のカメラ位置を設定
+        if (PlayerController.Instance.CurrentEventType != EventType.Default)
+            return;
+        PlayerController.Instance.ChangeEventType(EventType.Battle); // イベントタイプをバトルに変更
 
+        cameraManager.SetEventType(EventType.Battle); // バトル時のカメラ位置を設定
         messagePanel.SetActive(false); // メッセージパネルを表示
         worldMapPanel.SetActive(false); // ワールドマップパネルを非表示
 
@@ -249,6 +252,7 @@ public class BattleSystem : MonoBehaviour
 
         messagePanel.SetActive(true, CheckAllComplete); // メッセージパネルを表示
         worldMapPanel.SetActive(true, CheckAllComplete); // ワールドマップパネルを表示
-        cameraManager.SetCameraType(CameraType.Default); // バトル時のカメラ位置を設定
+        cameraManager.SetEventType(EventType.Default); // バトル時のカメラ位置を設定
+        PlayerController.Instance.ChangeEventType(EventType.Default); // イベントタイプをデフォルトに変更
     }
 }
