@@ -8,12 +8,13 @@ public class BattleSystem : MonoBehaviour
     public UnityAction OnBattleEnd;
     [SerializeField] private CameraManager cameraManager;
     [SerializeField] private BattleActionBoard battleActionBoard;
-    [SerializeField] private CharacterSubPanel playerSubPanel; // キャラクターサブパネル
+    [SerializeField] private PlayerSubPanel playerSubPanel; // キャラクターサブパネル
     [SerializeField] private CharacterSubPanel enemySubPanel1; // キャラクターサブパネル
     [SerializeField] private CharacterSubPanel enemySubPanel2; // キャラクターサブパネル
     [SerializeField] private CharacterSubPanel enemySubPanel3; // キャラクターサブパネル
     [SerializeField] private MessagePanel messagePanel; // キャラクターサブパネル
     [SerializeField] WorldMapPanel worldMapPanel;
+    [SerializeField] GameOverWindow gameOverWindow;
     [SerializeField] FieldPlayer fieldPlayer; //キャラクター
     [SerializeField] FieldEnemy fieldEnemyPrefab; //敵キャラクター
     [SerializeField] private GameObject enemyGroupArea; // 敵キャラクターの親オブジェクト
@@ -29,9 +30,10 @@ public class BattleSystem : MonoBehaviour
     {
         battleActionBoard.OnBattleEnd += BattleEnd; // リザーブアクションボードの終了イベントを登録
         battleActionBoard.OnActionEnd += OnActionEnd; // リザーブアクションボードのアクション結果イベントを登録
-        enemySubPanel1.OnLifeOutAction += LifeOutCharacter; // 敵のサブパネルのライフアウトイベントを登録
-        enemySubPanel2.OnLifeOutAction += LifeOutCharacter; // 敵のサブパネルのライフアウトイベントを登録
-        enemySubPanel3.OnLifeOutAction += LifeOutCharacter; // 敵のサブパネルのライフアウトイベントを登録
+        playerSubPanel.OnLifeOutAction += LifeOutPlayer; // プレイヤーのサブパネルのライフアウトイベントを登録
+        enemySubPanel1.OnLifeOutAction += LifeOutEnemy; // 敵のサブパネルのライフアウトイベントを登録
+        enemySubPanel2.OnLifeOutAction += LifeOutEnemy; // 敵のサブパネルのライフアウトイベントを登録
+        enemySubPanel3.OnLifeOutAction += LifeOutEnemy; // 敵のサブパネルのライフアウトイベントを登録
         enemySubPanels.Add(enemySubPanel1);
         enemySubPanels.Add(enemySubPanel2);
         enemySubPanels.Add(enemySubPanel3);
@@ -127,14 +129,14 @@ public class BattleSystem : MonoBehaviour
 
     public void ActivePlayerTurn(CharacterSubPanel playerSubPanel)
     {
-        StopAllPlayerTurnBar();
+        StopAllCharacterTurnBar();
         battleActionBoard.ChangeExecuteActionFlg(true); // アクションを実行可能にする
     }
 
     // TODO：敵の攻撃を実装する
     public void ActiveEnemyTurn(CharacterSubPanel enemySubPanel)
     {
-        StopAllPlayerTurnBar();
+        StopAllCharacterTurnBar();
         if (fieldEnemies.Count == 0)
         {
             Debug.LogWarning("敵がいません。");
@@ -143,17 +145,17 @@ public class BattleSystem : MonoBehaviour
         EnemyCharacter enemyCharacter = enemySubPanel.Character as EnemyCharacter;
         TotalAttackCount totalAttackCount = enemyCharacter.EnemyAttack();
         StartCoroutine(enemySubPanel.UpdateEnergyGauges());
-        StartCoroutine(EnemyTurn(totalAttackCount)); // ターンを再開
+        StartCoroutine(EnemyAttack(totalAttackCount)); // ターンを再開
     }
 
     // 仮の敵ターン
-    private IEnumerator EnemyTurn(TotalAttackCount totalAttackCount)
+    private IEnumerator EnemyAttack(TotalAttackCount totalAttackCount)
     {
         yield return StartCoroutine(playerSubPanel.TakeAttackCoroutine(totalAttackCount));
         OnActionEnd(); // アクション終了イベントを呼び出す
     }
 
-    private void StopAllPlayerTurnBar()
+    private void StopAllCharacterTurnBar()
     {
         playerSubPanel.PauseTurnBar(); // プレイヤーのターンバーを停止
         foreach (CharacterSubPanel enemySubPanel in enemySubPanels)
@@ -172,7 +174,13 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    public void LifeOutCharacter(CharacterSubPanel characterSubPanel)
+    public void LifeOutPlayer(CharacterSubPanel characterSubPanel)
+    {
+        if (characterSubPanel == null) return;
+        gameOverWindow.Show(); // ゲームオーバーウィンドウを表示
+    }
+
+    public void LifeOutEnemy(CharacterSubPanel characterSubPanel)
     {
         if (characterSubPanel == null) return;
         characterSubPanel.SetActive(false);

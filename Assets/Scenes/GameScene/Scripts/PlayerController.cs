@@ -187,12 +187,12 @@ public class PlayerController : MonoBehaviour
 
     private bool CanAddToBag()
     {
-        return player.BagItemList.Count < player.Bag;
+        return player.BagItemList.Count <= player.Bag;
     }
 
     private bool CanAddToPocket()
     {
-        return player.PocketList.Count < player.ColPocket;
+        return player.PocketList.Count <= player.ColPocket;
     }
 
     private void HandleBagOverflow(Item item)
@@ -282,7 +282,7 @@ public class PlayerController : MonoBehaviour
 
     private bool CanAddToStorage()
     {
-        return player.StorageList.Count < player.ColStorage;
+        return player.StorageList.Count <= player.ColStorage;
     }
 
     private bool IsValidTableIndex(int index)
@@ -389,6 +389,11 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Energy Management
+    public bool IsAlive()
+    {
+        return player.Life > 0;
+    }
+
     /// <summary>
     /// エネルギーコストをチェック
     /// </summary>
