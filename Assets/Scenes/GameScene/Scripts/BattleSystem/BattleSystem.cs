@@ -228,8 +228,6 @@ public class BattleSystem : MonoBehaviour
 
     public void BattleEnd()
     {
-        Debug.Log("Battle Ended");
-
         int completed = 0;
         foreach (FieldCharacter fieldEnemy in fieldEnemies)
         {

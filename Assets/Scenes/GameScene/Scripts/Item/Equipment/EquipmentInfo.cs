@@ -95,7 +95,6 @@ public class EquipmentInfo : MonoBehaviour
 
     private void MergeEnchantList(List<Enchant> newEnchants)
     {
-        // EnchantList.AddRange(newEnchants);
         // EnchantListに新しいエンチャントを追加する同じタイプはまとめる
         foreach (var newEnchant in newEnchants)
         {
@@ -111,14 +110,13 @@ public class EquipmentInfo : MonoBehaviour
             }
             if (!found)
             {
-                EnchantList.Add(newEnchant); // 新しいエンチャントを追加
+                EnchantList.Add(new Enchant(newEnchant)); // コピーコンストラクタを使用して新しいインスタンスを作成
             }
         }
     }
 
     private void MergeAttackList(List<EnergyCount> newAttacks)
     {
-        // EnergyAttackList.AddRange(newAttacks);
         // EnergyAttackListに新しい攻撃を追加する同じタイプはまとめる
         foreach (var newAttack in newAttacks)
         {
@@ -134,7 +132,7 @@ public class EquipmentInfo : MonoBehaviour
             }
             if (!found)
             {
-                EnergyAttackList.Add(newAttack); // 新しい攻撃を追加
+                EnergyAttackList.Add(new EnergyCount(newAttack)); // コピーコンストラクタを使用して新しいインスタンスを作成
             }
         }
     }
