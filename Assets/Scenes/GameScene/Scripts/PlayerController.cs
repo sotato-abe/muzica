@@ -103,9 +103,10 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void AddItemToBag(Item item)
     {
-        if (!CanAddToBag())
+        if (player.Bag <= player.BagItemList.Count)
         {
-            HandleBagOverflow(item);
+            Debug.LogWarning("バックの容量を超えています。アイテムを追加できません。");
+            FieldController.Instance.DropPlayerItem(item);
             return;
         }
         player.AddItemToBag(item);
@@ -116,9 +117,10 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void AddItemToPocket(Item item)
     {
-        if (!CanAddToPocket())
+        if (player.ColPocket <= player.PocketList.Count)
         {
-            HandlePocketOverflow(item);
+            Debug.LogWarning("ポケットの容量を超えています。アイテムを追加できません。");
+            FieldController.Instance.DropPlayerItem(item);
             return;
         }
 
@@ -185,27 +187,6 @@ public class PlayerController : MonoBehaviour
         FieldController.Instance.DropPlayerItem(item);
     }
 
-    private bool CanAddToBag()
-    {
-        return player.BagItemList.Count <= player.Bag;
-    }
-
-    private bool CanAddToPocket()
-    {
-        return player.PocketList.Count <= player.ColPocket;
-    }
-
-    private void HandleBagOverflow(Item item)
-    {
-        Debug.LogWarning("バッグの容量を超えています。アイテムを追加できません。");
-        FieldController.Instance.DropPlayerItem(item);
-    }
-
-    private void HandlePocketOverflow(Item item)
-    {
-        Debug.LogWarning("ポケットの容量を超えています。アイテムを追加できません。");
-        FieldController.Instance.DropPlayerItem(item);
-    }
     #endregion
 
     #region Command Management

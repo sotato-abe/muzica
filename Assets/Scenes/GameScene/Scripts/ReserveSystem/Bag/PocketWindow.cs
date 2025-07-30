@@ -41,12 +41,9 @@ public class PocketWindow : MonoBehaviour, IDropHandler
         // ドロップアイテムをバックに追加
         ItemBlock droppedItemBlock = eventData.pointerDrag?.GetComponent<ItemBlock>();
 
-        if (droppedItemBlock != null && droppedItemBlock.Item != null)
+        if (droppedItemBlock != null && droppedItemBlock.Item != null && droppedItemBlock.OriginalParent != this.transform)
         {
-            Item item = droppedItemBlock.Item;
-            if (droppedItemBlock.OriginalParent == this.transform)
-                return;
-            if (item is Equipment || item is Treasure)
+            if (droppedItemBlock.Item is Equipment || droppedItemBlock.Item is Treasure)
             {
                 Debug.LogWarning("装備品や宝物はポケットにドロップできません。");
                 return;

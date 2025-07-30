@@ -35,7 +35,7 @@ public class EscapePanel : BattleActionPanel
     {
         player = PlayerController.Instance.PlayerCharacter;
         ProbabilityCalculation();
-        CountEnegyCost();
+        CountEnergyCost();
     }
 
     private void Update()
@@ -61,7 +61,7 @@ public class EscapePanel : BattleActionPanel
     {
         this.enemyList = enemyList;
         ProbabilityCalculation();
-        CountEnegyCost();
+        CountEnergyCost();
     }
 
     private void ProbabilityCalculation()
@@ -76,7 +76,7 @@ public class EscapePanel : BattleActionPanel
         probabilityText.SetText(probability.ToString());
     }
 
-    private void CountEnegyCost()
+    private void CountEnergyCost()
     {
         lifeCost = Mathf.Max(0, player.Life / 10);
         batteryCost = Mathf.Max(0, player.Battery / 10);
@@ -110,7 +110,7 @@ public class EscapePanel : BattleActionPanel
             PlayerController.Instance.SetPlayerBlowing(new TalkMessage(MessageType.Miss, MessagePanelType.Default, "くそっ！"));
         }
         RunningOff();
-        CountEnegyCost();
+        CountEnergyCost();
         ProbabilityCalculation();
         isEscaping = false;
         OnActionEnd?.Invoke();
