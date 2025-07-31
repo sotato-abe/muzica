@@ -177,6 +177,7 @@ public class BattleSystem : MonoBehaviour
     public void LifeOutPlayer(CharacterSubPanel characterSubPanel)
     {
         if (characterSubPanel == null) return;
+        StopAllCharacterTurnBar();
         gameOverWindow.Show(); // ゲームオーバーウィンドウを表示
     }
 

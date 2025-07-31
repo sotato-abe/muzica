@@ -382,7 +382,7 @@ public class EquipPanel : BattleActionPanel
         if (!IsEquipmentValid()) return;
 
         base.ChangeExecuteActionFlg(canExecute);
-        Debug.Log($"canExecuteActionFlg {this.name}: {canExecute}/ {canExecuteActionFlg}");
+        // Debug.Log($"canExecuteActionFlg {this.name}: {canExecute}/ {canExecuteActionFlg}");
     }
     #endregion
 }

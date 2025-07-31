@@ -7,21 +7,10 @@ using UnityEngine.SceneManagement;
 
 public class GameOverWindow : MonoBehaviour
 {
-    private void Start()
-    {
-        // 初期化処理
-        Hide();
-    }
     public void Show()
     {
         // ゲームオーバーウィンドウを表示する処理
         gameObject.SetActive(true);
-
-    }
-    public void Hide()
-    {
-        // ゲームオーバーウィンドウを非表示にする処理
-        gameObject.SetActive(false);
     }
 
     // menuButtonのクリックイベントを設定

@@ -7,12 +7,12 @@ public class BattleActionBoard : SlidePanel
 {
     public UnityAction OnActionEnd;
     public UnityAction OnBattleEnd;
-    [SerializeField] private EquipPanel equip1Panel;
-    [SerializeField] private EquipPanel equip2Panel;
+    [SerializeField] private EquipPanel equipPanel1;
+    [SerializeField] private EquipPanel equipPanel2;
     [SerializeField] private PocketPanel pocketPanel;
     [SerializeField] private EscapePanel escapePanel;
-    [SerializeField] private ActionIcon equip1Icon;
-    [SerializeField] private ActionIcon equip2Icon;
+    [SerializeField] private ActionIcon equipIcon1;
+    [SerializeField] private ActionIcon equipIcon2;
     [SerializeField] private ActionIcon pocketIcon;
     [SerializeField] private ActionIcon escapeIcon;
 
@@ -25,24 +25,24 @@ public class BattleActionBoard : SlidePanel
     {
         actionPanels = new Dictionary<BattleActionType, Panel>
         {
-            {  BattleActionType.Equip1, equip1Panel },
-            {  BattleActionType.Equip2, equip2Panel },
+            {  BattleActionType.Equip1, equipPanel1 },
+            {  BattleActionType.Equip2, equipPanel2 },
             {  BattleActionType.Pocket, pocketPanel },
             {  BattleActionType.Escape, escapePanel },
         };
 
         actionIcons = new Dictionary<BattleActionType, ActionIcon>
         {
-            {  BattleActionType.Equip1, equip1Icon },
-            {  BattleActionType.Equip2, equip2Icon },
+            {  BattleActionType.Equip1, equipIcon1 },
+            {  BattleActionType.Equip2, equipIcon2 },
             {  BattleActionType.Pocket, pocketIcon },
             {  BattleActionType.Escape, escapeIcon },
         };
 
         actionTypeList = new List<BattleActionType>(actionPanels.Keys);
 
-        equip1Panel.OnActionEnd += ActionEnd;
-        equip2Panel.OnActionEnd += ActionEnd;
+        equipPanel1.OnActionEnd += ActionEnd;
+        equipPanel2.OnActionEnd += ActionEnd;
         escapePanel.OnActionEnd += ActionEnd;
         escapePanel.OnEscape += BattleEnd; // 逃げるイベントを登録
 
@@ -73,12 +73,12 @@ public class BattleActionBoard : SlidePanel
         }
     }
 
-    public void Equip1PanelOpen()
+    public void equipPanel1Open()
     {
         ChangeAction(BattleActionType.Equip1);
     }
 
-    public void Equip2PanelOpen()
+    public void equipPanel2Open()
     {
         ChangeAction(BattleActionType.Equip2);
     }
@@ -125,8 +125,8 @@ public class BattleActionBoard : SlidePanel
 
     public void ChangeExecuteActionFlg(bool canExecute = true)
     {
-        equip1Panel.ChangeExecuteActionFlg(canExecute);
-        equip2Panel.ChangeExecuteActionFlg(canExecute);
+        equipPanel1.ChangeExecuteActionFlg(canExecute);
+        equipPanel2.ChangeExecuteActionFlg(canExecute);
         pocketPanel.ChangeExecuteActionFlg(canExecute);
         escapePanel.ChangeExecuteActionFlg(canExecute);
     }
@@ -139,8 +139,8 @@ public class BattleActionBoard : SlidePanel
 
     public void SetEnemyList(List<Character> enemyList)
     {
-        // equip1Panel.SetEnemyList(enemyList);
-        // equip2Panel.SetEnemyList(enemyList);
+        // equipPanel1.SetEnemyList(enemyList);
+        // equipPanel2.SetEnemyList(enemyList);
         // pocketPanel.SetEnemyList(enemyList);
         escapePanel.SetEnemyList(enemyList);
     }

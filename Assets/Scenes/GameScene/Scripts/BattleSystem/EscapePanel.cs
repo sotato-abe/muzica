@@ -29,11 +29,9 @@ public class EscapePanel : BattleActionPanel
     int probability = 0;
     private bool isEscaping = false;
 
-    PlayerCharacter player;
 
     private void OnEnable()
     {
-        player = PlayerController.Instance.PlayerCharacter;
         ProbabilityCalculation();
         CountEnergyCost();
     }
@@ -66,6 +64,7 @@ public class EscapePanel : BattleActionPanel
 
     private void ProbabilityCalculation()
     {
+        PlayerCharacter player = PlayerController.Instance.PlayerCharacter;
         int playerSPD = player.ColSpeed;
         int enemySPD = 0;
         foreach (var enemy in enemyList)
@@ -78,6 +77,7 @@ public class EscapePanel : BattleActionPanel
 
     private void CountEnergyCost()
     {
+        PlayerCharacter player = PlayerController.Instance.PlayerCharacter;
         lifeCost = Mathf.Max(0, player.Life / 10);
         batteryCost = Mathf.Max(0, player.Battery / 10);
         soulCost = player.Soul / 2;
