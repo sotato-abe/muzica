@@ -13,7 +13,6 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
     [SerializeField] GameObject itemList;
     [SerializeField] GameObject blockList;
     [SerializeField] TextMeshProUGUI counterText;
-    PlayerController playerController;
     Dictionary<Item, ItemBlock> itemBlockMap = new Dictionary<Item, ItemBlock>();
 
     public delegate void TargetItemDelegate(Item? item);
@@ -23,14 +22,10 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
     private int currentBlockCount = 0;
     private void Awake()
     {
-        playerController = PlayerController.Instance;
         DeleteAllItems();
     }
     private void OnEnable()
     {
-        if (PlayerController.Instance == null) return;
-
-        playerController = PlayerController.Instance;
         SetItems();
         SetBlock();
     }
@@ -46,7 +41,7 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
         bool isRemoved = droppedItemBlock.RemoveItem();
         if (isRemoved)
         {
-            playerController.AddItemToBag(item);
+            PlayerController.Instance.AddItemToBag(item);
             CreateItemBlock(item, null);
             SetCounter();
         }
@@ -54,7 +49,16 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
 
     public void SetItems()
     {
-        List<Item> items = playerController.PlayerCharacter.BagItemList;
+        List<Item> items = PlayerController.Instance.PlayerCharacter.BagItemList;
+
+        // PocketListにないアイテムは削除する
+        foreach (var item in new List<Item>(itemBlockMap.Keys))
+        {
+            if (!items.Contains(item))
+            {
+                RemoveItem(itemBlockMap[item]);
+            }
+        }
 
         foreach (Item item in items)
         {
@@ -90,12 +94,12 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
 
     private void SetCounter()
     {
-        counterText.text = $"{itemBlockMap.Count} / {playerController.PlayerCharacter.Bag}";
+        counterText.text = $"{itemBlockMap.Count} / {PlayerController.Instance.PlayerCharacter.Bag}";
     }
 
     private void SetBlock()
     {
-        int newBlockCount = MAX_BAG_COUNT - playerController.PlayerCharacter.Bag;
+        int newBlockCount = MAX_BAG_COUNT - PlayerController.Instance.PlayerCharacter.Bag;
         if (currentBlockCount == newBlockCount)
             return;
 
@@ -131,7 +135,7 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
         if (itemBlock.OriginalParent != this.transform) return false;
 
         Item item = itemBlock.Item;
-        playerController.RemoveItemFromBag(itemBlock.Item);
+        PlayerController.Instance.RemoveItemFromBag(itemBlock.Item);
         itemBlock.RemovePlaceholder();
         itemBlockMap.Remove(item);
         Destroy(itemBlock.gameObject);
