@@ -80,9 +80,9 @@ public class BattleSystem : MonoBehaviour
             (Vector3 targetPos, bool isLeft, bool isFront) = GetRandomAroundFloorPosition();
             FieldEnemy fieldEnemy = Instantiate(fieldEnemyPrefab, targetPos, Quaternion.identity, enemyGroupArea.transform);
             fieldEnemy.SetUp(enemy); // バトラーの設定を行う
-            fieldEnemy.Inversion(isLeft); // 向きを反転
+            fieldEnemy.Inversion(!isLeft); // 向きを反転
             fieldEnemy.SetNumIcon(index); // 敵の番号アイコンを設定
-            fieldPlayer.Inversion(!isLeft); // プレイヤーの向きを反転
+            fieldPlayer.Inversion(isLeft); // プレイヤーの向きを反転
             SetEnemySubPanel(enemy, enemies.Count - (index + 1)); // 敵のサブパネルを設定
             fieldEnemies.Add(fieldEnemy); // 生成した敵をリストに追加
             yield return new WaitForSeconds(0.3f);

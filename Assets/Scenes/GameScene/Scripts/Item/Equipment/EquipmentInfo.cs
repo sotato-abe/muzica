@@ -38,16 +38,14 @@ public class EquipmentInfo : MonoBehaviour
             if (attack.type == EnergyType.Life || attack.isRecovery == false)
             {
                 EnergyCount colAttack = new EnergyCount(attack);
-                colAttack.val += PlayerController.Instance.PlayerCharacter.ColPower; // コレクションパワーを加算
-                                                                                     // Lifeエネルギーやマイナスの攻撃は表示しない
+                colAttack.val += PlayerController.Instance.PlayerCharacter.ColPower;
                 EnergyAttackList.Add(colAttack);
                 continue;
             }
             if (attack.type == EnergyType.Battery || attack.isRecovery == false)
             {
                 EnergyCount colAttack = new EnergyCount(attack);
-                colAttack.val += PlayerController.Instance.PlayerCharacter.ColTechnique; // コレクションパワーを加算
-                                                                                     // Lifeエネルギーやマイナスの攻撃は表示しない
+                colAttack.val += PlayerController.Instance.PlayerCharacter.ColTechnique;
                 EnergyAttackList.Add(colAttack);
                 continue;
             }
