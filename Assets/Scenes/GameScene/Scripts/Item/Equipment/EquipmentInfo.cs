@@ -34,6 +34,15 @@ public class EquipmentInfo : MonoBehaviour
         EnergyAttackList = new List<EnergyCount>();
         foreach (var attack in equipment.EquipmentBase.EnergyAttackList)
         {
+            // LIFEアタックのときPlayerのPOWを加算する
+            if (attack.type == EnergyType.Life || attack.isRecovery == false)
+            {
+                EnergyCount colAttack = new EnergyCount(attack);
+                colAttack.val += PlayerController.Instance.PlayerCharacter.ColPower; // コレクションパワーを加算
+                                                                                     // Lifeエネルギーやマイナスの攻撃は表示しない
+                EnergyAttackList.Add(colAttack);
+                continue;
+            }
             EnergyAttackList.Add(new EnergyCount(attack)); // コピーコンストラクタを使う（後述）
         }
 
@@ -77,6 +86,12 @@ public class EquipmentInfo : MonoBehaviour
             AttackCounter attackCounter = Instantiate(attackCounterPrefab, counterList.transform);
             attackCounter.SetCounter(attack);
         }
+    }
+
+    public void CharacterStatusUpdate(Character character)
+    {
+        int ColPower = character.ColPower;
+
     }
 
     public void CommandUpdate(Command command)

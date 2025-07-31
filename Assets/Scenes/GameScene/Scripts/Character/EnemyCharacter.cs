@@ -15,8 +15,17 @@ public class EnemyCharacter : Character
         if (activeEquipment != null)
         {
             // アクティブな装備がある場合、攻撃を実行
-            // アタック値を設定
-            totalAttackCount.EnergyAttackList.AddRange(activeEquipment.EquipmentBase.EnergyAttackList);
+            // Lifeへのアタックがある時エネミーのColPowerを加算する
+            foreach (EnergyCount original in activeEquipment.EquipmentBase.EnergyAttackList)
+            {
+                EnergyCount attack = new EnergyCount(original);
+                if (attack.type == EnergyType.Life && attack.isRecovery == false)
+                {
+                    attack.val += ColPower;
+                }
+                totalAttackCount.EnergyAttackList.Add(attack);
+            }
+
             totalAttackCount.EnchantList.AddRange(activeEquipment.EquipmentBase.EnchantList);
 
             //コストを消費
