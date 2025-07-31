@@ -15,7 +15,6 @@ public class EnemyCharacter : Character
         if (activeEquipment != null)
         {
             // アクティブな装備がある場合、攻撃を実行
-            Debug.Log($"Enemy attacks with {activeEquipment.EquipmentBase.Name} at level {activeEquipment.Level}");
             // アタック値を設定
             totalAttackCount.EnergyAttackList.AddRange(activeEquipment.EquipmentBase.EnergyAttackList);
             totalAttackCount.EnchantList.AddRange(activeEquipment.EquipmentBase.EnchantList);

@@ -485,7 +485,7 @@ public class FieldGenerator : MonoBehaviour
                 try
                 {
                     // PointBaseをPointに実体化させて格納
-                    pointTrigger.point = fieldData.Points[i].ToPoint(); // PointBaseからPointに変換
+                    pointTrigger.SetPoint(fieldData.Points[i].ToPoint()); // PointBaseからPointに変換
                 }
                 catch (System.Exception e)
                 {
