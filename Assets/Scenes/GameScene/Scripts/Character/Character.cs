@@ -155,13 +155,13 @@ public class Character
             switch (energyAttack.type)
             {
                 case EnergyType.Life:
-                    Life -= colEnergy;
+                    Life = Mathf.Clamp(Life - colEnergy, 0, MaxLife);
                     break;
                 case EnergyType.Battery:
-                    Battery -= colEnergy;
+                    Battery = Mathf.Clamp(Battery - colEnergy, 0, MaxBattery);
                     break;
                 case EnergyType.Soul:
-                    Soul -= colEnergy;
+                    Soul = Mathf.Clamp(Soul - colEnergy, 0, 100);
                     break;
                 default:
                     Debug.LogWarning($"Unknown energy type: {energyAttack.type}");

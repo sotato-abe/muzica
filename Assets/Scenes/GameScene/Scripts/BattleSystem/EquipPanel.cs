@@ -32,8 +32,6 @@ public class EquipPanel : BattleActionPanel
 
     [Header("Equipment Settings")]
     public int equipmentNum = 0;
-
-    // 未使用フィールド（将来の拡張用）
     private List<EnergyCount> energyAttackList;
     private TargetType targetType;
     private List<EnergyCost> energyCostList;
@@ -53,7 +51,10 @@ public class EquipPanel : BattleActionPanel
 
     private void Update()
     {
-        HandleInput();
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            ExecuteAttack();
+        }
     }
     #endregion
 
@@ -82,16 +83,6 @@ public class EquipPanel : BattleActionPanel
         }
 
         return null;
-    }
-    #endregion
-
-    #region Input Handling
-    private void HandleInput()
-    {
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            ExecuteAttack();
-        }
     }
     #endregion
 
@@ -198,7 +189,7 @@ public class EquipPanel : BattleActionPanel
         slotWindow.StopReels(result =>
         {
             List<Command> activeCommands = FilterValidCommands(result);
-            ActionStart(activeCommands);
+            CommandUpdate(activeCommands);
         });
     }
 
@@ -223,31 +214,23 @@ public class EquipPanel : BattleActionPanel
     /// <summary>
     /// アクションを開始
     /// </summary>
-    private void ActionStart(List<Command> commands)
+    private void CommandUpdate(List<Command> commands)
     {
         if (commands.Count > 0)
         {
-            UpdateEquipmentInfo(commands);
+            foreach (var command in commands)
+            {
+                if (command?.Base == null)
+                {
+                    Debug.LogWarning("コマンドのBaseが未設定です。");
+                    continue;
+                }
+
+                equipmentInfo.CommandUpdate(command);
+            }
         }
 
         ExecuteAttackVector();
-    }
-
-    /// <summary>
-    /// 装備情報を更新
-    /// </summary>
-    private void UpdateEquipmentInfo(List<Command> commands)
-    {
-        foreach (var command in commands)
-        {
-            if (command?.Base == null)
-            {
-                Debug.LogWarning("コマンドのBaseが未設定です。");
-                continue;
-            }
-
-            equipmentInfo.CommandUpdate(command);
-        }
     }
     #endregion
 
@@ -399,6 +382,7 @@ public class EquipPanel : BattleActionPanel
         if (!IsEquipmentValid()) return;
 
         base.ChangeExecuteActionFlg(canExecute);
+        Debug.Log($"canExecuteActionFlg {this.name}: {canExecute}/ {canExecuteActionFlg}");
     }
     #endregion
 }
