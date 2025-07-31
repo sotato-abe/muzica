@@ -43,6 +43,14 @@ public class EquipmentInfo : MonoBehaviour
                 EnergyAttackList.Add(colAttack);
                 continue;
             }
+            if (attack.type == EnergyType.Battery || attack.isRecovery == false)
+            {
+                EnergyCount colAttack = new EnergyCount(attack);
+                colAttack.val += PlayerController.Instance.PlayerCharacter.ColTechnique; // コレクションパワーを加算
+                                                                                     // Lifeエネルギーやマイナスの攻撃は表示しない
+                EnergyAttackList.Add(colAttack);
+                continue;
+            }
             EnergyAttackList.Add(new EnergyCount(attack)); // コピーコンストラクタを使う（後述）
         }
 

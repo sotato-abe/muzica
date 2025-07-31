@@ -23,6 +23,10 @@ public class EnemyCharacter : Character
                 {
                     attack.val += ColPower;
                 }
+                if (attack.type == EnergyType.Battery && attack.isRecovery == false)
+                {
+                    attack.val += ColTechnique;
+                }
                 totalAttackCount.EnergyAttackList.Add(attack);
             }
 
