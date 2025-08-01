@@ -60,12 +60,14 @@ public class PocketWindow : MonoBehaviour, IDropHandler
         // PocketListにないアイテムは削除する
         foreach (var item in new List<Item>(itemBlockMap.Keys))
         {
-            // Consumable型のみチェック
             if (item is Consumable consumableItem)
             {
                 if (!items.Contains(consumableItem))
                 {
-                    RemoveItem(itemBlockMap[item]);
+                    if (itemBlockMap.ContainsKey(item))
+                    {
+                        RemoveItem(itemBlockMap[item]);
+                    }
                 }
             }
         }

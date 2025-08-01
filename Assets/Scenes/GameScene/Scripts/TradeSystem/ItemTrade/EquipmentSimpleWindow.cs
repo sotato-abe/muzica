@@ -10,21 +10,14 @@ public class EquipmentSimpleWindow : MonoBehaviour, IDropHandler
 {
     [SerializeField] ItemBlock itemBlockPrefab;
     [SerializeField] GameObject itemList;
-    PlayerController playerController;
 
     public delegate void TargetItemDelegate(Item? item, bool isOwn = true);
     public event TargetItemDelegate OnTargetItem;
 
     private int currentBlockCount = 0;
-    private void Awake()
-    {
-        playerController = PlayerController.Instance;
-    }
+
     private void OnEnable()
     {
-        if (PlayerController.Instance == null) return;
-
-        playerController = PlayerController.Instance;
         SetItems();
     }
 
@@ -42,7 +35,7 @@ public class EquipmentSimpleWindow : MonoBehaviour, IDropHandler
             bool isBought = droppedItemBlock.RemoveItem();
             if (isBought)
             {
-                playerController.AddItemToEquip(droppedItemBlock.Item);
+                PlayerController.Instance.AddItemToEquip(droppedItemBlock.Item);
                 SetItems();
             }
         }
@@ -50,7 +43,7 @@ public class EquipmentSimpleWindow : MonoBehaviour, IDropHandler
 
     public void SetItems()
     {
-        List<Equipment> items = playerController.PlayerCharacter.EquipmentList;
+        List<Equipment> items = PlayerController.Instance.PlayerCharacter.EquipmentList;
         foreach (Transform child in itemList.transform)
         {
             Destroy(child.gameObject);
@@ -72,7 +65,7 @@ public class EquipmentSimpleWindow : MonoBehaviour, IDropHandler
         if (itemBlock == null || itemBlock.Item == null) return false;
         if (itemBlock.OriginalParent != this.transform) return false;
 
-        playerController.RemoveItemFromEquip(itemBlock.Item);
+        PlayerController.Instance.RemoveItemFromEquip(itemBlock.Item);
         itemBlock.RemovePlaceholder();
         Destroy(itemBlock.gameObject);
         SetItems();

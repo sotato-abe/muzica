@@ -44,14 +44,17 @@ public class CharacterSubPanel : SlidePanel, IDropHandler
             Item item = droppedItemBlock.Item;
             if (item is Consumable && droppedItemBlock.isOwned)
             {
-                UseConsumable(item as Consumable);
-                droppedItemBlock.RemoveItem();
+                bool isUsable = UseConsumable(item as Consumable);
+                if (!isUsable)
+                {
+                    droppedItemBlock.RemoveItem();
+                }
                 return;
             }
         }
     }
 
-    private void UseConsumable(Consumable consumable)
+    private bool UseConsumable(Consumable consumable)
     {
         TotalAttackCount totalCount = new TotalAttackCount
         {
@@ -60,7 +63,9 @@ public class CharacterSubPanel : SlidePanel, IDropHandler
             EnchantList = consumable.ConsumableBase.EnchantList
         };
         character.TakeAttack(totalCount);
+        bool isUsable = consumable.UseConsumable();
         StartCoroutine(UpdateEnergyGauges());
+        return isUsable;
     }
 
     public virtual void SetCharacter(Character character)

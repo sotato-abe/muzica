@@ -6,7 +6,7 @@ public class Consumable : Item
     [SerializeField] ConsumableBase _base;
 
     [field: SerializeField]
-    public int UsableCount { get; private set; }
+    public int UsableCount { get; set; }
 
     public override ItemType itemType => ItemType.Consumable;
     public override ItemBase Base => _base;
@@ -21,5 +21,11 @@ public class Consumable : Item
     public void Initialize()
     {
         UsableCount = _base?.UsableCount ?? 1;
+    }
+
+    public bool UseConsumable()
+    {
+        UsableCount--;
+        return UsableCount > 0;
     }
 }
