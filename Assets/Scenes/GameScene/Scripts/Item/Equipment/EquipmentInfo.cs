@@ -13,6 +13,7 @@ public class EquipmentInfo : MonoBehaviour
     [SerializeField] GameObject counterList;
     [SerializeField] EnchantIcon enchantIconPrefab;
     [SerializeField] AttackCounter attackCounterPrefab;
+    [SerializeField] bool isBaseInfo = false; // 基本情報かどうか
 
     private Equipment equipment = new Equipment(null); // 初期化のためにnullを渡す
     private TargetType TargetType = TargetType.Individual; // 初期値を設定
@@ -38,14 +39,16 @@ public class EquipmentInfo : MonoBehaviour
             if (attack.type == EnergyType.Life || attack.isRecovery == false)
             {
                 EnergyCount colAttack = new EnergyCount(attack);
-                colAttack.val += PlayerController.Instance.PlayerCharacter.ColPower;
+                if (!isBaseInfo)
+                    colAttack.val += PlayerController.Instance.PlayerCharacter.ColPower;
                 EnergyAttackList.Add(colAttack);
                 continue;
             }
             if (attack.type == EnergyType.Battery || attack.isRecovery == false)
             {
                 EnergyCount colAttack = new EnergyCount(attack);
-                colAttack.val += PlayerController.Instance.PlayerCharacter.ColTechnique;
+                if (!isBaseInfo)
+                    colAttack.val += PlayerController.Instance.PlayerCharacter.ColTechnique;
                 EnergyAttackList.Add(colAttack);
                 continue;
             }
