@@ -67,8 +67,8 @@ public class ShopItemWindow : MonoBehaviour, IDropHandler
         if (itemBlock.OriginalParent != this.transform) return false;
 
         Item item = itemBlock.Item;
-        bool isbuy = PlayerController.Instance.SpendCurrency(item.Base.CoinPrice, item.Base.DiscPrice);
-        if (isbuy)
+        bool isBuy = PlayerController.Instance.SpendCurrency(item.Base.CoinPrice, item.Base.DiscPrice);
+        if (isBuy)
         {
             itemBlock.RemovePlaceholder();
             Destroy(itemBlock.gameObject);

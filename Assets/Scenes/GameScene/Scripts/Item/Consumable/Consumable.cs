@@ -25,7 +25,7 @@ public class Consumable : Item
 
     public bool UseConsumable()
     {
-        UsableCount--;
+        UsableCount = Mathf.Max(UsableCount - 1, 0);
         return UsableCount > 0;
     }
 }
