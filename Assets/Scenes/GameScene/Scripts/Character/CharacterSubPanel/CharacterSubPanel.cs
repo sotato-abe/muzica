@@ -7,21 +7,26 @@ using TMPro;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class CharacterSubPanel : SlidePanel, IDropHandler
+public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler 
 {
     [SerializeField] Image characterImage;
     [SerializeField] TextMeshProUGUI characterNameText;
     [SerializeField] public BlowingPanel blowingPanel;
     [SerializeField] public EnergyGauge energyGauge;
     [SerializeField] public Image turnBar;
+    [SerializeField] Image targetImage;
 
     Character character;
     public Character Character => character;
     public bool fixedDisplayFlg = false; // Panelの固定表示フラグ
     bool inProgress = false; // Panelがアクティブかどうか
+    public bool isTarget = false; // ターゲット状態かどうか
     float turnBarFillAmount = 0f;
     Color runningColor = new Color(255f / 255f, 0f / 255f, 74f / 255f, 1f);
     Color activeColor = new Color(196f / 255f, 255f / 255f, 0 / 255f, 1f);
+
+    public delegate void TargetCharacterDelegate(CharacterSubPanel? characterSubPanel);
+    public event TargetCharacterDelegate OnTarget;
 
     public delegate void ActiveTurnDelegate(CharacterSubPanel? characterSubPanel);
     public event ActiveTurnDelegate OnActiveTurn;
@@ -32,6 +37,7 @@ public class CharacterSubPanel : SlidePanel, IDropHandler
     private void Awake()
     {
         turnBar.gameObject.SetActive(false);
+        SetTarget(false);
     }
 
     public void OnDrop(PointerEventData eventData)
@@ -52,6 +58,17 @@ public class CharacterSubPanel : SlidePanel, IDropHandler
                 return;
             }
         }
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        OnTarget?.Invoke(this);
+    }
+
+    public void SetTarget(bool targetFlg)
+    {
+        isTarget = targetFlg;
+        targetImage.gameObject.SetActive(isTarget);
     }
 
     private bool UseConsumable(Consumable consumable)

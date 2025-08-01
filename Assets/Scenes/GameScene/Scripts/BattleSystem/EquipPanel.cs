@@ -27,8 +27,10 @@ public class EquipPanel : BattleActionPanel
     #endregion
 
     #region Private Fields
-    private PlayerController playerController;
     private Equipment currentEquipment;
+
+    List<CharacterSubPanel> enemySubPanels = new List<CharacterSubPanel>(); // 敵のサブパネルリスト
+    List<CharacterSubPanel> targetSubPanels = new List<CharacterSubPanel>();
 
     [Header("Equipment Settings")]
     public int equipmentNum = 0;
@@ -39,14 +41,24 @@ public class EquipPanel : BattleActionPanel
     #endregion
 
     #region Unity Lifecycle
-    private void Start()
+    protected override void Awake()
     {
-        InitializeController();
+        base.Awake();
+        enemySubPanels.Add(enemySubPanel3);
+        enemySubPanels.Add(enemySubPanel2);
+        enemySubPanels.Add(enemySubPanel1);
+
+        foreach (var subPanel in enemySubPanels)
+        {
+            subPanel.OnTarget += ChangeTargetEnemy;
+            subPanel.OnLifeOutAction += LifeOutEnemy; // 敵のサブパネルのライフアウトイベントを登録
+        }
     }
 
     private void OnEnable()
     {
-        InitializeEquipment();
+        SetEquipment();
+        SetTargetting();
     }
 
     private void Update()
@@ -58,48 +70,28 @@ public class EquipPanel : BattleActionPanel
     }
     #endregion
 
-    #region Initialization
-    private void InitializeController()
-    {
-        playerController = PlayerController.Instance;
-    }
-
-    private void InitializeEquipment()
-    {
-        if (PlayerController.Instance == null) return;
-
-        playerController = PlayerController.Instance;
-        Equipment equipment = GetCurrentEquipment();
-        SetEquipment(equipment);
-    }
-
-    private Equipment GetCurrentEquipment()
-    {
-        int equipmentCount = playerController.PlayerCharacter.EquipmentList.Count;
-
-        if (equipmentNum < equipmentCount)
-        {
-            return playerController.PlayerCharacter.EquipmentList[equipmentNum];
-        }
-
-        return null;
-    }
-    #endregion
-
     #region Equipment Management
     /// <summary>
     /// 装備を設定
     /// </summary>
-    public void SetEquipment(Equipment equipment)
+    public void SetEquipment()
     {
-        if (equipment == null)
+        List<Equipment> equipmentList = PlayerController.Instance.PlayerCharacter.EquipmentList;
+
+        if (equipmentNum < 0 || equipmentNum >= equipmentList.Count)
         {
             ResetEquipment();
             return;
         }
 
-        equipWindow.SetEquipment(equipment);
-        currentEquipment = equipment;
+        currentEquipment = equipmentList[equipmentNum];
+        if (currentEquipment == null)
+        {
+            ResetEquipment();
+            return;
+        }
+        equipWindow.SetEquipment(currentEquipment);
+        equipmentInfo.SetInfo(currentEquipment);
         CheckEnergyCost();
     }
 
@@ -110,6 +102,7 @@ public class EquipPanel : BattleActionPanel
     {
         equipWindow.ResetSlot();
         currentEquipment = null;
+        ClearTarget();
     }
 
     /// <summary>
@@ -123,7 +116,7 @@ public class EquipPanel : BattleActionPanel
             return;
         }
 
-        bool canUse = playerController.CheckEnergyCost(currentEquipment.EquipmentBase.EnergyCostList);
+        bool canUse = PlayerController.Instance.CheckEnergyCost(currentEquipment.EquipmentBase.EnergyCostList);
         equipWindow.SetStatusImage(canUse);
     }
 
@@ -141,13 +134,87 @@ public class EquipPanel : BattleActionPanel
     }
     #endregion
 
-    #region Command Targeting
-    /// <summary>
-    /// コマンドをターゲット
-    /// </summary>
-    public void TargetCommand(Command command)
+    #region Target Management
+    public void SetTargetting()
     {
-        targetCommandWindow.TargetCommand(command);
+        targetSubPanels.Clear();
+        if (currentEquipment == null)
+        {
+            ClearTarget();
+            return;
+        }
+
+        switch (currentEquipment.EquipmentBase.TargetType)
+        {
+            case TargetType.Individual:
+                SetTargetEnemyPanel(1);
+                break;
+            case TargetType.Group:
+                SetTargetEnemyPanel(3);
+                break;
+                break;
+            case TargetType.All:
+                SetTargetEnemyPanel(3);
+                targetSubPanels.Add(playerSubPanel);
+                break;
+            case TargetType.Self:
+                SetTargetEnemyPanel(0);
+                targetSubPanels.Add(playerSubPanel);
+                break;
+            default:
+                Debug.LogWarning("Unknown target type.");
+                break;
+        }
+
+        foreach (var subPanel in targetSubPanels)
+        {
+            subPanel.SetTarget(true);
+        }
+    }
+    private void SetTargetEnemyPanel(int index)
+    {
+        targetSubPanels.Clear();
+        foreach (var subPanel in enemySubPanels)
+        {
+            if (subPanel.isOpen && targetSubPanels.Count < index)
+            {
+                targetSubPanels.Add(subPanel);
+                subPanel.SetTarget(true);
+            }
+            else
+            {
+                subPanel.SetTarget(false); // ターゲット以外は非表示にする
+            }
+        }
+    }
+    public void ChangeTargetEnemy(CharacterSubPanel enemySubPanel)
+    {
+        if (currentEquipment == null)
+            return;
+
+        targetType = currentEquipment.EquipmentBase.TargetType;
+        if (targetType == TargetType.Individual && enemySubPanel.isOpen)
+        {
+            foreach (var subPanel in targetSubPanels)
+            {
+                if (subPanel != enemySubPanel)
+                {
+                    subPanel.SetTarget(false);
+                }
+            }
+            targetSubPanels.Clear();
+            targetSubPanels.Add(enemySubPanel);
+            enemySubPanel.SetTarget(true);
+        }
+    }
+
+    private void ClearTarget()
+    {
+        foreach (var subPanel in targetSubPanels)
+        {
+            subPanel.SetTarget(false);
+        }
+        targetSubPanels.Clear();
     }
     #endregion
 
@@ -169,7 +236,7 @@ public class EquipPanel : BattleActionPanel
     /// </summary>
     private bool TryUseEnergy()
     {
-        bool isUsed = playerController.UseEnergyCost(currentEquipment.EquipmentBase.EnergyCostList);
+        bool isUsed = PlayerController.Instance.UseEnergyCost(currentEquipment.EquipmentBase.EnergyCostList);
         CheckEnergyCost();
 
         if (!isUsed)
@@ -230,11 +297,9 @@ public class EquipPanel : BattleActionPanel
             }
         }
 
-        ExecuteAttackVector();
+        TotalAttackCount totalCount = equipmentInfo.GetTotalCount();
+        ExecuteTargetAttack(totalCount);
     }
-    #endregion
-
-    #region Target Management
     /// <summary>
     /// 攻撃対象を取得
     /// </summary>
@@ -247,37 +312,6 @@ public class EquipPanel : BattleActionPanel
         if (enemySubPanel3.isOpen) activePanels.Add(enemySubPanel3);
 
         return activePanels;
-    }
-
-    /// <summary>
-    /// 攻撃ベクトルを実行
-    /// </summary>
-    private void ExecuteAttackVector()
-    {
-        TotalAttackCount totalCount = equipmentInfo.GetTotalCount();
-        List<CharacterSubPanel> activePanels = GetActiveEnemyPanels();
-
-        switch (totalCount.TargetType)
-        {
-            case TargetType.Self:
-                ExecuteSelfAttack(totalCount);
-                break;
-            case TargetType.Individual:
-                ExecuteIndividualAttack(activePanels, totalCount);
-                break;
-            case TargetType.Group:
-                ExecuteGroupAttack(activePanels, totalCount);
-                break;
-            case TargetType.All:
-                ExecuteAllAttack(activePanels, totalCount);
-                break;
-            case TargetType.Random:
-                ExecuteRandomAttack(activePanels, totalCount);
-                break;
-            default:
-                Debug.LogWarning("不明なターゲットタイプです。");
-                break;
-        }
     }
 
     /// <summary>
@@ -295,59 +329,20 @@ public class EquipPanel : BattleActionPanel
         }
     }
 
-    /// <summary>
-    /// 個別攻撃
-    /// </summary>
-    private void ExecuteIndividualAttack(List<CharacterSubPanel> activePanels, TotalAttackCount totalCount)
+    private void ExecuteTargetAttack(TotalAttackCount totalCount)
     {
-        if (activePanels.Count > 0)
-        {
-            CharacterSubPanel targetPanel = activePanels[activePanels.Count - 1];
-            StartCoroutine(ExecuteAction(targetPanel, totalCount));
-        }
-        else
-        {
-            Debug.LogWarning("攻撃対象のキャラクターサブパネルがありません。");
-        }
-    }
+        List<CharacterSubPanel> targetSubPanels = new List<CharacterSubPanel>();
 
-    /// <summary>
-    /// グループ攻撃
-    /// </summary>
-    private void ExecuteGroupAttack(List<CharacterSubPanel> activePanels, TotalAttackCount totalCount)
-    {
-        foreach (var subPanel in activePanels)
+        if (enemySubPanel1.isOpen && enemySubPanel1.isTarget) targetSubPanels.Add(enemySubPanel1);
+        if (enemySubPanel2.isOpen && enemySubPanel2.isTarget) targetSubPanels.Add(enemySubPanel2);
+        if (enemySubPanel3.isOpen && enemySubPanel3.isTarget) targetSubPanels.Add(enemySubPanel3);
+
+        foreach (var subPanel in targetSubPanels)
         {
             StartCoroutine(ExecuteAction(subPanel, totalCount));
         }
     }
 
-    /// <summary>
-    /// 全体攻撃
-    /// </summary>
-    private void ExecuteAllAttack(List<CharacterSubPanel> activePanels, TotalAttackCount totalCount)
-    {
-        foreach (var subPanel in activePanels)
-        {
-            StartCoroutine(ExecuteAction(subPanel, totalCount));
-        }
-        StartCoroutine(ExecuteAction(playerSubPanel, totalCount));
-    }
-
-    /// <summary>
-    /// ランダム攻撃
-    /// </summary>
-    private void ExecuteRandomAttack(List<CharacterSubPanel> activePanels, TotalAttackCount totalCount)
-    {
-        if (activePanels.Count > 0)
-        {
-            CharacterSubPanel targetPanel = activePanels[Random.Range(0, activePanels.Count)];
-            StartCoroutine(ExecuteAction(targetPanel, totalCount));
-        }
-    }
-    #endregion
-
-    #region Action Execution
     /// <summary>
     /// アクションを実行
     /// </summary>
@@ -372,4 +367,9 @@ public class EquipPanel : BattleActionPanel
         StartCoroutine(slotWindow.StartReels());
     }
     #endregion
+
+    public void LifeOutEnemy(CharacterSubPanel enemySubPanel)
+    {
+        SetTargetting();
+    }
 }

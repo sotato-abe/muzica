@@ -13,7 +13,7 @@ public class Panel : MonoBehaviour
     private Coroutine openMotionCoroutine = null; // コルーチンの参照
     private float groundY; // 初期位置を保存
 
-    private void Awake()
+    protected virtual void Awake()
     {
         // 初期位置を保存
         groundY = transform.position.y;
@@ -21,7 +21,8 @@ public class Panel : MonoBehaviour
 
     public void PanelOpen()
     {
-        transform.gameObject.SetActive(true);
+        isActive = true;
+        transform.gameObject.SetActive(isActive);
         if (!isAnimating) // 二重実行防止
         {
             openMotionCoroutine = StartCoroutine(OpenMotion());
@@ -31,7 +32,7 @@ public class Panel : MonoBehaviour
     public void ClosePanel()
     {
         isActive = false;
-        transform.gameObject.SetActive(false);
+        transform.gameObject.SetActive(isActive);
     }
 
     private IEnumerator OpenMotion()

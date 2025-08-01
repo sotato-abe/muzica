@@ -73,26 +73,6 @@ public class BattleActionBoard : SlidePanel
         }
     }
 
-    public void equipPanel1Open()
-    {
-        ChangeAction(BattleActionType.Equip1);
-    }
-
-    public void equipPanel2Open()
-    {
-        ChangeAction(BattleActionType.Equip2);
-    }
-
-    public void PocketPanelOpen()
-    {
-        ChangeAction(BattleActionType.Pocket);
-    }
-
-    public void EscapePanelOpen()
-    {
-        ChangeAction(BattleActionType.Escape);
-    }
-
     public void ChangeAction(BattleActionType actionType)
     {
         currentAction = actionType;
@@ -143,6 +123,18 @@ public class BattleActionBoard : SlidePanel
         // equipPanel2.SetEnemyList(enemyList);
         // pocketPanel.SetEnemyList(enemyList);
         escapePanel.SetEnemyList(enemyList);
+    }
+
+    public void EnemyAppearanced()
+    {
+        if (equipPanel1.isActive)
+        {
+            equipPanel1.SetTargetting();
+        }
+        if (equipPanel2.isActive)
+        {
+            equipPanel2.SetTargetting();
+        }
     }
 
     public void BattleEnd()

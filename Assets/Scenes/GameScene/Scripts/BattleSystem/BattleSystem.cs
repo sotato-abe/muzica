@@ -34,6 +34,7 @@ public class BattleSystem : MonoBehaviour
         enemySubPanel1.OnLifeOutAction += LifeOutEnemy; // 敵のサブパネルのライフアウトイベントを登録
         enemySubPanel2.OnLifeOutAction += LifeOutEnemy; // 敵のサブパネルのライフアウトイベントを登録
         enemySubPanel3.OnLifeOutAction += LifeOutEnemy; // 敵のサブパネルのライフアウトイベントを登録
+
         enemySubPanels.Add(enemySubPanel1);
         enemySubPanels.Add(enemySubPanel2);
         enemySubPanels.Add(enemySubPanel3);
@@ -54,7 +55,7 @@ public class BattleSystem : MonoBehaviour
         cameraManager.SetEventType(EventType.Battle); // バトル時のカメラ位置を設定
         messagePanel.SetActive(false); // メッセージパネルを表示
         worldMapPanel.SetActive(false); // ワールドマップパネルを非表示
-
+        
         playerSubPanel.SetActive(true); // キャラクターサブパネルを表示
         battleActionBoard.SetActive(true); // リザーブアクションボードを表示
         TalkMessage talkMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "なんだよ");
@@ -88,6 +89,7 @@ public class BattleSystem : MonoBehaviour
             yield return new WaitForSeconds(0.3f);
             index++;
         }
+        battleActionBoard.EnemyAppearanced();
         yield break; // 全ての敵を出現させたらnullを返す
     }
 
