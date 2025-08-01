@@ -22,7 +22,7 @@ public class BattleSystem : MonoBehaviour
     List<CharacterSubPanel> enemySubPanels = new List<CharacterSubPanel>(); // 敵のサブパネルリスト
 
     int RewardExp = 0; // 経験値のカウント
-    int RewardMoney = 0; // ゴールドのカウント
+    int RewardCoin = 0; // ゴールドのカウント
     string RewardItemListText = ""; // アイテムのカウント
     List<Item> RewardItems = new List<Item>(); // アイテムのカウント
 
@@ -188,7 +188,7 @@ public class BattleSystem : MonoBehaviour
 
         FieldCharacter fieldEnemy = fieldEnemies.Find(e => e.Character == characterSubPanel.Character);
         RewardExp += fieldEnemy.Character.Exp; // 経験値を加算
-        RewardMoney += fieldEnemy.Character.Money; // ゴールドを加算
+        RewardCoin += fieldEnemy.Character.Coin; // ゴールドを加算
         foreach (Item item in characterSubPanel.Character.BagItemList)
         {
             if (Random.Range(0, 100) < item.Base.Rarity.GetProbability())
@@ -219,9 +219,9 @@ public class BattleSystem : MonoBehaviour
                 RewardItemListText = RewardItemListText.TrimEnd(','); // 最後のカンマを削除
                 RewardText += $"アイテム: {RewardItemListText}\n";
             }
-            RewardText += $"EXP: {RewardExp}, マネー: {RewardMoney}";
+            RewardText += $"EXP: {RewardExp}, マネー: {RewardCoin}";
             messagePanel.AddMessage(MessageIconType.Battle, RewardText);
-            PlayerController.Instance.AddBattleReward(RewardExp, RewardMoney, RewardItems); // バトル報酬を追加
+            PlayerController.Instance.AddBattleReward(RewardExp, RewardCoin, RewardItems); // バトル報酬を追加
             BattleEnd(); // 全ての敵を倒した場合はバトル終了
         }
         yield break; // 全ての敵を倒した場合はnullを返す
@@ -247,7 +247,7 @@ public class BattleSystem : MonoBehaviour
         }
 
         RewardExp = 0; // 経験値のリセット
-        RewardMoney = 0; // ゴールドのリセット
+        RewardCoin = 0; // ゴールドのリセット
         RewardItems.Clear(); // アイテムのリセット
         RewardItemListText = ""; // アイテムリストのリセット
 

@@ -12,7 +12,7 @@ public class EquipmentSimpleWindow : MonoBehaviour, IDropHandler
     [SerializeField] GameObject itemList;
     PlayerController playerController;
 
-    public delegate void TargetItemDelegate(Item? item);
+    public delegate void TargetItemDelegate(Item? item, bool isOwn = true);
     public event TargetItemDelegate OnTargetItem;
 
     private int currentBlockCount = 0;

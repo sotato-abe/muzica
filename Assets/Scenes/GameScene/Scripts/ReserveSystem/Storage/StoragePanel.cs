@@ -18,8 +18,8 @@ public class StoragePanel : Panel
         tableWindow.OnTargetCommand += TargetCommand;
     }
 
-    public void TargetCommand(Command? command)
+    public void TargetCommand(Command? command, bool isOwn = true)
     {
-        targetCommandWindow.TargetCommand(command);
+        targetCommandWindow.TargetCommand(command, isOwn);
     }
 }

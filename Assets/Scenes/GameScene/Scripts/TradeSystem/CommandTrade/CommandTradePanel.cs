@@ -22,9 +22,9 @@ public class CommandTradePanel : Panel
         ChangeWindow(true);
     }
 
-    public void TargetCommand(Command Command)
+    public void TargetCommand(Command Command, bool isOwn = true)
     {
-        targetCommandWindow.TargetCommand(Command);
+        targetCommandWindow.TargetCommand(Command, isOwn);
     }
 
     public void ChangeWindow(bool isBag)

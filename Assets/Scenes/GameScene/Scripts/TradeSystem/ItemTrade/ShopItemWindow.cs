@@ -11,7 +11,7 @@ public class ShopItemWindow : MonoBehaviour, IDropHandler
     [SerializeField] ItemBlock itemBlockPrefab;
     [SerializeField] GameObject itemList;
 
-    public delegate void TargetItemDelegate(Item? item);
+    public delegate void TargetItemDelegate(Item? item, bool isOwn = false);
     public event TargetItemDelegate OnTargetItem;
 
     private const int MAX_BAG_COUNT = 20;
@@ -25,7 +25,7 @@ public class ShopItemWindow : MonoBehaviour, IDropHandler
         if (droppedItemBlock != null && droppedItemBlock.Item != null)
         {
             Item item = droppedItemBlock.Item;
-            PlayerController.Instance.AddMoney(item.Base.Price);
+            PlayerController.Instance.SellItem(item);
             droppedItemBlock.RemoveItem();
             CreateItemBlock(item, null);
         }
@@ -67,7 +67,7 @@ public class ShopItemWindow : MonoBehaviour, IDropHandler
         if (itemBlock.OriginalParent != this.transform) return false;
 
         Item item = itemBlock.Item;
-        bool isbuy = PlayerController.Instance.SpendMoney(item.Base.Price);
+        bool isbuy = PlayerController.Instance.SpendCurrency(item.Base.CoinPrice, item.Base.DiscPrice);
         if (isbuy)
         {
             itemBlock.RemovePlaceholder();

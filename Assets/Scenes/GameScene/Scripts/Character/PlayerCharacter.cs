@@ -114,10 +114,10 @@ public class PlayerCharacter : Character
         }
     }
 
-    public void AddMoney(int money)
+    public void AddCoin(int coin)
     {
-        if (money <= 0) return;
+        if (coin <= 0) return;
 
-        Money += money;
+        Coin += coin;
     }
 }

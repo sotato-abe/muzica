@@ -11,7 +11,7 @@ public class ShopCommandWindow : MonoBehaviour, IDropHandler
     [SerializeField] CommandBlock commandBlockPrefab;
     [SerializeField] GameObject commandList;
 
-    public delegate void TargetCommandDelegate(Command? command);
+    public delegate void TargetCommandDelegate(Command? command, bool isOwn = false);
     public event TargetCommandDelegate OnTargetCommand;
 
     private const int MAX_BAG_COUNT = 20;
@@ -25,7 +25,7 @@ public class ShopCommandWindow : MonoBehaviour, IDropHandler
         if (droppedCommandBlock != null && droppedCommandBlock.Command != null)
         {
             Command command = droppedCommandBlock.Command;
-            PlayerController.Instance.AddMoney(command.Base.Price);
+            PlayerController.Instance.SellCommand(command);
             droppedCommandBlock.RemoveCommand();
             CreateCommandBlock(command, null);
         }
@@ -67,7 +67,7 @@ public class ShopCommandWindow : MonoBehaviour, IDropHandler
         if (commandBlock.OriginalParent != this.transform) return false;
 
         Command command = commandBlock.Command;
-        bool isbuy = PlayerController.Instance.SpendMoney(command.Base.Price);
+        bool isbuy = PlayerController.Instance.SpendCurrency(command.Base.CoinPrice, command.Base.DiscPrice);        
         if (isbuy)
         {
             commandBlock.RemovePlaceholder();

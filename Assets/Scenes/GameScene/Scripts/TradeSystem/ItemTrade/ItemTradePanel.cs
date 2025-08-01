@@ -24,9 +24,9 @@ public class ItemTradePanel : Panel
         ChangeWindow(true);
     }
 
-    public void TargetItem(Item item)
+    public void TargetItem(Item item, bool isOwn = true)
     {
-        targetItemWindow.TargetItem(item);
+        targetItemWindow.TargetItem(item, isOwn);
     }
 
     public void ChangeWindow(bool isBag)

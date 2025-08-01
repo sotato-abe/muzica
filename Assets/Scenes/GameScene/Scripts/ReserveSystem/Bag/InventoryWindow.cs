@@ -15,7 +15,7 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
     [SerializeField] TextMeshProUGUI counterText;
     Dictionary<Item, ItemBlock> itemBlockMap = new Dictionary<Item, ItemBlock>();
 
-    public delegate void TargetItemDelegate(Item? item);
+    public delegate void TargetItemDelegate(Item? item, bool isOwn = true);
     public event TargetItemDelegate OnTargetItem;
 
     private const int MAX_BAG_COUNT = 20;

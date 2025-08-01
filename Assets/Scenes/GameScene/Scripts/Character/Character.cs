@@ -40,8 +40,8 @@ public class Character
     public int Bag { get; set; }
 
     // Property
-    public int Money { get; set; }
-    public int Disk { get; set; }
+    public int Coin { get; set; }
+    public int Disc { get; set; }
     public int Key { get; set; }
     public int Exp { get; set; }
 
@@ -73,8 +73,8 @@ public class Character
         Storage = _base.Storage;
         Pocket = _base.Pocket;
         Bag = _base.Bag;
-        Money = _base.Money;
-        Disk = _base.Disk;
+        Coin = _base.Coin;
+        Disc = _base.Disc;
         Key = _base.Key;
         Exp = _base.Exp;
 

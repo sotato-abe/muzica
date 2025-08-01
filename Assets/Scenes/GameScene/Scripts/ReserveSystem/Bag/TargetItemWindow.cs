@@ -9,8 +9,15 @@ using UnityEngine.EventSystems;
 public class TargetItemWindow : MonoBehaviour
 {
     [SerializeField] ItemDetail itemDetail;
+    [SerializeField] PriceTag coinPriceTag;
+    [SerializeField] PriceTag discPriceTag;
 
-    public void TargetItem(Item? item)
+    private void Awake()
+    {
+        ClearTargetItem();
+    }
+
+    public void TargetItem(Item? item, bool isOwn = true)
     {
         if (item == null)
         {
@@ -19,10 +26,22 @@ public class TargetItemWindow : MonoBehaviour
         }
 
         itemDetail.SetItemDetail(item);
+
+        if (coinPriceTag != null)
+            coinPriceTag.SetPrice(item.Base.CoinPrice, isOwn);
+
+        if (discPriceTag != null)
+            discPriceTag.SetPrice(item.Base.DiscPrice, isOwn);
     }
 
     private void ClearTargetItem()
     {
         itemDetail.ClearItemDetail();
+        
+        if (coinPriceTag != null)
+            coinPriceTag.SetPrice(null);
+
+        if (discPriceTag != null)
+            discPriceTag.SetPrice(null);
     }
 }

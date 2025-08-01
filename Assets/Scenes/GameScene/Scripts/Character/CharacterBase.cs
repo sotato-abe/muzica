@@ -30,8 +30,8 @@ public class CharacterBase : ScriptableObject
     [SerializeField] int bag = 10;
 
     // キャラクターの資産
-    [SerializeField] int money = 10;
-    [SerializeField] int disk = 0;
+    [SerializeField] int coin = 10;
+    [SerializeField] int disc = 0;
     [SerializeField] int key = 0;
     [SerializeField] int exp = 0;
 
@@ -68,8 +68,8 @@ public class CharacterBase : ScriptableObject
     public int Pocket { get => pocket; }
     public int Bag { get => bag; }
 
-    public int Money { get => money; }
-    public int Disk { get => disk; }
+    public int Coin { get => coin; }
+    public int Disc { get => disc; }
     public int Key { get => key; }
     public int Exp { get => exp; }
 

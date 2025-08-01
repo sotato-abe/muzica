@@ -20,7 +20,7 @@ public class Command
     public RarityType Rarity => _base.Rarity;
     public Sprite Sprite => _base.Sprite;
     public string Description => _base.Description;
-    public int Price => _base.Price;
+    // public int Price => _base.Price;
 
     public List<EnergyCount> EnergyAttackList => _base.EnergyAttackList;
     public List<EnergyCost> EnergyCostList => _base.EnergyCostList;

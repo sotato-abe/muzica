@@ -16,7 +16,7 @@ public class StorageWindow : MonoBehaviour, IDropHandler
     PlayerController playerController;
     Dictionary<Command, CommandBlock> commandBlockMap = new Dictionary<Command, CommandBlock>();
 
-    public delegate void TargetCommandDelegate(Command? command);
+    public delegate void TargetCommandDelegate(Command? command, bool isOwn = true);
     public event TargetCommandDelegate OnTargetCommand;
 
     private const int MAX_STORAGE_COUNT = 15;

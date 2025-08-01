@@ -13,8 +13,8 @@ public class PocketPanel : BattleActionPanel
         pocketWindow.OnTargetItem += TargetItem;
     }
 
-    public void TargetItem(Item item)
+    public void TargetItem(Item item, bool isOwn = true)
     {
-        targetItemWindow.TargetItem(item);
+        targetItemWindow.TargetItem(item, isOwn);
     }
 }

@@ -14,8 +14,8 @@ public class PlayerController : MonoBehaviour
     #region Serialized Fields
     [Header("Player Components")]
     [SerializeField] private CharacterSubPanel playerSubPanel;
+    [SerializeField] private CurrencyPanel currencyPanel;
     [SerializeField] private PlayerCharacter player;
-    [SerializeField] private PropertyPanel propertyPanel;
     #endregion
 
     #region Properties
@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour
     {
         player.Init();
         playerSubPanel.SetCharacter(player);
-        UpdatePropertyPanel();
+        UpdateCurrencyPanel();
     }
 
     private void GameStart()
@@ -80,10 +80,10 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// バトル報酬を追加
     /// </summary>
-    public void AddBattleReward(int exp, int money, List<Item> items)
+    public void AddBattleReward(int exp, int coin, List<Item> items)
     {
         player.AddExp(exp);
-        player.AddMoney(money);
+        player.AddCoin(coin);
 
         foreach (Item item in items)
         {
@@ -93,7 +93,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        UpdatePropertyPanel();
+        UpdateCurrencyPanel();
     }
     #endregion
 
@@ -178,6 +178,21 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void SellItem(Item item)
+    {
+        if (item == null) return;
+
+        float discountRate = 0.5f; // 50%の割引率
+
+        // アイテムの価格を取得
+        int coinPrice = (int)(item.Base.CoinPrice * discountRate);
+        int discPrice = (int)(item.Base.DiscPrice * discountRate);
+
+        // プレイヤーにコインとディスクを追加
+        AddCoin(coinPrice);
+        AddDisc(discPrice);
+    }
+
     /// <summary>
     /// アイテムをドロップ
     /// </summary>
@@ -252,6 +267,21 @@ public class PlayerController : MonoBehaviour
         player.TableList[index] = null;
     }
 
+    public void SellCommand(Command command)
+    {
+        if (command == null) return;
+
+        float discountRate = 0.5f; // 50%の割引率
+
+        // コマンドの価格を取得
+        int coinPrice = (int)(command.Base.CoinPrice * discountRate);
+        int discPrice = (int)(command.Base.DiscPrice * discountRate);
+
+        // プレイヤーにコインとディスクを追加
+        AddCoin(coinPrice);
+        AddDisc(discPrice);
+    }
+
     /// <summary>
     /// コマンドをドロップ
     /// </summary>
@@ -288,19 +318,19 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// お金を追加
     /// </summary>
-    public void AddMoney(int amount)
+    public void AddCoin(int amount)
     {
-        player.Money += amount;
-        UpdatePropertyPanel();
+        player.Coin += amount;
+        UpdateCurrencyPanel();
     }
 
     /// <summary>
     /// ディスクを追加
     /// </summary>
-    public void AddDisk(int amount)
+    public void AddDisc(int amount)
     {
-        player.Disk += amount;
-        UpdatePropertyPanel();
+        player.Disc += amount;
+        UpdateCurrencyPanel();
     }
 
     /// <summary>
@@ -309,30 +339,20 @@ public class PlayerController : MonoBehaviour
     public void AddKey(int amount)
     {
         player.Key += amount;
-        UpdatePropertyPanel();
+        UpdateCurrencyPanel();
     }
 
-    /// <summary>
-    /// お金を消費
-    /// </summary>
-    public bool SpendMoney(int amount)
+    public bool SpendCurrency(int coin, int disc = 0)
     {
-        if (player.Money < amount) return false;
+        if (player.Coin < coin || player.Disc < disc)
+        {
+            Debug.LogWarning("お金またはディスクが不足しています。");
+            return false;
+        }
 
-        player.Money -= amount;
-        UpdatePropertyPanel();
-        return true;
-    }
-
-    /// <summary>
-    /// ディスクを消費
-    /// </summary>
-    public bool SpendDisk(int amount)
-    {
-        if (player.Disk < amount) return false;
-
-        player.Disk -= amount;
-        UpdatePropertyPanel();
+        player.Coin -= coin;
+        player.Disc -= disc;
+        UpdateCurrencyPanel();
         return true;
     }
 
@@ -344,20 +364,20 @@ public class PlayerController : MonoBehaviour
         if (player.Key < amount) return false;
 
         player.Key -= amount;
-        UpdatePropertyPanel();
+        UpdateCurrencyPanel();
         return true;
     }
     #endregion
 
     #region UI Management
     /// <summary>
-    /// プロパティパネルを更新
+    /// 通貨パネルを更新
     /// </summary>
-    private void UpdatePropertyPanel()
+    private void UpdateCurrencyPanel()
     {
-        propertyPanel.SetMoney(player.Money);
-        propertyPanel.SetDisk(player.Disk);
-        propertyPanel.SetKey(player.Key);
+        currencyPanel.SetCoin(player.Coin);
+        currencyPanel.SetDisc(player.Disc);
+        currencyPanel.SetKey(player.Key);
     }
 
     /// <summary>
