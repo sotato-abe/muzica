@@ -12,9 +12,14 @@ public class EquipmentWindow : MonoBehaviour
     [SerializeField] EquipmentSlot equipmentSlot1;
     [SerializeField] EquipmentSlot equipmentSlot2;
 
+    public delegate void TargetItemDelegate(Item? item, bool isOwn = true);
+    public event TargetItemDelegate OnTargetItem;
+
     private void Awake()
     {
         SetEquipments();
+        equipmentSlot1.OnTargetItem += TargetItem;
+        equipmentSlot2.OnTargetItem += TargetItem;
     }
 
     private void OnEnable()
@@ -47,5 +52,15 @@ public class EquipmentWindow : MonoBehaviour
     public void UpdateInventory()
     {
         OnUpdateInventory?.Invoke();
+    }
+
+    public void TargetItem(Item item, bool isOwn = true)
+    {
+        if (item == null)
+        {
+            OnTargetItem?.Invoke(null);
+            return;
+        }
+        OnTargetItem?.Invoke(item, isOwn);
     }
 }

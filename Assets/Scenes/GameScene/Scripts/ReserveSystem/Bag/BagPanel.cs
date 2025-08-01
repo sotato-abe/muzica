@@ -16,6 +16,7 @@ public class BagPanel : Panel
     private void Start()
     {
         equipmentWindow.OnUpdateInventory += UpdateInvenotry;
+        equipmentWindow.OnTargetItem += TargetItem;
         inventoryWindow.OnTargetItem += TargetItem;
         pocketWindow.OnTargetItem += TargetItem;
         bagCategory.OnChangeWindow += ChangeWindow;
