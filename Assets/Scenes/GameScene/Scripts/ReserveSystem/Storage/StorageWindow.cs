@@ -13,24 +13,17 @@ public class StorageWindow : MonoBehaviour, IDropHandler
     [SerializeField] GameObject commandList;
     [SerializeField] GameObject blockList;
     [SerializeField] TextMeshProUGUI counterText;
-    PlayerController playerController;
+    [SerializeField] int maxCount = 15;
     Dictionary<Command, CommandBlock> commandBlockMap = new Dictionary<Command, CommandBlock>();
 
     public delegate void TargetCommandDelegate(Command? command, bool isOwn = true);
     public event TargetCommandDelegate OnTargetCommand;
-
-    private const int MAX_STORAGE_COUNT = 15;
-    private int currentBlockCount = 0;
     private void Awake()
     {
-        playerController = PlayerController.Instance;
         DeleteAllCommands();
     }
     private void OnEnable()
     {
-        if (PlayerController.Instance == null) return;
-
-        playerController = PlayerController.Instance;
         SetCommands();
         SetBlock();
     }
@@ -43,7 +36,7 @@ public class StorageWindow : MonoBehaviour, IDropHandler
         if (droppedCommandBlock.OriginalParent == this.transform) return;
 
         Command command = droppedCommandBlock.Command;
-        playerController.AddCommandToStorage(droppedCommandBlock.Command);
+        PlayerController.Instance.AddCommandToStorage(droppedCommandBlock.Command);
         droppedCommandBlock.RemoveCommand();
         CreateCommandBlock(command, null);
         SetCounter();
@@ -51,7 +44,7 @@ public class StorageWindow : MonoBehaviour, IDropHandler
 
     public void SetCommands()
     {
-        List<Command> commands = playerController.PlayerCharacter.StorageList;
+        List<Command> commands = PlayerController.Instance.PlayerCharacter.StorageList;
 
         foreach (Command command in commands)
         {
@@ -85,16 +78,12 @@ public class StorageWindow : MonoBehaviour, IDropHandler
 
     private void SetCounter()
     {
-        counterText.text = $"{commandBlockMap.Count} / {playerController.PlayerCharacter.ColStorage}";
+        counterText.text = $"{commandBlockMap.Count} / {PlayerController.Instance.PlayerCharacter.ColStorage}";
     }
 
     private void SetBlock()
     {
-        int newBlockCount = MAX_STORAGE_COUNT - playerController.PlayerCharacter.ColStorage;
-        if (currentBlockCount == newBlockCount)
-            return;
-
-        currentBlockCount = newBlockCount;
+        int newBlockCount = maxCount - PlayerController.Instance.PlayerCharacter.ColStorage;
         foreach (Transform child in blockList.transform)
         {
             Destroy(child.gameObject);
@@ -126,7 +115,7 @@ public class StorageWindow : MonoBehaviour, IDropHandler
         if (commandBlock.OriginalParent != this.transform) return false;
 
         Command command = commandBlock.Command;
-        playerController.RemoveCommandFromStorage(commandBlock.Command);
+        PlayerController.Instance.RemoveCommandFromStorage(commandBlock.Command);
         commandBlock.RemovePlaceholder();
         commandBlockMap.Remove(command);
         Destroy(commandBlock.gameObject);

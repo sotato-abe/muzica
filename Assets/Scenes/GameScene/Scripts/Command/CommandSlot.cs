@@ -23,7 +23,7 @@ public class CommandSlot : MonoBehaviour, IDropHandler
             Command command = droppedCommandBlock.Command;
             if (droppedCommandBlock.OriginalParent == this.transform)
                 return;
-            PlayerController.Instance.AddCommandToTable(command, SlotIndex);
+            PlayerController.Instance.AddCommandToSlot(command, SlotIndex);
             SetCommand(command);
             droppedCommandBlock.RemoveCommand();
         }
@@ -61,7 +61,7 @@ public class CommandSlot : MonoBehaviour, IDropHandler
         if (commandBlock.OriginalParent != this.transform) return false;
 
         Command command = commandBlock.Command;
-        PlayerController.Instance.AddCommandToTable(null, SlotIndex);
+        PlayerController.Instance.AddCommandToSlot(null, SlotIndex);
         commandBlock.RemovePlaceholder();
         Destroy(commandBlock.gameObject);
         return true;

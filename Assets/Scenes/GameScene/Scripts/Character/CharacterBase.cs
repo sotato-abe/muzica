@@ -42,7 +42,7 @@ public class CharacterBase : ScriptableObject
     [SerializeField] List<Equipment> bagEquipmentList;
     [SerializeField] List<Treasure> bagTreasureList;
     [SerializeField] List<Command> storageList;
-    [SerializeField] List<Command> tableList = new List<Command>(15);
+    [SerializeField] List<Command> slotList = new List<Command>(15);
 
     // キャラクターの会話メッセージ
     [SerializeField] List<TalkMessage> messageList;
@@ -80,7 +80,7 @@ public class CharacterBase : ScriptableObject
     public List<Treasure> BagTreasureList { get => bagTreasureList; }
 
     public List<Command> StorageList { get => storageList; }
-    public List<Command> TableList { get => tableList; }
+    public List<Command> SlotList { get => slotList; }
 
     public List<TalkMessage> MessageList { get => messageList; }
 }

@@ -11,13 +11,13 @@ public class CommandTradePanel : Panel
     [SerializeField] ShopCommandWindow shopCommandWindow;
     [SerializeField] BagCategory bagCategory;
     [SerializeField] StorageWindow storageWindow;
-    [SerializeField] TableWindow tableWindow;
+    [SerializeField] SlotSettingWindow slotSettingWindow;
 
     private void Start()
     {
         shopCommandWindow.OnTargetCommand += TargetCommand;
         storageWindow.OnTargetCommand += TargetCommand;
-        tableWindow.OnTargetCommand += TargetCommand;
+        slotSettingWindow.OnTargetCommand += TargetCommand;
         bagCategory.OnChangeWindow += ChangeWindow;
         ChangeWindow(true);
     }
@@ -30,7 +30,7 @@ public class CommandTradePanel : Panel
     public void ChangeWindow(bool isBag)
     {
         storageWindow.gameObject.SetActive(isBag);
-        tableWindow.gameObject.SetActive(!isBag);
+        slotSettingWindow.gameObject.SetActive(!isBag);
     }
 
     public void SetShopCommands(List<Command> Commands)

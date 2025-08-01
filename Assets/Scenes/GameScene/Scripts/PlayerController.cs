@@ -240,31 +240,31 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// コマンドをテーブルに追加
+    /// コマンドをスロットに追加
     /// </summary>
-    public void AddCommandToTable(Command? command, int index)
+    public void AddCommandToSlot(Command? command, int index)
     {
-        if (!IsValidTableIndex(index))
+        if (!IsValidSlotIndex(index))
         {
-            HandleInvalidTableIndex(command);
+            HandleInvalidSlotIndex(command);
             return;
         }
 
-        player.TableList[index] = command;
+        player.SlotList[index] = command;
     }
 
     /// <summary>
-    /// テーブルからコマンドを削除
+    /// スロットからコマンドを削除
     /// </summary>
-    public void RemoveCommandFromTable(int index)
+    public void RemoveCommandFromSlot(int index)
     {
-        if (!IsValidTableIndex(index))
+        if (!IsValidSlotIndex(index))
         {
             Debug.LogWarning("無効なインデックスです。コマンドを削除できません。");
             return;
         }
 
-        player.TableList[index] = null;
+        player.SlotList[index] = null;
     }
 
     public void SellCommand(Command command)
@@ -296,7 +296,7 @@ public class PlayerController : MonoBehaviour
         return player.StorageList.Count <= player.ColStorage;
     }
 
-    private bool IsValidTableIndex(int index)
+    private bool IsValidSlotIndex(int index)
     {
         return index >= 0 && index < player.ColMemory * 3;
     }
@@ -307,7 +307,7 @@ public class PlayerController : MonoBehaviour
         Debug.LogWarning("ストレージの容量を超えています。コマンドを追加できません。");
     }
 
-    private void HandleInvalidTableIndex(Command command)
+    private void HandleInvalidSlotIndex(Command command)
     {
         FieldController.Instance.DropPlayerCommand(command);
         Debug.LogWarning("無効なインデックスです。コマンドを追加できません。");

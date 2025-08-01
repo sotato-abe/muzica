@@ -49,7 +49,7 @@ public class Character
     public List<Equipment> EquipmentList { get; set; }
     public List<Consumable> PocketList { get; set; }
     public List<Command> StorageList { get; set; }
-    public List<Command> TableList { get; set; }
+    public List<Command> SlotList { get; set; }
     public List<Item> BagItemList { get; set; }
 
     public virtual void Init()
@@ -100,7 +100,7 @@ public class Character
         BagItemList.AddRange(_base.BagTreasureList);
 
         StorageList = new List<Command>(_base.StorageList ?? new List<Command>());
-        TableList = new List<Command>(_base.TableList ?? new List<Command>());
+        SlotList = new List<Command>(_base.SlotList ?? new List<Command>());
 
         CoLStatus();
     }

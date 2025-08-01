@@ -6,14 +6,14 @@ using TMPro;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class TableWindow : MonoBehaviour
+public class SlotSettingWindow : MonoBehaviour
 {
     [SerializeField] CommandSlot commandSlotPrefab;
     [SerializeField] GameObject slotList;
     [SerializeField] RectTransform backRectTransform;
     PlayerController playerController;
 
-    float tableHeight; // スロットの幅
+    float slotHeight; // スロットの高さ
     float paddingWidth = 50f; // 横幅
 
     List<CommandSlot> commandSlots = new List<CommandSlot>();
@@ -29,32 +29,32 @@ public class TableWindow : MonoBehaviour
             return;
         }
 
-        tableHeight = backRectTransform.sizeDelta.y;
+        slotHeight = backRectTransform.sizeDelta.y;
         // コマンドスロットを初期化
         InitializeCommandSlots();
         SetCommandSlot();
-        SetTableSize();
+        SetWindowSize();
     }
 
-    private void SetTableSize()
+    private void SetWindowSize()
     {
-        // テーブルのサイズを設定
-        float tableWidth = playerController.PlayerCharacter.ColMemory * 100 + paddingWidth;
-        backRectTransform.sizeDelta = new Vector2(tableWidth, tableHeight);
+        // スロットのサイズを設定
+        float windowWidth = playerController.PlayerCharacter.ColMemory * 100 + paddingWidth;
+        backRectTransform.sizeDelta = new Vector2(windowWidth, slotHeight);
     }
 
     public void SetCommandSlot()
     {
-        // 既存のコマンドスロットをクリア
+        // 既存のスロットをクリア
         foreach (CommandSlot slot in commandSlots)
         {
             slot.ResetSlot();
         }
 
-        // テーブルにコマンドをセット
+        // スロットにコマンドをセット
         for (int i = 0; i < playerController.PlayerCharacter.ColMemory * 3; i++)
         {
-            Command command = playerController.PlayerCharacter.TableList[i];
+            Command command = playerController.PlayerCharacter.SlotList[i];
             if (command != null && command.Base != null)
             {
                 commandSlots[i].SetCommand(command);

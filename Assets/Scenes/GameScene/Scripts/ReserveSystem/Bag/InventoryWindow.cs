@@ -13,13 +13,12 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
     [SerializeField] GameObject itemList;
     [SerializeField] GameObject blockList;
     [SerializeField] TextMeshProUGUI counterText;
+    [SerializeField] int maxCount = 20;
+    
     Dictionary<Item, ItemBlock> itemBlockMap = new Dictionary<Item, ItemBlock>();
-
     public delegate void TargetItemDelegate(Item? item, bool isOwn = true);
     public event TargetItemDelegate OnTargetItem;
 
-    private const int MAX_BAG_COUNT = 20;
-    private int currentBlockCount = 0;
     private void Awake()
     {
         DeleteAllItems();
@@ -99,11 +98,7 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
 
     private void SetBlock()
     {
-        int newBlockCount = MAX_BAG_COUNT - PlayerController.Instance.PlayerCharacter.Bag;
-        if (currentBlockCount == newBlockCount)
-            return;
-
-        currentBlockCount = newBlockCount;
+        int newBlockCount = maxCount - PlayerController.Instance.PlayerCharacter.Bag;
         foreach (Transform child in blockList.transform)
         {
             Destroy(child.gameObject);

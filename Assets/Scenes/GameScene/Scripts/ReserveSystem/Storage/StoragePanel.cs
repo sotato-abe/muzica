@@ -9,13 +9,13 @@ using UnityEngine.EventSystems;
 public class StoragePanel : Panel
 {
     [SerializeField] StorageWindow storageWindow;
-    [SerializeField] TableWindow tableWindow;
+    [SerializeField] SlotSettingWindow slotSettingWindow;
     [SerializeField] TargetCommandWindow targetCommandWindow;
 
     private void Start()
     {
         storageWindow.OnTargetCommand += TargetCommand;
-        tableWindow.OnTargetCommand += TargetCommand;
+        slotSettingWindow.OnTargetCommand += TargetCommand;
     }
 
     public void TargetCommand(Command? command, bool isOwn = true)

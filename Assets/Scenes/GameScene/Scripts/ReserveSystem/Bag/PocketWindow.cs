@@ -13,13 +13,11 @@ public class PocketWindow : MonoBehaviour, IDropHandler
     [SerializeField] GameObject itemList;
     [SerializeField] GameObject blockList;
     [SerializeField] TextMeshProUGUI counterText;
+    [SerializeField] int maxCount = 20;
+    
     Dictionary<Item, ItemBlock> itemBlockMap = new Dictionary<Item, ItemBlock>();
-
     public delegate void TargetItemDelegate(Item? item, bool isOwn = true);
     public event TargetItemDelegate OnTargetItem;
-    public int adjustmentBlockCount = 0; // 調整用のブロック数
-
-    private const int MAX_POCKET_COUNT = 20;
     private int currentBlockCount = 0;
     private void Awake()
     {
@@ -99,7 +97,7 @@ public class PocketWindow : MonoBehaviour, IDropHandler
 
     private void SetBlock()
     {
-        int newBlockCount = MAX_POCKET_COUNT - PlayerController.Instance.PlayerCharacter.ColPocket + adjustmentBlockCount;
+        int newBlockCount = maxCount - PlayerController.Instance.PlayerCharacter.ColPocket;
         if (currentBlockCount == newBlockCount)
             return;
 

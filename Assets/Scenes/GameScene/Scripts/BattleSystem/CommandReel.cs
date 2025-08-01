@@ -60,7 +60,7 @@ public class CommandReel : Panel
         int startNum = (reelNum - 1) * 3;
         for (int i = startNum; i < reelNum * 3; i++)
         {
-            Command command = PlayerController.Instance.PlayerCharacter.TableList[i];
+            Command command = PlayerController.Instance.PlayerCharacter.SlotList[i];
             commands.Add(command);
         }
     }
