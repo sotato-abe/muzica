@@ -37,8 +37,8 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
         if (droppedItemBlock.OriginalParent == this.transform) return;
 
         Item item = droppedItemBlock.Item;
-        bool isRemoved = droppedItemBlock.RemoveItem();
-        if (isRemoved)
+        bool canBuy = droppedItemBlock.RemoveItem();
+        if (canBuy)
         {
             PlayerController.Instance.AddItemToBag(item);
             CreateItemBlock(item, null);

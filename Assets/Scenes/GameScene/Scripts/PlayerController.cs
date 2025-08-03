@@ -105,7 +105,7 @@ public class PlayerController : MonoBehaviour
     {
         if (player.Bag <= player.BagItemList.Count)
         {
-            Debug.LogWarning("バックの容量を超えています。アイテムを追加できません。");
+            Debug.LogWarning($"バックの容量を超えています。アイテムを追加できません。{player.Bag}/{player.BagItemList.Count}");
             FieldController.Instance.DropPlayerItem(item);
             return;
         }

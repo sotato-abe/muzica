@@ -49,7 +49,7 @@ public class ShopItemWindow : MonoBehaviour, IDropHandler
         ItemBlock itemBlock = Instantiate(itemBlockPrefab, itemList.transform);
         itemBlock.Setup(item, this.transform);
         itemBlock.SetStatustext(statusText);
-        itemBlock.OnRemoveItem += BuyItem;
+        itemBlock.OnRemoveItem += SellItem;
         itemBlock.OnTargetItem += TargetItem;
     }
 
@@ -61,7 +61,7 @@ public class ShopItemWindow : MonoBehaviour, IDropHandler
         }
     }
 
-    private bool BuyItem(ItemBlock itemBlock)
+    private bool SellItem(ItemBlock itemBlock)
     {
         if (itemBlock == null || itemBlock.Item == null) return false;
         if (itemBlock.OriginalParent != this.transform) return false;
