@@ -3,29 +3,35 @@ using UnityEngine;
 [System.Serializable]
 public class Consumable : Item
 {
-    [SerializeField] ConsumableBase _base;
-
     [field: SerializeField]
     public int UsableCount { get; set; }
 
-    public override ItemType itemType => ItemType.Consumable;
-    public override ItemBase Base => _base;
-    public ConsumableBase ConsumableBase => _base;
+    // ConsumableBase にキャストしたプロパティ
+    public ConsumableBase ConsumableBase => _base as ConsumableBase;
 
-    public Consumable(ConsumableBase baseData)
+    public override ItemBase Base => _base;
+
+    // コンストラクタで base._base を設定
+    public Consumable(ConsumableBase baseData) : base(baseData)
     {
-        _base = baseData;
         UsableCount = baseData.UsableCount;
     }
 
     public void Initialize()
     {
-        UsableCount = _base?.UsableCount ?? 1;
+        UsableCount = (_base as ConsumableBase)?.UsableCount ?? 1;
     }
 
     public bool UseConsumable()
     {
         UsableCount = Mathf.Max(UsableCount - 1, 0);
         return UsableCount > 0;
+    }
+
+    public override Item Clone()
+    {
+        var copy = new Consumable(ConsumableBase);
+        copy.UsableCount = this.UsableCount;
+        return copy;
     }
 }

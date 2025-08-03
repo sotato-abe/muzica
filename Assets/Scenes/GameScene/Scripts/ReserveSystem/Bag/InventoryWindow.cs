@@ -31,18 +31,24 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
 
     public void OnDrop(PointerEventData eventData)
     {
+        Debug.Log("OnDrop called in InventoryWindow");
+        
         // ドロップアイテムをバックに追加
         ItemBlock droppedItemBlock = eventData.pointerDrag?.GetComponent<ItemBlock>();
         if (droppedItemBlock == null || droppedItemBlock.Item == null) return;
         if (droppedItemBlock.OriginalParent == this.transform) return;
+        
+        Debug.Log($"Attempting to add item: {droppedItemBlock.Item.Base.Name}");
 
         Item item = droppedItemBlock.Item;
         bool canBuy = droppedItemBlock.RemoveItem();
         if (canBuy)
         {
             PlayerController.Instance.AddItemToBag(item);
-            CreateItemBlock(item, null);
-            SetCounter();
+            Debug.Log($"Item added to bag. Total bag items: {PlayerController.Instance.PlayerCharacter.BagItemList.Count}");
+            
+            // SetItems()を呼び出すことで、新しく追加されたアイテムのItemBlockが作成される
+            SetItems();
         }
     }
 
@@ -50,25 +56,34 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
     {
         List<Item> items = PlayerController.Instance.PlayerCharacter.BagItemList;
 
-        // PocketListにないアイテムは削除する
-        foreach (var item in new List<Item>(itemBlockMap.Keys))
+        // 現在のBagItemListにないアイテムブロックは削除する
+        var itemsToRemove = new List<Item>();
+        foreach (var kvp in itemBlockMap)
         {
-            if (!items.Contains(item))
+            if (!items.Contains(kvp.Key))
             {
-                RemoveItem(itemBlockMap[item]);
+                itemsToRemove.Add(kvp.Key);
             }
         }
 
+        foreach (var item in itemsToRemove)
+        {
+            if (itemBlockMap.TryGetValue(item, out ItemBlock itemBlock))
+            {
+                Destroy(itemBlock.gameObject);
+                itemBlockMap.Remove(item);
+            }
+        }
+
+        // BagItemListにあるアイテムでitemBlockMapにないものを追加
         foreach (Item item in items)
         {
-            if (itemBlockMap.ContainsKey(item))
+            if (!itemBlockMap.ContainsKey(item))
             {
-                // 既に表示済みならスキップ
+                CreateItemBlock(item, "New");
                 continue;
             }
-
-            // 新規アイテムだけ生成
-            CreateItemBlock(item, "New");
+            Debug.Log($"ItemBlock for {item.Base.Name} already exists, skipping creation.---------------------");
         }
 
         SetCounter();
@@ -76,9 +91,11 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
 
     private void CreateItemBlock(Item item, string? statusText)
     {
+        Debug.Log($"Creating ItemBlock for item: {item.Base.Name} / item count: {PlayerController.Instance.PlayerCharacter.BagItemList.Count}");
+        
         if (itemBlockMap.ContainsKey(item))
         {
-            // 既に表示済みならスキップ
+            Debug.Log($"ItemBlock for {item.Base.Name} already exists, skipping creation.");
             return;
         }
 
@@ -89,6 +106,8 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
         itemBlock.OnRemoveItem += RemoveItem;
         itemBlock.OnTargetItem += TargetItem;
         itemBlockMap[item] = itemBlock;
+        
+        Debug.Log($"Successfully created ItemBlock for {item.Base.Name}. Total items in map: {itemBlockMap.Count}");
     }
 
     private void SetCounter()

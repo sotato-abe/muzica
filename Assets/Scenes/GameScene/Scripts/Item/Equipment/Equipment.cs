@@ -5,16 +5,22 @@ using UnityEngine;
 [System.Serializable]
 public class Equipment : Item
 {
-    [SerializeField] EquipmentBase _base;
     [SerializeField] int level = 1;
 
-    public override ItemType itemType => ItemType.Equipment;
-    public override ItemBase Base => _base; // EquipmentBase は ItemBase を継承している前提
-    public EquipmentBase EquipmentBase => _base;
+    // 親クラスの _base をキャストして使う
+    public override ItemBase Base => _base;
+    public EquipmentBase EquipmentBase => _base as EquipmentBase;
     public int Level => level;
 
-    public Equipment(EquipmentBase baseData)
+    public Equipment(EquipmentBase baseData) : base(baseData)
     {
-        _base = baseData;
+        // 必要なら初期化ロジックもここに
+    }
+
+    public override Item Clone()
+    {
+        var copy = new Equipment(EquipmentBase);
+        copy.level = this.level; // レベルもコピー
+        return copy;
     }
 }

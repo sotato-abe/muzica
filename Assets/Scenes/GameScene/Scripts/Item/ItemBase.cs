@@ -12,6 +12,7 @@ public class ItemBase : ScriptableObject
     [SerializeField] int coinPrice = 1;
     [SerializeField] int discPrice = 0;
 
+    public virtual ItemType itemType => ItemType.Consumable;
     public string Name { get => name; }
     public RarityType Rarity { get => rarity; }
     public Sprite Sprite { get => sprite; }

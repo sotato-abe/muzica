@@ -5,13 +5,17 @@ using UnityEngine;
 [System.Serializable]
 public class Treasure : Item
 {
-    [SerializeField] TreasureBase _base;
-    public override ItemType itemType => ItemType.Treasure;
     public override ItemBase Base => _base;
-    public TreasureBase TreasureBase { get => _base; }
-
-    public Treasure(TreasureBase baseData)
+    public TreasureBase TreasureBase => _base as TreasureBase;
+    public Treasure(TreasureBase baseData) : base(baseData)
     {
-        _base = baseData;
+        // 必要なら初期化ロジックもここに
+    }
+
+    public override Item Clone()
+    {
+        var copy = new Treasure(TreasureBase);
+        // 必要なら他のプロパティもコピー
+        return copy;
     }
 }

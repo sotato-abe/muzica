@@ -12,7 +12,7 @@ public class PointBase : ScriptableObject
     [SerializeField] Sprite icon; // ワールドマップで表示されるアイコン
     [SerializeField] Sprite image;
     [SerializeField] List<Equipment> equipmentList;
-    [SerializeField] List<Consumable> consumableList;
+    [SerializeField] List<ConsumableBase> consumableBaseList;
     [SerializeField] List<Treasure> treasureList;
     [SerializeField] List<Command> commandList;
 
@@ -23,23 +23,7 @@ public class PointBase : ScriptableObject
     public Sprite Image { get => image; }
 
     public List<Equipment> ShopEquipmentList { get => equipmentList; }
-    public List<Consumable> ShopConsumableList { get => consumableList; }
+    public List<ConsumableBase> ShopConsumableBaseList { get => consumableBaseList; }
     public List<Treasure> ShopTreasureList { get => treasureList; }
     public List<Command> ShopCommandList { get => commandList; }
-
-    public Point ToPoint()
-    {
-        Point point = new Point();
-        point.Base = this; // PointBaseをPointに設定
-        point.ShopItems = new List<Item>();
-        point.ShopCommands = new List<Command>();
-
-        // アイテムとコマンドをショップリストに追加
-        point.ShopItems.AddRange(equipmentList);
-        point.ShopItems.AddRange(consumableList);
-        point.ShopItems.AddRange(treasureList);
-        point.ShopCommands.AddRange(commandList);
-
-        return point;
-    }
 }

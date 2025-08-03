@@ -5,4 +5,5 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Item/Treasure")]
 public class TreasureBase : ItemBase
 {
+    public override ItemType itemType => ItemType.Treasure;
 }

@@ -19,6 +19,7 @@ public class EquipmentBase : ItemBase
     [SerializeField] List<Enchant> enchantList;
     [SerializeField] List<EnergyCount> energyAttackList;
 
+    public override ItemType itemType => ItemType.Equipment;
     public EquipmentType EquipmentType { get => equipmentType; }
     public int Life { get => life; }
     public int Battery { get => battery; }

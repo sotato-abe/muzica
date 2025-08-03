@@ -5,6 +5,17 @@ using UnityEngine;
 [System.Serializable]
 public class Item
 {
-    public virtual ItemType itemType => ItemType.Consumable;
-    public virtual ItemBase Base => null;
+    [SerializeField] protected ItemBase _base;
+
+    public Item(ItemBase baseData)
+    {
+        _base = baseData;
+    }
+
+    public virtual ItemBase Base => _base;
+
+    public virtual Item Clone()
+    {
+        return new Item(_base);
+    }
 }

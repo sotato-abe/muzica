@@ -10,18 +10,27 @@ public class Point
     public List<Item> ShopItems { get; set; }
     public List<Command> ShopCommands { get; set; }
 
-    public virtual void Init()
+    public static Point CreateFrom(PointBase baseData)
     {
-        if (_base == null)
+        var point = new Point
         {
-            Debug.LogError("Init() failed: _base is null");
-            return;
+            Base = baseData,
+            ShopItems = new List<Item>(),
+            ShopCommands = new List<Command>()
+        };
+
+        point.ShopItems.AddRange(baseData.ShopEquipmentList);
+
+        foreach (var consumableBase in baseData.ShopConsumableBaseList)
+        {
+            var consumable = new Consumable(consumableBase);
+            consumable.Initialize();
+            point.ShopItems.Add(consumable);
         }
 
-        ShopItems.AddRange(_base.ShopEquipmentList);
-        ShopItems.AddRange(_base.ShopConsumableList);
-        ShopItems.AddRange(_base.ShopTreasureList);
+        point.ShopItems.AddRange(baseData.ShopTreasureList);
+        point.ShopCommands.AddRange(baseData.ShopCommandList);
 
-        ShopCommands.AddRange(_base.ShopCommandList);
+        return point;
     }
 }

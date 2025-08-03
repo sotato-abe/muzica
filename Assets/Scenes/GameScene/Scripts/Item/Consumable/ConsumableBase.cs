@@ -11,6 +11,7 @@ public class ConsumableBase : ItemBase
     [SerializeField] List<Enchant> enchantList;
     [SerializeField] List<EnergyCount> energyAttackList;
 
+    public override ItemType itemType => ItemType.Consumable;
     public TargetType TargetType { get => targetType; }
     public ConsumableType ConsumableType { get => consumableType; }
     public int UsableCount { get => usableCount; }
