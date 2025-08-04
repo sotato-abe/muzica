@@ -7,6 +7,8 @@ public class EnergyBar : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI counterText;
     [SerializeField] Image barImage;
+    [SerializeField] EnergyType energyType;
+    [SerializeField] DiffCounter diffCounterPrefab;
 
     int maxEnergy = 100;
     int currentEnergy = 0;
@@ -45,6 +47,7 @@ public class EnergyBar : MonoBehaviour
         if (value < 0) value = 0;
 
         value = Mathf.Min(value, maxEnergy);
+        ShowDiffCounter(value - currentEnergy);
         currentEnergy = value;
 
         float targetFill = (float)currentEnergy / maxEnergy;
@@ -64,6 +67,16 @@ public class EnergyBar : MonoBehaviour
         }
 
         yield return fillCoroutine = StartCoroutine(SmoothFillCoroutine(targetFill));
+    }
+
+    private void ShowDiffCounter(int value)
+    {
+        if (value == 0) return;
+
+        DiffCounter diffCounter = Instantiate(diffCounterPrefab, transform);
+        diffCounter.SetDiffCounter(energyType, value);
+        RectTransform diffRect = diffCounter.GetComponent<RectTransform>();
+        diffCounter.transform.SetAsFirstSibling(); // 最前面に表示
     }
 
 

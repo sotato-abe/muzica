@@ -201,15 +201,6 @@ public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
         yield return soulCoroutine;
     }
 
-    public void UpdateEnergyGauges2()
-    {
-        if (character == null) return;
-
-        energyGauge.UpdateLifeGauge(character.MaxLife, character.Life);
-        energyGauge.UpdateBatteryGauge(character.MaxBattery, character.Battery);
-        energyGauge.UpdateSoulGauge(100, character.Soul);
-    }
-
     private IEnumerator StartTurnBar()
     {
         if (character == null)
