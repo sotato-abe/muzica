@@ -33,8 +33,13 @@ public class CommandTradePanel : Panel
         slotSettingWindow.gameObject.SetActive(!isBag);
     }
 
-    public void SetShopCommands(List<Command> Commands)
+    public void SetPoint(Point point)
     {
-        shopCommandWindow.SetCommands(Commands);
+        shopCommandWindow.SetPoint(point);
     }
+
+    // public void SetShopCommands(List<Command> Commands)
+    // {
+    //     shopCommandWindow.SetCommands(Commands);
+    // }
 }

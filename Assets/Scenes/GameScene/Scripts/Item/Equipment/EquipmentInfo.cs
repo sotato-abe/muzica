@@ -112,8 +112,8 @@ public class EquipmentInfo : MonoBehaviour
         }
 
         // コマンドの情報を更新する処理
-        MergeEnchantList(command.EnchantList);
-        MergeAttackList(command.EnergyAttackList);
+        MergeEnchantList(command.Base.EnchantList);
+        MergeAttackList(command.Base.EnergyAttackList);
         UpdateInfo();
     }
 

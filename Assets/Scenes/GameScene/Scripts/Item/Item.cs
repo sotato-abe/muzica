@@ -6,13 +6,12 @@ using UnityEngine;
 public class Item
 {
     [SerializeField] protected ItemBase _base;
+    public virtual ItemBase Base => _base;
 
     public Item(ItemBase baseData)
     {
         _base = baseData;
     }
-
-    public virtual ItemBase Base => _base;
 
     public virtual Item Clone()
     {

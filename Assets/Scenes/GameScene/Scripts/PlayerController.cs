@@ -109,7 +109,7 @@ public class PlayerController : MonoBehaviour
             FieldController.Instance.DropPlayerItem(item);
             return;
         }
-        player.AddItemToBag(item);
+        player.AddItemToBag(item.Clone());
     }
 
     /// <summary>
@@ -120,13 +120,13 @@ public class PlayerController : MonoBehaviour
         if (player.ColPocket <= player.PocketList.Count)
         {
             Debug.LogWarning("ポケットの容量を超えています。アイテムを追加できません。");
-            FieldController.Instance.DropPlayerItem(item);
+            FieldController.Instance.DropPlayerItem(item.Clone());
             return;
         }
 
         if (item is Consumable consumable)
         {
-            player.AddItemToPocket(consumable);
+            player.AddItemToPocket(consumable.Clone() as Consumable);
         }
     }
 
@@ -139,7 +139,7 @@ public class PlayerController : MonoBehaviour
 
         if (item is Equipment equipment)
         {
-            player.EquipmentList.Add(equipment);
+            player.EquipmentList.Add(equipment.Clone() as Equipment);
         }
     }
 
@@ -218,7 +218,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        player.StorageList.Add(command);
+        player.StorageList.Add(command.Clone());
     }
 
     /// <summary>
@@ -250,7 +250,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        player.SlotList[index] = command;
+        player.SlotList[index] = command.Clone();
     }
 
     /// <summary>

@@ -14,15 +14,13 @@ public class Command
     public Command(CommandBase baseData)
     {
         _base = baseData;
+        level = 1;
     }
 
-    public string Name => _base.Name;
-    public RarityType Rarity => _base.Rarity;
-    public Sprite Sprite => _base.Sprite;
-    public string Description => _base.Description;
-    // public int Price => _base.Price;
-
-    public List<EnergyCount> EnergyAttackList => _base.EnergyAttackList;
-    public List<EnergyCost> EnergyCostList => _base.EnergyCostList;
-    public List<Enchant> EnchantList => _base.EnchantList;
+    public virtual Command Clone()
+    {
+        var copy = new Command(_base);
+        copy.level = this.level; // レベルもコピー
+        return copy;
+    }
 }

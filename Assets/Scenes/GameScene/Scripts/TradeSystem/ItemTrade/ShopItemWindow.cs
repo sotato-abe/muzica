@@ -16,6 +16,7 @@ public class ShopItemWindow : MonoBehaviour, IDropHandler
 
     private const int MAX_BAG_COUNT = 20;
     private int currentBlockCount = 0;
+    private Point currentPoint;
 
     public void OnDrop(PointerEventData eventData)
     {
@@ -35,12 +36,18 @@ public class ShopItemWindow : MonoBehaviour, IDropHandler
         }
     }
 
+    public void SetPoint(Point point)
+    {
+        currentPoint = point;
+        SetItems(point.ShopItems);
+    }
+
     public void SetItems(List<Item> items = null)
     {
         DeleteAllItems();
         foreach (Item item in items)
         {
-            CreateItemBlock(item.Clone(), null);
+            CreateItemBlock(item, null);
         }
     }
 
@@ -72,6 +79,7 @@ public class ShopItemWindow : MonoBehaviour, IDropHandler
         {
             itemBlock.RemovePlaceholder();
             Destroy(itemBlock.gameObject);
+            currentPoint.ShopItems.Remove(item); // ポイントのアイテムリストから削除
             return true;
         }
         return false;

@@ -36,8 +36,8 @@ public class ItemTradePanel : Panel
         pocketWindow.gameObject.SetActive(!isBag);
     }
 
-    public void SetShopItems(List<Item> items)
+    public void SetPoint(Point point)
     {
-        shopItemWindow.SetItems(items);
+        shopItemWindow.SetPoint(point);
     }
 }

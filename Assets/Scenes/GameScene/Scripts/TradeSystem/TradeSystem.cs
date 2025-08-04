@@ -49,8 +49,10 @@ public class TradeSystem : MonoBehaviour
         rightcharacterSubPanel.SetActive(true); // キャラクターサブパネルを表示
         StartCoroutine(rightcharacterSubPanel.SetTalkMessage(talkMessage2));
 
-        itemTradePanel.SetShopItems(point.ShopItems); // アイテムトレードパネルにショップアイテムを設定
-        commandTradePanel.SetShopCommands(point.ShopCommands); // コマンドトレードパネルにショップコマンドを設定
+        itemTradePanel.SetPoint(point); // アイテムトレードパネルにポイントを設定
+        commandTradePanel.SetPoint(point); // コマンドトレードパネルにポイントを設定
+        // itemTradePanel.SetShopItems(point.ShopItems); // アイテムトレードパネルにショップアイテムを設定
+        // commandTradePanel.SetShopCommands(point.ShopCommands); // コマンドトレードパネルにショップコマンドを設定
 
         messagePanel.SetActive(false); // メッセージパネルを表示
         worldMapPanel.SetActive(false); // ワールドマップパネルを非表示

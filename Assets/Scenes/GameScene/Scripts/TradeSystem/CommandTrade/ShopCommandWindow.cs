@@ -16,6 +16,7 @@ public class ShopCommandWindow : MonoBehaviour, IDropHandler
 
     private const int MAX_BAG_COUNT = 20;
     private int currentBlockCount = 0;
+    private Point currentPoint;
 
     public void OnDrop(PointerEventData eventData)
     {
@@ -33,6 +34,12 @@ public class ShopCommandWindow : MonoBehaviour, IDropHandler
         {
             Debug.LogWarning("ドロップされたアイテムが無効です。");
         }
+    }
+
+    public void SetPoint(Point point)
+    {
+        currentPoint = point;
+        SetCommands(point.ShopCommands);
     }
 
     public void SetCommands(List<Command> commands = null)
