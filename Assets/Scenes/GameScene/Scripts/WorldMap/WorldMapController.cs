@@ -54,9 +54,9 @@ public class WorldMapController : MonoBehaviour
         fieldData.isBottomOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.down);
         fieldData.isRightOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.right);
         fieldData.isLeftOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.left);
+        worldMapPanel.SetFieldName(fieldData.FieldName);
         if (fieldData.FieldName != "")
         {
-            worldMapPanel.SetFieldName(fieldData.FieldName);
             TalkMessage talkMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Thinking, $"ここはなにかありそうだな。");
             PlayerController.Instance.SetPlayerMessage(talkMessage);
         }
