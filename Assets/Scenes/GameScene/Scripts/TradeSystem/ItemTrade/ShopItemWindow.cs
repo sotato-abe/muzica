@@ -40,7 +40,7 @@ public class ShopItemWindow : MonoBehaviour, IDropHandler
         DeleteAllItems();
         foreach (Item item in items)
         {
-            CreateItemBlock(item, null);
+            CreateItemBlock(item.Clone(), null);
         }
     }
 

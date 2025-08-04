@@ -53,11 +53,9 @@ public class PlayerCharacter : Character
 
     public bool AddItemToBag(Item item)
     {
-        Debug.Log("test2");
         if (BagItemList.Count < Bag)
         {
             BagItemList.Add(item);
-            Debug.Log("test3");
             return true;
         }
 

@@ -14,7 +14,7 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
     [SerializeField] GameObject blockList;
     [SerializeField] TextMeshProUGUI counterText;
     [SerializeField] int maxCount = 20;
-    
+
     Dictionary<Item, ItemBlock> itemBlockMap = new Dictionary<Item, ItemBlock>();
     public delegate void TargetItemDelegate(Item? item, bool isOwn = true);
     public event TargetItemDelegate OnTargetItem;
@@ -31,22 +31,16 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
 
     public void OnDrop(PointerEventData eventData)
     {
-        Debug.Log("OnDrop called in InventoryWindow");
-        
         // ドロップアイテムをバックに追加
         ItemBlock droppedItemBlock = eventData.pointerDrag?.GetComponent<ItemBlock>();
         if (droppedItemBlock == null || droppedItemBlock.Item == null) return;
         if (droppedItemBlock.OriginalParent == this.transform) return;
-        
-        Debug.Log($"Attempting to add item: {droppedItemBlock.Item.Base.Name}");
 
         Item item = droppedItemBlock.Item;
         bool canBuy = droppedItemBlock.RemoveItem();
         if (canBuy)
         {
             PlayerController.Instance.AddItemToBag(item);
-            Debug.Log($"Item added to bag. Total bag items: {PlayerController.Instance.PlayerCharacter.BagItemList.Count}");
-            
             // SetItems()を呼び出すことで、新しく追加されたアイテムのItemBlockが作成される
             SetItems();
         }
@@ -83,7 +77,6 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
                 CreateItemBlock(item, "New");
                 continue;
             }
-            Debug.Log($"ItemBlock for {item.Base.Name} already exists, skipping creation.---------------------");
         }
 
         SetCounter();
@@ -91,8 +84,6 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
 
     private void CreateItemBlock(Item item, string? statusText)
     {
-        Debug.Log($"Creating ItemBlock for item: {item.Base.Name} / item count: {PlayerController.Instance.PlayerCharacter.BagItemList.Count}");
-        
         if (itemBlockMap.ContainsKey(item))
         {
             Debug.Log($"ItemBlock for {item.Base.Name} already exists, skipping creation.");
@@ -106,8 +97,6 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
         itemBlock.OnRemoveItem += RemoveItem;
         itemBlock.OnTargetItem += TargetItem;
         itemBlockMap[item] = itemBlock;
-        
-        Debug.Log($"Successfully created ItemBlock for {item.Base.Name}. Total items in map: {itemBlockMap.Count}");
     }
 
     private void SetCounter()
