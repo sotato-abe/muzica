@@ -27,6 +27,14 @@ public class Point
         return point;
     }
 
+    public void ResetMerchandise()
+    {
+        ShopItems.Clear();
+        ShopCommands.Clear();
+        SetShopItems();
+        SetShopCommands();
+    }
+
     private void SetShopItems()
     {
         foreach (ItemBase item in _base.ShopItemBaseList)

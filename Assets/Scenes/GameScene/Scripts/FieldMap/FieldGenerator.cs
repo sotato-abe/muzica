@@ -28,6 +28,7 @@ public class FieldGenerator : MonoBehaviour
     #region Serialized Fields
     [Header("Field Configuration")]
     [SerializeField] private FieldData defaultFieldData;
+    [SerializeField] private PointDatabase pointDatabase;
     [SerializeField] private GameObject gateObject;
     [SerializeField] private GameObject treasureBoxObject;
     [SerializeField] private GameObject pointObject;
@@ -486,7 +487,8 @@ public class FieldGenerator : MonoBehaviour
                 {
                     // PointBaseをPointに実体化させて格納
                     // pointTrigger.SetPoint(fieldData.Points[i].ToPoint()); // PointBaseからPointに変換
-                    pointTrigger.SetPoint(Point.CreateFrom(fieldData.Points[i]));
+                    Point point = pointDatabase.GetPoint(fieldData.Points[i]);
+                    pointTrigger.SetPoint(point);
                 }
                 catch (System.Exception e)
                 {

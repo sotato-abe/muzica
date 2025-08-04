@@ -9,9 +9,11 @@ public class AgeTimePanel : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI ageTimeField;  // 表示用のTextMeshProUGUIフィールド
     [SerializeField] StatePanelController statePanel;
+    [SerializeField] PointDatabase pointDatabase;
 
     private DateTime ageTime;        // 現在の時間
     public TimeState timeSpeed = TimeState.Fast;
+    private int lastYear; // 直前の年を記録
 
     private void Start()
     {
@@ -22,6 +24,7 @@ public class AgeTimePanel : MonoBehaviour
     public void Init()
     {
         ageTime = new DateTime(2030, 12, 1);  // 初期値を2030年12月に設定
+        lastYear = ageTime.Year;              // 初期化時に記録
         UpdateAgeTimeField();
     }
 
@@ -47,6 +50,11 @@ public class AgeTimePanel : MonoBehaviour
             case TimeState.Fast:
                 ageTime = ageTime.AddDays(deltaTime * (10957.5f / 3600f)); // 30年60分
                 break;
+        }
+        if (ageTime.Year != lastYear)
+        {
+            lastYear = ageTime.Year;
+            pointDatabase.ResetMerchandise();
         }
 
         UpdateAgeTimeField();
