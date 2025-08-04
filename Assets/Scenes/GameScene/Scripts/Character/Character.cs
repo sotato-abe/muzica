@@ -52,6 +52,22 @@ public class Character
     public List<Command> SlotList { get; set; }
     public List<Item> BagItemList { get; set; }
 
+    public static Character CreateFrom(CharacterBase baseData)
+    {
+        var character = new Character
+        {
+            _base = baseData,
+            EquipmentList = new List<Equipment>(),
+            PocketList = new List<Consumable>(),
+            StorageList = new List<Command>(),
+            SlotList = new List<Command>(),
+            BagItemList = new List<Item>()
+        };
+
+        character.Init();
+        return character;
+    }
+
     public virtual void Init()
     {
         if (_base == null)

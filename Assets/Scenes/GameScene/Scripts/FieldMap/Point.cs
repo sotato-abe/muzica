@@ -7,6 +7,8 @@ public class Point
 {
     [SerializeField] PointBase _base;
     public PointBase Base { get => _base; set => _base = value; }
+
+    public Character Owner { get; set; }
     public List<Item> ShopItems { get; set; }
     public List<Command> ShopCommands { get; set; }
 
@@ -18,31 +20,44 @@ public class Point
             ShopItems = new List<Item>(),
             ShopCommands = new List<Command>()
         };
-
-        foreach (var equipmentBase in baseData.ShopEquipmentBaseList)
-        {
-            var equipment = new Equipment(equipmentBase);
-            point.ShopItems.Add(equipment);
-        }
-
-        foreach (var consumableBase in baseData.ShopConsumableBaseList)
-        {
-            var consumable = new Consumable(consumableBase);
-            point.ShopItems.Add(consumable);
-        }
-
-        foreach (var treasureBase in baseData.ShopTreasureBaseList)
-        {
-            var treasure = new Treasure(treasureBase);
-            point.ShopItems.Add(treasure);
-        }
-
-        foreach (var commandBase in baseData.ShopCommandBaseList)
-        {
-            var command = new Command(commandBase);
-            point.ShopCommands.Add(command);
-        }
+        point.Owner = Character.CreateFrom(baseData.Owner); // PointBaseからオーナーを取得
+        point.SetShopItems();
+        point.SetShopCommands();
 
         return point;
+    }
+
+    private void SetShopItems()
+    {
+        foreach (ItemBase item in _base.ShopItemBaseList)
+        {
+            switch (item.itemType)
+            {
+                case ItemType.Consumable:
+                    Consumable consumable = new Consumable((ConsumableBase)item);
+                    ShopItems.Add(consumable);
+                    break;
+                case ItemType.Equipment:
+                    Equipment equipment = new Equipment((EquipmentBase)item);
+                    ShopItems.Add(equipment);
+                    break;
+                case ItemType.Treasure:
+                    Treasure treasure = new Treasure((TreasureBase)item);
+                    ShopItems.Add(treasure);
+                    break;
+                default:
+                    Debug.LogError("Unknown item type: " + item.itemType);
+                    break;
+            }
+        }
+    }
+
+    private void SetShopCommands()
+    {
+        foreach (CommandBase commandBase in _base.ShopCommandBaseList)
+        {
+            Command command = new Command(commandBase);
+            ShopCommands.Add(command);
+        }
     }
 }

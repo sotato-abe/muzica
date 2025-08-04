@@ -45,7 +45,7 @@ public class TradeSystem : MonoBehaviour
         playerSubPanel.SetActive(true); // キャラクターサブパネルを表示
         StartCoroutine(playerSubPanel.SetTalkMessage(talkMessage1));
 
-        rightcharacterSubPanel.SetCharacter(point.Base.Owner);
+        rightcharacterSubPanel.SetCharacter(point.Owner);
         rightcharacterSubPanel.SetActive(true); // キャラクターサブパネルを表示
         StartCoroutine(rightcharacterSubPanel.SetTalkMessage(talkMessage2));
 
