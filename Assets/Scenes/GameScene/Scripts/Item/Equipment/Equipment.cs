@@ -14,7 +14,7 @@ public class Equipment : Item
 
     public Equipment(EquipmentBase baseData) : base(baseData)
     {
-        // 必要なら初期化ロジックもここに
+        level = 1; // 初期レベルを設定
     }
 
     public override Item Clone()

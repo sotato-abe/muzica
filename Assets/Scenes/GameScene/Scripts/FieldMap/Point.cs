@@ -19,17 +19,29 @@ public class Point
             ShopCommands = new List<Command>()
         };
 
-        point.ShopItems.AddRange(baseData.ShopEquipmentList);
+        foreach (var equipmentBase in baseData.ShopEquipmentBaseList)
+        {
+            var equipment = new Equipment(equipmentBase);
+            point.ShopItems.Add(equipment);
+        }
 
         foreach (var consumableBase in baseData.ShopConsumableBaseList)
         {
             var consumable = new Consumable(consumableBase);
-            consumable.Initialize();
             point.ShopItems.Add(consumable);
         }
 
-        point.ShopItems.AddRange(baseData.ShopTreasureList);
-        point.ShopCommands.AddRange(baseData.ShopCommandList);
+        foreach (var treasureBase in baseData.ShopTreasureBaseList)
+        {
+            var treasure = new Treasure(treasureBase);
+            point.ShopItems.Add(treasure);
+        }
+
+        foreach (var commandBase in baseData.ShopCommandBaseList)
+        {
+            var command = new Command(commandBase);
+            point.ShopCommands.Add(command);
+        }
 
         return point;
     }

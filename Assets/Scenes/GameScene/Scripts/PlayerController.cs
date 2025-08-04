@@ -469,50 +469,7 @@ public class PlayerController : MonoBehaviour
 
     public void StatusUp(StatusType type)
     {
-        if (player.SkillPoint > 0)
-        {
-            switch (type)
-            {
-                case StatusType.LIFE:
-                    player.MaxLife += 10;
-                    break;
-                case StatusType.BTRY:
-                    player.MaxBattery += 10;
-                    break;
-                case StatusType.POW:
-                    player.Power += 1;
-                    break;
-                case StatusType.TEC:
-                    player.Technique += 1;
-                    break;
-                case StatusType.DEF:
-                    player.Defense += 1;
-                    break;
-                case StatusType.SPD:
-                    player.Speed += 1;
-                    break;
-                case StatusType.LUK:
-                    player.Luck += 1;
-                    break;
-                case StatusType.MMR:
-                    player.Memory += 1;
-                    break;
-                case StatusType.STG:
-                    player.Storage += 1;
-                    break;
-                case StatusType.POC:
-                    player.Pocket += 1;
-                    break;
-            }
-            player.SkillPoint -= 1;
-            player.CoLStatus();
-            playerSubPanel.SetEnergy();
-            playerSubPanel.UpdateEnergyGauges2();
-        }
-        else
-        {
-            Debug.Log("スキルポイントが足りません。");
-        }
+        player.StatusUp(type);
     }
 
     public void TakeAttack(TotalAttackCount totalCount)

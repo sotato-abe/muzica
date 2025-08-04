@@ -43,7 +43,7 @@ public class EquipmentWindow : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("装備アイテムの数が不正です。1つまたは2つの装備アイテムが必要です。");
+            Debug.LogWarning("アイテムを装備していません。");
             equipmentSlot1.ResetSlot();
             equipmentSlot2.ResetSlot();
         }

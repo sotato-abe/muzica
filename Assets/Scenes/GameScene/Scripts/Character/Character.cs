@@ -9,18 +9,12 @@ public class Character
     [SerializeField] CharacterBase _base;
     public CharacterBase Base { get => _base; }
 
-    // Character
+    // CharacterStatus
     public int MaxLife { get; set; }
-    public int ColLife { get; set; }
     public int Life { get; set; }
     public int MaxBattery { get; set; }
-    public int ColBattery { get; set; }
     public int Battery { get; set; }
     public int Soul { get; set; }
-
-    // CharacterStatus
-    public int Level { get; set; }
-    public int SkillPoint { get; set; }
     public int Power { get; set; }
     public int Technique { get; set; }
     public int Defense { get; set; }
@@ -29,6 +23,10 @@ public class Character
     public int Memory { get; set; }
     public int Storage { get; set; }
     public int Pocket { get; set; }
+
+    // CoLStatus
+    public int ColLife { get; set; }
+    public int ColBattery { get; set; }
     public int ColPower { get; set; }
     public int ColTechnique { get; set; }
     public int ColDefense { get; set; }
@@ -39,13 +37,15 @@ public class Character
     public int ColPocket { get; set; }
     public int Bag { get; set; }
 
-    // Property
+    // Currency
     public int Coin { get; set; }
     public int Disc { get; set; }
     public int Key { get; set; }
     public int Exp { get; set; }
+    public int Level { get; set; }
+    public int SkillPoint { get; set; }
 
-    // Inventory
+    // Belongings
     public List<Equipment> EquipmentList { get; set; }
     public List<Consumable> PocketList { get; set; }
     public List<Command> StorageList { get; set; }
@@ -56,14 +56,19 @@ public class Character
     {
         if (_base == null)
         {
-            Debug.LogError("Init() failed: _base is null");
+            Debug.LogError("SetBaseStatus() failed: _base is null");
             return;
         }
+        SetBaseStatus();
+        SetBaseItems();
+        SetBaseCommands();
+        CoLStatus();
+    }
 
+    private void SetBaseStatus()
+    {
         MaxLife = _base.MaxLife;
-        Life = MaxLife;
         MaxBattery = _base.MaxBattery;
-        Battery = MaxBattery;
         Power = _base.Power;
         Technique = _base.Technique;
         Defense = _base.Defense;
@@ -73,39 +78,76 @@ public class Character
         Storage = _base.Storage;
         Pocket = _base.Pocket;
         Bag = _base.Bag;
+
         Coin = _base.Coin;
         Disc = _base.Disc;
         Key = _base.Key;
-        Exp = _base.Exp;
 
         Level = 1;
-        Soul = 0;
+        Exp = _base.Exp;
 
-        EquipmentList = new List<Equipment>(_base.EquipmentList ?? new List<Equipment>());
-        PocketList = new List<Consumable>();
-        foreach (Consumable item in _base.PocketList)
+        Life = MaxLife;
+        Battery = MaxBattery;
+        Soul = 0;
+    }
+
+    private void SetBaseItems()
+    {
+        EquipmentList = new List<Equipment>();
+        foreach (EquipmentBase equipmentBase in _base.EquipmentBaseList)
         {
-            item.Initialize();
-            PocketList.Add(item);
+            Equipment equipment = new Equipment(equipmentBase);
+            EquipmentList.Add(equipment);
+        }
+
+        PocketList = new List<Consumable>();
+        foreach (ConsumableBase consumableBase in _base.PocketBaseList)
+        {
+            Consumable consumable = new Consumable(consumableBase);
+            PocketList.Add(consumable);
         }
 
         BagItemList = new List<Item>();
-        foreach (Consumable item in _base.BagConsumableList)
+        foreach (ItemBase item in _base.BagItemBaseList)
         {
-            item.Initialize();
-            BagItemList.Add(item);
+            switch (item.itemType)
+            {
+                case ItemType.Consumable:
+                    Consumable bagConsumable = new Consumable((ConsumableBase)item);
+                    BagItemList.Add(bagConsumable);
+                    break;
+                case ItemType.Equipment:
+                    Equipment bagEquipment = new Equipment((EquipmentBase)item);
+                    BagItemList.Add(bagEquipment);
+                    break;
+                case ItemType.Treasure:
+                    Treasure bagTreasure = new Treasure((TreasureBase)item);
+                    BagItemList.Add(bagTreasure);
+                    break;
+                default:
+                    Debug.LogError("Unknown item type: " + item.itemType);
+                    break;
+            }
         }
-
-        BagItemList.AddRange(_base.BagEquipmentList);
-        BagItemList.AddRange(_base.BagTreasureList);
-
-        StorageList = new List<Command>(_base.StorageList ?? new List<Command>());
-        SlotList = new List<Command>(_base.SlotList ?? new List<Command>());
-
-        CoLStatus();
     }
 
-    // TODO : Characterのステータスを更新するメソッド
+    private void SetBaseCommands()
+    {
+        SlotList = new List<Command>();
+        foreach (CommandBase commandBase in _base.SlotBaseList)
+        {
+            Command command = new Command(commandBase);
+            SlotList.Add(command); // 追加する方法ならエラーにならない
+        }
+
+        StorageList = new List<Command>();
+        foreach (CommandBase commandBase in _base.StorageBaseList)
+        {
+            Command command = new Command(commandBase);
+            StorageList.Add(command);
+        }
+    }
+
     public void CoLStatus()
     {
         int DiffLife = 0;
@@ -168,6 +210,52 @@ public class Character
                     break;
             }
 
+        }
+    }
+
+    public void StatusUp(StatusType type)
+    {
+        if (SkillPoint > 0)
+        {
+            switch (type)
+            {
+                case StatusType.LIFE:
+                    MaxLife += 10;
+                    break;
+                case StatusType.BTRY:
+                    MaxBattery += 10;
+                    break;
+                case StatusType.POW:
+                    Power += 1;
+                    break;
+                case StatusType.TEC:
+                    Technique += 1;
+                    break;
+                case StatusType.DEF:
+                    Defense += 1;
+                    break;
+                case StatusType.SPD:
+                    Speed += 1;
+                    break;
+                case StatusType.LUK:
+                    Luck += 1;
+                    break;
+                case StatusType.MMR:
+                    Memory += 1;
+                    break;
+                case StatusType.STG:
+                    Storage += 1;
+                    break;
+                case StatusType.POC:
+                    Pocket += 1;
+                    break;
+            }
+            SkillPoint -= 1;
+            CoLStatus();
+        }
+        else
+        {
+            Debug.Log("スキルポイントが足りません。");
         }
     }
 }

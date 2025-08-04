@@ -11,10 +11,10 @@ public class PointBase : ScriptableObject
     [SerializeField, TextArea] string description;
     [SerializeField] Sprite icon; // ワールドマップで表示されるアイコン
     [SerializeField] Sprite image;
-    [SerializeField] List<Equipment> equipmentList;
+    [SerializeField] List<EquipmentBase> equipmentBaseList;
     [SerializeField] List<ConsumableBase> consumableBaseList;
-    [SerializeField] List<Treasure> treasureList;
-    [SerializeField] List<Command> commandList;
+    [SerializeField] List<TreasureBase> treasureBaseList;
+    [SerializeField] List<CommandBase> commandBaseList;
 
     public string Name { get => name; }
     public Character Owner { get => owner; }
@@ -22,8 +22,8 @@ public class PointBase : ScriptableObject
     public Sprite Icon { get => icon; }
     public Sprite Image { get => image; }
 
-    public List<Equipment> ShopEquipmentList { get => equipmentList; }
+    public List<EquipmentBase> ShopEquipmentBaseList { get => equipmentBaseList; }
     public List<ConsumableBase> ShopConsumableBaseList { get => consumableBaseList; }
-    public List<Treasure> ShopTreasureList { get => treasureList; }
-    public List<Command> ShopCommandList { get => commandList; }
+    public List<TreasureBase> ShopTreasureBaseList { get => treasureBaseList; }
+    public List<CommandBase> ShopCommandBaseList { get => commandBaseList; }
 }

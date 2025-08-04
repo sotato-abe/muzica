@@ -17,11 +17,6 @@ public class Consumable : Item
         UsableCount = baseData.UsableCount;
     }
 
-    public void Initialize()
-    {
-        UsableCount = (_base as ConsumableBase)?.UsableCount ?? 1;
-    }
-
     public bool UseConsumable()
     {
         UsableCount = Mathf.Max(UsableCount - 1, 0);

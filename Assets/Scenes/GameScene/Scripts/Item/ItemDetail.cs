@@ -39,7 +39,7 @@ public class ItemDetail : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Unknown item type: " + item.GetType());
+            Debug.LogError("Unknown item type: " + item.Base.itemType);
             return;
         }
     }

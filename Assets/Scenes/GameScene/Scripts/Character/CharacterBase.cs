@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewCharacter", menuName = "Character/CharacterBase")]
 public class CharacterBase : ScriptableObject
 {
+    [Header("Personal information")]
     [SerializeField] new string name;
     [SerializeField] RarityType rarity = RarityType.Common;
     [SerializeField] Sprite sprite;
@@ -12,38 +13,36 @@ public class CharacterBase : ScriptableObject
     [SerializeField, TextArea] string description;
     [SerializeField] FieldData birthplace;
 
+    [Header("Status")]
     // キャラクターのエナジー
     [SerializeField] int maxLife = 10;
     [SerializeField] int maxBattery = 5;
-
-    // キャラクターのステータス
     [SerializeField] int power = 1;
-    [SerializeField] int defense = 1;
     [SerializeField] int technique = 1;
+    [SerializeField] int defense = 1;
     [SerializeField] int speed = 1;
     [SerializeField] int luck = 1;
-
-    // キャラクターの容量
     [SerializeField] int memory = 3;
     [SerializeField] int storage = 10;
     [SerializeField] int pocket = 5;
     [SerializeField] int bag = 10;
 
+    [Header("Currency")]
     // キャラクターの資産
     [SerializeField] int coin = 10;
     [SerializeField] int disc = 0;
     [SerializeField] int key = 0;
     [SerializeField] int exp = 0;
 
+    [Header("Belongings")]
     // キャラクターの所持品
-    [SerializeField] List<Equipment> equipmentList;
-    [SerializeField] List<Consumable> pocketList;
-    [SerializeField] List<Consumable> bagConsumableList;
-    [SerializeField] List<Equipment> bagEquipmentList;
-    [SerializeField] List<Treasure> bagTreasureList;
-    [SerializeField] List<Command> storageList;
-    [SerializeField] List<Command> slotList = new List<Command>(15);
+    [SerializeField] List<EquipmentBase> equipmentBaseList;
+    [SerializeField] List<ConsumableBase> pocketBaseList;
+    [SerializeField] List<ItemBase> bagItemBaseList;
+    [SerializeField] List<CommandBase> slotBaseList = new List<CommandBase>(9);
+    [SerializeField] List<CommandBase> storageBaseList;
 
+    [Header("Messages")]
     // キャラクターの会話メッセージ
     [SerializeField] List<TalkMessage> messageList;
 
@@ -73,14 +72,31 @@ public class CharacterBase : ScriptableObject
     public int Key { get => key; }
     public int Exp { get => exp; }
 
-    public List<Equipment> EquipmentList { get => equipmentList; }
-    public List<Consumable> PocketList { get => pocketList; }
-    public List<Consumable> BagConsumableList { get => bagConsumableList; }
-    public List<Equipment> BagEquipmentList { get => bagEquipmentList; }
-    public List<Treasure> BagTreasureList { get => bagTreasureList; }
+    public List<EquipmentBase> EquipmentBaseList { get => equipmentBaseList; }
+    public List<ConsumableBase> PocketBaseList { get => pocketBaseList; }
+    public List<ItemBase> BagItemBaseList { get => bagItemBaseList; }
+    public List<CommandBase> StorageBaseList { get => storageBaseList; }
+    public List<CommandBase> SlotBaseList { get => slotBaseList; }
 
-    public List<Command> StorageList { get => storageList; }
-    public List<Command> SlotList { get => slotList; }
-
+    // キャラクターの会話メッセージ
     public List<TalkMessage> MessageList { get => messageList; }
+
+    // スロットの数を固定するためのプロパティ
+    private void OnValidate()
+    {
+        const int FIRST_SLOT_COUNT = 9;
+
+        // 要素数が固定未満なら null を追加して埋める
+        while (slotBaseList.Count < FIRST_SLOT_COUNT)
+        {
+            slotBaseList.Add(null);
+        }
+
+        // 要素数が多すぎる場合は削る（必要なければ省略可能）
+        while (slotBaseList.Count > FIRST_SLOT_COUNT)
+        {
+            slotBaseList.RemoveAt(slotBaseList.Count - 1);
+        }
+    }
+
 }

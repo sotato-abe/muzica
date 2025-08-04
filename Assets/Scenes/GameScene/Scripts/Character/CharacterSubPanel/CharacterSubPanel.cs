@@ -170,7 +170,7 @@ public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
 
         if (character.Life <= 0)
         {
-            Debug.LogWarning("エネルギーが不足しています。");
+            Debug.LogWarning("戦闘不能");
             turnBar.gameObject.SetActive(false);
             StopAllCoroutines();
             OnLifeOutAction?.Invoke(this);

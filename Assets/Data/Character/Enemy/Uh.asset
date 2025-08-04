@@ -21,8 +21,8 @@ MonoBehaviour:
   maxLife: 15
   maxBattery: 15
   power: 1
-  defense: 1
   technique: 1
+  defense: 1
   speed: 2
   luck: 1
   memory: 3
@@ -33,18 +33,21 @@ MonoBehaviour:
   disc: 0
   key: 0
   exp: 20
-  equipmentList:
-  - _base: {fileID: 11400000, guid: e0318b2766947c7458f5d69d9a04e543, type: 2}
-    level: 0
-  - _base: {fileID: 11400000, guid: d55d2943b293b474baafc6712688b183, type: 2}
-    level: 0
-  pocketList: []
-  bagConsumableList:
-  - _base: {fileID: 11400000, guid: fa6d8ac4bed66e64ab8d1f66c4b39f74, type: 2}
-    <UsableCount>k__BackingField: 1
-  bagEquipmentList: []
-  bagTreasureList:
-  - _base: {fileID: 11400000, guid: 46e7c483156da394d970db9f030bc96b, type: 2}
-  storageList: []
-  tableList: []
+  equipmentBaseList:
+  - {fileID: 11400000, guid: d55d2943b293b474baafc6712688b183, type: 2}
+  pocketBaseList: []
+  bagItemBaseList:
+  - {fileID: 11400000, guid: fa6d8ac4bed66e64ab8d1f66c4b39f74, type: 2}
+  - {fileID: 11400000, guid: ee02f7b99b3c89c4d880ae48eb350c7e, type: 2}
+  slotBaseList:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  storageBaseList: []
   messageList: []
