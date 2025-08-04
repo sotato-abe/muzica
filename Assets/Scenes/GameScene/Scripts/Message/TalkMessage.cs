@@ -16,4 +16,37 @@ public class TalkMessage
         this.messagePanelType = messagePanelType;
         this.message = message;
     }
+
+    public static TalkMessage GetDefaultMessage(MessageType messageType)
+    {
+        switch (messageType)
+        {
+            case MessageType.Encount:
+                return new TalkMessage(messageType, MessagePanelType.Default, "ちょっとつきあえや");
+            case MessageType.Attack:
+                return new TalkMessage(messageType, MessagePanelType.Default, "くらえ");
+            case MessageType.Recovery:
+                return new TalkMessage(messageType, MessagePanelType.Default, "これで大丈夫");
+            case MessageType.Damage:
+                return new TalkMessage(messageType, MessagePanelType.Default, "いてぇ");
+            case MessageType.Miss:
+                return new TalkMessage(messageType, MessagePanelType.Default, "ミスった！");
+            case MessageType.Escape:
+                return new TalkMessage(messageType, MessagePanelType.Default, "まて !");
+            case MessageType.Win:
+                return new TalkMessage(messageType, MessagePanelType.Default, "よし");
+            case MessageType.Lose:
+                return new TalkMessage(messageType, MessagePanelType.Default, "くそぅ");
+            case MessageType.Talk:
+                return new TalkMessage(messageType, MessagePanelType.Default, "おい、話があるんだ");
+            case MessageType.Question:
+                return new TalkMessage(messageType, MessagePanelType.Default, "?");
+            case MessageType.Entrance:
+                return new TalkMessage(messageType, MessagePanelType.Default, "いらっしゃい");
+            case MessageType.Greetings:
+                return new TalkMessage(messageType, MessagePanelType.Default, "こんにちは");
+            default:
+                return new TalkMessage(messageType, MessagePanelType.Default, "");
+        }
+    }
 }

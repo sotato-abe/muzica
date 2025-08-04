@@ -101,13 +101,13 @@ public class EscapePanel : BattleActionPanel
         {
             // 逃げる成功
             yield return new WaitForSeconds(1f);
-            PlayerController.Instance.SetPlayerBlowing(new TalkMessage(MessageType.Escape, MessagePanelType.Default, "にげろ！"));
+            PlayerController.Instance.SetPlayerMessage(new TalkMessage(MessageType.Escape, MessagePanelType.Default, "にげろ！"));
             OnEscape?.Invoke();
         }
         else
         {
             // 逃げる失敗
-            PlayerController.Instance.SetPlayerBlowing(new TalkMessage(MessageType.Miss, MessagePanelType.Default, "くそっ！"));
+            PlayerController.Instance.SetPlayerMessage(new TalkMessage(MessageType.Miss, MessagePanelType.Default, "くそっ！"));
         }
         RunningOff();
         CountEnergyCost();

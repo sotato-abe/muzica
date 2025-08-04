@@ -98,9 +98,7 @@ public class BattleSystem : MonoBehaviour
     {
         if (index < 0 || index >= enemySubPanels.Count) return; // インデックスが範囲外の場合は何もしない
         CharacterSubPanel subPanel = enemySubPanels[index];
-        subPanel.SetBattleCharacter(enemy); // 敵のキャラクターを設定
-        subPanel.BattleStart(); // ターンバーを開始
-        subPanel.SetActive(true); // キャラクターサブパネルを表示
+        subPanel.SetEnemy(enemy); // 敵のキャラクターを設定
     }
 
     private (Vector3, bool, bool) GetRandomAroundFloorPosition(int range = 1)

@@ -58,7 +58,7 @@ public class WorldMapController : MonoBehaviour
         {
             worldMapPanel.SetFieldName(fieldData.FieldName);
             TalkMessage talkMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Thinking, $"ここはなにかありそうだな。");
-            PlayerController.Instance.SetPlayerBlowing(talkMessage);
+            PlayerController.Instance.SetPlayerMessage(talkMessage);
         }
 
         FieldController.Instance.SetField(fieldData);

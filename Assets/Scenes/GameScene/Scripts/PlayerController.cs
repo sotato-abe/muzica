@@ -69,10 +69,14 @@ public class PlayerController : MonoBehaviour
         CurrentEventType = eventType;
     }
 
-    #region Player Communication
-    public void SetPlayerBlowing(TalkMessage talkMessage)
+    #region Player Message
+    public void SetPlayerMessage(TalkMessage talkMessage)
     {
         StartCoroutine(playerSubPanel.SetTalkMessage(talkMessage));
+    }
+    public void SetPlayerMessageByType(MessageType messageType)
+    {
+        playerSubPanel.SetMessageByType(messageType);
     }
     #endregion
 

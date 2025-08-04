@@ -274,4 +274,21 @@ public class Character
             Debug.Log("スキルポイントが足りません。");
         }
     }
+
+    public TalkMessage GetTalkMessageByType(MessageType messageType)
+    {
+        // Base.MessageListからmessageTypeに一致するメッセージを取得
+        List<TalkMessage> messages = Base.MessageList.FindAll(m => m.messageType == messageType);
+        if (messages.Count > 0)
+        {
+            // ランダムにメッセージを選択
+            int randomIndex = Random.Range(0, messages.Count);
+            TalkMessage selectedMessage = messages[randomIndex];
+            return selectedMessage;
+        }
+        else
+        {
+            return TalkMessage.GetDefaultMessage(messageType);
+        }
+    }
 }

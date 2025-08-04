@@ -7,7 +7,7 @@ using TMPro;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler 
+public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
 {
     [SerializeField] Image characterImage;
     [SerializeField] TextMeshProUGUI characterNameText;
@@ -95,17 +95,39 @@ public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
         turnBar.gameObject.SetActive(false);
     }
 
-    public override void SetActive(bool activeFlg, Action onComplete = null)
+    public void SetOwner(Character character)
     {
-        fixedDisplayFlg = activeFlg;
-        if (!activeFlg)
+        character.Init();
+        this.character = character;
+        characterImage.sprite = character.Base.SquareSprite;
+        characterNameText.text = character.Base.Name;
+        energyGauge.gameObject.SetActive(false);
+        turnBar.gameObject.SetActive(false);
+        SetActive(true);
+        SetMessageByType(MessageType.Entrance);
+    }
+
+    public virtual void SetEnemy(Character character)
+    {
+        character.Init();
+        this.character = character;
+        characterImage.sprite = character.Base.SquareSprite;
+        characterNameText.text = character.Base.Name;
+        energyGauge.gameObject.SetActive(true);
+        turnBar.gameObject.SetActive(true);
+        SetEnergy();
+        SetActive(true);
+        SetMessageByType(MessageType.Encount);
+        BattleStart();
+    }
+
+    public void SetMessageByType(MessageType messageType)
+    {
+        TalkMessage talkMessage = character.GetTalkMessageByType(messageType);
+        if (talkMessage != null)
         {
-            StopAllCoroutines();
-            turnBar.gameObject.SetActive(false);
-            blowingPanel.gameObject.SetActive(false);
+            StartCoroutine(SetTalkMessage(talkMessage));
         }
-        this.gameObject.SetActive(true);
-        base.SetActive(activeFlg, onComplete);
     }
 
     public IEnumerator SetTalkMessage(TalkMessage talkMessage)
@@ -123,18 +145,6 @@ public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
             yield return new WaitForSeconds(0.3f);
             base.SetActive(false);
         }
-    }
-
-    // Battle用のキャラクターを設定
-    public virtual void SetBattleCharacter(Character character)
-    {
-        character.Init();
-        this.character = character;
-        characterImage.sprite = character.Base.SquareSprite;
-        characterNameText.text = character.Base.Name;
-        energyGauge.gameObject.SetActive(true);
-        turnBar.gameObject.SetActive(true);
-        SetEnergy();
     }
 
     public void SetEnergy()
@@ -273,6 +283,19 @@ public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
         }
 
         transform.position = new Vector3(transform.position.x, groundY, transform.position.z); // 最後に位置を調整
+    }
+
+    public override void SetActive(bool activeFlg, Action onComplete = null)
+    {
+        fixedDisplayFlg = activeFlg;
+        if (!activeFlg)
+        {
+            StopAllCoroutines();
+            turnBar.gameObject.SetActive(false);
+            blowingPanel.gameObject.SetActive(false);
+        }
+        this.gameObject.SetActive(true);
+        base.SetActive(activeFlg, onComplete);
     }
 }
 
