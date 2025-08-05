@@ -37,7 +37,7 @@ public class FieldGenerator : MonoBehaviour
 
     [Header("Tiles")]
     private TileBase groundTile;
-    private TileBase grassTile;
+    private TileBase areaTile;
     private TileBase gateTile;
 
     [Header("Objects")]
@@ -137,7 +137,7 @@ public class FieldGenerator : MonoBehaviour
                 if ((-1 <= x && x <= 1) && (-1 <= y && y <= 1)) continue; // 自分自身とその周囲は除外
 
                 Vector2Int checkPos = targetPos + new Vector2Int(x, y);
-                if (IsValidMapPosition(checkPos.x, checkPos.y) && IsGroundOrGrass(checkPos))
+                if (IsValidMapPosition(checkPos.x, checkPos.y) && IsGroundOrArea(checkPos))
                 {
                     targetPos = checkPos;
                     targetPos += new Vector2Int(0, 1);
@@ -174,7 +174,7 @@ public class FieldGenerator : MonoBehaviour
     {
         this.fieldData = fieldData ?? defaultFieldData;
         this.groundTile = fieldTileSet.GroundTile ?? defaultFieldData.FieldTileSet.GroundTile;
-        this.grassTile = fieldTileSet.GrassTile ?? defaultFieldData.FieldTileSet.GrassTile;
+        this.areaTile = fieldTileSet.AreaTile ?? defaultFieldData.FieldTileSet.AreaTile;
 
         // フィールドのパラメータを設定
         width = this.fieldData.FieldWidth;
@@ -265,7 +265,7 @@ public class FieldGenerator : MonoBehaviour
             {
                 if (areaMapBase[x, y] == (int)TileType.Ground && mapBase[x, y] == (int)TileType.Ground)
                 {
-                    mapBase[x, y] = (int)TileType.Grass;
+                    mapBase[x, y] = (int)TileType.Area;
                 }
             }
         }
@@ -366,7 +366,7 @@ public class FieldGenerator : MonoBehaviour
         {
             Vector2Int current = queue.Dequeue();
 
-            if (IsGroundOrGrass(current) && !placedGates.Contains(current))
+            if (IsGroundOrArea(current) && !placedGates.Contains(current))
             {
                 CreatePath(current, cameFrom);
                 break;
@@ -388,10 +388,10 @@ public class FieldGenerator : MonoBehaviour
     /// <summary>
     /// 地面または草かチェック
     /// </summary>
-    private bool IsGroundOrGrass(Vector2Int pos)
+    private bool IsGroundOrArea(Vector2Int pos)
     {
         return mapBase[pos.x, pos.y] == (int)TileType.Ground ||
-               mapBase[pos.x, pos.y] == (int)TileType.Grass;
+               mapBase[pos.x, pos.y] == (int)TileType.Area;
     }
 
     /// <summary>
@@ -548,13 +548,13 @@ public class FieldGenerator : MonoBehaviour
                 int checkX = x + dx;
                 int checkY = y + dy;
 
-                if (!IsValidMapPosition(checkX, checkY) || !IsGroundOrGrass(new Vector2Int(checkX, checkY)))
+                if (!IsValidMapPosition(checkX, checkY) || !IsGroundOrArea(new Vector2Int(checkX, checkY)))
                 {
-                    return false; // 周囲に地面または草がない場合は配置不可
+                    return false; // 周囲に地面またはエリアがない場合は配置不可
                 }
             }
         }
-        return mapBase[x, y] == (int)TileType.Ground || mapBase[x, y] == (int)TileType.Grass;
+        return mapBase[x, y] == (int)TileType.Ground || mapBase[x, y] == (int)TileType.Area;
     }
 
     /// <summary>
@@ -581,7 +581,7 @@ public class FieldGenerator : MonoBehaviour
                 TileType tileType = (TileType)mapBase[x, y];
                 TileBase tileToPlace = GetTileForType(tileType);
 
-                if (tileType == TileType.Grass)
+                if (tileType == TileType.Area)
                 {
                     encountTilemap.SetTile(tilePosition, tileToPlace);
                 }
@@ -602,7 +602,7 @@ public class FieldGenerator : MonoBehaviour
         return tileType switch
         {
             TileType.Ground => groundTile,
-            TileType.Grass => grassTile,
+            TileType.Area => areaTile,
             TileType.Gate => groundTile,
             _ => null
         };
@@ -791,13 +791,13 @@ public class FieldGenerator : MonoBehaviour
                 int checkX = x + dx;
                 int checkY = y + dy;
 
-                if (!IsValidMapPosition(checkX, checkY) || !IsGroundOrGrass(new Vector2Int(checkX, checkY)))
+                if (!IsValidMapPosition(checkX, checkY) || !IsGroundOrArea(new Vector2Int(checkX, checkY)))
                 {
                     return false; // 周囲に地面または草がない場合は配置不可
                 }
             }
         }
-        return mapBase[x, y] == (int)TileType.Ground || mapBase[x, y] == (int)TileType.Grass;
+        return mapBase[x, y] == (int)TileType.Ground || mapBase[x, y] == (int)TileType.Area;
     }
 
     /// <summary>

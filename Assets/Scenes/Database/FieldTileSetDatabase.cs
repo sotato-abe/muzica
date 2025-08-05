@@ -122,4 +122,18 @@ public class FieldTileSetDatabase : MonoBehaviour
         }
         return null;
     }
+
+        public TileBase GetAreaTileByType(FieldType type)
+    {
+        FieldTileSet tileSet = GetTileSetFromByType(type);
+        if (tileSet != null)
+        {
+            return tileSet.AreaTile;
+        }
+        if (type != FieldType.None)
+        {
+            Debug.LogWarning($"No AreaTile found for FieldType: {type}");
+        }
+        return null;
+    }
 }

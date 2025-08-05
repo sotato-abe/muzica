@@ -213,7 +213,13 @@ public class Character
             switch (energyAttack.type)
             {
                 case EnergyType.Life:
-                    Life = Mathf.Clamp(Life - colEnergy, 0, MaxLife);
+                    if (energyAttack.isRecovery)
+                        Life = Mathf.Clamp(Life + (energyAttack.val * energyAttack.times), 0, MaxLife);
+                    else
+                    {
+                        colEnergy = Mathf.Max(0, (energyAttack.val - ColDefense) * energyAttack.times);
+                        Life = Mathf.Clamp(Life - colEnergy, 0, MaxLife);
+                    }
                     break;
                 case EnergyType.Battery:
                     Battery = Mathf.Clamp(Battery - colEnergy, 0, MaxBattery);

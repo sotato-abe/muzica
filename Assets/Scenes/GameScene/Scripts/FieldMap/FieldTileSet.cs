@@ -8,11 +8,11 @@ public class FieldTileSet : ScriptableObject
 {
     [SerializeField] FieldType fieldType = FieldType.Default;
     [SerializeField] TileBase groundTile;
-    [SerializeField] TileBase grassTile;
+    [SerializeField] TileBase areaTile;
     [SerializeField] GameObject[] objectPrefabs;
 
     public FieldType FieldType { get => fieldType; }
     public TileBase GroundTile { get => groundTile; }
-    public TileBase GrassTile { get => grassTile; }
+    public TileBase AreaTile { get => areaTile; }
     public GameObject[] ObjectPrefabs { get => objectPrefabs; }
 }
