@@ -9,7 +9,9 @@ public class CommandDetail : MonoBehaviour
     [SerializeField] TextMeshProUGUI commandNameText;
     [SerializeField] TextMeshProUGUI commandDescriptionText;
     [SerializeField] Image commandImage;
+    [SerializeField] GameObject enchantList;
     [SerializeField] GameObject costList;
+    [SerializeField] EnchantIcon enchantIconPrefab;
     [SerializeField] EnergyCostIcon energyCostIconPrefab;
 
     public void SetCommandDetail(Command command)
@@ -19,7 +21,24 @@ public class CommandDetail : MonoBehaviour
         commandDescriptionText.text = command.Base.Description;
         commandImage.sprite = command.Base.Sprite;
         commandImage.color = new Color(1, 1, 1, 1);
+        SetEnchants(command.Base.EnchantList);
         SetCosts(command.Base.EnergyCostList);
+    }
+
+    private void SetEnchants(List<Enchant> enchants)
+    {
+
+        foreach (Transform child in enchantList.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // エンチャントを表示する処理
+        foreach (var enchant in enchants)
+        {
+            EnchantIcon newIcon = Instantiate(enchantIconPrefab, enchantList.transform);
+            newIcon.SetEnchant(enchant);
+        }
     }
 
     private void SetCosts(List<EnergyCost> costs)
