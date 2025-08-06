@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using TMPro;
 
 [CreateAssetMenu(menuName = "Character/EnemyGroup")]
 public class EnemyGroup : ScriptableObject
 {
+    [SerializeField] string teamName; // チーム名
     [SerializeField] List<EnemyCharacter> CharacterList;
 
     public List<EnemyCharacter> GetCharacterList()

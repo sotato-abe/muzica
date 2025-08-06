@@ -17,7 +17,7 @@ MonoBehaviour:
   fieldWidth: 30
   fieldTileSet: {fileID: 11400000, guid: 142f15579faea10439092afa218277a4, type: 2}
   groundFillPercent: 0.4
-  areaFillPercent: 0.2
+  areaFillPercent: 0.4
   seed: 
   icon: {fileID: -1460347203, guid: d051fe1ac34111a44952b98a16508f03, type: 3}
   fieldName: "\u7802\u4E43\u91CC"
@@ -25,10 +25,11 @@ MonoBehaviour:
   objectCount: 5
   points: []
   treasureBoxItems: []
-  enemyGroups: []
+  enemyGroups:
+  - {fileID: 11400000, guid: e94487d4719271b40905c018d15a587b, type: 2}
   currentPosition: {x: 0, y: 0}
-  fieldType: 1
-  isTopOpen: 0
-  isBottomOpen: 0
+  fieldType: 2
+  isTopOpen: 1
+  isBottomOpen: 1
   isRightOpen: 0
-  isLeftOpen: 0
+  isLeftOpen: 1
