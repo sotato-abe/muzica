@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class ItemBase : ScriptableObject
 {
+    [Header("Item Information")]
     [SerializeField] new string name;
     [SerializeField] RarityType rarity;
     [SerializeField] Sprite sprite;
     [SerializeField, TextArea] string description;
     [SerializeField] int weight;
+
+    [Header("Item Price")]
     [SerializeField] int coinPrice = 1;
     [SerializeField] int discPrice = 0;
 

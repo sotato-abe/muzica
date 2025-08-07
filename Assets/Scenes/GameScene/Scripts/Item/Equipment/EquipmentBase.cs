@@ -4,7 +4,8 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewEquipment", menuName = "Item/EquipmentBase")]
 public class EquipmentBase : ItemBase
-{
+{    
+    [Header("Equipment Status")]
     [SerializeField] EquipmentType equipmentType; // 装備の種類
     [SerializeField] int life;
     [SerializeField] int battery;
@@ -14,6 +15,7 @@ public class EquipmentBase : ItemBase
     [SerializeField] int speed;
     [SerializeField] int luck;
 
+    [Header("Attack Performance")]
     [SerializeField] TargetType targetType;
     [SerializeField] List<EnergyCost> energyCostList;
     [SerializeField] List<Enchant> enchantList;
