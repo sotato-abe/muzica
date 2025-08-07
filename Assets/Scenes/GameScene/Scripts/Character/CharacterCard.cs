@@ -15,7 +15,8 @@ public class CharacterCard : MonoBehaviour
     [SerializeField] Image characterImage;
     [SerializeField] GameObject rarityStarSprite;
     [SerializeField] GameObject rarityList;
-
+    [SerializeField] Image frame;
+    [SerializeField] Image nameFrame;
     public void Setup(Character character)
     {
         this.character = character;
@@ -26,6 +27,9 @@ public class CharacterCard : MonoBehaviour
 
     private void SetRarity(int level)
     {
+        Color rarityColor = character.Base.Rarity.GetRarityColor();
+        frame.color = rarityColor;
+        nameFrame.color = rarityColor;
         // レベルに応じて星を表示
         foreach (Transform child in rarityList.transform)
         {

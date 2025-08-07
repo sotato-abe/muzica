@@ -10,6 +10,8 @@ using UnityEngine.EventSystems;
 public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
 {
     [SerializeField] Image characterImage;
+    [SerializeField] Image frame;
+    [SerializeField] Image nameFrame;
     [SerializeField] TextMeshProUGUI characterNameText;
     [SerializeField] public BlowingPanel blowingPanel;
     [SerializeField] public EnergyGauge energyGauge;
@@ -65,6 +67,53 @@ public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
         OnTarget?.Invoke(this);
     }
 
+    public virtual void SetCharacter(Character character)
+    {
+        character.Init();
+        this.character = character;
+        characterImage.sprite = character.Base.SquareSprite;
+        characterNameText.text = character.Base.Name;
+        energyGauge.gameObject.SetActive(false);
+        turnBar.gameObject.SetActive(false);
+        SetRarityColor();
+    }
+
+    public void SetOwner(Character character)
+    {
+        character.Init();
+        this.character = character;
+        characterImage.sprite = character.Base.SquareSprite;
+        characterNameText.text = character.Base.Name;
+        energyGauge.gameObject.SetActive(false);
+        turnBar.gameObject.SetActive(false);
+        SetActive(true);
+        SetMessageByType(MessageType.Entrance);
+        SetRarityColor();
+    }
+
+    public virtual void SetEnemy(Character character)
+    {
+        character.Init();
+        this.character = character;
+        characterImage.sprite = character.Base.SquareSprite;
+        characterNameText.text = character.Base.Name;
+        energyGauge.gameObject.SetActive(true);
+        turnBar.gameObject.SetActive(true);
+        SetEnergy();
+        SetActive(true);
+        SetMessageByType(MessageType.Encount);
+        BattleStart();
+        SetRarityColor();
+    }
+
+    private void SetRarityColor()
+    {
+        if (character == null) return;
+        Color rarityColor = character.Base.Rarity.GetRarityColor();
+        frame.color = rarityColor;
+        nameFrame.color = rarityColor;
+    }
+
     public void SetTarget(bool targetFlg)
     {
         isTarget = targetFlg;
@@ -83,42 +132,6 @@ public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
         bool isUsable = consumable.UseConsumable();
         StartCoroutine(UpdateEnergyGauges());
         return isUsable;
-    }
-
-    public virtual void SetCharacter(Character character)
-    {
-        character.Init();
-        this.character = character;
-        characterImage.sprite = character.Base.SquareSprite;
-        characterNameText.text = character.Base.Name;
-        energyGauge.gameObject.SetActive(false);
-        turnBar.gameObject.SetActive(false);
-    }
-
-    public void SetOwner(Character character)
-    {
-        character.Init();
-        this.character = character;
-        characterImage.sprite = character.Base.SquareSprite;
-        characterNameText.text = character.Base.Name;
-        energyGauge.gameObject.SetActive(false);
-        turnBar.gameObject.SetActive(false);
-        SetActive(true);
-        SetMessageByType(MessageType.Entrance);
-    }
-
-    public virtual void SetEnemy(Character character)
-    {
-        character.Init();
-        this.character = character;
-        characterImage.sprite = character.Base.SquareSprite;
-        characterNameText.text = character.Base.Name;
-        energyGauge.gameObject.SetActive(true);
-        turnBar.gameObject.SetActive(true);
-        SetEnergy();
-        SetActive(true);
-        SetMessageByType(MessageType.Encount);
-        BattleStart();
     }
 
     public void SetMessageByType(MessageType messageType)
