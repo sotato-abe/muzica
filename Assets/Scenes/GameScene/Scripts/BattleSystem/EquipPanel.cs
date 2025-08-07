@@ -228,7 +228,7 @@ public class EquipPanel : BattleActionPanel
         if (!IsEquipmentValid()) return;
         if (!TryUseEnergy()) return;
 
-        StopReels();
+        StartCoroutine(StopSlot());
     }
 
     /// <summary>
@@ -251,55 +251,14 @@ public class EquipPanel : BattleActionPanel
     /// <summary>
     /// リールを停止
     /// </summary>
-    private void StopReels()
+    public IEnumerator StopSlot()
     {
-        slotWindow.StopReels(result =>
-        {
-            List<Command> activeCommands = FilterValidCommands(result);
-            CommandUpdate(activeCommands);
-        });
-    }
-
-    /// <summary>
-    /// 有効なコマンドをフィルタリング
-    /// </summary>
-    private List<Command> FilterValidCommands(List<Command> commands)
-    {
-        List<Command> activeCommands = new List<Command>();
-
-        foreach (var cmd in commands)
-        {
-            if (cmd != null)
-            {
-                activeCommands.Add(cmd);
-            }
-        }
-
-        return activeCommands;
-    }
-
-    /// <summary>
-    /// アクションを開始
-    /// </summary>
-    private void CommandUpdate(List<Command> commands)
-    {
-        if (commands.Count > 0)
-        {
-            foreach (var command in commands)
-            {
-                if (command?.Base == null)
-                {
-                    Debug.LogWarning("コマンドのBaseが未設定です。");
-                    continue;
-                }
-
-                equipmentInfo.CommandUpdate(command);
-            }
-        }
-
+        yield return StartCoroutine(slotWindow.StopSlot());
         TotalAttackCount totalCount = equipmentInfo.GetTotalCount();
         ExecuteTargetAttack(totalCount);
+        yield return new WaitForSeconds(0.5f);
     }
+
     /// <summary>
     /// 攻撃対象を取得
     /// </summary>
@@ -350,13 +309,13 @@ public class EquipPanel : BattleActionPanel
     {
         yield return StartCoroutine(characterSubPanel.TakeAttackCoroutine(totalCount));
         OnActionEnd?.Invoke();
-        RestartReels();
+        RestartSlot();
     }
 
     /// <summary>
     /// リールを再開
     /// </summary>
-    public void RestartReels()
+    public void RestartSlot()
     {
         if (!IsEquipmentValid() || !gameObject.activeInHierarchy)
         {
@@ -364,7 +323,7 @@ public class EquipPanel : BattleActionPanel
         }
 
         equipmentInfo.SetInfo(currentEquipment);
-        StartCoroutine(slotWindow.StartReels());
+        StartCoroutine(slotWindow.StartSlot());
     }
     #endregion
 

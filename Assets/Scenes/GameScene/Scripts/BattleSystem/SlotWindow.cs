@@ -8,12 +8,13 @@ public class SlotWindow : Panel
     [SerializeField] CommandReel commandReel1;
     [SerializeField] CommandReel commandReel2;
     [SerializeField] CommandReel commandReel3;
+    [SerializeField] private EquipmentInfo equipmentInfo;
 
     private float startInterval = 0.3f; // リール開始の遅延時間
     private float stopInterval = 0.8f; // リール停止の遅延時間
     List<Command> resultList;
 
-    public IEnumerator StartReels()
+    public IEnumerator StartSlot()
     {
         commandReel1.StartReel();
         yield return new WaitForSeconds(startInterval);
@@ -22,23 +23,12 @@ public class SlotWindow : Panel
         commandReel3.StartReel();
     }
 
-    public void StopReels(System.Action<List<Command>> onComplete)
+    public IEnumerator StopSlot()
     {
-        StartCoroutine(GetReelCommands(onComplete));
-    }
-
-    private IEnumerator GetReelCommands(System.Action<List<Command>> onComplete)
-    {
-        resultList = new List<Command>();
-
-        resultList.Add(commandReel1.StopReel());
+        equipmentInfo.CommandUpdate(commandReel1.StopReel());
         yield return new WaitForSeconds(stopInterval);
-
-        resultList.Add(commandReel2.StopReel());
+        equipmentInfo.CommandUpdate(commandReel2.StopReel());
         yield return new WaitForSeconds(stopInterval);
-
-        resultList.Add(commandReel3.StopReel());
-
-        onComplete?.Invoke(resultList); // 完了時に結果を返す
+        equipmentInfo.CommandUpdate(commandReel3.StopReel());
     }
 }

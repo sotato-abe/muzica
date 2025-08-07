@@ -150,6 +150,8 @@ public class EquipmentInfo : MonoBehaviour
                 if (existingAttack.type == newAttack.type)
                 {
                     existingAttack.val += newAttack.val; // 値を加算
+                    if (0 < newAttack.times)
+                        existingAttack.times += Mathf.Max(0, newAttack.times - 1); // timesも加算
                     found = true;
                     break;
                 }
