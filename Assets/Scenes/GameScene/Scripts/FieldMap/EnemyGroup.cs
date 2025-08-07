@@ -9,6 +9,7 @@ public class EnemyGroup : ScriptableObject
 {
     [SerializeField] string teamName; // チーム名
     [SerializeField] List<EnemyCharacter> CharacterList;
+    [SerializeField] int maxCount = 3; // 最大出現数
 
     public List<EnemyCharacter> GetCharacterList()
     {
@@ -22,7 +23,7 @@ public class EnemyGroup : ScriptableObject
         if (copy.Count == 0)
             return new List<EnemyCharacter>();
 
-        int count = Random.Range(1, copy.Count + 1);
+        int count = Random.Range(1, maxCount);
 
         // シャッフル
         for (int i = copy.Count - 1; i > 0; i--)

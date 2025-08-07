@@ -5,21 +5,23 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
 
-public class AttackCounter : MonoBehaviour
+public class EnergyCountIcon : MonoBehaviour
 {
     [SerializeField] Image iconImage;
+    [SerializeField] Image backImage;
     [SerializeField] TextMeshProUGUI valText;
-    [SerializeField] TextMeshProUGUI timesText;
     [SerializeField] Sprite lifeIcon;
     [SerializeField] Sprite batteryIcon;
     [SerializeField] Sprite soulIcon;
+    [SerializeField] RectTransform backRectTransform;
 
     Color32 attackColor = new Color32(255, 101, 0, 255);
     Color32 recoveryColor = new Color32(0, 255, 219, 255);
 
-    public void SetCounter(EnergyCount energyCount)
+    int widthPadding = 55;
+
+    public void SetCount(EnergyCount energyCount)
     {
-        valText.text = energyCount.val.ToString();
         switch (energyCount.type)
         {
             case EnergyType.Life:
@@ -35,26 +37,31 @@ public class AttackCounter : MonoBehaviour
                 Debug.LogError("Unknown EnergyType");
                 break;
         }
-        if (energyCount.isRecovery)
-        {
-            iconImage.color = recoveryColor;
-            valText.color = recoveryColor;
-            timesText.color = recoveryColor;
-        }
-        else
-        {
-            iconImage.color = attackColor;
-            valText.color = attackColor;
-            timesText.color = attackColor;
-        }
 
+        if (energyCount.isRecovery)
+            backImage.color = recoveryColor; // 回復ならオレンジ
+        else
+            backImage.color = attackColor; // 攻撃なら赤
+
+        string val = "";
         if (energyCount.times > 1)
         {
-            timesText.text = "* " + energyCount.times.ToString();
+            val += "x" + energyCount.times.ToString();
         }
         else
         {
-            timesText.text = "";
+            val = energyCount.val.ToString();
         }
+
+        valText.text = val;
+        ResizeIcon();
+    }
+
+    private void ResizeIcon()
+    {
+        // フォントのサイズを調整する処理
+        float newWidth = valText.preferredWidth + widthPadding;
+        float height = backRectTransform.sizeDelta.y;
+        backRectTransform.sizeDelta = new Vector2(newWidth, height);
     }
 }
