@@ -36,10 +36,13 @@ public class StorageWindow : MonoBehaviour, IDropHandler
         if (droppedCommandBlock.OriginalParent == this.transform) return;
 
         Command command = droppedCommandBlock.Command;
-        PlayerController.Instance.AddCommandToStorage(droppedCommandBlock.Command);
-        droppedCommandBlock.RemoveCommand();
-        CreateCommandBlock(command, null);
-        SetCounter();
+        bool canBuy = droppedCommandBlock.RemoveCommand();
+
+        if (canBuy)
+        {
+            PlayerController.Instance.AddCommandToStorage(droppedCommandBlock.Command);
+            SetCommands();
+        }
     }
 
     public void SetCommands()
@@ -50,14 +53,11 @@ public class StorageWindow : MonoBehaviour, IDropHandler
         {
             if (commandBlockMap.ContainsKey(command))
             {
-                // 既に表示済みならスキップ
                 continue;
             }
 
-            // 新規アイテムだけ生成
             CreateCommandBlock(command, "New");
         }
-        SetCounter();
     }
 
     private void CreateCommandBlock(Command command, string statusText)
@@ -74,11 +74,6 @@ public class StorageWindow : MonoBehaviour, IDropHandler
         commandBlock.OnRemoveCommand += RemoveCommand;
         commandBlock.OnTargetCommand += TargetCommand;
         commandBlockMap[command] = commandBlock;
-    }
-
-    private void SetCounter()
-    {
-        counterText.text = $"{commandBlockMap.Count} / {PlayerController.Instance.PlayerCharacter.ColStorage}";
     }
 
     private void SetBlock()
@@ -106,7 +101,6 @@ public class StorageWindow : MonoBehaviour, IDropHandler
             Destroy(commandBlock.gameObject);
         }
         commandBlockMap.Clear();
-        SetCounter();
     }
 
     private bool RemoveCommand(CommandBlock commandBlock)
@@ -115,7 +109,7 @@ public class StorageWindow : MonoBehaviour, IDropHandler
         if (commandBlock.OriginalParent != this.transform) return false;
 
         Command command = commandBlock.Command;
-        PlayerController.Instance.RemoveCommandFromStorage(commandBlock.Command);
+        PlayerController.Instance.RemoveCommandFromStorage(command);
         commandBlock.RemovePlaceholder();
         commandBlockMap.Remove(command);
         Destroy(commandBlock.gameObject);

@@ -75,6 +75,18 @@ public class PlayerCharacter : Character
         return false;
     }
 
+    public bool AddCommandToStorage(Command command)
+    {
+        if (StorageList.Count < ColStorage)
+        {
+            StorageList.Add(command.Clone());
+            return true;
+        }
+
+        Debug.Log("ストレージがいっぱいです。");
+        return false;
+    }
+
     public bool EquipItem(Equipment equipment)
     {
         EquipmentList.Add(equipment);

@@ -18,19 +18,18 @@ public class CommandSlot : MonoBehaviour, IDropHandler
         // ドロップアイテムをバックに追加
         CommandBlock droppedCommandBlock = eventData.pointerDrag?.GetComponent<CommandBlock>();
 
-        if (droppedCommandBlock != null && droppedCommandBlock.Command != null)
-        {
-            Command command = droppedCommandBlock.Command;
-            if (droppedCommandBlock.OriginalParent == this.transform)
-                return;
-            PlayerController.Instance.AddCommandToSlot(command, SlotIndex);
-            SetCommand(command);
-            droppedCommandBlock.RemoveCommand();
-        }
-        else
+        if (droppedCommandBlock == null || droppedCommandBlock.Command == null)
         {
             Debug.LogWarning("ドロップされたアイテムが無効です。");
+            return;
         }
+        if (droppedCommandBlock.OriginalParent == this.transform)
+            return;
+
+        Command command = droppedCommandBlock.Command;
+        PlayerController.Instance.AddCommandToSlot(command, SlotIndex);
+        SetCommand(command);
+        droppedCommandBlock.RemoveCommand();
     }
 
     public void SetCommand(Command command)
@@ -61,7 +60,7 @@ public class CommandSlot : MonoBehaviour, IDropHandler
         if (commandBlock.OriginalParent != this.transform) return false;
 
         Command command = commandBlock.Command;
-        PlayerController.Instance.AddCommandToSlot(null, SlotIndex);
+        PlayerController.Instance.RemoveCommandFromSlot(SlotIndex);
         commandBlock.RemovePlaceholder();
         Destroy(commandBlock.gameObject);
         return true;

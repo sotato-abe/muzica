@@ -107,9 +107,11 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void AddItemToBag(Item item)
     {
+        if (item == null) return;
+
         if (player.Bag <= player.BagItemList.Count)
         {
-            Debug.LogWarning($"バックの容量を超えています。アイテムを追加できません。{player.Bag}/{player.BagItemList.Count}");
+            Debug.LogWarning($"バックの容量を超えています。アイテムを追加できません。");
             FieldController.Instance.DropPlayerItem(item);
             return;
         }
@@ -216,13 +218,13 @@ public class PlayerController : MonoBehaviour
     {
         if (command == null) return;
 
-        if (!CanAddToStorage())
+        if (player.ColStorage <= player.StorageList.Count)
         {
-            HandleStorageOverflow(command);
+            Debug.LogWarning("ストレージの容量を超えています。コマンドを追加できません。");
+            FieldController.Instance.DropPlayerCommand(command);
             return;
         }
-
-        player.StorageList.Add(command.Clone());
+        player.AddCommandToStorage(command.Clone());
     }
 
     /// <summary>
@@ -230,7 +232,10 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void RemoveCommandFromStorage(Command command)
     {
+        Debug.Log("RemoveCommandFromStorage");
         if (command == null) return;
+
+        Debug.Log(player.StorageList.Count);
 
         if (player.StorageList.Contains(command))
         {
@@ -295,20 +300,9 @@ public class PlayerController : MonoBehaviour
         FieldController.Instance.DropPlayerCommand(command);
     }
 
-    private bool CanAddToStorage()
-    {
-        return player.StorageList.Count <= player.ColStorage;
-    }
-
     private bool IsValidSlotIndex(int index)
     {
         return index >= 0 && index < player.ColMemory * 3;
-    }
-
-    private void HandleStorageOverflow(Command command)
-    {
-        FieldController.Instance.DropPlayerCommand(command);
-        Debug.LogWarning("ストレージの容量を超えています。コマンドを追加できません。");
     }
 
     private void HandleInvalidSlotIndex(Command command)

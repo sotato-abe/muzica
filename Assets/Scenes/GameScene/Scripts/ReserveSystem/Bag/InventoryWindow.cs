@@ -41,7 +41,6 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
         if (canBuy)
         {
             PlayerController.Instance.AddItemToBag(item);
-            // SetItems()を呼び出すことで、新しく追加されたアイテムのItemBlockが作成される
             SetItems();
         }
     }
@@ -52,6 +51,7 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
 
         // 現在のBagItemListにないアイテムブロックは削除する
         var itemsToRemove = new List<Item>();
+
         foreach (var kvp in itemBlockMap)
         {
             if (!items.Contains(kvp.Key))
@@ -72,11 +72,11 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
         // BagItemListにあるアイテムでitemBlockMapにないものを追加
         foreach (Item item in items)
         {
-            if (!itemBlockMap.ContainsKey(item))
+            if (itemBlockMap.ContainsKey(item))
             {
-                CreateItemBlock(item, "New");
                 continue;
             }
+            CreateItemBlock(item, "New");
         }
 
         SetCounter();
