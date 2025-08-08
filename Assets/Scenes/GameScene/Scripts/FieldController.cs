@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.Tilemaps;
-using UnityEngine;
 using UnityEngine.Events;
 
 public class FieldController : MonoBehaviour

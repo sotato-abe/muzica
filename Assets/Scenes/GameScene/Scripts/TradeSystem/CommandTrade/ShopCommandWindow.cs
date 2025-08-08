@@ -11,11 +11,10 @@ public class ShopCommandWindow : MonoBehaviour, IDropHandler
     [SerializeField] CommandBlock commandBlockPrefab;
     [SerializeField] GameObject commandList;
 
-    public delegate void TargetCommandDelegate(Command? command, bool isOwn = false);
+    public delegate void TargetCommandDelegate(Command command, bool isOwn = false);
     public event TargetCommandDelegate OnTargetCommand;
 
     private const int MAX_BAG_COUNT = 20;
-    private int currentBlockCount = 0;
     private Point currentPoint;
 
     public void OnDrop(PointerEventData eventData)
@@ -51,7 +50,7 @@ public class ShopCommandWindow : MonoBehaviour, IDropHandler
         }
     }
 
-    private void CreateCommandBlock(Command command, string? statusText)
+    private void CreateCommandBlock(Command command, string statusText)
     {
         CommandBlock commandBlock = Instantiate(commandBlockPrefab, commandList.transform);
         commandBlock.Setup(command, this.transform);

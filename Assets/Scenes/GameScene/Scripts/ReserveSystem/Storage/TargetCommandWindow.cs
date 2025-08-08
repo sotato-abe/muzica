@@ -17,7 +17,7 @@ public class TargetCommandWindow : MonoBehaviour
         ClearTargetCommand();
     }
 
-    public void TargetCommand(Command? command, bool isOwn = true)
+    public void TargetCommand(Command command, bool isOwn = true)
     {
         if (command == null)
         {

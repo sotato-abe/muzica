@@ -19,7 +19,7 @@ public class CommandBlock : Block, IPointerEnterHandler, IPointerExitHandler
     public delegate bool RemoveCommandDelegate(CommandBlock commandBlock);
     public event RemoveCommandDelegate OnRemoveCommand;
 
-    public delegate void TargetCommandDelegate(CommandBlock? commandBlock);
+    public delegate void TargetCommandDelegate(CommandBlock commandBlock);
     public event TargetCommandDelegate OnTargetCommand;
 
 

@@ -20,7 +20,7 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
     public delegate bool RemoveItemDelegate(ItemBlock itemBlock);
     public event RemoveItemDelegate OnRemoveItem;
 
-    public delegate void TargetItemDelegate(ItemBlock? itemBlock);
+    public delegate void TargetItemDelegate(ItemBlock itemBlock);
     public event TargetItemDelegate OnTargetItem;
 
 

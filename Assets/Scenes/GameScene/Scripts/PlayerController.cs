@@ -246,7 +246,7 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// コマンドをスロットに追加
     /// </summary>
-    public void AddCommandToSlot(Command? command, int index)
+    public void AddCommandToSlot(Command command, int index)
     {
         if (!IsValidSlotIndex(index))
         {

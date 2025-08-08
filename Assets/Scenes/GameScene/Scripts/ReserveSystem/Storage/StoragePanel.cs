@@ -18,7 +18,7 @@ public class StoragePanel : Panel
         slotSettingWindow.OnTargetCommand += TargetCommand;
     }
 
-    public void TargetCommand(Command? command, bool isOwn = true)
+    public void TargetCommand(Command command, bool isOwn = true)
     {
         targetCommandWindow.TargetCommand(command, isOwn);
     }

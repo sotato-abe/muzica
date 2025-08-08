@@ -152,7 +152,6 @@ public class EquipPanel : BattleActionPanel
             case TargetType.Group:
                 SetTargetEnemyPanel(3);
                 break;
-                break;
             case TargetType.All:
                 SetTargetEnemyPanel(3);
                 targetSubPanels.Add(playerSubPanel);

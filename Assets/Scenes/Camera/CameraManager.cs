@@ -8,7 +8,6 @@ public class CameraManager : MonoBehaviour
     public float smoothSpeed = 5f; // 追従のなめらかさ
     public Vector3 offset; // 追跡位置のズレ
 
-    private EventType cameraType = EventType.Default; // カメラの種類
     private Vector3 defaultPosition = new Vector3(0, 0, 0); // 通常時のカメラ位置
     private Vector3 battlePosition = new Vector3(0, -1, 0); // バトル時のカメラ位置
     private Vector3 tradePosition = new Vector3(0, 4, 0); // 取引時のカメラ位置

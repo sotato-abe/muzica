@@ -12,7 +12,7 @@ public class EquipmentWindow : MonoBehaviour
     [SerializeField] EquipmentSlot equipmentSlot1;
     [SerializeField] EquipmentSlot equipmentSlot2;
 
-    public delegate void TargetItemDelegate(Item? item, bool isOwn = true);
+    public delegate void TargetItemDelegate(Item item, bool isOwn = true);
     public event TargetItemDelegate OnTargetItem;
 
     private void Awake()

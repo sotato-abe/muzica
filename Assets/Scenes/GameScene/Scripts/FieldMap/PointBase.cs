@@ -7,7 +7,7 @@ using UnityEngine.Tilemaps;
 public class PointBase : ScriptableObject
 {
     [Header("Shop information")]
-    [SerializeField] string name;
+    [SerializeField] string pointName;
     [SerializeField] CharacterBase owner;
     [SerializeField, TextArea] string description;
     [SerializeField] Sprite icon; // ワールドマップで表示されるアイコン
@@ -17,7 +17,7 @@ public class PointBase : ScriptableObject
     [SerializeField] List<ItemBase> shopItemBaseList;
     [SerializeField] List<CommandBase> commandBaseList;
 
-    public string Name { get => name; }
+    public string Name { get => pointName; }
     public CharacterBase Owner { get => owner; }
     public string Description { get => description; }
     public Sprite Icon { get => icon; }

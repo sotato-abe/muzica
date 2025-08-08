@@ -16,7 +16,7 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
     [SerializeField] int maxCount = 20;
 
     Dictionary<Item, ItemBlock> itemBlockMap = new Dictionary<Item, ItemBlock>();
-    public delegate void TargetItemDelegate(Item? item, bool isOwn = true);
+    public delegate void TargetItemDelegate(Item item, bool isOwn = true);
     public event TargetItemDelegate OnTargetItem;
 
     private void Awake()
@@ -82,7 +82,7 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
         SetCounter();
     }
 
-    private void CreateItemBlock(Item item, string? statusText)
+    private void CreateItemBlock(Item item, string statusText)
     {
         if (itemBlockMap.ContainsKey(item))
         {

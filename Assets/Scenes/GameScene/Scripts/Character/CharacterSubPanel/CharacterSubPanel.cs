@@ -27,10 +27,10 @@ public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
     Color runningColor = new Color(255f / 255f, 0f / 255f, 74f / 255f, 1f);
     Color activeColor = new Color(196f / 255f, 255f / 255f, 0 / 255f, 1f);
 
-    public delegate void TargetCharacterDelegate(CharacterSubPanel? characterSubPanel);
+    public delegate void TargetCharacterDelegate(CharacterSubPanel characterSubPanel);
     public event TargetCharacterDelegate OnTarget;
 
-    public delegate void ActiveTurnDelegate(CharacterSubPanel? characterSubPanel);
+    public delegate void ActiveTurnDelegate(CharacterSubPanel characterSubPanel);
     public event ActiveTurnDelegate OnActiveTurn;
 
     public delegate void LifeOutDelegate(CharacterSubPanel characterSubPanel);

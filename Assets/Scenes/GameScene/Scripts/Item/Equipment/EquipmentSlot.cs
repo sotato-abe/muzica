@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class EquipmentSlot : EquipmentDetail, IDropHandler
 {
     public UnityAction OnUpdateInventory;
-    public delegate void TargetItemDelegate(Item? item, bool isOwn = true);
+    public delegate void TargetItemDelegate(Item item, bool isOwn = true);
     public event TargetItemDelegate OnTargetItem;
     ItemBlock currentBlock;
 

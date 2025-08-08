@@ -17,7 +17,7 @@ public class SlotSettingWindow : MonoBehaviour
     float paddingWidth = 50f; // 横幅
 
     List<CommandSlot> commandSlots = new List<CommandSlot>();
-    public delegate void TargetCommandDelegate(Command? command, bool isOwn = true);
+    public delegate void TargetCommandDelegate(Command command, bool isOwn = true);
     public event TargetCommandDelegate OnTargetCommand;
 
     private void Start()

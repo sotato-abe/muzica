@@ -11,11 +11,10 @@ public class ShopItemWindow : MonoBehaviour, IDropHandler
     [SerializeField] ItemBlock itemBlockPrefab;
     [SerializeField] GameObject itemList;
 
-    public delegate void TargetItemDelegate(Item? item, bool isOwn = false);
+    public delegate void TargetItemDelegate(Item item, bool isOwn = false);
     public event TargetItemDelegate OnTargetItem;
 
     private const int MAX_BAG_COUNT = 20;
-    private int currentBlockCount = 0;
     private Point currentPoint;
 
     public void OnDrop(PointerEventData eventData)
@@ -51,7 +50,7 @@ public class ShopItemWindow : MonoBehaviour, IDropHandler
         }
     }
 
-    private void CreateItemBlock(Item item, string? statusText)
+    private void CreateItemBlock(Item item, string statusText)
     {
         ItemBlock itemBlock = Instantiate(itemBlockPrefab, itemList.transform);
         itemBlock.Setup(item, this.transform);

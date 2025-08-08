@@ -10,7 +10,7 @@ public class CommandSlot : MonoBehaviour, IDropHandler
 
     public int SlotIndex;
 
-    public delegate void TargetCommandDelegate(CommandBlock? commandBlock);
+    public delegate void TargetCommandDelegate(CommandBlock commandBlock);
     public event TargetCommandDelegate OnTargetCommand;
 
     public void OnDrop(PointerEventData eventData)

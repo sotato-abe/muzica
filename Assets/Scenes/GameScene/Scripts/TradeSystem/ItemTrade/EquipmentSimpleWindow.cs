@@ -11,10 +11,8 @@ public class EquipmentSimpleWindow : MonoBehaviour, IDropHandler
     [SerializeField] ItemBlock itemBlockPrefab;
     [SerializeField] GameObject itemList;
 
-    public delegate void TargetItemDelegate(Item? item, bool isOwn = true);
+    public delegate void TargetItemDelegate(Item item, bool isOwn = true);
     public event TargetItemDelegate OnTargetItem;
-
-    private int currentBlockCount = 0;
 
     private void OnEnable()
     {

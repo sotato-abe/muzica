@@ -17,7 +17,7 @@ public class TargetItemWindow : MonoBehaviour
         ClearTargetItem();
     }
 
-    public void TargetItem(Item? item, bool isOwn = true)
+    public void TargetItem(Item item, bool isOwn = true)
     {
         if (item == null)
         {

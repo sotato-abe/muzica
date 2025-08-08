@@ -16,7 +16,7 @@ public class PocketWindow : MonoBehaviour, IDropHandler
     [SerializeField] int maxCount = 20;
     
     Dictionary<Item, ItemBlock> itemBlockMap = new Dictionary<Item, ItemBlock>();
-    public delegate void TargetItemDelegate(Item? item, bool isOwn = true);
+    public delegate void TargetItemDelegate(Item item, bool isOwn = true);
     public event TargetItemDelegate OnTargetItem;
     private int currentBlockCount = 0;
     private void Awake()

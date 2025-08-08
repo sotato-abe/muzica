@@ -16,7 +16,7 @@ public class StorageWindow : MonoBehaviour, IDropHandler
     [SerializeField] int maxCount = 15;
     Dictionary<Command, CommandBlock> commandBlockMap = new Dictionary<Command, CommandBlock>();
 
-    public delegate void TargetCommandDelegate(Command? command, bool isOwn = true);
+    public delegate void TargetCommandDelegate(Command command, bool isOwn = true);
     public event TargetCommandDelegate OnTargetCommand;
     private void Awake()
     {
@@ -60,7 +60,7 @@ public class StorageWindow : MonoBehaviour, IDropHandler
         SetCounter();
     }
 
-    private void CreateCommandBlock(Command command, string? statusText)
+    private void CreateCommandBlock(Command command, string statusText)
     {
         if (commandBlockMap.ContainsKey(command))
         {
