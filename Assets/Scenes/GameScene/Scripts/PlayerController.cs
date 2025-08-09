@@ -146,6 +146,7 @@ public class PlayerController : MonoBehaviour
         if (item is Equipment equipment)
         {
             player.EquipmentList.Add(equipment.Clone() as Equipment);
+            player.ColStatus();
         }
     }
 

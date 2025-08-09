@@ -20,7 +20,7 @@ public class StatusWindow : MonoBehaviour
     [SerializeField] StatusCounter luckCounter;
     [SerializeField] SkillPointParts skillPoint;
 
-    private void Start()
+    private void Awake()
     {
         lifeCounter.OnStatusUp += RestateWindow;
         powerCounter.OnStatusUp += RestateWindow;
@@ -28,6 +28,12 @@ public class StatusWindow : MonoBehaviour
         defenseCounter.OnStatusUp += RestateWindow;
         speedCounter.OnStatusUp += RestateWindow;
         luckCounter.OnStatusUp += RestateWindow;
+    }
+
+    private void OnEnable()
+    {
+        RestateWindow();
+        SetLevel();
     }
 
     public void SetCharacter(PlayerCharacter playerCharacter)

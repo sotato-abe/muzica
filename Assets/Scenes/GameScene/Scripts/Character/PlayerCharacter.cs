@@ -41,7 +41,7 @@ public class PlayerCharacter : Character
                     MaxBattery += 5;
                     break;
             }
-            CoLStatus();
+            ColStatus();
             SkillPoint -= 1;
         }
         else
@@ -85,19 +85,6 @@ public class PlayerCharacter : Character
 
         Debug.Log("ストレージがいっぱいです。");
         return false;
-    }
-
-    public bool EquipItem(Equipment equipment)
-    {
-        EquipmentList.Add(equipment);
-        // 3つ以上ある場合は一番頭の装備を外しBagItemListに追加
-        if (EquipmentList.Count >= EQUIPMENT_COUNT)
-        {
-            Equipment removedEquipment = EquipmentList[0];
-            EquipmentList.RemoveAt(0);
-            BagItemList.Add(removedEquipment);
-        }
-        return true;
     }
 
     public bool RemoveBagItem(Item item)

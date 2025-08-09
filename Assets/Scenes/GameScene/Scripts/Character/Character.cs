@@ -24,7 +24,7 @@ public class Character
     public int Storage { get; set; }
     public int Pocket { get; set; }
 
-    // CoLStatus
+    // ColStatus
     public int ColLife { get; set; }
     public int ColBattery { get; set; }
     public int ColPower { get; set; }
@@ -78,7 +78,7 @@ public class Character
         SetBaseStatus();
         SetBaseItems();
         SetBaseCommands();
-        CoLStatus();
+        ColStatus();
     }
 
     private void SetBaseStatus()
@@ -164,7 +164,7 @@ public class Character
         }
     }
 
-    public void CoLStatus()
+    public void ColStatus()
     {
         int DiffLife = 0;
         int DiffBattery = 0;
@@ -273,7 +273,7 @@ public class Character
                     break;
             }
             SkillPoint -= 1;
-            CoLStatus();
+            ColStatus();
         }
         else
         {
