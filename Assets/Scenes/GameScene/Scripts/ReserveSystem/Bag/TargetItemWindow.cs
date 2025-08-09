@@ -9,12 +9,14 @@ using UnityEngine.EventSystems;
 public class TargetItemWindow : MonoBehaviour
 {
     [SerializeField] ItemDetail itemDetail;
+    [SerializeField] EquipmentStatusDisplay equipmentStatusDisplay;
     [SerializeField] PriceTag coinPriceTag;
     [SerializeField] PriceTag discPriceTag;
 
     private void Awake()
     {
         ClearTargetItem();
+        equipmentStatusDisplay.gameObject.SetActive(false);
     }
 
     public void TargetItem(Item item, bool isOwn = true)
@@ -32,12 +34,23 @@ public class TargetItemWindow : MonoBehaviour
 
         if (discPriceTag != null)
             discPriceTag.SetPrice(item.Base.DiscPrice, isOwn);
+
+        if (item is Equipment equipment)
+        {
+            equipmentStatusDisplay.ShowEquipmentStatus(equipment);
+            equipmentStatusDisplay.gameObject.SetActive(true);
+        }
+        else
+        {
+            equipmentStatusDisplay.gameObject.SetActive(false);
+        }
     }
 
     private void ClearTargetItem()
     {
         itemDetail.ClearItemDetail();
-        
+        equipmentStatusDisplay.gameObject.SetActive(false);
+
         if (coinPriceTag != null)
             coinPriceTag.SetPrice(null);
 
