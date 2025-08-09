@@ -20,7 +20,7 @@ public class SlotSettingWindow : MonoBehaviour
     public delegate void TargetCommandDelegate(Command command, bool isOwn = true);
     public event TargetCommandDelegate OnTargetCommand;
 
-    private void Start()
+    private void Awake()
     {
         playerController = PlayerController.Instance;
         if (playerController == null)
@@ -34,6 +34,11 @@ public class SlotSettingWindow : MonoBehaviour
         InitializeCommandSlots();
         SetCommandSlot();
         SetWindowSize();
+    }
+
+    private void OnEnable()
+    {
+        SetCommandSlot();
     }
 
     private void SetWindowSize()
