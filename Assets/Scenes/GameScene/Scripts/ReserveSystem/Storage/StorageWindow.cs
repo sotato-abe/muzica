@@ -24,6 +24,7 @@ public class StorageWindow : MonoBehaviour, IDropHandler
     }
     private void OnEnable()
     {
+        Debug.Log("StorageWindow OnEnable");
         SetCommands();
         SetBlock();
     }
@@ -48,6 +49,24 @@ public class StorageWindow : MonoBehaviour, IDropHandler
     public void SetCommands()
     {
         List<Command> commands = PlayerController.Instance.PlayerCharacter.StorageList;
+        var commandsToRemove = new List<Command>();
+
+        foreach (var kvp in commandBlockMap)
+        {
+            if (!commands.Contains(kvp.Key))
+            {
+                commandsToRemove.Add(kvp.Key);
+            }
+        }
+
+        foreach (var command in commandsToRemove)
+        {
+            if (commandBlockMap.TryGetValue(command, out CommandBlock commandBlock))
+            {
+                Destroy(commandBlock.gameObject);
+                commandBlockMap.Remove(command);
+            }
+        }
 
         foreach (Command command in commands)
         {

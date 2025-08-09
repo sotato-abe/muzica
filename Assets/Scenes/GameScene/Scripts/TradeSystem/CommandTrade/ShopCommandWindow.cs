@@ -55,7 +55,7 @@ public class ShopCommandWindow : MonoBehaviour, IDropHandler
         CommandBlock commandBlock = Instantiate(commandBlockPrefab, commandList.transform);
         commandBlock.Setup(command, this.transform);
         commandBlock.SetStatustext(statusText);
-        commandBlock.OnRemoveCommand += BuyCommand;
+        commandBlock.OnRemoveCommand += SellCommand;
         commandBlock.OnTargetCommand += TargetCommand;
     }
 
@@ -67,7 +67,7 @@ public class ShopCommandWindow : MonoBehaviour, IDropHandler
         }
     }
 
-    private bool BuyCommand(CommandBlock commandBlock)
+    private bool SellCommand(CommandBlock commandBlock)
     {
         if (commandBlock == null || commandBlock.Command == null) return false;
         if (commandBlock.OriginalParent != this.transform) return false;
@@ -78,6 +78,7 @@ public class ShopCommandWindow : MonoBehaviour, IDropHandler
         {
             commandBlock.RemovePlaceholder();
             Destroy(commandBlock.gameObject);
+            currentPoint.ShopCommands.Remove(command); // ポイントのアイテムリストから削除
             return true;
         }
         return false;

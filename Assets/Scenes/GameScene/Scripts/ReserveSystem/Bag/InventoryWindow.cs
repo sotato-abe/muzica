@@ -69,7 +69,6 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
             }
         }
 
-        // BagItemListにあるアイテムでitemBlockMapにないものを追加
         foreach (Item item in items)
         {
             if (itemBlockMap.ContainsKey(item))
