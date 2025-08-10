@@ -1183,6 +1183,7 @@ GameObject:
   - component: {fileID: 3853358811746791517}
   - component: {fileID: 5367989603133372778}
   - component: {fileID: 1642062475229861507}
+  - component: {fileID: 4528375960436920852}
   m_Layer: 0
   m_Name: Title
   m_TagString: Untagged
@@ -1240,8 +1241,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Target
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a85bb7c7924926c43be313bf5266fc48, type: 2}
-  m_sharedMaterial: {fileID: -7014219873648055863, guid: a85bb7c7924926c43be313bf5266fc48, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5dc6e2c8f70970349aa6df6a664495fd, type: 2}
+  m_sharedMaterial: {fileID: -2287277865590233392, guid: 5dc6e2c8f70970349aa6df6a664495fd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1307,6 +1308,22 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &4528375960436920852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2564508308818003832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf1722d2a4c9d57428575913957d151b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: {fileID: 1642062475229861507}
+  padding: 30
+  backImage: {fileID: 3847955970485681401}
+  backRectTransform: {fileID: 3853358811746791517}
 --- !u!1 &2757591221414311075
 GameObject:
   m_ObjectHideFlags: 0
@@ -1716,6 +1733,8 @@ MonoBehaviour:
   equipmentStatusDisplay: {fileID: 7006952519411587253}
   coinPriceTag: {fileID: 6885283088930434400}
   discPriceTag: {fileID: 6933947052931938808}
+  titleText: {fileID: 4528375960436920852}
+  dispDetailSwitch: 1
 --- !u!1 &2949334639835524703
 GameObject:
   m_ObjectHideFlags: 0

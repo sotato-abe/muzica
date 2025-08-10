@@ -12,11 +12,15 @@ public class TargetItemWindow : MonoBehaviour
     [SerializeField] EquipmentStatusDisplay equipmentStatusDisplay;
     [SerializeField] PriceTag coinPriceTag;
     [SerializeField] PriceTag discPriceTag;
+    [SerializeField] Title titleText;
     [SerializeField] bool dispDetailSwitch = true;
+
+    private const string default_title = "Target";
 
     private void Awake()
     {
         ClearTargetItem();
+        titleText.ChangeTitle(default_title);
         equipmentStatusDisplay.gameObject.SetActive(false);
     }
 
@@ -29,7 +33,25 @@ public class TargetItemWindow : MonoBehaviour
         }
 
         itemDetail.SetItemDetail(item);
+        titleText.ChangeTitle(item.Base.Name);
+        ShowDetail(item, isOwn);
+    }
 
+    private void ClearTargetItem()
+    {
+        itemDetail.ClearItemDetail();
+        titleText.ChangeTitle(default_title);
+        equipmentStatusDisplay.gameObject.SetActive(false);
+
+        if (coinPriceTag != null)
+            coinPriceTag.SetPrice(null);
+
+        if (discPriceTag != null)
+            discPriceTag.SetPrice(null);
+    }
+
+    private void ShowDetail(Item item, bool isOwn = true)
+    {
         if (!dispDetailSwitch)
             return;
 
@@ -48,17 +70,5 @@ public class TargetItemWindow : MonoBehaviour
         {
             equipmentStatusDisplay.gameObject.SetActive(false);
         }
-    }
-
-    private void ClearTargetItem()
-    {
-        itemDetail.ClearItemDetail();
-        equipmentStatusDisplay.gameObject.SetActive(false);
-
-        if (coinPriceTag != null)
-            coinPriceTag.SetPrice(null);
-
-        if (discPriceTag != null)
-            discPriceTag.SetPrice(null);
     }
 }

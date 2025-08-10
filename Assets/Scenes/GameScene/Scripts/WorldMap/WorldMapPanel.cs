@@ -7,11 +7,11 @@ using TMPro;
 public class WorldMapPanel : SlidePanel
 {
     [SerializeField] WorldMapCamera worldMapCamera;
-    [SerializeField] Title fieldName;
+    [SerializeField] Title fieldTitle;
 
     public void SetFieldName(string name)
     {
-        StartCoroutine(fieldName.TypeTitle(name));
+        fieldTitle.ChangeTitle(name);
     }
 }
 

@@ -25,8 +25,14 @@ public class Title : MonoBehaviour
         {
             title.text += letter;
             ResizePlate();
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.05f);
         }
+    }
+
+    public void ChangeTitle(string newTitle)
+    {
+        StopAllCoroutines();
+        StartCoroutine(TypeTitle(newTitle));
     }
 
     private void ResizePlate()
