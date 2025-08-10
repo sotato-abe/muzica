@@ -8,13 +8,14 @@ using UnityEngine.EventSystems;
 
 public class TargetCommandWindow : MonoBehaviour
 {
-    [SerializeField] CommandDetail commandDetail;
+    [SerializeField] CommandCard commandCard;
     [SerializeField] PriceTag coinPriceTag;
     [SerializeField] PriceTag discPriceTag;
 
     private void Awake()
     {
         ClearTargetCommand();
+        commandCard.gameObject.SetActive(false);
     }
 
     public void TargetCommand(Command command, bool isOwn = true)
@@ -25,7 +26,8 @@ public class TargetCommandWindow : MonoBehaviour
             return;
         }
 
-        commandDetail.SetCommandDetail(command);
+        commandCard.SetCommandCard(command);
+        commandCard.gameObject.SetActive(true);
         if (coinPriceTag != null)
             coinPriceTag.SetPrice(command.Base.CoinPrice, isOwn);
 
@@ -35,7 +37,7 @@ public class TargetCommandWindow : MonoBehaviour
 
     private void ClearTargetCommand()
     {
-        commandDetail.ResetSlot();
+        commandCard.gameObject.SetActive(false);
 
         if (coinPriceTag != null)
             coinPriceTag.SetPrice(null);

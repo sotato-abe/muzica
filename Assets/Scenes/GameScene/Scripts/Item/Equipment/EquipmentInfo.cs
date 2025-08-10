@@ -107,7 +107,8 @@ public class EquipmentInfo : MonoBehaviour
     {
         if (command == null || command.Base == null)
         {
-            Debug.LogWarning("Command base is null, cannot update info.");
+            // スカ
+            // Debug.LogWarning("Command base is null, cannot update info.");
             return;
         }
 

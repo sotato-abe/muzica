@@ -45,6 +45,21 @@ public class EquipmentCard : Card
             newCost.SetCostIcon(cost);
         }
     }
+    
+    private void SetAttacks(List<EnergyCount> counts)
+    {
+        foreach (Transform child in attackCounterList.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // EnergyCostを表示する処理
+        foreach (var count in counts)
+        {
+            AttackCounter newCounter = Instantiate(attackCounterPrefab, attackCounterList.transform);
+            newCounter.SetCounter(count);
+        }
+    }
 
     private void SetEnchants(List<Enchant> enchants)
     {
@@ -59,21 +74,6 @@ public class EquipmentCard : Card
         {
             EnchantIcon newEnchant = Instantiate(enchantIconPrefab, enchantList.transform);
             newEnchant.SetEnchant(enchant);
-        }
-    }
-
-    private void SetAttacks(List<EnergyCount> counts)
-    {
-        foreach (Transform child in attackCounterList.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
-        // EnergyCostを表示する処理
-        foreach (var count in counts)
-        {
-            AttackCounter newCounter = Instantiate(attackCounterPrefab, attackCounterList.transform);
-            newCounter.SetCounter(count);
         }
     }
 
