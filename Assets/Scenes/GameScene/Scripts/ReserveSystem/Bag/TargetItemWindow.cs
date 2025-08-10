@@ -12,6 +12,7 @@ public class TargetItemWindow : MonoBehaviour
     [SerializeField] EquipmentStatusDisplay equipmentStatusDisplay;
     [SerializeField] PriceTag coinPriceTag;
     [SerializeField] PriceTag discPriceTag;
+    [SerializeField] bool dispDetailSwitch = true;
 
     private void Awake()
     {
@@ -28,6 +29,9 @@ public class TargetItemWindow : MonoBehaviour
         }
 
         itemDetail.SetItemDetail(item);
+
+        if (!dispDetailSwitch)
+            return;
 
         if (coinPriceTag != null)
             coinPriceTag.SetPrice(item.Base.CoinPrice, isOwn);
