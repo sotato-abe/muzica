@@ -2,24 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 using TMPro;
 
-public class EnergyCostIcon : MonoBehaviour
+public class CostIconPrefab : MonoBehaviour
 {
+    [SerializeField] TextMeshProUGUI valText;
     [SerializeField] Image iconImage;
     [SerializeField] Image backImage;
-    [SerializeField] TextMeshProUGUI valText;
     [SerializeField] Sprite lifeIcon;
     [SerializeField] Sprite batteryIcon;
     [SerializeField] Sprite soulIcon;
 
-    public void SetCost(EnergyCost energyCost)
+    public void SetCostIcon(EnergyCost cost)
     {
-        Color32 energyColor = energyCost.type.GetEnergyColor();
+        if (cost == null)
+            return;
+
+        valText.text = cost.val.ToString();
+        SetType(cost.type);
+    }
+    
+    private void SetType(EnergyType type)
+    {
+        Color32 energyColor = type.GetEnergyColor();
         backImage.color = energyColor;
 
-        switch (energyCost.type)
+        switch (type)
         {
             case EnergyType.Life:
                 iconImage.sprite = lifeIcon;
@@ -34,7 +42,5 @@ public class EnergyCostIcon : MonoBehaviour
                 Debug.LogError("Unknown EnergyType");
                 break;
         }
-
-        valText.text = energyCost.val.ToString();
     }
 }

@@ -19,7 +19,6 @@ public class AttackCounter : MonoBehaviour
 
     public void SetCounter(EnergyCount energyCount)
     {
-        valText.text = energyCount.val.ToString();
         switch (energyCount.type)
         {
             case EnergyType.Life:
@@ -35,6 +34,7 @@ public class AttackCounter : MonoBehaviour
                 Debug.LogError("Unknown EnergyType");
                 break;
         }
+
         if (energyCount.isRecovery)
         {
             iconImage.color = recoveryColor;
@@ -56,5 +56,6 @@ public class AttackCounter : MonoBehaviour
         {
             timesText.text = "";
         }
+        valText.text = energyCount.val.ToString();
     }
 }

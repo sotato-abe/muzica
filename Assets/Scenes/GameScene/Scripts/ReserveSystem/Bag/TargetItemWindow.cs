@@ -8,20 +8,19 @@ using UnityEngine.EventSystems;
 
 public class TargetItemWindow : MonoBehaviour
 {
-    [SerializeField] ItemDetail itemDetail;
-    [SerializeField] EquipmentStatusDisplay equipmentStatusDisplay;
+    [SerializeField] ConsumableCard consumableCard;
+    [SerializeField] EquipmentCard equipmentCard;
+    [SerializeField] TreasureCard treasureCard;
     [SerializeField] PriceTag coinPriceTag;
     [SerializeField] PriceTag discPriceTag;
-    [SerializeField] Title titleText;
     [SerializeField] bool dispDetailSwitch = true;
-
-    private const string default_title = "Target";
 
     private void Awake()
     {
         ClearTargetItem();
-        titleText.ChangeTitle(default_title);
-        equipmentStatusDisplay.gameObject.SetActive(false);
+        consumableCard.gameObject.SetActive(false);
+        equipmentCard.gameObject.SetActive(false);
+        treasureCard.gameObject.SetActive(false);
     }
 
     public void TargetItem(Item item, bool isOwn = true)
@@ -31,23 +30,41 @@ public class TargetItemWindow : MonoBehaviour
             ClearTargetItem();
             return;
         }
-
-        itemDetail.SetItemDetail(item);
-        titleText.ChangeTitle(item.Base.Name);
+        if (item is Consumable consumable)
+        {
+            consumableCard.SetConsumableDetail(consumable);
+            consumableCard.gameObject.SetActive(true);
+        }
+        else if (item is Equipment equipment)
+        {
+            equipmentCard.SetEquipmentDetail(equipment);
+            equipmentCard.gameObject.SetActive(true);
+        }
+        else if (item is Treasure treasure)
+        {
+            treasureCard.SetTreasureDetail(treasure);
+            treasureCard.gameObject.SetActive(true);
+        }
+        else
+        {
+            Debug.LogWarning("Unsupported item type: " + item.GetType());
+            ClearTargetItem();
+            return;
+        }
         ShowDetail(item, isOwn);
     }
 
     private void ClearTargetItem()
     {
-        itemDetail.ClearItemDetail();
-        titleText.ChangeTitle(default_title);
-        equipmentStatusDisplay.gameObject.SetActive(false);
-
         if (coinPriceTag != null)
             coinPriceTag.SetPrice(null);
 
         if (discPriceTag != null)
             discPriceTag.SetPrice(null);
+
+        consumableCard.gameObject.SetActive(false);
+        equipmentCard.gameObject.SetActive(false);
+        treasureCard.gameObject.SetActive(false);
     }
 
     private void ShowDetail(Item item, bool isOwn = true)
@@ -60,15 +77,5 @@ public class TargetItemWindow : MonoBehaviour
 
         if (discPriceTag != null)
             discPriceTag.SetPrice(item.Base.DiscPrice, isOwn);
-
-        if (item is Equipment equipment)
-        {
-            equipmentStatusDisplay.ShowEquipmentStatus(equipment);
-            equipmentStatusDisplay.gameObject.SetActive(true);
-        }
-        else
-        {
-            equipmentStatusDisplay.gameObject.SetActive(false);
-        }
     }
 }

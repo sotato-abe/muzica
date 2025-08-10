@@ -19,8 +19,6 @@ public class BagPanel : Panel
         equipmentWindow.OnTargetItem += TargetItem;
         inventoryWindow.OnTargetItem += TargetItem;
         pocketWindow.OnTargetItem += TargetItem;
-        bagCategory.OnChangeWindow += ChangeWindow;
-        ChangeWindow(true);
     }
 
     public void UpdateInvenotry()
@@ -31,11 +29,5 @@ public class BagPanel : Panel
     public void TargetItem(Item item, bool isOwn = true)
     {
         targetItemWindow.TargetItem(item, isOwn);
-    }
-
-    public void ChangeWindow(bool isEquipment)
-    {
-        equipmentWindow.gameObject.SetActive(isEquipment);
-        pocketWindow.gameObject.SetActive(!isEquipment);
     }
 }
