@@ -10,14 +10,14 @@ public class EnergyCount
     public EnergyType type;
     public bool isRecovery = true; // trueならプラス、falseならマイナス
     public int val;
-    public int times = 1;
+    public float times = 1;
 
-    public EnergyCount(EnergyType type, bool isRecovery, int val, int times = 1)
+    public EnergyCount(EnergyType type, bool isRecovery, int val, float times = 1)
     {
         this.type = type;
         this.isRecovery = isRecovery;
         this.val = val;
-        this.val = times;
+        this.times = times;
     }
 
     public EnergyCount(EnergyCount other)

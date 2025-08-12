@@ -209,15 +209,15 @@ public class Character
         {
             // エネルギー攻撃の処理
             int isRecovery = energyAttack.isRecovery ? -1 : 1;
-            int colEnergy = energyAttack.val * energyAttack.times * isRecovery;
+            int colEnergy = (int)(energyAttack.val * energyAttack.times) * isRecovery;
             switch (energyAttack.type)
             {
                 case EnergyType.Life:
                     if (energyAttack.isRecovery)
-                        Life = Mathf.Clamp(Life + (energyAttack.val * energyAttack.times), 0, MaxLife);
+                        Life = Mathf.Clamp(Life + (int)(energyAttack.val * energyAttack.times), 0, MaxLife);
                     else
                     {
-                        colEnergy = Mathf.Max(0, (energyAttack.val - ColDefense) * energyAttack.times);
+                        colEnergy = Mathf.Max(0, (int)(energyAttack.val * energyAttack.times) - ColDefense);
                         Life = Mathf.Clamp(Life - colEnergy, 0, MaxLife);
                     }
                     break;
