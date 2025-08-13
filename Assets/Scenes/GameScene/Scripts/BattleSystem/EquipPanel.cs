@@ -57,8 +57,7 @@ public class EquipPanel : BattleActionPanel
 
     private void OnEnable()
     {
-        SetEquipment();
-        SetTargetting();
+        ShowTargeting();
     }
 
     private void Update()
@@ -204,6 +203,37 @@ public class EquipPanel : BattleActionPanel
             targetSubPanels.Clear();
             targetSubPanels.Add(enemySubPanel);
             enemySubPanel.SetTarget(true);
+        }
+    }
+
+    public void ShowTargeting()
+    {
+        if (0 == targetSubPanels.Count)
+        {
+            SetEquipment();
+            SetTargetting();
+            return;
+        }
+
+        foreach (var subPanel in enemySubPanels)
+        {
+            if (targetSubPanels.Contains(subPanel))
+            {
+                if (subPanel.isOpen)
+                {
+                    subPanel.SetTarget(true);
+                }
+                else
+                {
+                    // ターゲットが倒れているときはターゲットを再選択する
+                    SetTargetting();
+                    break;
+                }
+            }
+            else
+            {
+                subPanel.SetTarget(false);
+            }
         }
     }
 
