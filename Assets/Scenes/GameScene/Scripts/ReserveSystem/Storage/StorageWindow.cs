@@ -75,11 +75,11 @@ public class StorageWindow : MonoBehaviour, IDropHandler
                 continue;
             }
 
-            CreateCommandBlock(command, "New");
+            CreateCommandBlock(command);
         }
     }
 
-    private void CreateCommandBlock(Command command, string statusText)
+    private void CreateCommandBlock(Command command)
     {
         if (commandBlockMap.ContainsKey(command))
         {
@@ -89,7 +89,6 @@ public class StorageWindow : MonoBehaviour, IDropHandler
 
         CommandBlock commandBlock = Instantiate(commandBlockPrefab, commandList.transform);
         commandBlock.Setup(command, this.transform);
-        commandBlock.SetStatustext(statusText);
         commandBlock.OnRemoveCommand += RemoveCommand;
         commandBlock.OnTargetCommand += TargetCommand;
         commandBlockMap[command] = commandBlock;

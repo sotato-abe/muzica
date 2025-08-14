@@ -27,7 +27,7 @@ public class ShopItemWindow : MonoBehaviour, IDropHandler
             Item item = droppedItemBlock.Item;
             PlayerController.Instance.SellItem(item);
             droppedItemBlock.RemoveItem();
-            CreateItemBlock(item, null);
+            CreateItemBlock(item);
         }
         else
         {
@@ -46,15 +46,14 @@ public class ShopItemWindow : MonoBehaviour, IDropHandler
         DeleteAllItems();
         foreach (Item item in items)
         {
-            CreateItemBlock(item, null);
+            CreateItemBlock(item);
         }
     }
 
-    private void CreateItemBlock(Item item, string statusText)
+    private void CreateItemBlock(Item item)
     {
         ItemBlock itemBlock = Instantiate(itemBlockPrefab, itemList.transform);
         itemBlock.Setup(item, this.transform);
-        itemBlock.SetStatustext(statusText);
         itemBlock.OnRemoveItem += SellItem;
         itemBlock.OnTargetItem += TargetItem;
     }

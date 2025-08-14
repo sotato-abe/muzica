@@ -13,6 +13,12 @@ public class StatusText : MonoBehaviour
 
     public void SetText(string text)
     {
+        if (text == null)
+        {
+            transform.gameObject.SetActive(false);
+            return;
+        }
+        transform.gameObject.SetActive(true);
         mainText.text = text;
         frameText.text = text;
     }

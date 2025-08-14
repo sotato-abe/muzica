@@ -7,6 +7,7 @@ public class Command
 {
     [SerializeField] CommandBase _base;
     [SerializeField] int level = 1;
+    public bool isNew = true;
 
     public CommandBase Base => _base; // CommandBase は ScriptableObject を継承している前提
     public int Level => level;
@@ -21,6 +22,7 @@ public class Command
     {
         var copy = new Command(_base);
         copy.level = this.level; // レベルもコピー
+        copy.isNew = this.isNew;
         return copy;
     }
 }

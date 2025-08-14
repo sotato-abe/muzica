@@ -15,7 +15,7 @@ public class Treasure : Item
     public override Item Clone()
     {
         var copy = new Treasure(TreasureBase);
-        // 必要なら他のプロパティもコピー
+        copy.isNew = this.isNew;
         return copy;
     }
 }

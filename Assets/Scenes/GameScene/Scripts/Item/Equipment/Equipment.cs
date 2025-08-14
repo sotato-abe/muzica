@@ -21,6 +21,7 @@ public class Equipment : Item
     {
         var copy = new Equipment(EquipmentBase);
         copy.level = this.level; // レベルもコピー
+        copy.isNew = this.isNew;
         return copy;
     }
 }

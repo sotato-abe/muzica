@@ -29,12 +29,6 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
         SetTarget(false);
     }
 
-    public void SetStatustext(string text)
-    {
-        statusText.SetText(text);
-        statusText.SetActive(true);
-    }
-
     protected override void Awake()
     {
         base.Awake();
@@ -46,12 +40,30 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
         image.sprite = Item.Base.Sprite;
         this.OriginalParent = originalParent;
         SetTarget(false);
+        SetStatustext();
+    }
+
+    private void SetStatustext()
+    {
+        if (Item.isNew)
+        {
+            statusText.SetText("New");
+        }
+        else
+        {
+            statusText.SetText(null);
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
 
         SetTarget(true);
+        if (Item.isNew)
+        {
+            Item.isNew = false;
+            statusText.SetText(null);
+        }
         OnTargetItem?.Invoke(this);
     }
 
@@ -64,7 +76,6 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
     public void SetTarget(bool activeFlg)
     {
         if (isActive == activeFlg) return;
-        statusText.SetActive(false);
         isActive = activeFlg;
         Color bgColor = cursor.color;
         bgColor.a = isActive ? 1f : 0f;

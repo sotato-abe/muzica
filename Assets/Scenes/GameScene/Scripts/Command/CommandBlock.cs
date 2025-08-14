@@ -39,12 +39,30 @@ public class CommandBlock : Block, IPointerEnterHandler, IPointerExitHandler
         image.sprite = Command.Base.Sprite;
         this.OriginalParent = originalParent;
         SetTarget(false);
+        SetStatustext();
+    }
+
+    public void SetStatustext()
+    {
+        if (Command.isNew)
+        {
+            statusText.SetText("New");
+        }
+        else
+        {
+            statusText.SetText(null);
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
 
         SetTarget(true);
+        if (Command.isNew)
+        {
+            Command.isNew = false;
+            statusText.SetText(null);
+        }
         OnTargetCommand?.Invoke(this);
     }
 
@@ -67,11 +85,5 @@ public class CommandBlock : Block, IPointerEnterHandler, IPointerExitHandler
     public bool RemoveCommand()
     {
         return OnRemoveCommand?.Invoke(this) ?? false;
-    }
-
-    public void SetStatustext(string text)
-    {
-        statusText.SetText(text);
-        statusText.SetActive(true);
     }
 }

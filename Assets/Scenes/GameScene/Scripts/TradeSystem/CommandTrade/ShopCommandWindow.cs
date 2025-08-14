@@ -27,7 +27,7 @@ public class ShopCommandWindow : MonoBehaviour, IDropHandler
             Command command = droppedCommandBlock.Command;
             PlayerController.Instance.SellCommand(command);
             droppedCommandBlock.RemoveCommand();
-            CreateCommandBlock(command, null);
+            CreateCommandBlock(command);
         }
         else
         {
@@ -46,15 +46,14 @@ public class ShopCommandWindow : MonoBehaviour, IDropHandler
         DeleteAllCommands();
         foreach (Command command in commands)
         {
-            CreateCommandBlock(command, null);
+            CreateCommandBlock(command);
         }
     }
 
-    private void CreateCommandBlock(Command command, string statusText)
+    private void CreateCommandBlock(Command command)
     {
         CommandBlock commandBlock = Instantiate(commandBlockPrefab, commandList.transform);
         commandBlock.Setup(command, this.transform);
-        commandBlock.SetStatustext(statusText);
         commandBlock.OnRemoveCommand += SellCommand;
         commandBlock.OnTargetCommand += TargetCommand;
     }

@@ -27,6 +27,7 @@ public class Consumable : Item
     {
         var copy = new Consumable(ConsumableBase);
         copy.UsableCount = this.UsableCount;
+        copy.isNew = this.isNew;
         return copy;
     }
 }
