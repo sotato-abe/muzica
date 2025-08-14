@@ -9,8 +9,9 @@ using UnityEngine.EventSystems;
 public class StatusWindow : MonoBehaviour
 {
     PlayerCharacter playerCharacter;
-    [SerializeField] TextMeshProUGUI lvText;
-    [SerializeField] Image lvBar;
+    [SerializeField] TextMeshProUGUI levelText;
+    [SerializeField] TextMeshProUGUI expText;
+    [SerializeField] ExpPercentageBar bar;
     [SerializeField] TextMeshProUGUI expCountText;
     [SerializeField] StatusCounter lifeCounter;
     [SerializeField] StatusCounter powerCounter;
@@ -19,6 +20,8 @@ public class StatusWindow : MonoBehaviour
     [SerializeField] StatusCounter speedCounter;
     [SerializeField] StatusCounter luckCounter;
     [SerializeField] SkillPointParts skillPoint;
+    private int currentLevel = 1; // 現在のレベル
+    private int currentExp = 0; // 現在の経験値
 
     private void Awake()
     {
@@ -43,19 +46,27 @@ public class StatusWindow : MonoBehaviour
         SetLevel();
     }
 
-    private void SetLevel()
+    public void SetLevel()
     {
-        lvText.text = playerCharacter.Level.ToString();
-        expCountText.text = playerCharacter.Exp.ToString() + " / 100"; // 仮の値として100を使用
-        if (playerCharacter.Exp > 0)
+        int level = this.playerCharacter.Level;
+        levelText.text = level.ToString();
+
+        int exp = this.playerCharacter.Exp;
+        if (currentExp != exp)
         {
-            lvBar.fillAmount = (float)playerCharacter.Exp / 100f; // 仮の値として100を使用
+            expText.text = exp.ToString() + " / 100";
         }
-        else
-        {
-            lvBar.fillAmount = 0f;
-        }
-        skillPoint.SetPoint(playerCharacter.SkillPoint);
+        if (currentLevel == level && currentExp == exp) return; // 変更がない場合は処理しない
+        UpdateExpBar(level, exp);
+    }
+
+    private void UpdateExpBar(int level, int exp)
+    {
+        // 以前からのレベル差と新しい経験値を受け渡す
+        int levelDifference = level - currentLevel;
+        bar.SetExpBar(levelDifference, exp);
+        currentLevel = level; // 現在のレベルを更新
+        currentExp = exp; // 現在の経験値を更新
     }
 
     private void SetStatusCounters()
