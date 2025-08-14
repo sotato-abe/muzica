@@ -33,6 +33,7 @@ public class EquipPanel : BattleActionPanel
     List<CharacterSubPanel> targetSubPanels = new List<CharacterSubPanel>();
 
     [Header("Equipment Settings")]
+    public BodyPartType bodyPartType = BodyPartType.None;
     public int equipmentNum = 0;
     private List<EnergyCount> energyAttackList;
     private TargetType targetType;
@@ -57,6 +58,7 @@ public class EquipPanel : BattleActionPanel
 
     private void OnEnable()
     {
+        SetEquipment();
         ShowTargeting();
     }
 
@@ -75,15 +77,7 @@ public class EquipPanel : BattleActionPanel
     /// </summary>
     public void SetEquipment()
     {
-        List<Equipment> equipmentList = PlayerController.Instance.PlayerCharacter.EquipmentList;
-
-        if (equipmentNum < 0 || equipmentNum >= equipmentList.Count)
-        {
-            ResetEquipment();
-            return;
-        }
-
-        currentEquipment = equipmentList[equipmentNum];
+        currentEquipment = PlayerController.Instance.GetEquipmentByBodyPart(bodyPartType);
         if (currentEquipment == null)
         {
             ResetEquipment();

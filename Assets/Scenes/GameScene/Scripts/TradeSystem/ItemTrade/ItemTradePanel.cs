@@ -11,14 +11,16 @@ public class ItemTradePanel : Panel
     [SerializeField] TargetItemWindow targetItemWindow;
     [SerializeField] BagCategory bagCategory;
     [SerializeField] InventoryWindow inventoryWindow;
-    [SerializeField] EquipmentSimpleWindow equipmentWindow;
+    [SerializeField] EquipmentSimpleSlot rightHandSlot;
+    [SerializeField] EquipmentSimpleSlot leftHandSlot;
     [SerializeField] PocketWindow pocketWindow;
 
     private void Start()
     {
         shopItemWindow.OnTargetItem += TargetItem;
         inventoryWindow.OnTargetItem += TargetItem;
-        equipmentWindow.OnTargetItem += TargetItem;
+        rightHandSlot.OnTargetItem += TargetItem;
+        leftHandSlot.OnTargetItem += TargetItem;
         pocketWindow.OnTargetItem += TargetItem;
         bagCategory.OnChangeWindow += ChangeWindow;
         ChangeWindow(true);
@@ -32,7 +34,6 @@ public class ItemTradePanel : Panel
     public void ChangeWindow(bool isBag)
     {
         inventoryWindow.gameObject.SetActive(isBag);
-        equipmentWindow.gameObject.SetActive(!isBag);
         pocketWindow.gameObject.SetActive(!isBag);
     }
 

@@ -5,19 +5,33 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class EquipmentSlot : EquipmentDetail, IDropHandler
+public class EquipmentSimpleSlot : MonoBehaviour, IDropHandler
 {
+    [SerializeField] public GameObject blockSlot;
+    [SerializeField] public ItemBlock itemBlockPrefab;
+    [SerializeField] Image backIcon;
     public UnityAction OnUpdateInventory;
     public delegate void TargetItemDelegate(Item item, bool isOwn = true);
     public event TargetItemDelegate OnTargetItem;
     ItemBlock currentBlock;
+
     public BodyPartType bodyPartType = BodyPartType.None;
 
-    public override void SetEquipmentBlock(Equipment equipment)
+    private void OnEnable()
     {
+        SetEquipmentBlock();
+    }
+
+    public void SetEquipmentBlock()
+    {
+        Equipment equipment = PlayerController.Instance.GetEquipmentByBodyPart(bodyPartType);
         foreach (Transform child in blockSlot.transform)
         {
             Destroy(child.gameObject);
+        }
+        if (equipment == null)
+        {
+            return;
         }
         // 装備アイテムのブロックを設定
         ItemBlock itemBlock = Instantiate(itemBlockPrefab, blockSlot.transform);
@@ -27,16 +41,20 @@ public class EquipmentSlot : EquipmentDetail, IDropHandler
         currentBlock = itemBlock;
     }
 
-    public void OnDrop(PointerEventData eventData)
+    public virtual void OnDrop(PointerEventData eventData)
     {
         ItemBlock droppedItemBlock = eventData.pointerDrag?.GetComponent<ItemBlock>();
         if (droppedItemBlock.Item is Equipment equipment)
         {
-            // 既に装備中のアイテムがある場合は、バックに戻す
-            PlayerController.Instance.SetEquipmentByBodyPart(bodyPartType, equipment);
-            OnUpdateInventory?.Invoke();
+            if (currentBlock != null && currentBlock.Item != null)
+            {
+                // 既に装備中のアイテムがある場合は、バックに戻す
+                PlayerController.Instance.AddItemToBag(currentBlock.Item);
+                OnUpdateInventory?.Invoke();
+            }
             droppedItemBlock.RemoveItem();
-            SetEquipmentBlock(equipment);
+            PlayerController.Instance.SetEquipmentByBodyPart(bodyPartType, equipment);
+            SetEquipmentBlock();
         }
     }
 
@@ -44,11 +62,11 @@ public class EquipmentSlot : EquipmentDetail, IDropHandler
     {
         if (itemBlock == null || itemBlock.Item == null) return false;
 
+        Item item = itemBlock.Item;
         PlayerController.Instance.RemoveEquipmentbyBodyPart(bodyPartType);
         itemBlock.RemovePlaceholder();
         Destroy(itemBlock.gameObject);
         currentBlock = null;
-        ResetSlot();
         return true;
     }
 

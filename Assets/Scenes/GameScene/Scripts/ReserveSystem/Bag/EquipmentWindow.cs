@@ -29,24 +29,8 @@ public class EquipmentWindow : MonoBehaviour
 
     public void SetEquipments()
     {
-        List<Equipment> equipmentList = PlayerController.Instance.PlayerCharacter.EquipmentList;
-
-        if (equipmentList.Count == 1)
-        {
-            equipmentSlot1.SetEquipment(equipmentList[0]);
-            equipmentSlot2.ResetSlot();
-        }
-        else if (equipmentList.Count == 2)
-        {
-            equipmentSlot1.SetEquipment(equipmentList[0]);
-            equipmentSlot2.SetEquipment(equipmentList[1]);
-        }
-        else
-        {
-            Debug.LogWarning("アイテムを装備していません。");
-            equipmentSlot1.ResetSlot();
-            equipmentSlot2.ResetSlot();
-        }
+        equipmentSlot1.SetEquipment(PlayerController.Instance.PlayerCharacter.RightHandEquipment);
+        equipmentSlot2.SetEquipment(PlayerController.Instance.PlayerCharacter.LeftHandEquipment);
     }
 
     public void UpdateInventory()

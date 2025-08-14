@@ -46,6 +46,8 @@ public class Character
     public int SkillPoint { get; set; }
 
     // Belongings
+    public Equipment RightHandEquipment { get; set; }
+    public Equipment LeftHandEquipment { get; set; }
     public List<Equipment> EquipmentList { get; set; }
     public List<Consumable> PocketList { get; set; }
     public List<Command> StorageList { get; set; }
@@ -109,11 +111,17 @@ public class Character
 
     private void SetBaseItems()
     {
+        RightHandEquipment = _base.RightHandEquipmentBase != null ? new Equipment(_base.RightHandEquipmentBase) : null;
+        LeftHandEquipment = _base.LeftHandEquipmentBase != null ? new Equipment(_base.LeftHandEquipmentBase) : null;
+
         EquipmentList = new List<Equipment>();
-        foreach (EquipmentBase equipmentBase in _base.EquipmentBaseList)
+        if (RightHandEquipment != null)
         {
-            Equipment equipment = new Equipment(equipmentBase);
-            EquipmentList.Add(equipment);
+            EquipmentList.Add(RightHandEquipment);
+        }
+        if (LeftHandEquipment != null)
+        {
+            EquipmentList.Add(LeftHandEquipment);
         }
 
         PocketList = new List<Consumable>();

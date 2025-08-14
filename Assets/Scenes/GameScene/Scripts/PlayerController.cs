@@ -136,18 +136,47 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 装備を追加
-    /// </summary>
-    public void AddItemToEquip(Item item)
+    public Equipment GetEquipmentByBodyPart(BodyPartType bodyPartType)
     {
-        if (item == null) return;
+        if (bodyPartType == BodyPartType.None) return null;
+        else if (bodyPartType == BodyPartType.RightHand)
+            return player.RightHandEquipment;
+        else if (bodyPartType == BodyPartType.LeftHand)
+            return player.LeftHandEquipment;
+        else
+            return null; // 他のボディパーツは未実装
+    }
 
-        if (item is Equipment equipment)
+    public void SetEquipmentByBodyPart(BodyPartType bodyPartType, Equipment equipment)
+    {
+        if (bodyPartType == BodyPartType.None) return;
+        Equipment currentEquipment = GetEquipmentByBodyPart(bodyPartType);
+        if (currentEquipment != null)
         {
-            player.EquipmentList.Add(equipment.Clone() as Equipment);
-            player.ColStatus();
+            AddItemToBag(currentEquipment.Clone());
         }
+
+        if (bodyPartType == BodyPartType.RightHand)
+            player.RightHandEquipment = equipment.Clone() as Equipment;
+        else if (bodyPartType == BodyPartType.LeftHand)
+            player.LeftHandEquipment = equipment.Clone() as Equipment;
+
+        player.ColStatus();
+    }
+
+    /// <summary>
+    /// 装備を削除
+    /// </summary>
+    public void RemoveEquipmentbyBodyPart(BodyPartType bodyPartType)
+    {
+        if (bodyPartType == BodyPartType.None) return;
+
+        if (bodyPartType == BodyPartType.RightHand)
+            player.RightHandEquipment = null;
+        else if (bodyPartType == BodyPartType.LeftHand)
+            player.LeftHandEquipment = null;
+
+        player.ColStatus();
     }
 
     /// <summary>
@@ -169,19 +198,6 @@ public class PlayerController : MonoBehaviour
         if (item is Consumable consumable)
         {
             player.PocketList.Remove(consumable);
-        }
-    }
-
-    /// <summary>
-    /// 装備を削除
-    /// </summary>
-    public void RemoveItemFromEquip(Item item)
-    {
-        if (item == null) return;
-
-        if (item is Equipment equipment)
-        {
-            player.EquipmentList.Remove(equipment);
         }
     }
 
