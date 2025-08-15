@@ -39,10 +39,10 @@ public class CommandBlock : Block, IPointerEnterHandler, IPointerExitHandler
         image.sprite = Command.Base.Sprite;
         this.OriginalParent = originalParent;
         SetTarget(false);
-        SetStatustext();
+        SetStatusText();
     }
 
-    public void SetStatustext()
+    public void SetStatusText()
     {
         if (Command.isNew)
         {

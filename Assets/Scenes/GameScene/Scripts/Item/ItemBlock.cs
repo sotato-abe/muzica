@@ -40,10 +40,10 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
         image.sprite = Item.Base.Sprite;
         this.OriginalParent = originalParent;
         SetTarget(false);
-        SetStatustext();
+        SetStatusText();
     }
 
-    private void SetStatustext()
+    public void SetStatusText()
     {
         if (Item.isNew)
         {

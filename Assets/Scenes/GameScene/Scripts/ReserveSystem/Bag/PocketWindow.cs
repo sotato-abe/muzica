@@ -74,7 +74,7 @@ public class PocketWindow : MonoBehaviour, IDropHandler
         {
             if (itemBlockMap.ContainsKey(item))
             {
-                // 既に表示済みならスキップ
+                itemBlockMap[item].SetStatusText();
                 continue;
             }
 

@@ -49,22 +49,14 @@ public class StorageWindow : MonoBehaviour, IDropHandler
     public void SetCommands()
     {
         List<Command> commands = PlayerController.Instance.PlayerCharacter.StorageList;
-        var commandsToRemove = new List<Command>();
-
-        foreach (var kvp in commandBlockMap)
+        foreach (var command in new List<Command>(commandBlockMap.Keys))
         {
-            if (!commands.Contains(kvp.Key))
+            if (!commands.Contains(command))
             {
-                commandsToRemove.Add(kvp.Key);
-            }
-        }
-
-        foreach (var command in commandsToRemove)
-        {
-            if (commandBlockMap.TryGetValue(command, out CommandBlock commandBlock))
-            {
-                Destroy(commandBlock.gameObject);
-                commandBlockMap.Remove(command);
+                if (commandBlockMap.ContainsKey(command))
+                {
+                    RemoveCommand(commandBlockMap[command]);
+                }
             }
         }
 
@@ -72,26 +64,16 @@ public class StorageWindow : MonoBehaviour, IDropHandler
         {
             if (commandBlockMap.ContainsKey(command))
             {
+                commandBlockMap[command].SetStatusText();
                 continue;
             }
 
-            CreateCommandBlock(command);
+            CommandBlock commandBlock = Instantiate(commandBlockPrefab, commandList.transform);
+            commandBlock.Setup(command, this.transform);
+            commandBlock.OnRemoveCommand += RemoveCommand;
+            commandBlock.OnTargetCommand += TargetCommand;
+            commandBlockMap[command] = commandBlock;
         }
-    }
-
-    private void CreateCommandBlock(Command command)
-    {
-        if (commandBlockMap.ContainsKey(command))
-        {
-            // 既に表示済みならスキップ
-            return;
-        }
-
-        CommandBlock commandBlock = Instantiate(commandBlockPrefab, commandList.transform);
-        commandBlock.Setup(command, this.transform);
-        commandBlock.OnRemoveCommand += RemoveCommand;
-        commandBlock.OnTargetCommand += TargetCommand;
-        commandBlockMap[command] = commandBlock;
     }
 
     private void SetBlock()
