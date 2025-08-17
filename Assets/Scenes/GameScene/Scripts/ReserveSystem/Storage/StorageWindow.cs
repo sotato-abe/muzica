@@ -24,7 +24,6 @@ public class StorageWindow : MonoBehaviour, IDropHandler
     }
     private void OnEnable()
     {
-        Debug.Log("StorageWindow OnEnable");
         SetCommands();
         SetBlock();
     }
