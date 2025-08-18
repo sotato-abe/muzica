@@ -101,7 +101,7 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    #region Inventory Management
+    #region Item Management
     /// <summary>
     /// アイテムをバッグに追加
     /// </summary>
