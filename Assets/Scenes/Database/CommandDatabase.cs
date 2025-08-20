@@ -39,7 +39,6 @@ public class CommandDatabase : MonoBehaviour
         {
             return -1;
         }
-        Debug.Log($"GetCommandId: {command.Name}");
         return commandDataList.IndexOf(command);
     }
 }
