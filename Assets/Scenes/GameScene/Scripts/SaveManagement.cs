@@ -1,10 +1,14 @@
 using UnityEngine;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using Newtonsoft.Json;
 
 public class SaveManagement : MonoBehaviour
 {
-    public Setting setting;
+    [SerializeField] AgeTimePanel ageTimePanel;
+    public SaveData setting;
     public const string RELATIVE_PATH = "setting.json";
 
     public TextMeshProUGUI text;
@@ -13,6 +17,8 @@ public class SaveManagement : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
+            setting.position = WorldMapController.Instance.playerPosition;
+            setting.time = ageTimePanel.ageTime;
             PlayerData playerData = PlayerDataConverter();
             setting.playerData = playerData;
             Persistance.Save(RELATIVE_PATH, setting);
@@ -20,13 +26,13 @@ public class SaveManagement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.L))
         {
             Debug.Log("Load setting");
-            setting = Persistance.Load<Setting>(RELATIVE_PATH);
+            setting = Persistance.Load<SaveData>(RELATIVE_PATH);
         }
         text.enableWordWrapping = true;
         text.overflowMode = TextOverflowModes.Overflow; // はみ出す場合の挙動も選べる
         text.text = JsonConvert.SerializeObject(setting, Formatting.None);
     }
-    
+
     private PlayerData PlayerDataConverter()
     {
         PlayerCharacter character = PlayerController.Instance.PlayerCharacter;
@@ -52,41 +58,59 @@ public class SaveManagement : MonoBehaviour
             key = character.Key,
             level = character.Level,
             skillPoint = character.SkillPoint,
-            exp = character.Exp
+            exp = character.Exp,
         };
+        if(character.RightHandEquipment != null)
+            playerData.rightEquipmentIndex = ItemDatabase.Instance.GetItemId(character.RightHandEquipment.Base);
+        if(character.LeftHandEquipment != null)
+            playerData.leftEquipmentIndex = ItemDatabase.Instance.GetItemId(character.LeftHandEquipment.Base);
 
-        // Add equipped items and bag items
-        // for (int i = 0; i < EQUIPMENT_COUNT; i++)
-        // {
-        //     playerData.equippedItemIndexList[i, 0] = character.EquippedItems[i].Id;
-        // }
-        // for (int i = 0; i < character.BagItemList.Count; i++)
-        // {
-        //     playerData.bagItemIndexList[i, 0] = character.BagItemList[i].Id;
-        // }
+        foreach (var item in character.BagItemList)
+        {
+            int itemId = ItemDatabase.Instance.GetItemId(item.Base);
+            if (itemId != -1)
+                playerData.bagItemIndexList.Add(itemId);
+        }
+        foreach (var item in character.PocketList)
+        {
+            int itemId = ItemDatabase.Instance.GetItemId(item.Base);
+            if (itemId != -1)
+                playerData.pocketItemIndexList.Add(itemId);
+        }
+        foreach (var command in character.StorageList)
+        {
+            int commandId = CommandDatabase.Instance.GetCommandId(command.Base);
+            if (commandId != -1)
+                playerData.storageCommandIndexList.Add(commandId);
+        }
+        foreach (var command in character.SlotList)
+        {
+            int commandId = CommandDatabase.Instance.GetCommandId(command.Base);
+            if (commandId != -1)
+                playerData.slotCommandIndexList.Add(commandId);
+        }
 
         return playerData;
     }
 }
 
 [System.Serializable]
-public class Setting
+public class SaveData
 {
+    public DateTime time = DateTime.Now;
+    public Vector2Int position;
     public PlayerData playerData;
-    public int resolutionIndex = 0;
-    public bool isFullScreen = true;
 }
 
-[System.Serializable]
 public class PlayerData
 {
     public int characterId = 0;
     // status
-    public int maxLife = 100;
-    public int currentLife = 100;
-    public int maxBattery = 50;
-    public int currentBattery = 50;
-    public int currentSoul = 50;
+    public int maxLife = 0;
+    public int currentLife = 0;
+    public int maxBattery = 0;
+    public int currentBattery = 0;
+    public int currentSoul = 0;
     public int power = 0;
     public int technique = 0;
     public int defense = 0;
@@ -100,16 +124,15 @@ public class PlayerData
     public int coin = 0;
     public int disc = 0;
     public int key = 0;
-    public int level = 1;
-    public int skillPoint = 1;
+    public int level = 0;
+    public int skillPoint = 0;
     public int exp = 0;
 
     // Belongings
-    public int rightEquipmentIndex = 20;
-    public int leftEquipmentIndex = 21;
-    public int[,] equippedItemIndexList = new int[5, 3];
-    public int[,] pocketItemIndexList = new int[5, 2];
-    public int[,] storageCommandIndexList = new int[5, 4];
-    public int[,] bagItemIndexList = new int[5, 4];
-    public int[,] slotCommandIndexList = new int[12, 2];
+    public int rightEquipmentIndex = -1;
+    public int leftEquipmentIndex = -1;
+    public List<int> bagItemIndexList = new List<int>();
+    public List<int> pocketItemIndexList = new List<int>();
+    public List<int> storageCommandIndexList = new List<int>();
+    public List<int> slotCommandIndexList = new List<int>();
 }

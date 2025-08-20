@@ -5,7 +5,21 @@ using UnityEngine;
 public class CharacterDatabase : MonoBehaviour
 {
     public static CharacterDatabase Instance { get; private set; }
-    [SerializeField] List<CharacterBase> characterDataList;
+
+    [SerializeField] private List<CharacterBase> characterDataList;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject); // シーン切り替えても残す
+        }
+        else
+        {
+            Destroy(gameObject); // 重複防止
+        }
+    }
 
     public CharacterBase LoadCharacterData(int characterId)
     {
@@ -15,21 +29,7 @@ public class CharacterDatabase : MonoBehaviour
             return null;
         }
 
-        CharacterBase character = characterDataList[characterId];
-        return character;
-    }
-
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        return characterDataList[characterId];
     }
 
     public int GetCharacterId(CharacterBase character)

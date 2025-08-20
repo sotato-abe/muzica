@@ -11,7 +11,7 @@ public class AgeTimePanel : MonoBehaviour
     [SerializeField] StatePanelController statePanel;
     [SerializeField] PointDatabase pointDatabase;
 
-    private DateTime ageTime;        // 現在の時間
+    public DateTime ageTime;        // 現在の時間
     public TimeState timeSpeed = TimeState.Fast;
     private int lastYear; // 直前の年を記録
 
