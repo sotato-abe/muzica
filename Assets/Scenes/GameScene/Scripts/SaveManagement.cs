@@ -30,9 +30,10 @@ public class SaveManagement : MonoBehaviour
     private PlayerData PlayerDataConverter()
     {
         PlayerCharacter character = PlayerController.Instance.PlayerCharacter;
+        int characterId = CharacterDatabase.Instance.GetCharacterId(character.Base);
         PlayerData playerData = new PlayerData
         {
-            characterId = 0,
+            characterId = characterId,
             maxLife = character.MaxLife,
             currentLife = character.Life,
             maxBattery = character.MaxBattery,
