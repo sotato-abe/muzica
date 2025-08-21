@@ -20,7 +20,7 @@ public class Point
             ShopItems = new List<Item>(),
             ShopCommands = new List<Command>()
         };
-        point.Owner = Character.CreateFrom(baseData.Owner); // PointBaseからオーナーを取得
+        point.Owner = new Character(baseData.Owner); // PointBaseからオーナーを取得
         point.SetShopItems();
         point.SetShopCommands();
 

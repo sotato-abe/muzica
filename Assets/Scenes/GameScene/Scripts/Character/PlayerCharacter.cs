@@ -10,10 +10,7 @@ public class PlayerCharacter : Character
     private const int EQUIPMENT_COUNT = 2;
     // public int SkillPoint { get; set; } = 0;
 
-    public override void Init()
-    {
-        base.Init();
-    }
+    public PlayerCharacter(CharacterBase baseData) : base(baseData) { }
 
     public void AcquisitionExp(int exp)
     {

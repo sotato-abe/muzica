@@ -36,7 +36,21 @@ public class WorldMapController : MonoBehaviour
     private void Start()
     {
         ChangePlayerCoordinate(new Vector2Int(0, 0));
+        Debug.Log($"Start player to {playerPosition}");
         Vector2Int startPos = Vector2Int.up;
+    }
+
+    public void WarpPlayerCoordinate(Vector2Int targetPosition)
+    {
+        Debug.Log($"Warping player to {targetPosition}");
+        // すでにイベント実行中のときはワールド移動をスキップする。
+        if (PlayerController.Instance.CurrentEventType != EventType.Default)
+            return;
+
+        playerPosition = targetPosition;
+        GenerateField();
+        MoveFieldPlayerPosition(Vector2Int.zero); // フィールドのプレイヤー位置を更新
+        SetWorldMapPlayerPosition();
     }
 
     public void ChangePlayerCoordinate(Vector2Int direction)
@@ -44,7 +58,16 @@ public class WorldMapController : MonoBehaviour
         // すでにイベント実行中のときはワールド移動をスキップする。
         if (PlayerController.Instance.CurrentEventType != EventType.Default)
             return;
+
         playerPosition = playerPosition + direction;
+        GenerateField();
+        MoveFieldPlayerPosition(direction);
+        SetWorldMapPlayerPosition();
+
+    }
+
+    private void GenerateField()
+    {
         FieldTileSet fieldTileSet = GetTileSet(playerPosition);
         FieldData fieldData = GetFieldData(playerPosition);
 
@@ -55,16 +78,8 @@ public class WorldMapController : MonoBehaviour
         fieldData.isRightOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.right);
         fieldData.isLeftOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.left);
         worldMapPanel.SetFieldName(fieldData.FieldName);
-        if (fieldData.FieldName != "")
-        {
-            TalkMessage talkMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Thinking, $"ここはなにかありそうだな。");
-            PlayerController.Instance.SetPlayerMessage(talkMessage);
-        }
-
         FieldController.Instance.SetField(fieldData);
         fieldGenerator.SetField(fieldData, fieldTileSet);
-        SetFieldPlayerPosition(direction);
-        SetWorldMapPlayerPosition();
     }
 
     private FieldTileSet GetTileSet(Vector2Int targetPosition)
@@ -93,7 +108,7 @@ public class WorldMapController : MonoBehaviour
         return fieldData;
     }
 
-    private void SetFieldPlayerPosition(Vector2Int direction)
+    private void MoveFieldPlayerPosition(Vector2Int direction)
     {
         if (player != null)
         {

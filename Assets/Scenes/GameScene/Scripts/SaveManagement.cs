@@ -1,36 +1,52 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Newtonsoft.Json;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 public class SaveManagement : MonoBehaviour
 {
     [SerializeField] AgeTimePanel ageTimePanel;
-    public SaveData setting;
-    public const string RELATIVE_PATH = "setting.json";
+    [SerializeField] Button saveButton;
+    [SerializeField] Button loadButton;
+    public PlayData playData;
+    public const string RELATIVE_PATH = "playData.json";
 
     public TextMeshProUGUI text;
 
-    void Update()
+    private void Awake()
     {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            setting.position = WorldMapController.Instance.playerPosition;
-            setting.time = ageTimePanel.ageTime;
-            PlayerData playerData = PlayerDataConverter();
-            setting.playerData = playerData;
-            Persistance.Save(RELATIVE_PATH, setting);
-        }
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            Debug.Log("Load setting");
-            setting = Persistance.Load<SaveData>(RELATIVE_PATH);
-        }
+        saveButton.onClick.AddListener(SavePlayData);
+        loadButton.onClick.AddListener(LoadPlayData);
+    }
+
+    private void SavePlayData()
+    {
+        playData.position = WorldMapController.Instance.playerPosition;
+        playData.time = ageTimePanel.ageTime;
+        PlayerData playerData = PlayerDataConverter();
+        playData.playerData = playerData;
+        Persistance.Save(RELATIVE_PATH, playData);
+    }
+
+    private void LoadPlayData()
+    {
+        playData = Persistance.Load<PlayData>(RELATIVE_PATH);
+        PlayerCharacter loadCharacter = LoadPlayerCharacter(playData.playerData);
+        PlayerController.Instance.SetPlayerCharacter(loadCharacter);
+        WorldMapController.Instance.WarpPlayerCoordinate(playData.position);
+        ShowDebugLog();
+    }
+
+    private void ShowDebugLog()
+    {
         text.enableWordWrapping = true;
         text.overflowMode = TextOverflowModes.Overflow; // はみ出す場合の挙動も選べる
-        text.text = JsonConvert.SerializeObject(setting, Formatting.None);
+        text.text = JsonConvert.SerializeObject(playData, Formatting.None);
     }
 
     private PlayerData PlayerDataConverter()
@@ -60,9 +76,9 @@ public class SaveManagement : MonoBehaviour
             skillPoint = character.SkillPoint,
             exp = character.Exp,
         };
-        if(character.RightHandEquipment != null)
+        if (character.RightHandEquipment != null)
             playerData.rightEquipmentIndex = ItemDatabase.Instance.GetItemId(character.RightHandEquipment.Base);
-        if(character.LeftHandEquipment != null)
+        if (character.LeftHandEquipment != null)
             playerData.leftEquipmentIndex = ItemDatabase.Instance.GetItemId(character.LeftHandEquipment.Base);
 
         foreach (var item in character.BagItemList)
@@ -85,6 +101,11 @@ public class SaveManagement : MonoBehaviour
         }
         foreach (var command in character.SlotList)
         {
+            if (command == null)
+            {
+                Debug.LogWarning("SlotCommand is null, skipping.");
+                continue;
+            }
             int commandId = CommandDatabase.Instance.GetCommandId(command.Base);
             if (commandId != -1)
                 playerData.slotCommandIndexList.Add(commandId);
@@ -92,10 +113,74 @@ public class SaveManagement : MonoBehaviour
 
         return playerData;
     }
+
+    // PlayerDataからPlayerCharacterを生成
+    // PlayerDataにセットされたステータスをPlayerCharacterに適用
+    private PlayerCharacter LoadPlayerCharacter(PlayerData playerData)
+    {
+        PlayerCharacter loadPlayerCharacter = CharacterDatabase.Instance.GetPlayerCharacterFromId(playerData.characterId);
+        Debug.Log("LoadPlayerCharacter: " + loadPlayerCharacter.Base.name);
+        loadPlayerCharacter.MaxLife = playerData.maxLife;
+        loadPlayerCharacter.Life = playerData.currentLife;
+        loadPlayerCharacter.MaxBattery = playerData.maxBattery;
+        loadPlayerCharacter.Battery = playerData.currentBattery;
+        loadPlayerCharacter.Soul = playerData.currentSoul;
+        loadPlayerCharacter.Power = playerData.power;
+        loadPlayerCharacter.Technique = playerData.technique;
+        loadPlayerCharacter.Defense = playerData.defense;
+        loadPlayerCharacter.Speed = playerData.speed;
+        loadPlayerCharacter.Luck = playerData.luck;
+        loadPlayerCharacter.Memory = playerData.memory;
+        loadPlayerCharacter.Storage = playerData.storage;
+        loadPlayerCharacter.Pocket = playerData.pocket;
+        loadPlayerCharacter.Coin = playerData.coin;
+        loadPlayerCharacter.Disc = playerData.disc;
+        loadPlayerCharacter.Key = playerData.key;
+        loadPlayerCharacter.Level = playerData.level;
+        loadPlayerCharacter.SkillPoint = playerData.skillPoint;
+        loadPlayerCharacter.Exp = playerData.exp;
+
+        loadPlayerCharacter.RightHandEquipment = ItemDatabase.Instance.GetItemFromId(playerData.rightEquipmentIndex) as Equipment;
+        loadPlayerCharacter.LeftHandEquipment = ItemDatabase.Instance.GetItemFromId(playerData.leftEquipmentIndex) as Equipment;
+
+        loadPlayerCharacter.BagItemList.Clear();
+        foreach(int itemId in playerData.bagItemIndexList)
+        {
+            Item newItem = ItemDatabase.Instance.GetItemFromId(itemId);
+            if (newItem != null)
+            {
+                loadPlayerCharacter.AddItemToBag(newItem);
+            }
+            else
+            {
+                Debug.LogWarning("未対応のItemBase型：" + itemId);
+            }
+        }
+        loadPlayerCharacter.PocketList.Clear();
+        foreach(int itemId in playerData.pocketItemIndexList)
+        {
+            Item newItem = ItemDatabase.Instance.GetItemFromId(itemId);
+            if (newItem != null)
+            {
+                loadPlayerCharacter.AddItemToPocket(newItem as Consumable);
+            }
+            else
+            {
+                Debug.LogWarning("未対応のItemBase型：" + itemId);
+            }
+        }
+        loadPlayerCharacter.StorageList.Clear();
+        loadPlayerCharacter.SlotList.Clear();
+
+
+
+
+        return loadPlayerCharacter;
+    }
 }
 
 [System.Serializable]
-public class SaveData
+public class PlayData
 {
     public DateTime time = DateTime.Now;
     public Vector2Int position;

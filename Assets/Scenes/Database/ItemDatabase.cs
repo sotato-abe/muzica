@@ -41,6 +41,29 @@ public class ItemDatabase : MonoBehaviour
         return item;
     }
 
+    public Item GetItemFromId(int itemId)
+    {
+        if (itemId < 0 || itemId >= itemDataList.Count)
+        {
+            Debug.LogWarning("Invalid item ID: " + itemId);
+            return null;
+        }
+
+        ItemBase baseData = itemDataList[itemId];
+        switch (baseData.itemType)
+        {
+            case ItemType.Consumable:
+                return new Consumable((ConsumableBase)baseData);
+            case ItemType.Equipment:
+                return new Equipment((EquipmentBase)baseData);
+            case ItemType.Treasure:
+                return new Treasure((TreasureBase)baseData);
+            default:
+                Debug.LogError("Unknown item type: " + baseData.itemType);
+                return null;
+        }
+    }
+
     public int GetItemId(ItemBase item)
     {
         if (item == null)

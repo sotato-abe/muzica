@@ -6,8 +6,8 @@ using UnityEngine;
 [System.Serializable]
 public class Character
 {
-    [SerializeField] CharacterBase _base;
-    public CharacterBase Base { get => _base; }
+    [SerializeField] protected CharacterBase _base;
+    public CharacterBase Base => _base;
 
     // CharacterStatus
     public int MaxLife { get; set; }
@@ -54,21 +54,32 @@ public class Character
     public List<Command> SlotList { get; set; }
     public List<Item> BagItemList { get; set; }
 
-    public static Character CreateFrom(CharacterBase baseData)
+    public Character(CharacterBase baseData)
     {
-        var character = new Character
-        {
-            _base = baseData,
-            EquipmentList = new List<Equipment>(),
-            PocketList = new List<Consumable>(),
-            StorageList = new List<Command>(),
-            SlotList = new List<Command>(),
-            BagItemList = new List<Item>()
-        };
-
-        character.Init();
-        return character;
+        _base = baseData;
+        this.EquipmentList = new List<Equipment>();
+        this.PocketList = new List<Consumable>();
+        this.StorageList = new List<Command>();
+        this.SlotList = new List<Command>();
+        this.BagItemList = new List<Item>();
+        Init();
     }
+
+    // public static Character CreateFrom(CharacterBase baseData)
+    // {
+    //     var character = new Character
+    //     {
+    //         _base = baseData,
+    //         EquipmentList = new List<Equipment>(),
+    //         PocketList = new List<Consumable>(),
+    //         StorageList = new List<Command>(),
+    //         SlotList = new List<Command>(),
+    //         BagItemList = new List<Item>()
+    //     };
+
+    //     character.Init();
+    //     return character;
+    // }
 
     public virtual void Init()
     {

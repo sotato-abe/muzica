@@ -7,6 +7,7 @@ using TMPro;
 [System.Serializable]
 public class EnemyCharacter : Character
 {
+    public EnemyCharacter(CharacterBase baseData) : base(baseData) { }
 
     public TotalAttackCount EnemyAttack()
     {

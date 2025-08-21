@@ -57,6 +57,19 @@ public class PlayerController : MonoBehaviour
         UpdateCurrencyPanel();
     }
 
+    public void SetPlayerCharacter(PlayerCharacter loadCharcter)
+    {
+        if (loadCharcter == null)
+        {
+            Debug.LogError("ロードするキャラクターがnullです。");
+            return;
+        }
+
+        player = loadCharcter;
+        playerSubPanel.SetCharacter(player);
+        UpdateCurrencyPanel();
+    }
+
     private void GameStart()
     {
         TalkMessage startMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "はじめるか、、");
