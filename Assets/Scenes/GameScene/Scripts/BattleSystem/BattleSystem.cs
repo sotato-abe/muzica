@@ -14,6 +14,7 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] private CharacterSubPanel enemySubPanel3; // キャラクターサブパネル
     [SerializeField] private MessagePanel messagePanel; // キャラクターサブパネル
     [SerializeField] WorldMapPanel worldMapPanel;
+    [SerializeField] SlidePanel savePanel;
     [SerializeField] GameOverWindow gameOverWindow;
     [SerializeField] FieldPlayer fieldPlayer; //キャラクター
     [SerializeField] FieldEnemy fieldEnemyPrefab; //敵キャラクター
@@ -55,7 +56,8 @@ public class BattleSystem : MonoBehaviour
         cameraManager.SetEventType(EventType.Battle); // バトル時のカメラ位置を設定
         messagePanel.SetActive(false); // メッセージパネルを表示
         worldMapPanel.SetActive(false); // ワールドマップパネルを非表示
-        
+        savePanel.SetActive(false); // セーブパネルを非表示
+
         playerSubPanel.SetActive(true); // キャラクターサブパネルを表示
         battleActionBoard.SetActive(true); // リザーブアクションボードを表示
         TalkMessage talkMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "なんだよ");
@@ -239,7 +241,7 @@ public class BattleSystem : MonoBehaviour
         void CheckAllComplete()
         {
             completed++;
-            if (completed >= 7)
+            if (completed >= 8)
             {
                 OnBattleEnd?.Invoke();
                 transform.gameObject.SetActive(false);
@@ -259,6 +261,7 @@ public class BattleSystem : MonoBehaviour
 
         messagePanel.SetActive(true, CheckAllComplete); // メッセージパネルを表示
         worldMapPanel.SetActive(true, CheckAllComplete); // ワールドマップパネルを表示
+        savePanel.SetActive(true, CheckAllComplete); // セーブパネルを表示
         cameraManager.SetEventType(EventType.Default); // バトル時のカメラ位置を設定
         PlayerController.Instance.ChangeEventType(EventType.Default); // イベントタイプをデフォルトに変更
     }

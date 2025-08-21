@@ -15,6 +15,7 @@ public class ReserveSystem : MonoBehaviour
     [SerializeField] private CharacterSubPanel playerSubPanel; // キャラクターサブパネル
     [SerializeField] private MessagePanel messagePanel; // キャラクターサブパネル
     [SerializeField] WorldMapPanel worldMapPanel;
+    [SerializeField] SlidePanel savePanel;
 
     private void Start()
     {
@@ -38,6 +39,7 @@ public class ReserveSystem : MonoBehaviour
 
         messagePanel.SetActive(false); // メッセージパネルを表示
         worldMapPanel.SetActive(false); // ワールドマップパネルを非表示
+        savePanel.SetActive(false); // セーブパネルを非表示
 
         footer.SetActive(true); // フッターを非表示にする
         playerSubPanel.SetActive(true); // キャラクターサブパネルを表示
@@ -52,7 +54,7 @@ public class ReserveSystem : MonoBehaviour
         void CheckAllComplete()
         {
             completed++;
-            if (completed >= 5)
+            if (completed >= 6)
             {
                 OnReserveEnd?.Invoke();
                 transform.gameObject.SetActive(false);
@@ -64,6 +66,7 @@ public class ReserveSystem : MonoBehaviour
 
         messagePanel.SetActive(true, CheckAllComplete); // メッセージパネルを表示
         worldMapPanel.SetActive(true, CheckAllComplete); // ワールドマップパネルを表示
+        savePanel.SetActive(true, CheckAllComplete); // セーブパネルを表示
         cameraManager.SetEventType(EventType.Default); // 通常時のカメラ位置を設定
         PlayerController.Instance.ChangeEventType(EventType.Default); // イベントタイプをデフォルトに変更
     }
