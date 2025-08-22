@@ -80,6 +80,7 @@ public class BattleSystem : MonoBehaviour
         int index = 0;
         foreach (Character enemy in enemies)
         {
+            enemy.Init();
             (Vector3 targetPos, bool isLeft, bool isFront) = GetRandomAroundFloorPosition();
             FieldEnemy fieldEnemy = Instantiate(fieldEnemyPrefab, targetPos, Quaternion.identity, enemyGroupArea.transform);
             fieldEnemy.SetUp(enemy); // バトラーの設定を行う

@@ -16,16 +16,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private CharacterSubPanel playerSubPanel;
     [SerializeField] private CurrencyPanel currencyPanel;
     [SerializeField] private PlayerCharacter defaultPlayer; // 初期用だけ
+    #endregion
+
     public PlayerCharacter PlayerCharacter { get; private set; }
-    #endregion
-
-    #region Properties
     public event System.Action<PlayerCharacter> OnPlayerCharacterSet;
-    #endregion
-
-    #region Events
     public EventType CurrentEventType { get; private set; } = EventType.Default;
-    #endregion
 
     #region Unity Lifecycle
     void Awake()
@@ -38,9 +33,10 @@ public class PlayerController : MonoBehaviour
         // 初期状態はインスペクタでセットされたデフォルトを使う
         if (PlayerCharacter == null && defaultPlayer != null)
         {
+            defaultPlayer.Init();
             SetPlayerCharacter(defaultPlayer);
         }
-        playerSubPanel.SetCharacter(defaultPlayer);
+        playerSubPanel.SetCharacter(PlayerCharacter);
         UpdateCurrencyPanel();
         GameStart();
     }
@@ -64,9 +60,7 @@ public class PlayerController : MonoBehaviour
             Debug.LogError("ロードするキャラクターがnullです。");
             return;
         }
-
         PlayerCharacter = loadCharcter;
-        Debug.Log($"SetPlayerCharacter: {PlayerCharacter.Base.Name} / {PlayerCharacter.Exp}");
         playerSubPanel.SetCharacter(PlayerCharacter);
         UpdateCurrencyPanel();
 

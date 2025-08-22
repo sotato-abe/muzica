@@ -69,7 +69,6 @@ public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
 
     public virtual void SetCharacter(Character character)
     {
-        character.Init();
         this.character = character;
         characterImage.sprite = character.Base.SquareSprite;
         characterNameText.text = character.Base.Name;
@@ -80,7 +79,6 @@ public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
 
     public void SetOwner(Character character)
     {
-        character.Init();
         this.character = character;
         characterImage.sprite = character.Base.SquareSprite;
         characterNameText.text = character.Base.Name;
@@ -93,7 +91,6 @@ public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
 
     public virtual void SetEnemy(Character character)
     {
-        character.Init();
         this.character = character;
         characterImage.sprite = character.Base.SquareSprite;
         characterNameText.text = character.Base.Name;

@@ -30,7 +30,6 @@ public class SaveManagement : MonoBehaviour
         playData.time = ageTimePanel.ageTime;
         PlayerData playerData = PlayerDataConverter();
         playData.playerData = playerData;
-        Debug.Log("SavePlayData: " + playerData.characterId + " / " + playerData.exp);
         Persistance.Save(RELATIVE_PATH, playData);
     }
 
@@ -38,7 +37,6 @@ public class SaveManagement : MonoBehaviour
     {
         playData = Persistance.Load<PlayData>(RELATIVE_PATH);
         PlayerCharacter loadCharacter = LoadPlayerCharacter(playData.playerData);
-        Debug.Log("LoadPlayData: " + loadCharacter?.Base.Name + " / " + loadCharacter?.Exp);
         PlayerController.Instance.SetPlayerCharacter(loadCharacter);
         ageTimePanel.TimeSlip(playData.time);
         WorldMapController.Instance.WarpPlayerCoordinate(playData.position);
@@ -106,12 +104,14 @@ public class SaveManagement : MonoBehaviour
         {
             if (command == null)
             {
-                Debug.LogWarning("SlotCommand is null, skipping.");
+                playerData.slotCommandIndexList.Add(-1);
                 continue;
             }
             int commandId = CommandDatabase.Instance.GetCommandId(command.Base);
             if (commandId != -1)
                 playerData.slotCommandIndexList.Add(commandId);
+            else
+                playerData.slotCommandIndexList.Add(-1);
         }
 
         return playerData;
@@ -141,41 +141,53 @@ public class SaveManagement : MonoBehaviour
         loadPlayerCharacter.Level = playerData.level;
         loadPlayerCharacter.SkillPoint = playerData.skillPoint;
         loadPlayerCharacter.Exp = playerData.exp;
+        loadPlayerCharacter.ColStatus();
 
         loadPlayerCharacter.RightHandEquipment = ItemDatabase.Instance.GetItemFromId(playerData.rightEquipmentIndex) as Equipment;
         loadPlayerCharacter.LeftHandEquipment = ItemDatabase.Instance.GetItemFromId(playerData.leftEquipmentIndex) as Equipment;
 
         loadPlayerCharacter.BagItemList.Clear();
-        foreach(int itemId in playerData.bagItemIndexList)
+        foreach (int itemId in playerData.bagItemIndexList)
         {
             Item newItem = ItemDatabase.Instance.GetItemFromId(itemId);
             if (newItem != null)
             {
                 loadPlayerCharacter.AddItemToBag(newItem);
             }
-            else
-            {
-                Debug.LogWarning("未対応のItemBase型：" + itemId);
-            }
         }
         loadPlayerCharacter.PocketList.Clear();
-        foreach(int itemId in playerData.pocketItemIndexList)
+        foreach (int itemId in playerData.pocketItemIndexList)
         {
             Item newItem = ItemDatabase.Instance.GetItemFromId(itemId);
             if (newItem != null)
             {
                 loadPlayerCharacter.AddItemToPocket(newItem as Consumable);
             }
-            else
-            {
-                Debug.LogWarning("未対応のItemBase型：" + itemId);
-            }
         }
         loadPlayerCharacter.StorageList.Clear();
+        foreach (int commandId in playerData.storageCommandIndexList)
+        {
+            Command newCommand = CommandDatabase.Instance.GetCommandFromId(commandId);
+            if (newCommand != null)
+            {
+                loadPlayerCharacter.AddCommandToStorage(newCommand);
+            }
+        }
         loadPlayerCharacter.SlotList.Clear();
-
-
-
+        int slotIndex = 0;
+        foreach (int commandId in playerData.slotCommandIndexList)
+        {
+            Command newCommand = CommandDatabase.Instance.GetCommandFromId(commandId);
+            if (newCommand != null)
+            {
+                loadPlayerCharacter.SlotList.Add(newCommand);
+            }
+            else
+            {
+                loadPlayerCharacter.SlotList.Add(null);
+            }
+            slotIndex++;
+        }
 
         return loadPlayerCharacter;
     }

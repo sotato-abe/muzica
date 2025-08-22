@@ -65,22 +65,6 @@ public class Character
         Init();
     }
 
-    // public static Character CreateFrom(CharacterBase baseData)
-    // {
-    //     var character = new Character
-    //     {
-    //         _base = baseData,
-    //         EquipmentList = new List<Equipment>(),
-    //         PocketList = new List<Consumable>(),
-    //         StorageList = new List<Command>(),
-    //         SlotList = new List<Command>(),
-    //         BagItemList = new List<Item>()
-    //     };
-
-    //     character.Init();
-    //     return character;
-    // }
-
     public virtual void Init()
     {
         if (_base == null)
@@ -172,7 +156,7 @@ public class Character
         foreach (CommandBase commandBase in _base.SlotBaseList)
         {
             Command command = new Command(commandBase);
-            SlotList.Add(command); // 追加する方法ならエラーにならない
+            SlotList.Add(command);
         }
 
         StorageList = new List<Command>();

@@ -56,7 +56,6 @@ public class CharacterDatabase : MonoBehaviour
 
         CharacterBase baseData = characterDataList[characterId];
         PlayerCharacter loadCharacter = new PlayerCharacter(baseData);
-        Debug.Log($"GetPlayerCharacterFromId: {loadCharacter.Base.name}, ID: {characterId}");
         return loadCharacter;
     }
 

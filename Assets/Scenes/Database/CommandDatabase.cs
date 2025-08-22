@@ -33,6 +33,18 @@ public class CommandDatabase : MonoBehaviour
         return command;
     }
 
+    public Command GetCommandFromId(int commandId)
+    {
+        if (commandId < 0 || commandId >= commandDataList.Count)
+        {
+            Debug.LogWarning("Invalid command ID: " + commandId);
+            return null;
+        }
+
+        CommandBase baseData = commandDataList[commandId];
+        return new Command(baseData);
+    }
+
     public int GetCommandId(CommandBase command)
     {
         if (command == null)

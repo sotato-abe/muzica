@@ -21,18 +21,23 @@ public class StatusPanel : Panel
 
     private void OnEnable()
     {
-        if (player == null)
-        {
-            player = PlayerController.Instance?.PlayerCharacter;
-            Debug.Log($"OnEnable: player が初期化されました。{player?.Base.Name} / {player?.Exp}");
-            Debug.Log($"OnEnable: PlayerCharacter が初期化されました。{PlayerController.Instance?.PlayerCharacter?.Base.Name} / {PlayerController.Instance?.PlayerCharacter?.Exp}");
-            if (player == null)
-            {
-                Debug.LogWarning("OnEnable: player がまだ初期化されていません。");
-                return;
-            }
-        }
+        PlayerController.Instance.OnPlayerCharacterSet += HandlePlayerSet;
 
+        // すでにセット済みなら即反映
+        if (PlayerController.Instance.PlayerCharacter != null)
+        {
+            HandlePlayerSet(PlayerController.Instance.PlayerCharacter);
+        }
+    }
+
+    private void OnDisable()
+    {
+        PlayerController.Instance.OnPlayerCharacterSet -= HandlePlayerSet;
+    }
+
+    private void HandlePlayerSet(PlayerCharacter newplayer)
+    {
+        this.player = newplayer;
         characterCard.Setup(player);
         statusWindow.SetCharacter(player);
     }
