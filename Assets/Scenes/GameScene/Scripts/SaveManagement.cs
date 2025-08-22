@@ -30,6 +30,7 @@ public class SaveManagement : MonoBehaviour
         playData.time = ageTimePanel.ageTime;
         PlayerData playerData = PlayerDataConverter();
         playData.playerData = playerData;
+        Debug.Log("SavePlayData: " + playerData.characterId + " / " + playerData.exp);
         Persistance.Save(RELATIVE_PATH, playData);
     }
 
@@ -37,6 +38,7 @@ public class SaveManagement : MonoBehaviour
     {
         playData = Persistance.Load<PlayData>(RELATIVE_PATH);
         PlayerCharacter loadCharacter = LoadPlayerCharacter(playData.playerData);
+        Debug.Log("LoadPlayData: " + loadCharacter?.Base.Name + " / " + loadCharacter?.Exp);
         PlayerController.Instance.SetPlayerCharacter(loadCharacter);
         WorldMapController.Instance.WarpPlayerCoordinate(playData.position);
         ShowDebugLog();
@@ -119,7 +121,6 @@ public class SaveManagement : MonoBehaviour
     private PlayerCharacter LoadPlayerCharacter(PlayerData playerData)
     {
         PlayerCharacter loadPlayerCharacter = CharacterDatabase.Instance.GetPlayerCharacterFromId(playerData.characterId);
-        Debug.Log("LoadPlayerCharacter: " + loadPlayerCharacter.Base.name);
         loadPlayerCharacter.MaxLife = playerData.maxLife;
         loadPlayerCharacter.Life = playerData.currentLife;
         loadPlayerCharacter.MaxBattery = playerData.maxBattery;

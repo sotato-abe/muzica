@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Properties
-    public PlayerCharacter PlayerCharacter => player;
+    public PlayerCharacter PlayerCharacter { get; private set; }
     #endregion
 
     #region Events
@@ -30,6 +30,8 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         InitializeSingleton();
+        PlayerCharacter = player;
+        Debug.Log($"Awake: PlayerCharacter が初期化されました。{PlayerCharacter.Base.Name} / {PlayerCharacter.Exp}");
     }
 
     private void Start()
@@ -66,6 +68,8 @@ public class PlayerController : MonoBehaviour
         }
 
         player = loadCharcter;
+        PlayerCharacter = player;
+        Debug.Log($"SetPlayerCharacter: {PlayerCharacter.Base.Name} / {PlayerCharacter.Exp}");
         playerSubPanel.SetCharacter(player);
         UpdateCurrencyPanel();
     }
