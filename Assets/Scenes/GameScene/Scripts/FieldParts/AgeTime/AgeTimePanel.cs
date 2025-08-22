@@ -35,6 +35,12 @@ public class AgeTimePanel : MonoBehaviour
         statePanel.ChangeState(state);
     }
 
+    public void TimeSlip(DateTime targetTime)
+    {
+        ageTime = targetTime;
+        UpdateAgeTimeField();
+    }
+
     // 時間経過を管理し、timeSpeedに応じて進行速度を変更する
     private void Update()
     {

@@ -40,6 +40,7 @@ public class SaveManagement : MonoBehaviour
         PlayerCharacter loadCharacter = LoadPlayerCharacter(playData.playerData);
         Debug.Log("LoadPlayData: " + loadCharacter?.Base.Name + " / " + loadCharacter?.Exp);
         PlayerController.Instance.SetPlayerCharacter(loadCharacter);
+        ageTimePanel.TimeSlip(playData.time);
         WorldMapController.Instance.WarpPlayerCoordinate(playData.position);
         ShowDebugLog();
     }
