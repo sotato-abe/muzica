@@ -46,6 +46,7 @@ public class ShopItemWindow : MonoBehaviour, IDropHandler
         DeleteAllItems();
         foreach (Item item in items)
         {
+            item.isNew = false;
             CreateItemBlock(item);
         }
     }

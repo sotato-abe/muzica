@@ -36,13 +36,11 @@ public class WorldMapController : MonoBehaviour
     private void Start()
     {
         ChangePlayerCoordinate(new Vector2Int(0, 0));
-        Debug.Log($"Start player to {playerPosition}");
         Vector2Int startPos = Vector2Int.up;
     }
 
     public void WarpPlayerCoordinate(Vector2Int targetPosition)
     {
-        Debug.Log($"Warping player to {targetPosition}");
         // すでにイベント実行中のときはワールド移動をスキップする。
         if (PlayerController.Instance.CurrentEventType != EventType.Default)
             return;

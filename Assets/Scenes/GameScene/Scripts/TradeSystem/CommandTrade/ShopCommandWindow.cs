@@ -46,6 +46,7 @@ public class ShopCommandWindow : MonoBehaviour, IDropHandler
         DeleteAllCommands();
         foreach (Command command in commands)
         {
+            command.isNew = false;
             CreateCommandBlock(command);
         }
     }
