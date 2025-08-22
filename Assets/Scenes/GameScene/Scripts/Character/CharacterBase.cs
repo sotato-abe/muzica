@@ -36,9 +36,9 @@ public class CharacterBase : ScriptableObject
 
     [Header("Belongings")]
     // キャラクターの所持品
+    [SerializeField] List<AbilityBase> abilityList;
     [SerializeField] EquipmentBase rightHandEquipment;
     [SerializeField] EquipmentBase leftHandEquipment;
-    // [SerializeField] List<EquipmentBase> equipmentBaseList;
     [SerializeField] List<ConsumableBase> pocketBaseList;
     [SerializeField] List<ItemBase> bagItemBaseList;
     [SerializeField] List<CommandBase> slotBaseList = new List<CommandBase>(9);
@@ -77,6 +77,7 @@ public class CharacterBase : ScriptableObject
     public EquipmentBase RightHandEquipmentBase { get => rightHandEquipment; }
     public EquipmentBase LeftHandEquipmentBase { get => leftHandEquipment; }
     public List<ConsumableBase> PocketBaseList { get => pocketBaseList; }
+    public List<AbilityBase> AbilityList { get => abilityList; }
     public List<ItemBase> BagItemBaseList { get => bagItemBaseList; }
     public List<CommandBase> StorageBaseList { get => storageBaseList; }
     public List<CommandBase> SlotBaseList { get => slotBaseList; }

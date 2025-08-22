@@ -46,6 +46,7 @@ public class Character
     public int SkillPoint { get; set; }
 
     // Belongings
+    public List<Ability> AbilityList { get; set; }
     public Equipment RightHandEquipment { get; set; }
     public Equipment LeftHandEquipment { get; set; }
     public List<Equipment> EquipmentList { get; set; }
@@ -57,11 +58,6 @@ public class Character
     public Character(CharacterBase baseData)
     {
         _base = baseData;
-        this.EquipmentList = new List<Equipment>();
-        this.PocketList = new List<Consumable>();
-        this.StorageList = new List<Command>();
-        this.SlotList = new List<Command>();
-        this.BagItemList = new List<Item>();
         Init();
     }
 
@@ -72,10 +68,21 @@ public class Character
             Debug.LogError("SetBaseStatus() failed: _base is null");
             return;
         }
+        SetBaseAbility();
         SetBaseStatus();
         SetBaseItems();
         SetBaseCommands();
         ColStatus();
+    }
+
+    private void SetBaseAbility()
+    {
+        AbilityList = new List<Ability>();
+        foreach (AbilityBase abilityBase in _base.AbilityList)
+        {
+            Ability ability = new Ability(abilityBase);
+            AbilityList.Add(ability);
+        }
     }
 
     private void SetBaseStatus()

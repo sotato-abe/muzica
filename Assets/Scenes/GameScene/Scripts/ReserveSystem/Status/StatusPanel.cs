@@ -11,6 +11,8 @@ public class StatusPanel : Panel
     PlayerCharacter player;
     [SerializeField] CharacterCard characterCard;
     [SerializeField] StatusWindow statusWindow;
+    [SerializeField] GameObject abilityListWindow;
+    [SerializeField] AbilityBlock abilityBlockPrefab;
 
     private void Start()
     {
@@ -40,5 +42,19 @@ public class StatusPanel : Panel
         this.player = newplayer;
         characterCard.Setup(player);
         statusWindow.SetCharacter(player);
+        SetAbility();
+    }
+
+    private void SetAbility()
+    {
+        foreach (Transform child in abilityListWindow.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        foreach (Ability ability in player.AbilityList)
+        {
+            AbilityBlock block = Instantiate(abilityBlockPrefab, abilityListWindow.transform);
+            block.Setup(ability);
+        }
     }
 }
