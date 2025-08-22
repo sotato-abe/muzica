@@ -15,11 +15,12 @@ public class PlayerController : MonoBehaviour
     [Header("Player Components")]
     [SerializeField] private CharacterSubPanel playerSubPanel;
     [SerializeField] private CurrencyPanel currencyPanel;
-    [SerializeField] private PlayerCharacter player;
+    [SerializeField] private PlayerCharacter defaultPlayer; // 初期用だけ
+    public PlayerCharacter PlayerCharacter { get; private set; }
     #endregion
 
     #region Properties
-    public PlayerCharacter PlayerCharacter { get; private set; }
+    public event System.Action<PlayerCharacter> OnPlayerCharacterSet;
     #endregion
 
     #region Events
@@ -30,13 +31,17 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         InitializeSingleton();
-        PlayerCharacter = player;
-        Debug.Log($"Awake: PlayerCharacter が初期化されました。{PlayerCharacter.Base.Name} / {PlayerCharacter.Exp}");
     }
 
     private void Start()
     {
-        InitializePlayer();
+        // 初期状態はインスペクタでセットされたデフォルトを使う
+        if (PlayerCharacter == null && defaultPlayer != null)
+        {
+            SetPlayerCharacter(defaultPlayer);
+        }
+        playerSubPanel.SetCharacter(defaultPlayer);
+        UpdateCurrencyPanel();
         GameStart();
     }
     #endregion
@@ -52,13 +57,6 @@ public class PlayerController : MonoBehaviour
         Instance = this;
     }
 
-    private void InitializePlayer()
-    {
-        player.Init();
-        playerSubPanel.SetCharacter(player);
-        UpdateCurrencyPanel();
-    }
-
     public void SetPlayerCharacter(PlayerCharacter loadCharcter)
     {
         if (loadCharcter == null)
@@ -67,11 +65,12 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        player = loadCharcter;
-        PlayerCharacter = player;
+        PlayerCharacter = loadCharcter;
         Debug.Log($"SetPlayerCharacter: {PlayerCharacter.Base.Name} / {PlayerCharacter.Exp}");
-        playerSubPanel.SetCharacter(player);
+        playerSubPanel.SetCharacter(PlayerCharacter);
         UpdateCurrencyPanel();
+
+        OnPlayerCharacterSet?.Invoke(PlayerCharacter);
     }
 
     private void GameStart()
@@ -103,8 +102,8 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void AddBattleReward(int exp, int coin, List<Item> items)
     {
-        player.AddExp(exp);
-        player.AddCoin(coin);
+        PlayerCharacter.AddExp(exp);
+        PlayerCharacter.AddCoin(coin);
 
         foreach (Item item in items)
         {
@@ -126,13 +125,13 @@ public class PlayerController : MonoBehaviour
     {
         if (item == null) return;
 
-        if (player.Bag <= player.BagItemList.Count)
+        if (PlayerCharacter.Bag <= PlayerCharacter.BagItemList.Count)
         {
             Debug.LogWarning($"バックの容量を超えています。アイテムを追加できません。");
             FieldController.Instance.DropPlayerItem(item.Clone());
             return;
         }
-        player.AddItemToBag(item.Clone());
+        PlayerCharacter.AddItemToBag(item.Clone());
     }
 
     /// <summary>
@@ -140,7 +139,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void AddItemToPocket(Item item)
     {
-        if (player.ColPocket <= player.PocketList.Count)
+        if (PlayerCharacter.ColPocket <= PlayerCharacter.PocketList.Count)
         {
             Debug.LogWarning("ポケットの容量を超えています。アイテムを追加できません。");
             FieldController.Instance.DropPlayerItem(item.Clone());
@@ -149,7 +148,7 @@ public class PlayerController : MonoBehaviour
 
         if (item is Consumable consumable)
         {
-            player.AddItemToPocket(consumable.Clone() as Consumable);
+            PlayerCharacter.AddItemToPocket(consumable.Clone() as Consumable);
         }
     }
 
@@ -157,9 +156,9 @@ public class PlayerController : MonoBehaviour
     {
         if (bodyPartType == BodyPartType.None) return null;
         else if (bodyPartType == BodyPartType.RightHand)
-            return player.RightHandEquipment;
+            return PlayerCharacter.RightHandEquipment;
         else if (bodyPartType == BodyPartType.LeftHand)
-            return player.LeftHandEquipment;
+            return PlayerCharacter.LeftHandEquipment;
         else
             return null; // 他のボディパーツは未実装
     }
@@ -174,11 +173,11 @@ public class PlayerController : MonoBehaviour
         }
 
         if (bodyPartType == BodyPartType.RightHand)
-            player.RightHandEquipment = equipment.Clone() as Equipment;
+            PlayerCharacter.RightHandEquipment = equipment.Clone() as Equipment;
         else if (bodyPartType == BodyPartType.LeftHand)
-            player.LeftHandEquipment = equipment.Clone() as Equipment;
+            PlayerCharacter.LeftHandEquipment = equipment.Clone() as Equipment;
 
-        player.ColStatus();
+        PlayerCharacter.ColStatus();
     }
 
     /// <summary>
@@ -189,11 +188,11 @@ public class PlayerController : MonoBehaviour
         if (bodyPartType == BodyPartType.None) return;
 
         if (bodyPartType == BodyPartType.RightHand)
-            player.RightHandEquipment = null;
+            PlayerCharacter.RightHandEquipment = null;
         else if (bodyPartType == BodyPartType.LeftHand)
-            player.LeftHandEquipment = null;
+            PlayerCharacter.LeftHandEquipment = null;
 
-        player.ColStatus();
+        PlayerCharacter.ColStatus();
     }
 
     /// <summary>
@@ -202,7 +201,7 @@ public class PlayerController : MonoBehaviour
     public void RemoveItemFromBag(Item item)
     {
         if (item == null) return;
-        player.RemoveBagItem(item);
+        PlayerCharacter.RemoveBagItem(item);
     }
 
     /// <summary>
@@ -214,7 +213,7 @@ public class PlayerController : MonoBehaviour
 
         if (item is Consumable consumable)
         {
-            player.PocketList.Remove(consumable);
+            PlayerCharacter.PocketList.Remove(consumable);
         }
     }
 
@@ -252,13 +251,13 @@ public class PlayerController : MonoBehaviour
     {
         if (command == null) return;
 
-        if (player.ColStorage <= player.StorageList.Count)
+        if (PlayerCharacter.ColStorage <= PlayerCharacter.StorageList.Count)
         {
             Debug.LogWarning("ストレージの容量を超えています。コマンドを追加できません。");
             FieldController.Instance.DropPlayerCommand(command);
             return;
         }
-        player.AddCommandToStorage(command.Clone());
+        PlayerCharacter.AddCommandToStorage(command.Clone());
     }
 
     /// <summary>
@@ -269,11 +268,11 @@ public class PlayerController : MonoBehaviour
         Debug.Log("RemoveCommandFromStorage");
         if (command == null) return;
 
-        Debug.Log(player.StorageList.Count);
+        Debug.Log(PlayerCharacter.StorageList.Count);
 
-        if (player.StorageList.Contains(command))
+        if (PlayerCharacter.StorageList.Contains(command))
         {
-            player.StorageList.Remove(command);
+            PlayerCharacter.StorageList.Remove(command);
             Debug.Log($"ストレージからコマンドを削除しました: {command.Base.Name}");
         }
         else
@@ -293,7 +292,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        player.SlotList[index] = command.Clone();
+        PlayerCharacter.SlotList[index] = command.Clone();
     }
 
     /// <summary>
@@ -307,7 +306,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        player.SlotList[index] = null;
+        PlayerCharacter.SlotList[index] = null;
     }
 
     public void SellCommand(Command command)
@@ -336,7 +335,7 @@ public class PlayerController : MonoBehaviour
 
     private bool IsValidSlotIndex(int index)
     {
-        return index >= 0 && index < player.ColMemory * 3;
+        return index >= 0 && index < PlayerCharacter.ColMemory * 3;
     }
 
     private void HandleInvalidSlotIndex(Command command)
@@ -352,7 +351,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void AddCoin(int amount)
     {
-        player.Coin += amount;
+        PlayerCharacter.Coin += amount;
         UpdateCurrencyPanel();
     }
 
@@ -361,7 +360,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void AddDisc(int amount)
     {
-        player.Disc += amount;
+        PlayerCharacter.Disc += amount;
         UpdateCurrencyPanel();
     }
 
@@ -370,20 +369,20 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void AddKey(int amount)
     {
-        player.Key += amount;
+        PlayerCharacter.Key += amount;
         UpdateCurrencyPanel();
     }
 
     public bool SpendCurrency(int coin, int disc = 0)
     {
-        if (player.Coin < coin || player.Disc < disc)
+        if (PlayerCharacter.Coin < coin || PlayerCharacter.Disc < disc)
         {
             Debug.LogWarning("お金またはディスクが不足しています。");
             return false;
         }
 
-        player.Coin -= coin;
-        player.Disc -= disc;
+        PlayerCharacter.Coin -= coin;
+        PlayerCharacter.Disc -= disc;
         UpdateCurrencyPanel();
         return true;
     }
@@ -393,9 +392,9 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public bool SpendKey(int amount)
     {
-        if (player.Key < amount) return false;
+        if (PlayerCharacter.Key < amount) return false;
 
-        player.Key -= amount;
+        PlayerCharacter.Key -= amount;
         UpdateCurrencyPanel();
         return true;
     }
@@ -407,9 +406,9 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void UpdateCurrencyPanel()
     {
-        currencyPanel.SetCoin(player.Coin);
-        currencyPanel.SetDisc(player.Disc);
-        currencyPanel.SetKey(player.Key);
+        currencyPanel.SetCoin(PlayerCharacter.Coin);
+        currencyPanel.SetDisc(PlayerCharacter.Disc);
+        currencyPanel.SetKey(PlayerCharacter.Key);
     }
 
     /// <summary>
@@ -424,7 +423,7 @@ public class PlayerController : MonoBehaviour
     #region Energy Management
     public bool IsAlive()
     {
-        return player.Life > 0;
+        return PlayerCharacter.Life > 0;
     }
 
     /// <summary>
@@ -473,9 +472,9 @@ public class PlayerController : MonoBehaviour
     {
         return type switch
         {
-            EnergyType.Life => player.Life,
-            EnergyType.Battery => player.Battery,
-            EnergyType.Soul => player.Soul,
+            EnergyType.Life => PlayerCharacter.Life,
+            EnergyType.Battery => PlayerCharacter.Battery,
+            EnergyType.Soul => PlayerCharacter.Soul,
             _ => 0,
         };
     }
@@ -488,25 +487,25 @@ public class PlayerController : MonoBehaviour
         switch (type)
         {
             case EnergyType.Life:
-                player.Life = Mathf.Clamp(player.Life - amount, 0, player.MaxLife);
+                PlayerCharacter.Life = Mathf.Clamp(PlayerCharacter.Life - amount, 0, PlayerCharacter.MaxLife);
                 break;
             case EnergyType.Battery:
-                player.Battery = Mathf.Clamp(player.Battery - amount, 0, player.MaxBattery);
+                PlayerCharacter.Battery = Mathf.Clamp(PlayerCharacter.Battery - amount, 0, PlayerCharacter.MaxBattery);
                 break;
             case EnergyType.Soul:
-                player.Soul = Mathf.Clamp(player.Soul - amount, 0, 100);
+                PlayerCharacter.Soul = Mathf.Clamp(PlayerCharacter.Soul - amount, 0, 100);
                 break;
         }
     }
 
     public void StatusUp(StatusType type)
     {
-        player.StatusUp(type);
+        PlayerCharacter.StatusUp(type);
     }
 
     public void TakeAttack(TotalAttackCount totalCount)
     {
-        player.TakeAttack(totalCount);
+        PlayerCharacter.TakeAttack(totalCount);
         UpdatePlayerEnergy();
     }
     #endregion
