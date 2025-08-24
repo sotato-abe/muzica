@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private CharacterSubPanel playerSubPanel;
     [SerializeField] private CurrencyPanel currencyPanel;
     [SerializeField] private PlayerCharacter defaultPlayer; // 初期用だけ
+    [SerializeField] private SaveManagement saveManagement;
     #endregion
 
     public PlayerCharacter PlayerCharacter { get; private set; }
@@ -31,6 +32,11 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         // 初期状態はインスペクタでセットされたデフォルトを使う
+        PlayData selectedPlayData = GameScene.selectedPlayData;
+        if (selectedPlayData != null)
+        {
+            PlayerCharacter = saveManagement.LoadPlayerCharacter(GameScene.selectedPlayData.playerData);
+        }
         if (PlayerCharacter == null && defaultPlayer != null)
         {
             defaultPlayer.Init();
@@ -38,7 +44,6 @@ public class PlayerController : MonoBehaviour
         }
         playerSubPanel.SetCharacter(PlayerCharacter);
         UpdateCurrencyPanel();
-        GameStart();
     }
     #endregion
 
@@ -52,6 +57,7 @@ public class PlayerController : MonoBehaviour
         }
         Instance = this;
     }
+    #endregion
 
     public void SetPlayerCharacter(PlayerCharacter loadCharcter)
     {
@@ -61,18 +67,12 @@ public class PlayerController : MonoBehaviour
             return;
         }
         PlayerCharacter = loadCharcter;
+        PlayerCharacter.Init();
         playerSubPanel.SetCharacter(PlayerCharacter);
         UpdateCurrencyPanel();
 
         OnPlayerCharacterSet?.Invoke(PlayerCharacter);
     }
-
-    private void GameStart()
-    {
-        TalkMessage startMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "はじめるか、、");
-        StartCoroutine(playerSubPanel.SetTalkMessage(startMessage));
-    }
-    #endregion
 
     public void ChangeEventType(EventType eventType)
     {

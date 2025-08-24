@@ -448,7 +448,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &69440523
 RectTransform:
   m_ObjectHideFlags: 0
@@ -465,9 +465,9 @@ RectTransform:
   - {fileID: 574734621}
   m_Father: {fileID: 531184304}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 180, y: -90}
   m_SizeDelta: {x: 180, y: 70}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &69440524
@@ -604,6 +604,8 @@ MonoBehaviour:
   tradeSystem: {fileID: 1766387215}
   fieldPlayer: {fileID: 611831675}
   fieldController: {fileID: 1321909785}
+  defaultPlayer:
+    _base: {fileID: 0}
 --- !u!1001 &116651262
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13491,6 +13493,7 @@ MonoBehaviour:
   currencyPanel: {fileID: 870711296}
   defaultPlayer:
     _base: {fileID: 11400000, guid: 2668a915055a17243b143ffac7057499, type: 2}
+  saveManagement: {fileID: 923148799}
 --- !u!1 &746391295
 GameObject:
   m_ObjectHideFlags: 0
@@ -14200,7 +14203,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ageTimePanel: {fileID: 1058362223}
   saveButton: {fileID: 1214035583}
-  loadButton: {fileID: 69440524}
   playData:
     position: {x: 0, y: 0}
   text: {fileID: 1952082444}

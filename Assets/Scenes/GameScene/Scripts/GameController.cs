@@ -10,17 +10,26 @@ public class GameController : MonoBehaviour
     [SerializeField] TradeSystem tradeSystem;
     [SerializeField] FieldPlayer fieldPlayer;
     [SerializeField] FieldController fieldController;
+    [SerializeField] private PlayerCharacter defaultPlayer; // 初期用だけ
+
 
     private void Start()
     {
-        // ゲーム開始時にエージェントの初期化を行う
-        ageTimePanel.SetTimeSpeed(TimeState.Fast);  // 初期状態をFastに設定
         fieldPlayer.OnReserveStart += ReserveStart; // リザーブ開始イベントを登録
         fieldPlayer.OnBattleStart += BattleStart; // バトル開始イベントを登録
         reserveSystem.OnReserveEnd += ReserveEnd; // リザーブ終了イベントを登録
         battleSystem.OnBattleEnd += BattleEnd; // バトル終了イベントを登録
         tradeSystem.OnTradeEnd += TradeEnd; // リザーブ終了イベントを登録
         fieldController.OnPointEnter += TradeStart;
+        LoadPlayData();
+    }
+
+    private void LoadPlayData()
+    {
+        PlayData selectedPlayData = GameScene.selectedPlayData;
+        ageTimePanel.TimeSlip(selectedPlayData.time);
+        WorldMapController.Instance.WarpPlayerCoordinate(selectedPlayData.position);
+        fieldPlayer.SetCanMove(true);
     }
 
     public void ReserveStart()

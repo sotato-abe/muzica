@@ -12,7 +12,6 @@ public class SaveManagement : MonoBehaviour
 {
     [SerializeField] AgeTimePanel ageTimePanel;
     [SerializeField] Button saveButton;
-    [SerializeField] Button loadButton;
     public PlayData playData;
     public const string RELATIVE_PATH = "playData.json";
 
@@ -21,7 +20,6 @@ public class SaveManagement : MonoBehaviour
     private void Awake()
     {
         saveButton.onClick.AddListener(SavePlayData);
-        loadButton.onClick.AddListener(LoadPlayData);
     }
 
     private void SavePlayData()
@@ -39,7 +37,7 @@ public class SaveManagement : MonoBehaviour
         PlayerCharacter loadCharacter = LoadPlayerCharacter(playData.playerData);
         PlayerController.Instance.SetPlayerCharacter(loadCharacter);
         ageTimePanel.TimeSlip(playData.time);
-        WorldMapController.Instance.WarpPlayerCoordinate(playData.position);
+        // WorldMapController.Instance.WarpPlayerCoordinate(playData.position);
         ShowDebugLog();
     }
 
@@ -119,7 +117,7 @@ public class SaveManagement : MonoBehaviour
 
     // PlayerDataからPlayerCharacterを生成
     // PlayerDataにセットされたステータスをPlayerCharacterに適用
-    private PlayerCharacter LoadPlayerCharacter(PlayerData playerData)
+    public PlayerCharacter LoadPlayerCharacter(PlayerData playerData)
     {
         PlayerCharacter loadPlayerCharacter = CharacterDatabase.Instance.GetPlayerCharacterFromId(playerData.characterId);
         loadPlayerCharacter.MaxLife = playerData.maxLife;

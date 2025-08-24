@@ -10,6 +10,7 @@ public class LoadController : MonoBehaviour
     [SerializeField] LoadDataButton loadDataButton2;
     [SerializeField] LoadDataButton loadDataButton3;
 
+    public const string FILE_SOLA = "solaData.json";
     public const string FILE_NAME1 = "playData1.json";
     public const string FILE_NAME2 = "playData2.json";
     public const string FILE_NAME3 = "playData3.json";
@@ -18,6 +19,9 @@ public class LoadController : MonoBehaviour
     {
         startButton.onClick.AddListener(StartGame);
         LoadData();
+        loadDataButton1.OnStartGame += LoadGame;
+        loadDataButton2.OnStartGame += LoadGame;
+        loadDataButton3.OnStartGame += LoadGame;
     }
 
     private void LoadData()
@@ -45,7 +49,22 @@ public class LoadController : MonoBehaviour
 
     void StartGame()
     {
-        Debug.Log("GameStart");
+
+        PlayData selectedPlayData = Persistance.Load<PlayData>(FILE_SOLA);
+        GameScene.selectedPlayData = selectedPlayData;
+        SceneManager.LoadScene("GameScene");
+    }
+    
+    void LoadGame(int index)
+    {
+        PlayData selectedPlayData = index switch
+        {
+            1 => Persistance.Load<PlayData>(FILE_NAME1),
+            2 => Persistance.Load<PlayData>(FILE_NAME2),
+            3 => Persistance.Load<PlayData>(FILE_NAME3),
+            _ => null,
+        };
+        GameScene.selectedPlayData = selectedPlayData;
         SceneManager.LoadScene("GameScene");
     }
 }

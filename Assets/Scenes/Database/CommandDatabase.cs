@@ -25,7 +25,7 @@ public class CommandDatabase : MonoBehaviour
 
         if (commandId < 0 || commandId >= commandDataList.Count)
         {
-            Debug.LogError("Invalid command ID: " + commandId);
+            // Debug.LogError("Invalid command ID: " + commandId);
             return null;
         }
 
@@ -37,7 +37,7 @@ public class CommandDatabase : MonoBehaviour
     {
         if (commandId < 0 || commandId >= commandDataList.Count)
         {
-            Debug.LogWarning("Invalid command ID: " + commandId);
+            // Debug.LogWarning("Invalid command ID: " + commandId);
             return null;
         }
 
