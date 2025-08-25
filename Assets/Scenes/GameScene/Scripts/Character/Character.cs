@@ -103,7 +103,7 @@ public class Character
         Disc = _base.Disc;
         Key = _base.Key;
 
-        Level = 1;
+        Level = 0;
         Exp = _base.Exp;
 
         Life = MaxLife;

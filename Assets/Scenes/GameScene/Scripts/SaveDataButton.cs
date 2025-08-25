@@ -4,10 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class LoadDataButton : MonoBehaviour
+public class SaveDataButton : MonoBehaviour
 {
     [SerializeField] private Button button;
-    [SerializeField] private GameObject loadDisc;
+    [SerializeField] private GameObject saveDisc;
     [SerializeField] private TextMeshProUGUI emptyText;
     [SerializeField] private Image characterImage;
     [SerializeField] private TextMeshProUGUI nameText;
@@ -16,47 +16,40 @@ public class LoadDataButton : MonoBehaviour
     [SerializeField] private TextMeshProUGUI eventText;
     [SerializeField] int saveIndex;
 
-    public delegate void LoadGameDelegate(int index);
-    public LoadGameDelegate OnStartGame;
-
-    bool isLoaded = false;
+    public delegate void SaveGameDelegate(int index);
+    public SaveGameDelegate OnSaveGame;
 
     private void Start()
     {
         button.onClick.AddListener(OnButtonClick);
     }
 
-    public void Setup(SimpleData loadData)
+    public void Setup(SimpleData saveData)
     {
-        if (loadData == null)
+        if (saveData == null)
         {
             SetEmpty();
             return;
         }
 
-        isLoaded = true;
         emptyText.gameObject.SetActive(false);
-        loadDisc.SetActive(true);
+        saveDisc.SetActive(true);
 
-        characterImage.sprite = loadData.characterSprite;
-        nameText.text = loadData.name;
-        levelText.text = "Lv." + loadData.level.ToString();
-        timeText.text = loadData.time.ToString("yyyy/MM/dd") + " " + loadData.position;
+        characterImage.sprite = saveData.characterSprite;
+        nameText.text = saveData.name;
+        levelText.text = "Lv." + saveData.level.ToString();
+        timeText.text = saveData.time.ToString("yyyy/MM/dd") + " " + saveData.position;
         eventText.text = "test";
     }
 
     public void SetEmpty()
     {
-        isLoaded = false;
         emptyText.gameObject.SetActive(true);
-        loadDisc.SetActive(false);
+        saveDisc.SetActive(false);
     }
 
     private void OnButtonClick()
     {
-        if (isLoaded)
-        {
-            OnStartGame?.Invoke(saveIndex);
-        }
+        OnSaveGame?.Invoke(saveIndex);
     }
 }

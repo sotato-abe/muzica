@@ -55,6 +55,7 @@ public class SimpleData
     public DateTime time;
     public Vector2Int position;
     public string sceneName;
+    public Sprite characterSprite;
 
     public SimpleData(PlayData playData)
     {
@@ -65,5 +66,6 @@ public class SimpleData
         this.time = playData.time;
         this.position = playData.position;
         this.sceneName = "test";
+        this.characterSprite = loadPlayerCharacter.Base.SquareSprite;
     }
 }

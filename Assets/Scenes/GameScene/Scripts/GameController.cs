@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class GameController : MonoBehaviour
 {
@@ -10,7 +11,8 @@ public class GameController : MonoBehaviour
     [SerializeField] TradeSystem tradeSystem;
     [SerializeField] FieldPlayer fieldPlayer;
     [SerializeField] FieldController fieldController;
-    [SerializeField] private PlayerCharacter defaultPlayer; // 初期用だけ
+    [SerializeField] SaveManagement saveManagement;
+    [SerializeField] private PlayerCharacter defaultPlayer; // テスト用
 
 
     private void Start()
@@ -27,6 +29,15 @@ public class GameController : MonoBehaviour
     private void LoadPlayData()
     {
         PlayData selectedPlayData = GameScene.selectedPlayData;
+        if (selectedPlayData == null)
+        {
+            selectedPlayData = new PlayData();
+            defaultPlayer.Init();
+            selectedPlayData.playerData = saveManagement.PlayerDataConverter(defaultPlayer);
+            selectedPlayData.position = defaultPlayer.Base.Birthplace.Position;
+            selectedPlayData.time = new DateTime(2030, 12, 1);
+            GameScene.selectedPlayData = selectedPlayData;
+        }
         ageTimePanel.TimeSlip(selectedPlayData.time);
         WorldMapController.Instance.WarpPlayerCoordinate(selectedPlayData.position);
         fieldPlayer.SetCanMove(true);

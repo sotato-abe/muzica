@@ -12,45 +12,61 @@ public class SaveManagement : MonoBehaviour
 {
     [SerializeField] AgeTimePanel ageTimePanel;
     [SerializeField] Button saveButton;
+    [SerializeField] Button closeButton;
+    [SerializeField] SlidePanel saveButtonList;
+    [SerializeField] SavePanel savePanel;
     public PlayData playData;
     public const string RELATIVE_PATH = "playData.json";
-
-    public TextMeshProUGUI text;
+    public const string FILE_NAME = "playData";
+    public const string FILE_EXTENSION = ".json";
 
     private void Awake()
     {
-        saveButton.onClick.AddListener(SavePlayData);
+        saveButton.onClick.AddListener(OpenSavePanel);
+        closeButton.onClick.AddListener(CloseSavePanel);
     }
 
-    private void SavePlayData()
+    private void OpenSavePanel()
+    {
+        ageTimePanel.SetTimeSpeed(TimeState.Stop);
+        savePanel.PanelOpen();
+    }
+
+    private void CloseSavePanel()
+    {
+        savePanel.ClosePanel();
+        ageTimePanel.SetTimeSpeed(TimeState.Fast);
+    }
+
+    public void SavePlayData(int index)
     {
         playData.position = WorldMapController.Instance.playerPosition;
         playData.time = ageTimePanel.ageTime;
-        PlayerData playerData = PlayerDataConverter();
+        PlayerData playerData = PlayerDataConverter(PlayerController.Instance.PlayerCharacter);
         playData.playerData = playerData;
-        Persistance.Save(RELATIVE_PATH, playData);
+        string filePath = $"{FILE_NAME}{index}{FILE_EXTENSION}";
+        Persistance.Save(filePath, playData);
     }
 
-    private void LoadPlayData()
+    private void LoadPlayData(int index)
     {
-        playData = Persistance.Load<PlayData>(RELATIVE_PATH);
+        string filePath = $"{FILE_NAME}{index}{FILE_EXTENSION}";
+        playData = Persistance.Load<PlayData>(filePath);
         PlayerCharacter loadCharacter = LoadPlayerCharacter(playData.playerData);
         PlayerController.Instance.SetPlayerCharacter(loadCharacter);
         ageTimePanel.TimeSlip(playData.time);
-        // WorldMapController.Instance.WarpPlayerCoordinate(playData.position);
-        ShowDebugLog();
     }
 
-    private void ShowDebugLog()
+    public SimpleData GetSaveData(int index)
     {
-        text.enableWordWrapping = true;
-        text.overflowMode = TextOverflowModes.Overflow; // はみ出す場合の挙動も選べる
-        text.text = JsonConvert.SerializeObject(playData, Formatting.None);
+        string filePath = $"{FILE_NAME}{index}{FILE_EXTENSION}";
+        playData = Persistance.Load<PlayData>(filePath);
+        if (playData == null) return null;
+        return new SimpleData(playData);
     }
 
-    private PlayerData PlayerDataConverter()
+    public PlayerData PlayerDataConverter(PlayerCharacter character)
     {
-        PlayerCharacter character = PlayerController.Instance.PlayerCharacter;
         int characterId = CharacterDatabase.Instance.GetCharacterId(character.Base);
         PlayerData playerData = new PlayerData
         {
