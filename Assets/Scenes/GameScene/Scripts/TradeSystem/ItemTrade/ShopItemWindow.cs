@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 
 public class ShopItemWindow : MonoBehaviour, IDropHandler
 {
+    public UnityAction OnInsufficientCoin; // お金が足りない時に呼び出される。
     [SerializeField] ItemBlock itemBlockPrefab;
     [SerializeField] GameObject itemList;
 
@@ -81,6 +82,7 @@ public class ShopItemWindow : MonoBehaviour, IDropHandler
             currentPoint.ShopItems.Remove(item); // ポイントのアイテムリストから削除
             return true;
         }
+        OnInsufficientCoin?.Invoke();
         return false;
     }
 
