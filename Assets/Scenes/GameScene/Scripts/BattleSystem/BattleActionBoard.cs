@@ -54,23 +54,40 @@ public class BattleActionBoard : SlidePanel
     {
         if (!Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.RightShift))
         {
-            if (Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                ChangeAction(BattleActionType.Equip1);
-            }
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
-                ChangeAction(BattleActionType.Equip2);
-            }
-            if (Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                ChangeAction(BattleActionType.Pocket);
+                ChoiceAction(false);
             }
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                ChangeAction(BattleActionType.Escape);
+                ChoiceAction(true);
             }
         }
+    }
+
+    private void ChoiceAction(bool isLeft)
+    {
+        // actionPanelsから現在のアクションのインデックスを取得
+        int currentIndex = actionTypeList.IndexOf(currentAction);
+        if (isLeft)
+        {
+            currentIndex--;
+            if (currentIndex < 0)
+            {
+                currentIndex = actionTypeList.Count - 1;
+            }
+        }
+        else
+        {
+            currentIndex++;
+            if (currentIndex >= actionTypeList.Count)
+            {
+                currentIndex = 0;
+            }
+        }
+        currentAction = actionTypeList[currentIndex];
+        ChangeActiveIcon();
+        ChangeActionPanel();
     }
 
     public void ChangeAction(BattleActionType actionType)

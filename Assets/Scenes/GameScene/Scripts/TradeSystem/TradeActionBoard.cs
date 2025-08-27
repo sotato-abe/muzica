@@ -17,6 +17,7 @@ public class TradeActionBoard : SlidePanel
 
     private Dictionary<TradeActionType, Panel> actionPanels;
     private Dictionary<TradeActionType, ActionIcon> actionIcons;
+    private List<TradeActionType> actionTypeList;
     private TradeActionType currentAction = TradeActionType.Item;
 
     private void Start()
@@ -36,6 +37,8 @@ public class TradeActionBoard : SlidePanel
             {  TradeActionType.Quit, quitIcon },
         };
 
+        actionTypeList = new List<TradeActionType>(actionIcons.Keys);
+
         ChangeActiveIcon();
         ChangeActionPanel();
     }
@@ -44,21 +47,13 @@ public class TradeActionBoard : SlidePanel
     {
         if (!Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.RightShift))
         {
-            if (Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                ChangeAction(TradeActionType.Item);
-            }
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
-                ChangeAction(TradeActionType.Command);
-            }
-            if (Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                ChangeAction(TradeActionType.Talk);
+                ChoiceAction(false);
             }
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                ChangeAction(TradeActionType.Quit);
+                ChoiceAction(true);
             }
         }
 
@@ -69,6 +64,31 @@ public class TradeActionBoard : SlidePanel
                 OnTradeEnd?.Invoke(); // 予約終了イベントを呼び出す
             }
         }
+    }
+
+    private void ChoiceAction(bool isLeft)
+    {
+        // actionPanelsから現在のアクションのインデックスを取得
+        int currentIndex = actionTypeList.IndexOf(currentAction);
+        if (isLeft)
+        {
+            currentIndex--;
+            if (currentIndex < 0)
+            {
+                currentIndex = actionTypeList.Count - 1;
+            }
+        }
+        else
+        {
+            currentIndex++;
+            if (currentIndex >= actionTypeList.Count)
+            {
+                currentIndex = 0;
+            }
+        }
+        currentAction = actionTypeList[currentIndex];
+        ChangeActiveIcon();
+        ChangeActionPanel();
     }
 
     public void ItemPanelOpen()

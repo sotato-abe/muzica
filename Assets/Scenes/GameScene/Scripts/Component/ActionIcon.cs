@@ -10,7 +10,7 @@ public class ActionIcon : MonoBehaviour
 {
     [SerializeField] Image backImage;
     [SerializeField] private bool isActive = false;
-    [SerializeField] Color defaultColor = new Color(0, 0, 0, 200);
+    [SerializeField] Color defaultColor = new Color(0, 0, 0, 100);
     [SerializeField] Color activeColor = new Color(133, 10, 255, 200);
     private float defaultSize = 50f;
     private float activeScale = 1.3f;
@@ -20,6 +20,7 @@ public class ActionIcon : MonoBehaviour
 
     private void Awake()
     {
+        defaultColor = backImage.color;
         rectTransform = GetComponent<RectTransform>();
     }
 

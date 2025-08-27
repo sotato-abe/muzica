@@ -36,7 +36,7 @@ public class ReserveActionBoard : SlidePanel
             {  ReserveActionType.Quit, quitIcon },
         };
 
-        actionTypeList = new List<ReserveActionType>(actionPanels.Keys);
+        actionTypeList = new List<ReserveActionType>(actionIcons.Keys);
 
         ChangeActiveIcon();
         ChangeActionPanel();
@@ -46,21 +46,13 @@ public class ReserveActionBoard : SlidePanel
     {
         if (!Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.RightShift))
         {
-            if (Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                ChangeAction(ReserveActionType.Bag);
-            }
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
-                ChangeAction(ReserveActionType.Storage);
-            }
-            if (Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                ChangeAction(ReserveActionType.Status);
+                ChoiceAction(false);
             }
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                ChangeAction(ReserveActionType.Quit);
+                ChoiceAction(true);
             }
         }
 
@@ -69,6 +61,41 @@ public class ReserveActionBoard : SlidePanel
             if (currentAction == ReserveActionType.Quit)
             {
                 OnReserveEnd?.Invoke(); // 予約終了イベントを呼び出す
+            }
+        }
+    }
+
+    private void ChoiceAction(bool isLeft)
+    {
+        // actionPanelsから現在のアクションのインデックスを取得
+        // 端まで行ったらループする
+        int currentIndex = actionTypeList.IndexOf(currentAction);
+        if (currentIndex == actionTypeList.Count)
+        {
+            // Quitのときはスキップする
+            currentAction = ReserveActionType.Quit;
+            return;
+        }
+        if (isLeft)
+        {
+            if (currentIndex > 0)
+            {
+                ChangeAction(actionTypeList[currentIndex - 1]);
+            }
+            else
+            {
+                ChangeAction(actionTypeList[actionTypeList.Count - 1]);
+            }
+        }
+        else
+        {
+            if (currentIndex < actionTypeList.Count - 1)
+            {
+                ChangeAction(actionTypeList[currentIndex + 1]);
+            }
+            else
+            {
+                ChangeAction(actionTypeList[0]);
             }
         }
     }
@@ -90,7 +117,7 @@ public class ReserveActionBoard : SlidePanel
 
     public void QuitReserve()
     {
-        ChangeAction(ReserveActionType.Status);
+        ChangeAction(ReserveActionType.Quit);
     }
 
     public void ChangeAction(ReserveActionType actionType)
