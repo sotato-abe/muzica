@@ -12,7 +12,7 @@ public class ActionIcon : MonoBehaviour
     [SerializeField] private bool isActive = false;
     [SerializeField] Color defaultColor = new Color(0, 0, 0, 100);
     [SerializeField] Color activeColor = new Color(133, 10, 255, 200);
-    private float defaultSize = 50f;
+    private float defaultSize = 70f;
     private float activeScale = 1.3f;
     private float scaleDuration = 0.05f;
     private RectTransform rectTransform;
@@ -22,6 +22,7 @@ public class ActionIcon : MonoBehaviour
     {
         defaultColor = backImage.color;
         rectTransform = GetComponent<RectTransform>();
+        defaultSize = rectTransform.sizeDelta.x;
     }
 
     public void SetActive(bool activeFlg)
