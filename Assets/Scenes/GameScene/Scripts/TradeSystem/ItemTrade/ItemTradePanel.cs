@@ -7,7 +7,6 @@ using UnityEngine.Events;
 
 public class ItemTradePanel : Panel
 {
-    public UnityAction OnInsufficientCoin; // お金が足りない時に呼び出される。
     [SerializeField] ShopItemWindow shopItemWindow;
     [SerializeField] TargetItemWindow targetItemWindow;
     [SerializeField] BagCategory bagCategory;
@@ -16,15 +15,17 @@ public class ItemTradePanel : Panel
     [SerializeField] EquipmentSimpleSlot leftHandSlot;
     [SerializeField] PocketWindow pocketWindow;
 
+    public delegate void OwnerMessageDelegate(TalkMessage message);
+    public event OwnerMessageDelegate OnOwnerMessage;
     private void Start()
     {
         shopItemWindow.OnTargetItem += TargetItem;
+        shopItemWindow.OnOwnerMessage += OwnerMessage;
         inventoryWindow.OnTargetItem += TargetItem;
         rightHandSlot.OnTargetItem += TargetItem;
         leftHandSlot.OnTargetItem += TargetItem;
         pocketWindow.OnTargetItem += TargetItem;
         bagCategory.OnChangeWindow += ChangeWindow;
-        shopItemWindow.OnInsufficientCoin += InsufficientCoin;
         ChangeWindow(true);
     }
 
@@ -44,8 +45,8 @@ public class ItemTradePanel : Panel
         shopItemWindow.SetPoint(point);
     }
 
-    private void InsufficientCoin()
+    public void OwnerMessage(TalkMessage message)
     {
-        OnInsufficientCoin?.Invoke();
+        OnOwnerMessage?.Invoke(message);
     }
 }

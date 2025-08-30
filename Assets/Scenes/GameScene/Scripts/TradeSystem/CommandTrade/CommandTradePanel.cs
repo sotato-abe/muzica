@@ -13,9 +13,13 @@ public class CommandTradePanel : Panel
     [SerializeField] StorageWindow storageWindow;
     [SerializeField] SlotSettingWindow slotSettingWindow;
 
+    public delegate void OwnerMessageDelegate(TalkMessage message);
+    public event OwnerMessageDelegate OnOwnerMessage;
+
     private void Start()
     {
         shopCommandWindow.OnTargetCommand += TargetCommand;
+        shopCommandWindow.OnOwnerMessage += OwnerMessage;
         storageWindow.OnTargetCommand += TargetCommand;
         slotSettingWindow.OnTargetCommand += TargetCommand;
         bagCategory.OnChangeWindow += ChangeWindow;
@@ -38,8 +42,8 @@ public class CommandTradePanel : Panel
         shopCommandWindow.SetPoint(point);
     }
 
-    // public void SetShopCommands(List<Command> Commands)
-    // {
-    //     shopCommandWindow.SetCommands(Commands);
-    // }
+    public void OwnerMessage(TalkMessage message)
+    {
+        OnOwnerMessage?.Invoke(message);
+    }
 }

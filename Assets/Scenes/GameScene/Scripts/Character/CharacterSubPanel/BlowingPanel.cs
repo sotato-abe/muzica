@@ -16,7 +16,7 @@ public class BlowingPanel : MonoBehaviour
 
     private float paddingHeight = 90f;
     private float paddingWidth = 60f;
-    private float maxWidth = 250f;
+    private float maxWidth = 300f;
     private List<TalkMessage> messageList = new List<TalkMessage>();
     private Coroutine fadeCoroutine;
     private Coroutine messageCoroutine;

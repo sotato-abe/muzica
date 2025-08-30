@@ -14,6 +14,9 @@ public class ShopCommandWindow : MonoBehaviour, IDropHandler
     public delegate void TargetCommandDelegate(Command command, bool isOwn = false);
     public event TargetCommandDelegate OnTargetCommand;
 
+    public delegate void OwnerMessageDelegate(TalkMessage message);
+    public event OwnerMessageDelegate OnOwnerMessage;
+
     private const int MAX_BAG_COUNT = 20;
     private Point currentPoint;
 
@@ -27,6 +30,10 @@ public class ShopCommandWindow : MonoBehaviour, IDropHandler
             Command command = droppedCommandBlock.Command;
             PlayerController.Instance.SellCommand(command);
             droppedCommandBlock.RemoveCommand();
+            string coinText = "C:" + ((command.Base.CoinPrice / 2).ToString() ?? "0");
+            string discText = "D:" + ((command.Base.DiscPrice / 2).ToString() ?? "0");
+            TalkMessage talkMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "これは" + coinText + discText + "だね");
+            OnOwnerMessage?.Invoke(talkMessage);
             CreateCommandBlock(command);
         }
         else
@@ -73,14 +80,18 @@ public class ShopCommandWindow : MonoBehaviour, IDropHandler
         if (commandBlock.OriginalParent != this.transform) return false;
 
         Command command = commandBlock.Command;
-        bool isbuy = PlayerController.Instance.SpendCurrency(command.Base.CoinPrice, command.Base.DiscPrice);        
+        bool isbuy = PlayerController.Instance.SpendCurrency(command.Base.CoinPrice, command.Base.DiscPrice);
         if (isbuy)
         {
             commandBlock.RemovePlaceholder();
             Destroy(commandBlock.gameObject);
+            TalkMessage sellMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "ありがとうね");
+            OnOwnerMessage?.Invoke(sellMessage);
             currentPoint.ShopCommands.Remove(command); // ポイントのアイテムリストから削除
             return true;
         }
+        TalkMessage talkMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "お金が足りないよ");
+        OnOwnerMessage?.Invoke(talkMessage);
         return false;
     }
 

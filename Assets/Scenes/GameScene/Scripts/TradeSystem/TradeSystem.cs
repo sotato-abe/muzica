@@ -21,7 +21,8 @@ public class TradeSystem : MonoBehaviour
     private void Start()
     {
         tradeActionBoard.OnTradeEnd += TradeEnd; // リザーブアクションボードの終了イベントを登録
-        itemTradePanel.OnInsufficientCoin += SetOwnerMessage;
+        itemTradePanel.OnOwnerMessage += SetOwnerMessage;
+        commandTradePanel.OnOwnerMessage += SetOwnerMessage;
     }
     private void Update()
     {
@@ -58,10 +59,9 @@ public class TradeSystem : MonoBehaviour
         ownerSubPanel.SetOwner(owner);
     }
 
-    public void SetOwnerMessage()
+    public void SetOwnerMessage(TalkMessage message)
     {
-        TalkMessage talkMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "お金が足りないよ");
-        StartCoroutine(ownerSubPanel.SetTalkMessage(talkMessage));
+        StartCoroutine(ownerSubPanel.SetTalkMessage(message));
     }
 
     public void TradeEnd()

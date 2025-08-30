@@ -8,12 +8,14 @@ using UnityEngine.EventSystems;
 
 public class ShopItemWindow : MonoBehaviour, IDropHandler
 {
-    public UnityAction OnInsufficientCoin; // お金が足りない時に呼び出される。
     [SerializeField] ItemBlock itemBlockPrefab;
     [SerializeField] GameObject itemList;
 
     public delegate void TargetItemDelegate(Item item, bool isOwn = false);
     public event TargetItemDelegate OnTargetItem;
+
+    public delegate void OwnerMessageDelegate(TalkMessage message);
+    public event OwnerMessageDelegate OnOwnerMessage;
 
     private const int MAX_BAG_COUNT = 20;
     private Point currentPoint;
@@ -28,6 +30,10 @@ public class ShopItemWindow : MonoBehaviour, IDropHandler
             Item item = droppedItemBlock.Item;
             PlayerController.Instance.SellItem(item);
             droppedItemBlock.RemoveItem();
+            string coinText = "C:" + ((item.Base.CoinPrice / 2).ToString() ?? "0");
+            string discText = "D:" + ((item.Base.DiscPrice / 2).ToString() ?? "0");
+            TalkMessage talkMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "これは" + coinText + discText + "だね");
+            OnOwnerMessage?.Invoke(talkMessage);
             CreateItemBlock(item);
         }
         else
@@ -80,9 +86,12 @@ public class ShopItemWindow : MonoBehaviour, IDropHandler
             itemBlock.RemovePlaceholder();
             Destroy(itemBlock.gameObject);
             currentPoint.ShopItems.Remove(item); // ポイントのアイテムリストから削除
+            TalkMessage sellMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "ありがとうね");
+            OnOwnerMessage?.Invoke(sellMessage);
             return true;
         }
-        OnInsufficientCoin?.Invoke();
+        TalkMessage talkMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "お金が足りないよ");
+        OnOwnerMessage?.Invoke(talkMessage);
         return false;
     }
 
