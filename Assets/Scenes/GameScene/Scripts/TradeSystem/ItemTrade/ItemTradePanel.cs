@@ -17,6 +17,7 @@ public class ItemTradePanel : Panel
 
     public delegate void OwnerMessageDelegate(TalkMessage message);
     public event OwnerMessageDelegate OnOwnerMessage;
+    
     private void Start()
     {
         shopItemWindow.OnTargetItem += TargetItem;

@@ -7,4 +7,10 @@ using UnityEngine.Events;
 
 public class TalkPanel : Panel
 {
+    [SerializeField] ShopQuestWindow shopQuestWindow;
+
+    public void SetPoint(Point point)
+    {
+        shopQuestWindow.SetPoint(point);
+    }
 }

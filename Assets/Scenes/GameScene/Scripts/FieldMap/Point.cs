@@ -11,6 +11,7 @@ public class Point
     public Character Owner { get; set; }
     public List<Item> ShopItems { get; set; }
     public List<Command> ShopCommands { get; set; }
+    public List<Quest> ShopQuests { get; set; }
 
     public static Point CreateFrom(PointBase baseData)
     {
@@ -18,11 +19,13 @@ public class Point
         {
             Base = baseData,
             ShopItems = new List<Item>(),
-            ShopCommands = new List<Command>()
+            ShopCommands = new List<Command>(),
+            ShopQuests = new List<Quest>(),
         };
         point.Owner = new Character(baseData.Owner); // PointBaseからオーナーを取得
         point.SetShopItems();
         point.SetShopCommands();
+        point.SetShopQuests();
 
         return point;
     }
@@ -33,6 +36,7 @@ public class Point
         ShopCommands.Clear();
         SetShopItems();
         SetShopCommands();
+        SetShopQuests();
     }
 
     private void SetShopItems()
@@ -66,6 +70,15 @@ public class Point
         {
             Command command = new Command(commandBase);
             ShopCommands.Add(command);
+        }
+    }
+
+    private void SetShopQuests()
+    {
+        foreach (QuestBase questBase in _base.ShopQuestBaseList)
+        {
+            Quest quest = new Quest(questBase);
+            ShopQuests.Add(quest);
         }
     }
 }

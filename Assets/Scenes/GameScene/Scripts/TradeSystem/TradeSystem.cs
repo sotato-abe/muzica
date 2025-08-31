@@ -13,6 +13,7 @@ public class TradeSystem : MonoBehaviour
     [SerializeField] private MessagePanel messagePanel; // キャラクターサブパネル
     [SerializeField] ItemTradePanel itemTradePanel;
     [SerializeField] CommandTradePanel commandTradePanel;
+    [SerializeField] TalkPanel talkPanel;
     [SerializeField] WorldMapPanel worldMapPanel;
     [SerializeField] SlidePanel savePanel;
 
@@ -54,6 +55,7 @@ public class TradeSystem : MonoBehaviour
         currentPoint = point; // 現在のポイントを保存
         itemTradePanel.SetPoint(point); // アイテムトレードパネルにポイントを設定
         commandTradePanel.SetPoint(point); // コマンドトレードパネルにポイントを設定
+        talkPanel.SetPoint(point);
         Character owner = point.Owner;
         owner.Init();
         ownerSubPanel.SetOwner(owner);

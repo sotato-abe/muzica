@@ -16,6 +16,7 @@ public class PointBase : ScriptableObject
     [Header("Merchandise")]
     [SerializeField] List<ItemBase> shopItemBaseList;
     [SerializeField] List<CommandBase> commandBaseList;
+    [SerializeField] List<QuestBase> questBaseList;
 
     public string Name { get => pointName; }
     public CharacterBase Owner { get => owner; }
@@ -25,4 +26,5 @@ public class PointBase : ScriptableObject
 
     public List<ItemBase> ShopItemBaseList { get => shopItemBaseList; }
     public List<CommandBase> ShopCommandBaseList { get => commandBaseList; }
+    public List<QuestBase> ShopQuestBaseList { get => questBaseList; }
 }
