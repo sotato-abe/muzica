@@ -12,6 +12,9 @@ public class QuestBlock : Block, IPointerEnterHandler, IPointerExitHandler
 {
     public Quest Quest { get; set; }
     [SerializeField] TextMeshProUGUI titleText;
+    [SerializeField] TextMeshProUGUI coinText;
+    [SerializeField] TextMeshProUGUI discText;
+    [SerializeField] Image backImage;
     [SerializeField] Image cursor;
 
     void Start()
@@ -27,8 +30,15 @@ public class QuestBlock : Block, IPointerEnterHandler, IPointerExitHandler
     public void Setup(Quest quest)
     {
         Quest = quest;
-        titleText.SetText(Quest.Base.Name);
+        coinText.SetText("C: " + Quest.Base.CoinPrice.ToString());
+        discText.SetText("D: " + Quest.Base.DiscPrice.ToString());
+        SetRarityColor(Quest.Base.Rarity);
         SetTarget(false);
+    }
+
+    private void SetRarityColor(RarityType rarityType)
+    {
+        backImage.color = rarityType.GetRarityColor();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
