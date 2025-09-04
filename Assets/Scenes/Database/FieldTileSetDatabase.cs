@@ -114,6 +114,10 @@ public class FieldTileSetDatabase : MonoBehaviour
         FieldTileSet tileSet = GetTileSetFromByType(type);
         if (tileSet != null)
         {
+            if(type == FieldType.Sea)
+            {
+                return tileSet.AreaTile; // 海と海洋はAreaTileを返す
+            }
             return tileSet.GroundTile;
         }
         if (type != FieldType.None)
