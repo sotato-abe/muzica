@@ -4,17 +4,18 @@ using UnityEngine;
 
 public class WorldBigMapCameraManager : MonoBehaviour
 {
-    private int worldHeight = 100; // ワールドマップの高さ
+    private int minXposition = -55; // ワールドマップのXの最小位置
+    private int maxXposition = -33; // ワールドマップのXの最大
+    private int minYposition = 4; // ワールドマップのYの最小位置
+    private int maxYposition = 17; // ワールドマップのYの最大位置
 
-    private Vector3Int currentPos; // 現在のカメラ位置
+    private Vector3 currentPos; // 現在のカメラ位置
 
     // WorldMapのPlayer位置にカメラを合わせる
-    public void TargetPlayer(Vector3Int targetPos)
+    public void TargetPlayer(Vector3 targetPos)
     {
         currentPos = targetPos; // 現在のカメラ位置を更新
-        // カメラの位置をターゲットの位置に合わせる
-        Vector3 cameraPos = new Vector3(20, targetPos.y, -10); // Z軸は-10に固定
-        transform.position = cameraPos;
+        transform.position = currentPos;
     }
 
     public void ResetCamera()
@@ -27,10 +28,9 @@ public class WorldBigMapCameraManager : MonoBehaviour
         // カメラの位置を上に移動
         Vector3 cameraPos = transform.position;
         cameraPos.y += 0.05f; // 上に1ユニット移動
-        if (cameraPos.y > worldHeight) // 上限を超えないように制限
-        {
-            cameraPos.y = 0;
-        }
+        if (cameraPos.y > maxYposition) // 上限を超えないように制限
+            return;
+
         transform.position = cameraPos;
     }
 
@@ -39,10 +39,9 @@ public class WorldBigMapCameraManager : MonoBehaviour
         // カメラの位置を下に移動
         Vector3 cameraPos = transform.position;
         cameraPos.y -= 0.05f; // 下に1ユニット移動
-        if (cameraPos.y < 0) // 下限を超えないように制限
-        {
-            cameraPos.y = worldHeight;
-        }
+        if (cameraPos.y < minYposition) // 下限を超えないように制限
+            return;
+
         transform.position = cameraPos;
     }
 
@@ -51,6 +50,9 @@ public class WorldBigMapCameraManager : MonoBehaviour
         // カメラの位置を右に移動
         Vector3 cameraPos = transform.position;
         cameraPos.x += 0.05f; // 右に1ユニット移動
+        if (cameraPos.x > maxXposition) // 右限を超えないように制限
+            return;
+
         transform.position = cameraPos;
     }
 
@@ -59,6 +61,9 @@ public class WorldBigMapCameraManager : MonoBehaviour
         // カメラの位置を左に移動
         Vector3 cameraPos = transform.position;
         cameraPos.x -= 0.05f; // 左に1ユニット移動
+        if (cameraPos.x < minXposition) // 左限を超えないように制限
+            return;
+
         transform.position = cameraPos;
     }
 }

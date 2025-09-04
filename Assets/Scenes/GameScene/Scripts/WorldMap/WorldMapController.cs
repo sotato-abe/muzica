@@ -18,6 +18,7 @@ public class WorldMapController : MonoBehaviour
     public FieldGenerator fieldGenerator; // 今あるフィールド生成スクリプト
     public Transform player;              // プレイヤー
     [SerializeField] private WorldMapCamera worldMapCamera;
+    [SerializeField] private WorldBigMapCameraManager worldMapBigCamera;
     [SerializeField] WorldMapRender worldMapRender;
     [SerializeField] WorldMapPanel worldMapPanel;
 
@@ -154,5 +155,8 @@ public class WorldMapController : MonoBehaviour
         // カメラの位置をプレイヤーのアイコンに移動（Zは固定）
         Vector3 camPos = new Vector3(worldPos.x, worldPos.y, worldMapCamera.transform.position.z);
         worldMapCamera.transform.position = camPos;
+
+        Vector3Int worldPosInt = new Vector3Int((int)worldPos.x, (int)worldPos.y, -10);
+        worldMapBigCamera.TargetPlayer(worldPosInt);
     }
 }

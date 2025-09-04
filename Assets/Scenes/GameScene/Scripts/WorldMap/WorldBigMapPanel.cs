@@ -39,6 +39,11 @@ public class WorldBigMapPanel : Panel
         {
             OnCurrentPosition(); // 下に移動
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.E))
+        {
+            ClosePanel();
+        }
     }
 
     public void SwitchActive()
@@ -55,6 +60,14 @@ public class WorldBigMapPanel : Panel
             ClosePanel();
         }
         fieldPlayer.SetCanMove(!isActive);
+    }
+
+    private void ClosePanel()
+    {
+        isActive = false;
+        ageTimePanel.SetTimeSpeed(TimeState.Fast); // 時間を進める
+        fieldPlayer.SetCanMove(true);
+        transform.gameObject.SetActive(false);
     }
 
     public void OnUpStart()
