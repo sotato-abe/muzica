@@ -7,6 +7,7 @@ using TMPro;
 public class MessagePrefab : MonoBehaviour
 {
     [SerializeField] Image image;
+    [SerializeField] SlidePanel slidePanel;
     [SerializeField] RectTransform backRectTransform;
     [SerializeField] TextMeshProUGUI text;
 
@@ -14,11 +15,35 @@ public class MessagePrefab : MonoBehaviour
     private int minHeight = 50;
     private float padding = 0f;
 
+    private void OnEnable()
+    {
+        StartCoroutine(CloseMessage());
+    }
+
     public void SetMessage(Message message)
     {
         text.SetText(message.messageText);
         ResizePlate();
         image.sprite = message.sprite;
+        slidePanel.SetActive(true);
+
+        // 1フレーム待ってから実行
+        StartCoroutine(StartCloseMessage());
+    }
+
+    private IEnumerator StartCloseMessage()
+    {
+        yield return null; // 次のフレームまで待機
+        StartCoroutine(CloseMessage());
+    }
+
+    private IEnumerator CloseMessage()
+    {
+        yield return new WaitForSeconds(10.0f);
+        slidePanel.SetActive(false);
+        yield return new WaitForSeconds(1.0f);
+        gameObject.SetActive(false);
+        yield return null;
     }
 
     private void ResizePlate()
