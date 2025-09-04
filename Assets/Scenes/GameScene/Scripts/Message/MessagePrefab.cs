@@ -15,7 +15,7 @@ public class MessagePrefab : MonoBehaviour
     private int minHeight = 50;
     private float padding = 0f;
 
-    private void OnEnable()
+    private void OnStart()
     {
         StartCoroutine(CloseMessage());
     }
@@ -26,15 +26,6 @@ public class MessagePrefab : MonoBehaviour
         ResizePlate();
         image.sprite = message.sprite;
         slidePanel.SetActive(true);
-
-        // 1フレーム待ってから実行
-        StartCoroutine(StartCloseMessage());
-    }
-
-    private IEnumerator StartCloseMessage()
-    {
-        yield return null; // 次のフレームまで待機
-        StartCoroutine(CloseMessage());
     }
 
     private IEnumerator CloseMessage()
