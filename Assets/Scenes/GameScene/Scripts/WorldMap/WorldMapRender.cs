@@ -89,6 +89,8 @@ public class WorldMapRender : MonoBehaviour
                 Tile tile = ScriptableObject.CreateInstance<Tile>();
                 tile.sprite = fieldData.Icon;
                 fieldMap.SetTile(cell, tile);
+
+                fieldMap.SetTransformMatrix(cell, Matrix4x4.TRS(new Vector3(0, 0.2f, 0), Quaternion.identity, Vector3.one));
             }
         }
     }
