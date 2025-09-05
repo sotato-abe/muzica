@@ -1651,6 +1651,7 @@ MonoBehaviour:
   costBatteryText: {fileID: 4136507068214365914}
   costSoulText: {fileID: 4492135903383290883}
   equipmentInfo: {fileID: 6775050055191546219}
+  equipStatusWindow: {fileID: 395427055741765800}
 --- !u!1 &6370126655875617365
 GameObject:
   m_ObjectHideFlags: 0
@@ -1662,6 +1663,7 @@ GameObject:
   - component: {fileID: 7864894003563867276}
   - component: {fileID: 9179215210630745626}
   - component: {fileID: 8853048791105927523}
+  - component: {fileID: 395427055741765800}
   m_Layer: 5
   m_Name: statusImage
   m_TagString: Untagged
@@ -1726,6 +1728,24 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &395427055741765800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6370126655875617365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f83cbaf3c8c2ec4bac5d9d1c0907a22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  statusImage: {fileID: 8853048791105927523}
+  energyOutImage: {fileID: 21300000, guid: 0c49872436f8d1e4c900da8c2d52d2bd, type: 3}
+  stopImage: {fileID: 21300000, guid: 7ecad1b19c7c6e247bc84bf19fcee577, type: 3}
+  brokenImage: {fileID: 21300000, guid: ad04d2db12dc85c428cfff62b07ca777, type: 3}
+  mysteryImage: {fileID: 21300000, guid: e3a46b501c7e595408f252ecbaf3415c, type: 3}
+  emptyImage: {fileID: 21300000, guid: 65e7dcbeeaf12154598bc48a2e9cabfc, type: 3}
 --- !u!1 &7504638521658156048
 GameObject:
   m_ObjectHideFlags: 0

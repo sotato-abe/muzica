@@ -12,6 +12,7 @@ public class EquipWindow : MonoBehaviour
     [SerializeField] TextMeshProUGUI costBatteryText;
     [SerializeField] TextMeshProUGUI costSoulText;
     [SerializeField] EquipmentInfo equipmentInfo;
+    [SerializeField] EquipStatusWindow equipStatusWindow;
     // [SerializeField] Sprite butteryOutImage; // TODO: ステータスを増やす
 
     public void SetEquipment(Equipment equipment)
@@ -58,6 +59,7 @@ public class EquipWindow : MonoBehaviour
         costBatteryText.text = "0";
         costSoulText.text = "0";
         equipmentInfo.gameObject.SetActive(false);
+        equipStatusWindow.SetStatus(EquipStatusType.Empty);
     }
 
     public void SetStatusImage(bool canUse)
@@ -65,10 +67,12 @@ public class EquipWindow : MonoBehaviour
         if (canUse)
         {
             equipStatusImage.gameObject.SetActive(false);
+            equipStatusWindow.SetStatus(EquipStatusType.Active);
         }
         else
         {
             equipStatusImage.gameObject.SetActive(true);
+            equipStatusWindow.SetStatus(EquipStatusType.EnergyOut);
         }
     }
 }
