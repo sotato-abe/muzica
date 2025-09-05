@@ -28,6 +28,7 @@ public class FieldController : MonoBehaviour
     [SerializeField] List<EnemyGroup> pollutionEnemyGroups = new List<EnemyGroup>();
     [SerializeField] List<EnemyGroup> seaEnemyGroups = new List<EnemyGroup>();
     [SerializeField] List<EnemyGroup> oceanEnemyGroups = new List<EnemyGroup>();
+    [SerializeField] List<EnemyGroup> outfieldEnemyGroups = new List<EnemyGroup>();
 
     private Dictionary<FieldType, List<EnemyGroup>> fieldTypeEnemyGroups;
 
@@ -78,8 +79,15 @@ public class FieldController : MonoBehaviour
         int groupCount = currentFieldData.EnemyGroups.Count;
         if (groupCount == 0)
         {
-            List<EnemyGroup> targetGroups = fieldTypeEnemyGroups[currentFieldData.fieldType];
-            targetGroup = targetGroups[Random.Range(0, targetGroups.Count)];
+            if (Random.Range(0, 100) < 20 && outfieldEnemyGroups.Count > 0)
+            {
+                targetGroup = outfieldEnemyGroups[Random.Range(0, outfieldEnemyGroups.Count)];
+            }
+            else
+            {
+                List<EnemyGroup> targetGroups = fieldTypeEnemyGroups[currentFieldData.fieldType];
+                targetGroup = targetGroups[Random.Range(0, targetGroups.Count)];
+            }
         }
         else
         {
