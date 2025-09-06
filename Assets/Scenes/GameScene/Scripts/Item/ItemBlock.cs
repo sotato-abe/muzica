@@ -13,10 +13,13 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
     public Item Item { get; set; }
     [SerializeField] Image image;
     [SerializeField] Image cursor;
+    [SerializeField] Image flame;
     [SerializeField] StatusText statusText;
     private bool isActive = true;
     public bool isOwned = false;
+
     public Transform OriginalParent { get; private set; }
+
     public delegate bool RemoveItemDelegate(ItemBlock itemBlock);
     public event RemoveItemDelegate OnRemoveItem;
 
@@ -41,6 +44,14 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
         this.OriginalParent = originalParent;
         SetTarget(false);
         SetStatusText();
+        SetItemTypeFrame();
+    }
+
+    private void SetItemTypeFrame()
+    {
+        if (Item == null) return;
+        Color frameColor = Item.Base.itemType.GetItemTypeColor();
+        flame.color = frameColor;
     }
 
     public void SetStatusText()

@@ -19,4 +19,9 @@ public class Item
     {
         return new Item(_base, this.isNew);
     }
+
+    public ItemType GetItemType()
+    {
+        return _base.itemType;
+    }
 }
