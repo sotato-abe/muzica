@@ -23,7 +23,7 @@ public class ConsumableCard : Card
         cardImage.color = new Color(1, 1, 1, 1);
         SetEnchants(consumable.ConsumableBase.EnchantList);
         SetAttacks(consumable.ConsumableBase.EnergyAttackList);
-        countText.text = consumable.ConsumableBase.UsableCount.ToString();
+        countText.text = consumable.UsableCount.ToString();
     }
 
     private void SetEnchants(List<Enchant> enchants)
