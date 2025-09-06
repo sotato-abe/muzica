@@ -223,7 +223,7 @@ public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
             yield break;
         }
         turnBar.color = runningColor;
-        float speed = character.ColSpeed / 5f; // 速度を調整
+        float speed = character.ColSpeed / 10f; // 速度を調整
         while (turnBarFillAmount < 1f)
         {
             turnBarFillAmount += Time.deltaTime * speed;

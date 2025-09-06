@@ -77,8 +77,10 @@ public class FieldController : MonoBehaviour
         EnemyGroup targetGroup = null; // ← new は使わない
 
         int groupCount = currentFieldData.EnemyGroups.Count;
+
         if (groupCount == 0)
         {
+            // アウトフィールド
             if (Random.Range(0, 100) < 20 && outfieldEnemyGroups.Count > 0)
             {
                 targetGroup = outfieldEnemyGroups[Random.Range(0, outfieldEnemyGroups.Count)];
