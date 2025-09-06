@@ -103,7 +103,7 @@ public class BlowingPanel : MonoBehaviour
             SetPanel(messageList[0].messagePanelType); // パネルの種類を設定
             yield return TypeDialog(message);
             // messageの文字数によって待ち時間を変更する
-            float waitTime = Mathf.Clamp(message.Length * 0.2f, 2f, 6f); // 最小1秒、最大5秒
+            float waitTime = Mathf.Clamp(message.Length * 0.2f, 1f, 6f); // 最小1秒、最大6秒
             yield return new WaitForSeconds(waitTime);
             messageList.RemoveAt(0); // タイプし終わったメッセージを削除
         }

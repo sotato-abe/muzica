@@ -194,7 +194,7 @@ public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
         {
             Debug.LogWarning("戦闘不能");
             TalkMessage lifeOutMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "おぼえてろ !");
-            StartCoroutine(SetTalkMessage(lifeOutMessage));
+            yield return StartCoroutine(SetTalkMessage(lifeOutMessage));
             turnBar.gameObject.SetActive(false);
             StopAllCoroutines();
             OnLifeOutAction?.Invoke(this);
