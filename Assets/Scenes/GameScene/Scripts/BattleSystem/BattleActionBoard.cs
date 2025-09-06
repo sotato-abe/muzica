@@ -90,6 +90,26 @@ public class BattleActionBoard : SlidePanel
         ChangeActionPanel();
     }
 
+    public void Equip1PanelOpen()
+    {
+        ChangeAction(BattleActionType.Equip1);
+    }
+
+    public void Equip2PanelOpen()
+    {
+        ChangeAction(BattleActionType.Equip2);
+    }
+
+    public void PocketPanelOpen()
+    {
+        ChangeAction(BattleActionType.Pocket);
+    }
+
+    public void EscapePanelOpen()
+    {
+        ChangeAction(BattleActionType.Escape);
+    }
+
     public void ChangeAction(BattleActionType actionType)
     {
         currentAction = actionType;
@@ -136,9 +156,6 @@ public class BattleActionBoard : SlidePanel
 
     public void SetEnemyList(List<Character> enemyList)
     {
-        // equipPanel1.SetEnemyList(enemyList);
-        // equipPanel2.SetEnemyList(enemyList);
-        // pocketPanel.SetEnemyList(enemyList);
         escapePanel.SetEnemyList(enemyList);
     }
 
