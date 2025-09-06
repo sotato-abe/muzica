@@ -15,20 +15,11 @@ public class AgeTimePanel : MonoBehaviour
     public TimeState timeSpeed = TimeState.Fast;
     private int lastYear; // 直前の年を記録
 
-    // private void Start()
-    // {
-    //     Init();
-    // }
+    private void Start()
+    {
+        SetTimeSpeed(TimeState.Fast);
+    }
 
-    // // 初期化して現在の時間を設定
-    // public void Init()
-    // {
-    //     ageTime = new DateTime(2030, 12, 1);  // 初期値を2030年12月に設定
-    //     lastYear = ageTime.Year;              // 初期化時に記録
-    //     UpdateAgeTimeField();
-    // }
-
-    // TimeStateを変化させる。
     public void SetTimeSpeed(TimeState state)
     {
         timeSpeed = state;
@@ -70,6 +61,6 @@ public class AgeTimePanel : MonoBehaviour
     // ageTimeFieldに時間を表示
     private void UpdateAgeTimeField()
     {
-        ageTimeField.text = ageTime.ToString("yyyy/MM/dd");
+        ageTimeField.text = ageTime.ToString("yyyy/MM");
     }
 }
