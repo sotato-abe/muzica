@@ -379,8 +379,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1793456966192022653}
-  - {fileID: 86931726251968719}
   - {fileID: 5372071315697707840}
+  - {fileID: 86931726251968719}
   m_Father: {fileID: 2024008341266139739}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -406,7 +406,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 3
-  m_Spacing: 20
+  m_Spacing: 10
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
@@ -630,7 +630,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 83400965, guid: bf3b17938e9f1c0409d7ff7c199cd449, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7f1c4fc781974024e9dda8e339b25da5, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -653,9 +653,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   iconImage: {fileID: 890835592361525018}
-  individualImage: {fileID: 83400965, guid: bf3b17938e9f1c0409d7ff7c199cd449, type: 3}
-  grouplImage: {fileID: 427619400, guid: bf3b17938e9f1c0409d7ff7c199cd449, type: 3}
-  allImage: {fileID: 409951094, guid: bf3b17938e9f1c0409d7ff7c199cd449, type: 3}
+  selfImage: {fileID: 21300000, guid: b7769d815e797ed4595341db09f68e4f, type: 3}
+  individualImage: {fileID: 21300000, guid: 7f1c4fc781974024e9dda8e339b25da5, type: 3}
+  groupImage: {fileID: 21300000, guid: a5e383167e34cb54cb571e41dafa3bc7, type: 3}
+  allImage: {fileID: 21300000, guid: cc22199ba200b9a4791cc16b265e7fe4, type: 3}
+  randomImage: {fileID: 21300000, guid: 2d0e9135cdc2a634a9b3af0c9736bd43, type: 3}
 --- !u!1 &2963530123978708409
 GameObject:
   m_ObjectHideFlags: 0
@@ -695,7 +697,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 120, y: 0}
-  m_SizeDelta: {x: 460, y: 100}
+  m_SizeDelta: {x: 480, y: 100}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &8539428355371971052
 CanvasRenderer:
@@ -1458,7 +1460,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 180, y: 100}
+  m_SizeDelta: {x: 200, y: 100}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &841867601377671882
 MonoBehaviour:
@@ -1478,7 +1480,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 3
-  m_Spacing: 5
+  m_Spacing: 0
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
