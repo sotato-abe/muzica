@@ -40,7 +40,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 800, y: 100}
+  m_SizeDelta: {x: 780, y: 100}
   m_Pivot: {x: 1, y: 1}
 --- !u!222 &5883030206942253587
 CanvasRenderer:
@@ -416,7 +416,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 180, y: 100}
+  m_SizeDelta: {x: 200, y: 100}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &6005721747820405157
 MonoBehaviour:
@@ -436,7 +436,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 3
-  m_Spacing: 5
+  m_Spacing: 0
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
@@ -480,7 +480,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 80, y: 80}
+  m_SizeDelta: {x: 70, y: 70}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &5542404511290271101
 CanvasRenderer:
@@ -510,7 +510,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 83400965, guid: bf3b17938e9f1c0409d7ff7c199cd449, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2d0e9135cdc2a634a9b3af0c9736bd43, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -533,9 +533,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   iconImage: {fileID: 1785842743343120299}
-  individualImage: {fileID: 83400965, guid: bf3b17938e9f1c0409d7ff7c199cd449, type: 3}
-  grouplImage: {fileID: 427619400, guid: bf3b17938e9f1c0409d7ff7c199cd449, type: 3}
-  allImage: {fileID: 409951094, guid: bf3b17938e9f1c0409d7ff7c199cd449, type: 3}
+  selfImage: {fileID: 21300000, guid: b7769d815e797ed4595341db09f68e4f, type: 3}
+  individualImage: {fileID: 21300000, guid: 7f1c4fc781974024e9dda8e339b25da5, type: 3}
+  groupImage: {fileID: 21300000, guid: a5e383167e34cb54cb571e41dafa3bc7, type: 3}
+  allImage: {fileID: 21300000, guid: cc22199ba200b9a4791cc16b265e7fe4, type: 3}
+  randomImage: {fileID: 21300000, guid: 2d0e9135cdc2a634a9b3af0c9736bd43, type: 3}
 --- !u!1 &8070206184856254370
 GameObject:
   m_ObjectHideFlags: 0
@@ -670,8 +672,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7090708297091085266}
-  - {fileID: 2715043632529366077}
   - {fileID: 690635749845824688}
+  - {fileID: 2715043632529366077}
   m_Father: {fileID: 4030737493064925066}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -735,7 +737,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 3
-  m_Spacing: 20
+  m_Spacing: 10
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
