@@ -11,29 +11,42 @@ public class MessagePrefab : MonoBehaviour
     [SerializeField] RectTransform backRectTransform;
     [SerializeField] TextMeshProUGUI text;
 
+    public delegate bool RemoveMessageDelegate(Message message);
+    public event RemoveMessageDelegate OnRemoveMessage;
+
     private int lineWidth = 700;
     private int minHeight = 50;
     private float padding = 0f;
+    private float waitingTime = 8.0f;
 
-    private void OnStart()
-    {
-        StartCoroutine(CloseMessage());
-    }
+    private Message currentMessage;
 
     public void SetMessage(Message message)
     {
+        currentMessage = message;
         text.SetText(message.messageText);
         ResizePlate();
         image.sprite = message.sprite;
         slidePanel.SetActive(true);
+
+        StartCoroutine(CloseMessage());
     }
 
     private IEnumerator CloseMessage()
     {
-        yield return new WaitForSeconds(10.0f);
-        slidePanel.SetActive(false);
-        yield return new WaitForSeconds(1.0f);
-        gameObject.SetActive(false);
+        int completed = 0;
+        yield return new WaitForSeconds(waitingTime);
+
+        void CheckAllComplete()
+        {
+            completed++;
+            if (completed >= 1)
+            {
+                OnRemoveMessage?.Invoke(currentMessage);
+                Destroy(gameObject);
+            }
+        }
+        slidePanel.SetActive(false, CheckAllComplete);
         yield return null;
     }
 

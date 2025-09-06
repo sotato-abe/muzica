@@ -9,7 +9,7 @@ public class MessagePanel : SlidePanel
     [SerializeField] MessagePrefab messagePrefab;
     private List<Message> messageList = new List<Message>();
 
-    private int messageCount = 4;
+    private int messageCount = 6;
 
     private void Start()
     {
@@ -64,6 +64,7 @@ public class MessagePanel : SlidePanel
             {
                 // 新しく生成する
                 MessagePrefab newPrefab = Instantiate(messagePrefab, transform);
+                newPrefab.OnRemoveMessage += OnRemoveMessage;
                 newPrefab.SetMessage(message);
             }
         }
@@ -74,5 +75,15 @@ public class MessagePanel : SlidePanel
             Destroy(transform.GetChild(i).gameObject);
         }
         LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
+    }
+
+    public bool OnRemoveMessage(Message message)
+    {
+        if (messageList.Contains(message))
+        {
+            messageList.Remove(message);
+            return true;
+        }
+        return false;
     }
 }
