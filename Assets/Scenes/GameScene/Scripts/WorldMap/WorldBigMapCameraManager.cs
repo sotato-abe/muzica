@@ -6,13 +6,13 @@ public class WorldBigMapCameraManager : MonoBehaviour
 {
     private int minXposition = -50; // ワールドマップのXの最小位置
     private int maxXposition = -37; // ワールドマップのXの最大
-    private int minYposition = 5; // ワールドマップのYの最小位置
-    private int maxYposition = 15; // ワールドマップのYの最大位置
+    private int minYposition = -45; // ワールドマップのYの最小位置
+    private int maxYposition = -35; // ワールドマップのYの最大位置
 
     private Vector3 currentPos; // 現在のカメラ位置
     private Vector3 targetPos; // 目標のカメラ位置
 
-    float moveSpeed = 0.5f; // カメラの移動速度
+    float moveSpeed = 0.7f; // カメラの移動速度
     float smoothSpeed = 8f; // カメラの移動のなめらかさ
 
     // WorldMapのPlayer位置にカメラを合わせる
