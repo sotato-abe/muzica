@@ -55,7 +55,7 @@ public class CommandReel : Panel
 
     private void SetCommands()
     {
-        commands.Clear(); // ここ追加
+        commands.Clear();
 
         int startNum = (reelNum - 1) * 3;
         for (int i = startNum; i < reelNum * 3; i++)
