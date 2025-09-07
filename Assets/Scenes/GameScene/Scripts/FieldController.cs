@@ -149,7 +149,7 @@ public class FieldController : MonoBehaviour
             if (randomValue <= cumulative)
             {
                 // ここでインベントリに追加する処理を入れればOK
-                messagePanel.AddMessage(MessageIconType.Treasure, $"{item.Name}を手に入れた。 ({item.Rarity})");
+                messagePanel.AddMessage(MessageIconType.Treasure, $"{item.Name}を手に入れた。");
                 // item newItem = new 
 
                 Item newItem;

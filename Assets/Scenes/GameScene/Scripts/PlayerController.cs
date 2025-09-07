@@ -22,7 +22,8 @@ public class PlayerController : MonoBehaviour
     public PlayerCharacter PlayerCharacter { get; private set; }
     public event System.Action<PlayerCharacter> OnPlayerCharacterSet;
     public EventType CurrentEventType { get; private set; } = EventType.Default;
-
+    [SerializeField] private MessagePanel messagePanel;
+    
     #region Unity Lifecycle
     void Awake()
     {
@@ -122,6 +123,7 @@ public class PlayerController : MonoBehaviour
         if (PlayerCharacter.Bag <= PlayerCharacter.BagItemList.Count)
         {
             Debug.LogWarning($"バックの容量を超えています。アイテムを追加できません。");
+            messagePanel.AddMessage(MessageIconType.Bag, $"バックがパンパンだった。{item.Base.Name}を落としてしまった。");
             FieldController.Instance.DropPlayerItem(item.Clone());
             return;
         }
