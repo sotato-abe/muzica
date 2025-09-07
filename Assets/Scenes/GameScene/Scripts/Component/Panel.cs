@@ -19,6 +19,19 @@ public class Panel : MonoBehaviour
         groundY = transform.position.y;
     }
 
+    public void SwitchActive()
+    {
+        isActive = !isActive; // フラグをトグル
+        if (isActive)
+        {
+            PanelOpen();
+        }
+        else
+        {
+            ClosePanel();
+        }
+    }
+
     public void PanelOpen()
     {
         isActive = true;

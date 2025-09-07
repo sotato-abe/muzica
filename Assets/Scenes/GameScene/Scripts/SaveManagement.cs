@@ -11,32 +11,12 @@ using UnityEngine.EventSystems;
 public class SaveManagement : MonoBehaviour
 {
     [SerializeField] AgeTimePanel ageTimePanel;
-    [SerializeField] Button saveButton;
-    [SerializeField] Button closeButton;
     [SerializeField] SlidePanel saveButtonList;
     [SerializeField] SavePanel savePanel;
     public PlayData playData;
     public const string RELATIVE_PATH = "playData.json";
     public const string FILE_NAME = "playData";
     public const string FILE_EXTENSION = ".json";
-
-    private void Awake()
-    {
-        saveButton.onClick.AddListener(OpenSavePanel);
-        closeButton.onClick.AddListener(CloseSavePanel);
-    }
-
-    private void OpenSavePanel()
-    {
-        ageTimePanel.SetTimeSpeed(TimeState.Stop);
-        savePanel.PanelOpen();
-    }
-
-    private void CloseSavePanel()
-    {
-        savePanel.ClosePanel();
-        ageTimePanel.SetTimeSpeed(TimeState.Fast);
-    }
 
     public void SavePlayData(int index)
     {
