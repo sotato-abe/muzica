@@ -22,6 +22,7 @@ public class SaveManagement : MonoBehaviour
     {
         playData.position = WorldMapController.Instance.playerPosition;
         playData.time = ageTimePanel.ageTime;
+        playData.yearsElapsed = ageTimePanel.yearsElapsed;
         PlayerData playerData = PlayerDataConverter(PlayerController.Instance.PlayerCharacter);
         playData.playerData = playerData;
         string filePath = $"{FILE_NAME}{index}{FILE_EXTENSION}";
@@ -35,6 +36,7 @@ public class SaveManagement : MonoBehaviour
         PlayerCharacter loadCharacter = LoadPlayerCharacter(playData.playerData);
         PlayerController.Instance.SetPlayerCharacter(loadCharacter);
         ageTimePanel.TimeSlip(playData.time);
+        ageTimePanel.yearsElapsed = playData.yearsElapsed;
     }
 
     public SimpleData GetSaveData(int index)

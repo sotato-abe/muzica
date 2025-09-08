@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
     public event System.Action<PlayerCharacter> OnPlayerCharacterSet;
     public EventType CurrentEventType { get; private set; } = EventType.Default;
     [SerializeField] private MessagePanel messagePanel;
-    
+
     #region Unity Lifecycle
     void Awake()
     {

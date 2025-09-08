@@ -19,6 +19,8 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] FieldPlayer fieldPlayer; //キャラクター
     [SerializeField] FieldEnemy fieldEnemyPrefab; //敵キャラクター
     [SerializeField] private GameObject enemyGroupArea; // 敵キャラクターの親オブジェクト
+    [SerializeField] AgeTimePanel ageTimePanel;
+
     List<FieldCharacter> fieldEnemies = new List<FieldCharacter>(); // フィールドの敵リスト
     List<CharacterSubPanel> enemySubPanels = new List<CharacterSubPanel>(); // 敵のサブパネルリスト
 
@@ -78,9 +80,15 @@ public class BattleSystem : MonoBehaviour
     private IEnumerator AppearanceEnemies(List<Character> enemies)
     {
         int index = 0;
+        int LevelIncreaseCount = ageTimePanel.yearsElapsed * 2; // 1年ごとに2レベル上昇
+
         foreach (Character enemy in enemies)
         {
             enemy.Init();
+            if (enemy is EnemyCharacter enemyCharacter)
+            {
+                enemyCharacter.LevelUp(LevelIncreaseCount); // レベルアップ
+            }
             (Vector3 targetPos, bool isLeft, bool isFront) = GetRandomAroundFloorPosition();
             FieldEnemy fieldEnemy = Instantiate(fieldEnemyPrefab, targetPos, Quaternion.identity, enemyGroupArea.transform);
             fieldEnemy.SetUp(enemy); // バトラーの設定を行う

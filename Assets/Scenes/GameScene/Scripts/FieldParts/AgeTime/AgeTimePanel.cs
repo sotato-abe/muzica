@@ -11,6 +11,7 @@ public class AgeTimePanel : MonoBehaviour
     [SerializeField] StatePanelController statePanel;
     [SerializeField] PointDatabase pointDatabase;
 
+    public int yearsElapsed = 0;        // 経過時間
     public DateTime ageTime;        // 現在の時間
     public TimeState timeSpeed = TimeState.Fast;
     private int lastYear; // 直前の年を記録
@@ -51,6 +52,7 @@ public class AgeTimePanel : MonoBehaviour
         }
         if (ageTime.Year != lastYear)
         {
+            yearsElapsed++;
             lastYear = ageTime.Year;
             pointDatabase.ResetMerchandise();
         }

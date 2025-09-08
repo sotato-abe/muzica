@@ -9,6 +9,7 @@ using TMPro;
 public class PlayData
 {
     public DateTime time = DateTime.Now;
+    public int yearsElapsed = 0;
     public Vector2Int position;
     public PlayerData playerData;
 }

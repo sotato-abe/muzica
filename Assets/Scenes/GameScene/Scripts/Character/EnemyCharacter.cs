@@ -9,6 +9,43 @@ public class EnemyCharacter : Character
 {
     public EnemyCharacter(CharacterBase baseData) : base(baseData) { }
 
+    public void LevelUp(int increase)
+    {
+        for (int i = 0; i < increase; i++)
+        {
+            StatusType randomStatus = (StatusType)Random.Range(0, 6);
+            Debug.Log($"{randomStatus}");
+
+            switch (randomStatus)
+            {
+                case StatusType.LIFE:
+                    MaxLife += 10;
+                    Life = MaxLife;
+                    break;
+                case StatusType.BTRY:
+                    MaxBattery += 5;
+                    Battery = MaxBattery;
+                    break;
+                case StatusType.POW:
+                    Power += 1;
+                    break;
+                case StatusType.DEF:
+                    Defense += 1;
+                    break;
+                case StatusType.TEC:
+                    Technique += 1;
+                    break;
+                case StatusType.SPD:
+                    Speed += 1;
+                    break;
+                case StatusType.LUK:
+                    Luck += 1;
+                    break;
+            }
+        }
+        Level = increase;
+    }
+
     public TotalAttackCount EnemyAttack()
     {
         Equipment activeEquipment = GetRandomActiveEquipment();

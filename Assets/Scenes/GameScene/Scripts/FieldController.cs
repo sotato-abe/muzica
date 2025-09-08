@@ -74,7 +74,7 @@ public class FieldController : MonoBehaviour
         }
 
         List<Character> enemies = new List<Character>();
-        EnemyGroup targetGroup = null; // ← new は使わない
+        EnemyGroup targetGroup = null;
 
         int groupCount = currentFieldData.EnemyGroups.Count;
 
