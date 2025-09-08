@@ -83,6 +83,7 @@ public class EquipPanel : BattleActionPanel
             ResetEquipment();
             return;
         }
+        slotWindow.gameObject.SetActive(true);
         equipWindow.SetEquipment(currentEquipment);
         equipmentInfo.SetInfo(currentEquipment);
         CheckEnergyCost();
@@ -93,6 +94,7 @@ public class EquipPanel : BattleActionPanel
     /// </summary>
     private void ResetEquipment()
     {
+        slotWindow.gameObject.SetActive(false);
         equipWindow.ResetSlot();
         currentEquipment = null;
         ClearTarget();

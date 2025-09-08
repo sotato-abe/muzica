@@ -13,7 +13,7 @@ public class EquipWindow : MonoBehaviour
     [SerializeField] TextMeshProUGUI costSoulText;
     [SerializeField] EquipmentInfo equipmentInfo;
     [SerializeField] EquipStatusWindow equipStatusWindow;
-    // [SerializeField] Sprite butteryOutImage; // TODO: ステータスを増やす
+    [SerializeField] GameObject costWindow;
 
     public void SetEquipment(Equipment equipment)
     {
@@ -23,6 +23,7 @@ public class EquipWindow : MonoBehaviour
             ResetSlot();
             return;
         }
+        costWindow.SetActive(true);
         equipImage.gameObject.SetActive(true);
         equipImage.sprite = equipment.Base.Sprite;
         equipmentInfo.SetInfo(equipment);
@@ -54,6 +55,7 @@ public class EquipWindow : MonoBehaviour
 
     public void ResetSlot()
     {
+        costWindow.SetActive(false);
         equipImage.gameObject.SetActive(false);
         costLifeText.text = "0";
         costBatteryText.text = "0";
