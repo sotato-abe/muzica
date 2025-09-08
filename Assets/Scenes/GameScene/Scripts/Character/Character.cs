@@ -249,37 +249,38 @@ public class Character
     {
         if (SkillPoint > 0)
         {
+            int increaseAmount = type.GetStatusIncreaseAmount();
             switch (type)
             {
                 case StatusType.LIFE:
-                    MaxLife += 10;
+                    MaxLife += increaseAmount;
                     break;
                 case StatusType.BTRY:
-                    MaxBattery += 10;
+                    MaxBattery += increaseAmount;
                     break;
                 case StatusType.POW:
-                    Power += 1;
+                    Power += increaseAmount;
                     break;
                 case StatusType.TEC:
-                    Technique += 1;
+                    Technique += increaseAmount;
                     break;
                 case StatusType.DEF:
-                    Defense += 1;
+                    Defense += increaseAmount;
                     break;
                 case StatusType.SPD:
-                    Speed += 1;
+                    Speed += increaseAmount;
                     break;
                 case StatusType.LUK:
-                    Luck += 1;
+                    Luck += increaseAmount;
                     break;
                 case StatusType.MMR:
-                    Memory += 1;
+                    Memory += increaseAmount;
                     break;
                 case StatusType.STG:
-                    Storage += 1;
+                    Storage += increaseAmount;
                     break;
                 case StatusType.POC:
-                    Pocket += 1;
+                    Pocket += increaseAmount;
                     break;
             }
             SkillPoint -= 1;

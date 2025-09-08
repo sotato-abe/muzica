@@ -25,29 +25,6 @@ public class PlayerCharacter : Character
         }
     }
 
-    public void EnergyUp(EnergyType type)
-    {
-        if (SkillPoint > 0)
-        {
-            switch (type)
-            {
-                case EnergyType.Life:
-                    MaxLife += 10;
-                    break;
-                case EnergyType.Battery:
-                    MaxBattery += 5;
-                    break;
-            }
-            ColStatus();
-            SkillPoint -= 1;
-        }
-        else
-        {
-            Debug.Log("スキルポイントが足りません。");
-        }
-        Debug.Log($"スキルポイント: {ColLife},{MaxLife}/{Life}");
-    }
-
     public bool AddItemToBag(Item item)
     {
         if (BagItemList.Count < Bag)

@@ -15,13 +15,13 @@ public class EnemyCharacter : Character
     {
         statusDictionary = new Dictionary<StatusType, int>();
 
-        statusDictionary[StatusType.LIFE] = MaxLife / 10;
-        statusDictionary[StatusType.BTRY] = MaxBattery / 5;
-        statusDictionary[StatusType.POW] = Power;
-        statusDictionary[StatusType.DEF] = Defense;
-        statusDictionary[StatusType.TEC] = Technique;
-        statusDictionary[StatusType.SPD] = Speed;
-        statusDictionary[StatusType.LUK] = Luck;
+        statusDictionary[StatusType.LIFE] = MaxLife / StatusType.LIFE.GetStatusIncreaseAmount();
+        statusDictionary[StatusType.BTRY] = MaxBattery / StatusType.BTRY.GetStatusIncreaseAmount();
+        statusDictionary[StatusType.POW] = Power / StatusType.POW.GetStatusIncreaseAmount();
+        statusDictionary[StatusType.DEF] = Defense / StatusType.DEF.GetStatusIncreaseAmount();
+        statusDictionary[StatusType.TEC] = Technique / StatusType.TEC.GetStatusIncreaseAmount();
+        statusDictionary[StatusType.SPD] = Speed / StatusType.SPD.GetStatusIncreaseAmount();
+        statusDictionary[StatusType.LUK] = Luck / StatusType.LUK.GetStatusIncreaseAmount();
 
         for (int i = 0; i < increase; i++)
         {
@@ -30,27 +30,27 @@ public class EnemyCharacter : Character
             switch (targetStatus)
             {
                 case StatusType.LIFE:
-                    MaxLife += 10;
+                    MaxLife += targetStatus.GetStatusIncreaseAmount();
                     Life = MaxLife;
                     break;
                 case StatusType.BTRY:
-                    MaxBattery += 5;
+                    MaxBattery += targetStatus.GetStatusIncreaseAmount();
                     Battery = MaxBattery;
                     break;
                 case StatusType.POW:
-                    Power += 1;
+                    Power += targetStatus.GetStatusIncreaseAmount();
                     break;
                 case StatusType.DEF:
-                    Defense += 1;
+                    Defense += targetStatus.GetStatusIncreaseAmount();
                     break;
                 case StatusType.TEC:
-                    Technique += 1;
+                    Technique += targetStatus.GetStatusIncreaseAmount();
                     break;
                 case StatusType.SPD:
-                    Speed += 1;
+                    Speed += targetStatus.GetStatusIncreaseAmount();
                     break;
                 case StatusType.LUK:
-                    Luck += 1;
+                    Luck += targetStatus.GetStatusIncreaseAmount();
                     break;
             }
         }
