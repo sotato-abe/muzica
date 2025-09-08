@@ -36,7 +36,7 @@ public class EquipmentSlot : EquipmentDetail, IDropHandler
             PlayerController.Instance.SetEquipmentByBodyPart(bodyPartType, equipment);
             OnUpdateInventory?.Invoke();
             droppedItemBlock.RemoveItem();
-            SetEquipmentBlock(equipment);
+            SetEquipment(equipment);
         }
     }
 
