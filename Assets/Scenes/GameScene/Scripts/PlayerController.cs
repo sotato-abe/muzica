@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private CurrencyPanel currencyPanel;
     [SerializeField] private PlayerCharacter defaultPlayer; // 初期用だけ
     [SerializeField] private SaveManagement saveManagement;
+    [SerializeField] private FieldPlayer fieldPlayer;
     #endregion
 
     public PlayerCharacter PlayerCharacter { get; private set; }
@@ -503,6 +504,13 @@ public class PlayerController : MonoBehaviour
     {
         PlayerCharacter.TakeAttack(totalCount);
         UpdatePlayerEnergy();
+    }
+    #endregion
+
+    #region FieldPlayer
+    public void SetFieldPlayerMove(bool canMove)
+    {
+        fieldPlayer.SetCanMove(canMove);
     }
     #endregion
 }

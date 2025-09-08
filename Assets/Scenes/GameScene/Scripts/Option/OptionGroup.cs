@@ -33,8 +33,9 @@ public class OptionGroup : MonoBehaviour
                 if (panel.isActive)
                 {
                     panel.ClosePanel();
-                    ChangeTimeState(false);
-                    break; // 最初に見つけたアクティブなパネルだけを閉じる
+                    PlayerController.Instance.SetFieldPlayerMove(true);
+                    StopTimeState(false);
+                    break;
                 }
             }
         }
@@ -64,19 +65,27 @@ public class OptionGroup : MonoBehaviour
     {
         foreach (var p in panelList)
         {
-            if (p == panel)
+            if (p == panel && !p.isActive)
             {
-                p.SwitchActive();
-                ChangeTimeState(p.isActive);
+                p.PanelOpen();
+                PlayerController.Instance.SetFieldPlayerMove(false);
+                StopTimeState(true);
+            }
+            else if (p == panel && p.isActive)
+            {
+                p.ClosePanel();
+                PlayerController.Instance.SetFieldPlayerMove(true);
+                StopTimeState(false);
             }
             else
             {
+                StopTimeState(false);
                 p.ClosePanel();
             }
         }
     }
 
-    private void ChangeTimeState(bool isActive)
+    private void StopTimeState(bool isActive)
     {
         if (isActive)
         {

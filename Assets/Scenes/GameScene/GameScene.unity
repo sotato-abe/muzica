@@ -13348,7 +13348,6 @@ GameObject:
   m_Component:
   - component: {fileID: 527113197}
   - component: {fileID: 527113198}
-  - component: {fileID: 527113199}
   m_Layer: 5
   m_Name: WorldMapPanel
   m_TagString: Untagged
@@ -13398,35 +13397,6 @@ MonoBehaviour:
   isOpen: 1
   worldMapCamera: {fileID: 1520619792}
   fieldTitle: {fileID: 1947004386}
---- !u!114 &527113199
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 527113196}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 4
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1035247910}
-          m_TargetAssemblyTypeName: WorldBigMapPanel, Assembly-CSharp
-          m_MethodName: SwitchActive
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!1 &531184303
 GameObject:
   m_ObjectHideFlags: 0
@@ -13966,7 +13936,6 @@ MonoBehaviour:
   isActive: 0
   worldMapCameraManager: {fileID: 0}
   ageTimePanel: {fileID: 1058362223}
-  fieldPlayer: {fileID: 611831675}
 --- !u!224 &611831672 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5733545666576407842, guid: d0e0c2bab747b4f47b9b16b84808799c, type: 3}
@@ -14701,6 +14670,7 @@ MonoBehaviour:
   defaultPlayer:
     _base: {fileID: 11400000, guid: 2668a915055a17243b143ffac7057499, type: 2}
   saveManagement: {fileID: 923148799}
+  fieldPlayer: {fileID: 611831675}
   messagePanel: {fileID: 651672342}
 --- !u!1 &746391295
 GameObject:
@@ -16667,7 +16637,6 @@ MonoBehaviour:
   isActive: 0
   worldMapCameraManager: {fileID: 55670487}
   ageTimePanel: {fileID: 1058362223}
-  fieldPlayer: {fileID: 611831675}
 --- !u!1 &1058362221
 GameObject:
   m_ObjectHideFlags: 0

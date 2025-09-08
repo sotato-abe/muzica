@@ -8,7 +8,6 @@ public class WorldBigMapPanel : Panel
 {
     [SerializeField] WorldBigMapCameraManager worldMapCameraManager;
     [SerializeField] AgeTimePanel ageTimePanel;
-    [SerializeField] FieldPlayer fieldPlayer;
 
     private bool isCameraUpFlg = false;
     private bool isCameraBottomFlg = false;
@@ -59,14 +58,12 @@ public class WorldBigMapPanel : Panel
             ageTimePanel.SetTimeSpeed(TimeState.Fast); // 時間を進める
             ClosePanel();
         }
-        fieldPlayer.SetCanMove(!isActive);
     }
 
     private void ClosePanel()
     {
         isActive = false;
         ageTimePanel.SetTimeSpeed(TimeState.Fast); // 時間を進める
-        fieldPlayer.SetCanMove(true);
         transform.gameObject.SetActive(false);
     }
 
