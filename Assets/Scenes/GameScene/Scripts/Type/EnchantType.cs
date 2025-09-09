@@ -6,7 +6,7 @@ public enum EnchantType
     Adrenalin,      // アドレナリン（POW・SPDを１上げる）
     Curing,         // 脱力（POWとDEFを１上げ、SPDを１下げる）
     Acceleration,   // 加速（SPDを１上げる）
-    Vaccine,       // ワクチン（毒をのデバフを受け付けない）
+    Vaccine,        // ワクチン（毒をのデバフを受け付けない）
     Lucky,          // 幸運（LUKを１上げる）
     Clear,          // クリア（デバフをランダムで１つ解除する）
     Splinter,       // トゲ (アタックを受ける時、攻撃者のLIFEに5のダメージを与える)
@@ -23,7 +23,7 @@ public enum EnchantType
     Restraint,      // 拘束（SPDを１下げる）
     Bug,            // バグ（コマンド実行時にLIFEを１失う）
     Atrophy,        // イシュク POWが1ダウンする。
-    Fatigue,        // 疲労 DEFを1ダウンする TODO 変更予定。
+    Fatigue,        // 疲労 Soulが上昇しなくなる。
     UnLuckey,       // 不運 LUKを1ダウンする。
     Crack,          // 亀裂 ガードを1ダウンする。
     Cipher,         // 暗号化 自分へのコマンド攻撃確率を５％下げる。
@@ -36,4 +36,5 @@ public enum EnchantType
     Indignation,    // 憤怒 (POWを20%アップさせ、確率を30％下げる（下限は5%）)
     Petrifaction,   // 石化 (ダメージを受けない、そのかわり行動で。)
     Sleep,          // 睡眠 (1ターン行動できないが、ターン終了後にLIFEを5％回復する。攻撃されると解除される。)
+    Dehydration,    // 脱水 POW・SPDが1ダウンする。
 }
