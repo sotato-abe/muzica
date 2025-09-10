@@ -185,16 +185,16 @@ public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
         if (character == null) yield return null;
 
         StartCoroutine(JumpMotion());
-        TalkMessage damageMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "いてーな !");
-        StartCoroutine(SetTalkMessage(damageMessage));
+        TalkMessage talkMessage = character.GetTalkMessageByType(MessageType.Damage);
+        StartCoroutine(SetTalkMessage(talkMessage));
         character.TakeAttack(totalCount);
         yield return StartCoroutine(UpdateEnergyGauges());
 
         if (character.Life <= 0)
         {
             Debug.LogWarning("戦闘不能");
-            TalkMessage lifeOutMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "おぼえてろ !");
-            yield return StartCoroutine(SetTalkMessage(lifeOutMessage));
+            talkMessage = character.GetTalkMessageByType(MessageType.Lose);
+            yield return StartCoroutine(SetTalkMessage(talkMessage));
             turnBar.gameObject.SetActive(false);
             StopAllCoroutines();
             OnLifeOutAction?.Invoke(this);

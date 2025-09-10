@@ -107,7 +107,8 @@ public class EscapePanel : BattleActionPanel
         else
         {
             // 逃げる失敗
-            PlayerController.Instance.SetPlayerMessage(new TalkMessage(MessageType.Miss, MessagePanelType.Default, "くそっ！"));
+            TalkMessage talkMessage = character.GetTalkMessageByType(MessageType.Miss);
+            PlayerController.Instance.SetPlayerMessage(talkMessage);
         }
         RunningOff();
         CountEnergyCost();
