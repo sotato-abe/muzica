@@ -90,7 +90,7 @@ public class WorldMapRender : MonoBehaviour
                 tile.sprite = fieldData.Icon;
                 fieldMap.SetTile(cell, tile);
 
-                fieldMap.SetTransformMatrix(cell, Matrix4x4.TRS(new Vector3(0, 0.2f, 0), Quaternion.identity, Vector3.one));
+                fieldMap.SetTransformMatrix(cell, Matrix4x4.TRS(new Vector3(0, 0.15f, 0), Quaternion.identity, Vector3.one));
             }
         }
     }
