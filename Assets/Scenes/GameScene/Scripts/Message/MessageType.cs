@@ -12,4 +12,5 @@ public enum MessageType
     Question,     //ナゾ
     Entrance,     //入店
     Greetings,     //挨拶
+    Other,     
 }

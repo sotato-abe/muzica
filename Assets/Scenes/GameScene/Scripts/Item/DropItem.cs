@@ -81,7 +81,7 @@ public class DropItem : MonoBehaviour
         if (canPickup && other.CompareTag("Player"))
         {
             // アイテム取得処理
-            PlayerController.Instance.AddItemToBag(item);
+            PlayerController.Instance.PickUpItem(item);
             Destroy(gameObject);
         }
     }

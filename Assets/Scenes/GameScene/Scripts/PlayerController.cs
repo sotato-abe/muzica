@@ -238,6 +238,12 @@ public class PlayerController : MonoBehaviour
         FieldController.Instance.DropPlayerItem(item);
     }
 
+    public void PickUpItem(Item item)
+    {
+        messagePanel.AddMessage(MessageIconType.Bag, $"{item.Base.Name}をひろった");
+        AddItemToBag(item);
+    }
+
     #endregion
 
     #region Command Management
