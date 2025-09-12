@@ -32,7 +32,7 @@ public class ShopItemWindow : MonoBehaviour, IDropHandler
             droppedItemBlock.RemoveItem();
             string coinText = "C:" + ((item.Base.CoinPrice / 2).ToString() ?? "0");
             string discText = "D:" + ((item.Base.DiscPrice / 2).ToString() ?? "0");
-            TalkMessage talkMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "これは" + coinText + discText + "だね");
+            TalkMessage talkMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "買い取るよ");
             OnOwnerMessage?.Invoke(talkMessage);
             CreateItemBlock(item);
         }
