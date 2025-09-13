@@ -7,11 +7,17 @@ using System;
 public class QuestBase : ScriptableObject
 {
     [Header("Quest Information")] // クエスト情報
-    [SerializeField] new string name;
-    [SerializeField] RarityType rarity;
-    [SerializeField] QuestType questType;
-    [SerializeField, TextArea] string description;
-    [SerializeField] List<Item> orderedItemsList;
+    [SerializeField] new string name; // クエスト名
+    [SerializeField] RarityType rarity; // レアリティ
+    [SerializeField] QuestType questType; // クエストタイプ
+    [SerializeField, TextArea] string description; // 説明
+    [SerializeField, TextArea] string achievementMessage; // 達成メッセージ
+
+    // TODO : クエストのタイプごとにここを分岐させたクラスを作る
+    [Header("Task")] // タスク
+    [SerializeField] List<Item> orderedItemsList; // 納品アイテムリスト
+    [SerializeField] List<Item> transportItemsList; // 運搬アイテムリスト
+    [SerializeField] List<CharacterBase> exterminationCharactersList; // 討伐キャラクターリスト
 
     [Header("Conditions")] // 出現条件
     [SerializeField] DateTime startDateTime;
@@ -28,6 +34,7 @@ public class QuestBase : ScriptableObject
     public RarityType Rarity { get => rarity; }
     public QuestType QuestType => questType;
     public string Description { get => description; }
+    public string AchievementMessage { get => achievementMessage; }
     public List<Item> OrderedItemsList { get => orderedItemsList; }
 
     public DateTime StartDateTime { get => startDateTime; }
