@@ -8,7 +8,6 @@ using UnityEngine.Events;
 public class TalkPanel : Panel
 {
     [SerializeField] QuestCard questCard;
-    // [SerializeField] ShopQuestWindow shopQuestWindow;
 
     public void SetPoint(Point point)
     {

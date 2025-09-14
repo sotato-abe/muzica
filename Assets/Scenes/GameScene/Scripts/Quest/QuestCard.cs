@@ -33,19 +33,24 @@ public class QuestCard : MonoBehaviour
         {
             case QuestType.Story:
                 var storyQuest = currentQuest as StoryQuest;
+                storyQuestWindow.gameObject.SetActive(true);
                 break;
             case QuestType.Supply:
                 var supplyQuest = currentQuest as SupplyQuest;
+                supplyQuestWindow.gameObject.SetActive(true);
                 break;
 
             case QuestType.Delivery:
                 var deliveryQuest = currentQuest as DeliveryQuest;
+                deliveryQuestWindow.gameObject.SetActive(true);
                 break;
             case QuestType.Extermination:
                 var exterminationQuest = currentQuest as ExterminationQuest;
+                exterminationQuestWindow.gameObject.SetActive(true);
                 break;
             case QuestType.Special:
                 var specialQuest = currentQuest as SpecialQuest;
+                specialQuestWindow.gameObject.SetActive(true);
                 break;
 
             default:
