@@ -9,6 +9,7 @@ using UnityEngine.EventSystems;
 public class TargetCommandWindow : MonoBehaviour
 {
     [SerializeField] CommandCard commandCard;
+    [SerializeField] GameObject currencyWindow;
     [SerializeField] PriceTag coinPriceTag;
     [SerializeField] PriceTag discPriceTag;
 
@@ -28,21 +29,25 @@ public class TargetCommandWindow : MonoBehaviour
 
         commandCard.SetCommandCard(command);
         commandCard.gameObject.SetActive(true);
-        if (coinPriceTag != null)
-            coinPriceTag.SetPrice(command.Base.CoinPrice, isOwn);
-
-        if (discPriceTag != null)
-            discPriceTag.SetPrice(command.Base.DiscPrice, isOwn);
+        ShowPriceTags(command, isOwn);
     }
 
     private void ClearTargetCommand()
     {
+        coinPriceTag.SetPrice(null);
+        discPriceTag.SetPrice(null);
+        currencyWindow.SetActive(false);
         commandCard.gameObject.SetActive(false);
+    }
 
-        if (coinPriceTag != null)
-            coinPriceTag.SetPrice(null);
+    private void ShowPriceTags(Command command, bool isOwn)
+    {
+        coinPriceTag.SetPrice(command.Base.CoinPrice, isOwn);
+        discPriceTag.SetPrice(command.Base.DiscPrice, isOwn);
 
-        if (discPriceTag != null)
-            discPriceTag.SetPrice(null);
+        if (command.Base.CoinPrice != null || command.Base.DiscPrice != null)
+        {
+            currencyWindow.SetActive(true);
+        }
     }
 }

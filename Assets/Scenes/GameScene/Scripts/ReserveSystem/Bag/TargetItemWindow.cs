@@ -11,9 +11,9 @@ public class TargetItemWindow : MonoBehaviour
     [SerializeField] ConsumableCard consumableCard;
     [SerializeField] EquipmentCard equipmentCard;
     [SerializeField] TreasureCard treasureCard;
+    [SerializeField] GameObject currencyWindow;
     [SerializeField] PriceTag coinPriceTag;
     [SerializeField] PriceTag discPriceTag;
-    [SerializeField] bool dispDetailSwitch = true;
 
     private void Awake()
     {
@@ -51,31 +51,28 @@ public class TargetItemWindow : MonoBehaviour
             ClearTargetItem();
             return;
         }
-        ShowDetail(item, isOwn);
+        ShowPriceTags(item, isOwn);
     }
 
     private void ClearTargetItem()
     {
-        if (coinPriceTag != null)
-            coinPriceTag.SetPrice(null);
-
-        if (discPriceTag != null)
-            discPriceTag.SetPrice(null);
-
+        coinPriceTag.SetPrice(null);
+        discPriceTag.SetPrice(null);
+        currencyWindow.SetActive(false);
         consumableCard.gameObject.SetActive(false);
         equipmentCard.gameObject.SetActive(false);
         treasureCard.gameObject.SetActive(false);
     }
 
-    private void ShowDetail(Item item, bool isOwn = true)
+    private void ShowPriceTags(Item item, bool isOwn = true)
     {
-        if (!dispDetailSwitch)
-            return;
 
-        if (coinPriceTag != null)
-            coinPriceTag.SetPrice(item.Base.CoinPrice, isOwn);
+        coinPriceTag.SetPrice(item.Base.CoinPrice, isOwn);
+        discPriceTag.SetPrice(item.Base.DiscPrice, isOwn);
 
-        if (discPriceTag != null)
-            discPriceTag.SetPrice(item.Base.DiscPrice, isOwn);
+        if (item.Base.CoinPrice != null || item.Base.DiscPrice != null)
+        {
+            currencyWindow.SetActive(true);
+        }
     }
 }
