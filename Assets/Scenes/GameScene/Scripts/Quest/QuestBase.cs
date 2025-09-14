@@ -3,39 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-[CreateAssetMenu(fileName = "NewQuest", menuName = "Quest/QuestBase")]
 public class QuestBase : ScriptableObject
 {
     [Header("Quest Information")] // クエスト情報
     [SerializeField] new string name; // クエスト名
     [SerializeField] RarityType rarity; // レアリティ
-    [SerializeField] QuestType questType; // クエストタイプ
     [SerializeField, TextArea] string description; // 説明
     [SerializeField, TextArea] string achievementMessage; // 達成メッセージ
 
-    // TODO : クエストのタイプごとにここを分岐させたクラスを作る
-    [Header("Task")] // タスク
-    [SerializeField] List<Item> orderedItemsList; // 納品アイテムリスト
-    [SerializeField] List<Item> transportItemsList; // 運搬アイテムリスト
-    [SerializeField] List<CharacterBase> exterminationCharactersList; // 討伐キャラクターリスト
-
     [Header("Conditions")] // 出現条件
-    [SerializeField] DateTime startDateTime;
-    [SerializeField] DateTime endDateTime;
-    [SerializeField] List<Item> optionalItemsList;
+    [SerializeField] DateTime startDateTime; // 開始日時
+    [SerializeField] DateTime endDateTime; // 終了日時
+    [SerializeField] List<Item> optionalItemsList; // 必要アイテムリスト
 
     [Header("Reward")] // 報酬
     [SerializeField] List<Item> rewardItemsList;
-    [SerializeField] int coinPrice = 1;
+    [SerializeField] int coinPrice = 0;
     [SerializeField] int discPrice = 0;
 
 
+    public virtual QuestType questType => QuestType.Story;
+
     public string Name { get => name; }
     public RarityType Rarity { get => rarity; }
-    public QuestType QuestType => questType;
     public string Description { get => description; }
     public string AchievementMessage { get => achievementMessage; }
-    public List<Item> OrderedItemsList { get => orderedItemsList; }
 
     public DateTime StartDateTime { get => startDateTime; }
     public DateTime EndDateTime { get => endDateTime; }
