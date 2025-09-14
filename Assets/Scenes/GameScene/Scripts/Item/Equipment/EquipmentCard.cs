@@ -29,6 +29,7 @@ public class EquipmentCard : Card
     {
         this.gameObject.SetActive(true);
         SetRarity(equipment.Base.Rarity);
+        SetCardType(ItemType.Equipment);
         cardName.text = equipment.Base.Name;
         cardImage.sprite = equipment.Base.Sprite;
         cardImage.color = new Color(1, 1, 1, 1);

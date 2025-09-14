@@ -12,6 +12,7 @@ public class TreasureCard : Card
     {
         this.gameObject.SetActive(true);
         SetRarity(treasure.Base.Rarity);
+        SetCardType(ItemType.Treasure);
         description.text = treasure.Base.Description;
         cardName.text = treasure.Base.Name;
         cardImage.sprite = treasure.Base.Sprite;

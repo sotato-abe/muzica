@@ -17,6 +17,7 @@ public class ConsumableCard : Card
     {
         this.gameObject.SetActive(true);
         SetRarity(consumable.Base.Rarity);
+        SetCardType(ItemType.Consumable);
         cardName.text = consumable.Base.Name;
         description.text = consumable.Base.Description;
         cardImage.sprite = consumable.Base.Sprite;
