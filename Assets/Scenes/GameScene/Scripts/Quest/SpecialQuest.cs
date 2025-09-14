@@ -1,10 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
-[CreateAssetMenu(fileName = "NewSpecialQuest", menuName = "Quest/Special")]
-public class SpecialQuestBase : QuestBase
+[System.Serializable]
+public class SpecialQuest : Quest
 {
+    // 親クラスの _base をキャストして使う
+    public override QuestBase Base => _base;
+    public SpecialQuestBase SpecialQuestBase => _base as SpecialQuestBase;
 
+    public SpecialQuest(SpecialQuestBase baseData) : base(baseData)
+    {
+    }
+
+    public override Quest Clone()
+    {
+        var copy = new SpecialQuest(SpecialQuestBase);
+        copy.isNew = this.isNew;
+        return copy;
+    }
 }

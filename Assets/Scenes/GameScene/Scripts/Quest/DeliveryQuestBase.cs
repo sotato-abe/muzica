@@ -7,10 +7,10 @@ using System;
 public class DeliveryQuestBase : QuestBase
 {
     [Header("Task")] // タスク
-    [SerializeField] List<Item> transportItemsList; // 運搬アイテムリスト
+    [SerializeField] List<TreasureBase> transportItemBaseList; // 運搬アイテムリスト
     [SerializeField] Point deliveryPoint; // 配達ポイント
 
     public override QuestType questType => QuestType.Delivery;
-    public List<Item> TransportItemsList { get => transportItemsList; }
+    public List<TreasureBase> TransportItemBaseList { get => transportItemBaseList; }
     public Point DeliveryPoint { get => deliveryPoint; }
 }

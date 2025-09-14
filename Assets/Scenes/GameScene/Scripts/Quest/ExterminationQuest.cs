@@ -1,14 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
-[CreateAssetMenu(fileName = "NewExterminationQuest", menuName = "Quest/Extermination")]
-public class ExterminationQuestBase : QuestBase
+[System.Serializable]
+public class ExterminationQuest : Quest
 {
-    [Header("Task")] // タスク
-    [SerializeField] List<CharacterBase> exterminationCharactersList; // 討伐キャラクターリスト
+    // 親クラスの _base をキャストして使う
+    public override QuestBase Base => _base;
+    public ExterminationQuestBase ExterminationQuestBase => _base as ExterminationQuestBase;
 
-    public override QuestType questType => QuestType.Extermination;
-    public List<CharacterBase> ExterminationCharactersList { get => exterminationCharactersList; }
+    public ExterminationQuest(ExterminationQuestBase baseData) : base(baseData)
+    {
+    }
+
+    public override Quest Clone()
+    {
+        var copy = new ExterminationQuest(ExterminationQuestBase);
+        copy.isNew = this.isNew;
+        return copy;
+    }
 }

@@ -19,4 +19,9 @@ public class Quest
     {
         return new Quest(_base, this.isNew);
     }
+
+    public QuestType GetQuestType()
+    {
+        return _base.questType;
+    }
 }
