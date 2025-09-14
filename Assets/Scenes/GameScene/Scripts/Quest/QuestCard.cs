@@ -6,6 +6,7 @@ using TMPro;
 
 public class QuestCard : MonoBehaviour
 {
+    [SerializeField] RarityIcon questRarity;
     [SerializeField] TextMeshProUGUI questTitle;
     [SerializeField] TextMeshProUGUI descriptionText;
     [SerializeField] StoryQuestWindow storyQuestWindow;
@@ -18,10 +19,12 @@ public class QuestCard : MonoBehaviour
 
     public void SetQuest(Quest quest)
     {
-        Debug.Log("Setting quest: " + (quest != null ? quest.Base.Name : "null"));
+        if (quest == null) return;
+
         currentQuest = quest;
         questTitle.text = quest.Base.Name;
         descriptionText.text = quest.Base.Description;
+        questRarity.SetRarityIcon(quest.Base.Rarity);
 
         SetTask();
     }
