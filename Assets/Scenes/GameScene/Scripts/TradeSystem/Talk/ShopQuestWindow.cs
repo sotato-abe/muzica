@@ -22,7 +22,6 @@ public class ShopQuestWindow : MonoBehaviour
 
         foreach (Quest quest in quests)
         {
-            quest.isNew = false;
             CreateQuestBlock(quest);
         }
     }

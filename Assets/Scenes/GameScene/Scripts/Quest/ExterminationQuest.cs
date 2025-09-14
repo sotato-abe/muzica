@@ -16,7 +16,6 @@ public class ExterminationQuest : Quest
     public override Quest Clone()
     {
         var copy = new ExterminationQuest(ExterminationQuestBase);
-        copy.isNew = this.isNew;
         return copy;
     }
 }

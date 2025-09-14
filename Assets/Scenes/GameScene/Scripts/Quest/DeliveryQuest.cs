@@ -16,7 +16,6 @@ public class DeliveryQuest : Quest
     public override Quest Clone()
     {
         var copy = new DeliveryQuest(DeliveryQuestBase);
-        copy.isNew = this.isNew;
         return copy;
     }
 }

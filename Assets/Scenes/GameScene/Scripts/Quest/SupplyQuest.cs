@@ -16,7 +16,6 @@ public class SupplyQuest : Quest
     public override Quest Clone()
     {
         var copy = new SupplyQuest(SupplyQuestBase);
-        copy.isNew = this.isNew;
         return copy;
     }
 }

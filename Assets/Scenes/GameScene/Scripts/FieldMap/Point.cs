@@ -81,4 +81,17 @@ public class Point
             ShopQuests.Add(quest);
         }
     }
+
+    public Quest GetActiveQuest()
+    {
+        if (ShopQuests == null || ShopQuests.Count == 0) return null;
+        foreach (Quest quest in ShopQuests)
+        {
+            if (!quest.IsCompleted())
+            {
+                return quest;
+            }
+        }
+        return null;
+    }
 }

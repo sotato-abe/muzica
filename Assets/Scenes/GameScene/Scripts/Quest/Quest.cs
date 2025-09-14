@@ -7,21 +7,26 @@ public class Quest
 {
     [SerializeField] protected QuestBase _base;
     public virtual QuestBase Base => _base;
-    public bool isNew = true;
+    public bool isCompleted = true;
 
-    public Quest(QuestBase baseData, bool isNew = true)
+    public Quest(QuestBase baseData)
     {
         _base = baseData;
-        this.isNew = isNew;
+        this.isCompleted = false;
     }
 
     public virtual Quest Clone()
     {
-        return new Quest(_base, this.isNew);
+        return new Quest(_base);
     }
 
     public QuestType GetQuestType()
     {
         return _base.questType;
+    }
+
+    public bool IsCompleted()
+    {
+        return isCompleted;
     }
 }

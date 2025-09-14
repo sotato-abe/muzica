@@ -16,7 +16,6 @@ public class SpecialQuest : Quest
     public override Quest Clone()
     {
         var copy = new SpecialQuest(SpecialQuestBase);
-        copy.isNew = this.isNew;
         return copy;
     }
 }
