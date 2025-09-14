@@ -11,6 +11,12 @@ public class WorldMapPanel : SlidePanel
 
     public void SetFieldName(string name)
     {
+        if (string.IsNullOrEmpty(name))
+        {
+            fieldTitle.gameObject.SetActive(false);
+            return;
+        }
+        fieldTitle.gameObject.SetActive(true);
         fieldTitle.ChangeTitle(name);
     }
 }

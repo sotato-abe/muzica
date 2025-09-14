@@ -13,13 +13,6 @@ public class Title : MonoBehaviour
 
     public IEnumerator TypeTitle(string line)
     {
-        if (line == "")
-        {
-            backImage.color = new Color(0, 0, 0, 0);
-        }else
-        {
-            backImage.color = new Color(0, 0, 0, 1f);
-        }
         title.SetText("");
         foreach (char letter in line)
         {

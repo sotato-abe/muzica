@@ -63,6 +63,7 @@ public class OptionGroup : MonoBehaviour
 
     private void SwitchPanel(Panel panel)
     {
+        StopTimeState(false);
         foreach (var p in panelList)
         {
             if (p == panel && !p.isActive)
@@ -75,11 +76,9 @@ public class OptionGroup : MonoBehaviour
             {
                 p.ClosePanel();
                 PlayerController.Instance.SetFieldPlayerMove(true);
-                StopTimeState(false);
             }
             else
             {
-                StopTimeState(false);
                 p.ClosePanel();
             }
         }
@@ -87,6 +86,7 @@ public class OptionGroup : MonoBehaviour
 
     private void StopTimeState(bool isActive)
     {
+        Debug.Log("StopTimeState: " + isActive);
         if (isActive)
         {
             ageTimePanel.SetTimeSpeed(TimeState.Stop);

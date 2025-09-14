@@ -7,7 +7,7 @@ using TMPro;
 public class WorldBigMapPanel : Panel
 {
     [SerializeField] WorldBigMapCameraManager worldMapCameraManager;
-    [SerializeField] AgeTimePanel ageTimePanel;
+    // [SerializeField] AgeTimePanel ageTimePanel;
 
     private bool isCameraUpFlg = false;
     private bool isCameraBottomFlg = false;
@@ -50,12 +50,12 @@ public class WorldBigMapPanel : Panel
         isActive = !isActive; // フラグをトグル
         if (isActive)
         {
-            ageTimePanel.SetTimeSpeed(TimeState.Live); // 時間を止める
+            // ageTimePanel.SetTimeSpeed(TimeState.Live); // 時間を止める
             PanelOpen();
         }
         else
         {
-            ageTimePanel.SetTimeSpeed(TimeState.Fast); // 時間を進める
+            // ageTimePanel.SetTimeSpeed(TimeState.Fast); // 時間を進める
             ClosePanel();
         }
     }
@@ -63,7 +63,7 @@ public class WorldBigMapPanel : Panel
     private void ClosePanel()
     {
         isActive = false;
-        ageTimePanel.SetTimeSpeed(TimeState.Fast); // 時間を進める
+        // ageTimePanel.SetTimeSpeed(TimeState.Fast); // 時間を進める
         transform.gameObject.SetActive(false);
     }
 
