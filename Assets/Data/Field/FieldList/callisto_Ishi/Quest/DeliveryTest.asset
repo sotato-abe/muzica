@@ -12,16 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 195dc76d833d5db40b9b69f93810a171, type: 3}
   m_Name: DeliveryTest
   m_EditorClassIdentifier: 
-  name: "\u3046\u3063\u304B\u308A\u3058\u3044\u3055\u3093"
+  title: "\u3046\u3063\u304B\u308A\u3058\u3044\u3055\u3093"
   rarity: 0
   description: "\u304A\u3058\u3044\u3061\u3083\u3093\u4ECA\u65E5\u3082\u5F01\u5F53\u5FD8\u308C\u3061\u3083\u3063\u305F\u306E\u3001\n\u3053\u306E\u304A\u5F01\u5F53\u3092\u3053\u3053\u3058\u3044\u306B\u5C4A\u3051\u3066\u304F\u308C\u306A\u3044\uFF1F"
   achievementMessage: 
   optionalItemsList: []
-  rewardItemsList:
+  deliveryItemBaseList:
+  - {fileID: 11400000, guid: 780bde623a92f7a438f68c8d1f3b46c7, type: 2}
+  address: "\u30A4\u30B7\u306E\u8857 / \u3053\u3053\u5546\u5E97"
+  deliveryCharacter: {fileID: 11400000, guid: 84072fecf888cc942bd33dfaa8e98bf6, type: 2}
+  rewardItemList:
   - _base: {fileID: 11400000, guid: cdd87767ce052984fa27e97a017c2f64, type: 2}
     isNew: 0
-  coinPrice: 0
-  discPrice: 0
-  transportItemBaseList:
-  - {fileID: 11400000, guid: 780bde623a92f7a438f68c8d1f3b46c7, type: 2}
-  deliveryCharacter: {fileID: 0}
+  coinPrice: 1
+  discPrice: 2

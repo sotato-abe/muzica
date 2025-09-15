@@ -75,10 +75,33 @@ public class Point
 
     private void SetShopQuests()
     {
-        foreach (QuestBase questBase in _base.ShopQuestBaseList)
+        foreach (QuestBase quest in _base.ShopQuestBaseList)
         {
-            Quest quest = new Quest(questBase);
-            ShopQuests.Add(quest);
+            switch (quest.questType)
+            {
+                case QuestType.Delivery:
+                    DeliveryQuest deliveryQuest = new DeliveryQuest((DeliveryQuestBase)quest);
+                    ShopQuests.Add(deliveryQuest);
+                    break;
+                case QuestType.Story:
+                    StoryQuest storyQuest = new StoryQuest((StoryQuestBase)quest);
+                    ShopQuests.Add(storyQuest);
+                    break;
+                case QuestType.Supply:
+                    SupplyQuest supplyQuest = new SupplyQuest((SupplyQuestBase)quest);
+                    ShopQuests.Add(supplyQuest);
+                    break;
+                case QuestType.Extermination:
+                    ExterminationQuest exterminationQuest = new ExterminationQuest((ExterminationQuestBase)quest);
+                    ShopQuests.Add(exterminationQuest);
+                    break;
+                case QuestType.Special:
+                    SpecialQuest specialQuest = new SpecialQuest((SpecialQuestBase)quest);
+                    ShopQuests.Add(specialQuest);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 

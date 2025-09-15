@@ -6,14 +6,19 @@ using TMPro;
 
 public class QuestCard : MonoBehaviour
 {
+    [SerializeField] Image clientImage;
+    [SerializeField] Image clientFrame;
+    [SerializeField] TextMeshProUGUI clientNameTitle;
+    [SerializeField] TextMeshProUGUI clientAddressTitle;
+
     [SerializeField] RarityIcon questRarity;
     [SerializeField] TextMeshProUGUI questTitle;
     [SerializeField] TextMeshProUGUI descriptionText;
-    [SerializeField] StoryQuestWindow storyQuestWindow;
-    [SerializeField] SupplyQuestWindow supplyQuestWindow;
-    [SerializeField] DeliveryQuestWindow deliveryQuestWindow;
-    [SerializeField] ExterminationQuestWindow exterminationQuestWindow;
-    [SerializeField] SpecialQuestWindow specialQuestWindow;
+    [SerializeField] StoryQuestTask storyQuestTask;
+    [SerializeField] SupplyQuestTask supplyQuestTask;
+    [SerializeField] DeliveryQuestTask deliveryQuestTask;
+    [SerializeField] ExterminationQuestTask exterminationQuestTask;
+    [SerializeField] SpecialQuestTask specialQuestTask;
 
     private Quest currentQuest;
 
@@ -22,7 +27,7 @@ public class QuestCard : MonoBehaviour
         if (quest == null) return;
 
         currentQuest = quest;
-        questTitle.text = quest.Base.Name;
+        questTitle.text = quest.Base.Title;
         descriptionText.text = quest.Base.Description;
         questRarity.SetRarityIcon(quest.Base.Rarity);
 
@@ -36,24 +41,25 @@ public class QuestCard : MonoBehaviour
         {
             case QuestType.Story:
                 var storyQuest = currentQuest as StoryQuest;
-                storyQuestWindow.gameObject.SetActive(true);
+                storyQuestTask.gameObject.SetActive(true);
                 break;
             case QuestType.Supply:
                 var supplyQuest = currentQuest as SupplyQuest;
-                supplyQuestWindow.gameObject.SetActive(true);
+                supplyQuestTask.gameObject.SetActive(true);
                 break;
 
             case QuestType.Delivery:
                 var deliveryQuest = currentQuest as DeliveryQuest;
-                deliveryQuestWindow.gameObject.SetActive(true);
+                deliveryQuestTask.gameObject.SetActive(true);
+                deliveryQuestTask.SetDeliveryTask(deliveryQuest);
                 break;
             case QuestType.Extermination:
                 var exterminationQuest = currentQuest as ExterminationQuest;
-                exterminationQuestWindow.gameObject.SetActive(true);
+                exterminationQuestTask.gameObject.SetActive(true);
                 break;
             case QuestType.Special:
                 var specialQuest = currentQuest as SpecialQuest;
-                specialQuestWindow.gameObject.SetActive(true);
+                specialQuestTask.gameObject.SetActive(true);
                 break;
 
             default:
@@ -64,10 +70,10 @@ public class QuestCard : MonoBehaviour
 
     private void ClearTask()
     {
-        storyQuestWindow.gameObject.SetActive(false);
-        supplyQuestWindow.gameObject.SetActive(false);
-        deliveryQuestWindow.gameObject.SetActive(false);
-        exterminationQuestWindow.gameObject.SetActive(false);
-        specialQuestWindow.gameObject.SetActive(false);
+        storyQuestTask.gameObject.SetActive(false);
+        supplyQuestTask.gameObject.SetActive(false);
+        deliveryQuestTask.gameObject.SetActive(false);
+        exterminationQuestTask.gameObject.SetActive(false);
+        specialQuestTask.gameObject.SetActive(false);
     }
 }
