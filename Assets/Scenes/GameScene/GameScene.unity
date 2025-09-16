@@ -19925,7 +19925,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 12
+  m_text: 112
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 63a99b5d4987d0d48ae07d83a28850e1, type: 2}
   m_sharedMaterial: {fileID: 8045094208641856841, guid: 63a99b5d4987d0d48ae07d83a28850e1, type: 2}
@@ -20141,6 +20141,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 651672341}
     m_Modifications:
+    - target: {fileID: 102196949803909504, guid: b80aeffb63ced2444b7fe69f80cd8808, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: c8f155637cfd60d44a7c1f35cbc791fc, type: 2}
+    - target: {fileID: 102196949803909504, guid: b80aeffb63ced2444b7fe69f80cd8808, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -7669817720770445346, guid: c8f155637cfd60d44a7c1f35cbc791fc, type: 2}
+    - target: {fileID: 102196949803909504, guid: b80aeffb63ced2444b7fe69f80cd8808, type: 3}
+      propertyPath: m_characterSpacing
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 102196949803909504, guid: b80aeffb63ced2444b7fe69f80cd8808, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2322884975777791864, guid: b80aeffb63ced2444b7fe69f80cd8808, type: 3}
       propertyPath: m_Name
       value: MessagePrefab
@@ -22116,7 +22132,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: -20, y: 10}
-  m_SizeDelta: {x: 188.4711, y: 50}
+  m_SizeDelta: {x: 150, y: 50}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1947004384
 MonoBehaviour:
@@ -23618,8 +23634,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u30A4\u30B7\u306E\u8857"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 5dc6e2c8f70970349aa6df6a664495fd, type: 2}
-  m_sharedMaterial: {fileID: -2287277865590233392, guid: 5dc6e2c8f70970349aa6df6a664495fd, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c8f155637cfd60d44a7c1f35cbc791fc, type: 2}
+  m_sharedMaterial: {fileID: -7669817720770445346, guid: c8f155637cfd60d44a7c1f35cbc791fc, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -23643,8 +23659,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 25
+  m_fontSizeBase: 25
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

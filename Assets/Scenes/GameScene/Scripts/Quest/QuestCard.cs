@@ -6,11 +6,6 @@ using TMPro;
 
 public class QuestCard : MonoBehaviour
 {
-    [SerializeField] Image clientImage;
-    [SerializeField] Image clientFrame;
-    [SerializeField] TextMeshProUGUI clientNameTitle;
-    [SerializeField] TextMeshProUGUI clientAddressTitle;
-
     [SerializeField] RarityIcon questRarity;
     [SerializeField] TextMeshProUGUI questTitle;
     [SerializeField] TextMeshProUGUI descriptionText;
