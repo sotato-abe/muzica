@@ -16,6 +16,7 @@ public class TalkPanel : Panel
     public void SetPoint(Point point)
     {
         Quest quest = point.GetActiveQuest();
+        quest.Init();
         if (quest == null)
         {
             Debug.Log("No quest available at this point.");

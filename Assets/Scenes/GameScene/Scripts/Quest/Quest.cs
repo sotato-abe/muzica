@@ -15,6 +15,11 @@ public class Quest
         this.isCompleted = false;
     }
 
+    public virtual void Init()
+    {
+        // 初期化処理をここに追加
+    }
+
     public virtual Quest Clone()
     {
         return new Quest(_base);

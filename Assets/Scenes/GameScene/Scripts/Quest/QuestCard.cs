@@ -44,6 +44,8 @@ public class QuestCard : MonoBehaviour
             case QuestType.Supply:
                 var supplyQuest = currentQuest as SupplyQuest;
                 supplyQuestTask.gameObject.SetActive(true);
+                supplyQuestTask.OnTargetItem += TargetItem;
+                supplyQuestTask.SetSupplyTask(supplyQuest);
                 break;
 
             case QuestType.Delivery:

@@ -22,7 +22,7 @@ public class DeliveryQuestTask : MonoBehaviour
         ClearTask();
         // サプライクエストのタスク設定ロジックをここに実装
         SetDeliveryCharacter(quest);
-        foreach (var item in quest.DeliveryQuestBase.DeliveryItemList)
+        foreach (var item in quest.DeliveryItemList)
         {
             SetDeliveryItemSlot(item);
         }

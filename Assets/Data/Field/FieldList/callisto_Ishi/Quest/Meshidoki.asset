@@ -10,14 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b7984d6e00c46348aab5fdaae21e21c, type: 3}
-  m_Name: SupplyTest
+  m_Name: Meshidoki
   m_EditorClassIdentifier: 
-  name: "\u306E\u3046\u3072\u3093\u30C6\u30B9\u30C8"
+  title: "\u98EF\u6642"
   rarity: 0
-  description: 
-  achievementMessage: 
+  description: "\u8179\u304C\u6E1B\u3063\u305F\u306E\u3046"
+  achievementMessage: "\u3053\u308C\u306F\u548C\u7D19\u306E\u5F01\u5F53\uFF11\n\u3042\u308A\u304C\u3068\u306D\uFF5E"
   optionalItemsList: []
-  rewardItemsList: []
-  coinPrice: 0
+  supplyItemBaseList:
+  - {fileID: 11400000, guid: 780bde623a92f7a438f68c8d1f3b46c7, type: 2}
+  rewardItemBaseList:
+  - {fileID: 11400000, guid: b21abcdf525566b44aaf1a2257a79c19, type: 2}
+  coinPrice: 10
   discPrice: 0
-  transportItemsList: []

@@ -4,14 +4,16 @@ public class SupplyQuestTask : MonoBehaviour
 {
     [Header("Task")] // タスク
     [SerializeField] OrderItemSlot orderItemSlotPrefab;
-    [SerializeField] GameObject orderItemList;
+    [SerializeField] GameObject supplyItemList;
 
     [Header("Reward")] // 報酬
     [SerializeField] MockItemBlock rewardItemPrefab;
-    [SerializeField] GameObject supplyItemList;
     [SerializeField] GameObject rewardItemList;
     [SerializeField] CurrencyVal coinVal;
     [SerializeField] CurrencyVal discVal;
+
+    public delegate void TargetItemDelegate(Item item);
+    public event TargetItemDelegate OnTargetItem;
 
     // ここにサプライクエストタスクのロジックを実装
     public void SetSupplyTask(SupplyQuest quest)
@@ -19,11 +21,11 @@ public class SupplyQuestTask : MonoBehaviour
         // サプライクエストのタスク設定ロジックをここに実装
         if (quest == null) return;
         ClearTask();
-        foreach (var item in quest.SupplyQuestBase.SupplyItemBaseList)
+        foreach (var item in quest.OrderItems)
         {
             SetSupplyItemSlot(item);
         }
-        foreach (var item in quest.SupplyQuestBase.RewardItemList)
+        foreach (var item in quest.RewardItems)
         {
             SetRewardItemSlot(item);
         }
@@ -31,16 +33,18 @@ public class SupplyQuestTask : MonoBehaviour
         discVal.SetCurrencyVal(quest.SupplyQuestBase.DiscPrice);
     }
 
-    private void SetSupplyItemSlot(ItemBase item)
+    private void SetSupplyItemSlot(Item item)
     {
         var slot = Instantiate(orderItemSlotPrefab, supplyItemList.transform);
         slot.SetOrderItem(item);
+        slot.OnTargetItem += TargetItem;
     }
 
     private void SetRewardItemSlot(Item item)
     {
         var slot = Instantiate(rewardItemPrefab, rewardItemList.transform);
         slot.SetMockItem(item);
+        slot.OnTargetItem += TargetItem;
     }
 
     private void ClearTask()
@@ -53,5 +57,10 @@ public class SupplyQuestTask : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+    }
+
+    private void TargetItem(Item item)
+    {
+        OnTargetItem?.Invoke(item);
     }
 }
