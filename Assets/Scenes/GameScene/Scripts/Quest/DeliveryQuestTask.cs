@@ -12,6 +12,9 @@ public class DeliveryQuestTask : MonoBehaviour
     [SerializeField] MockItemBlock deliveryItemPrefab;
     [SerializeField] GameObject deliveryItemList;
 
+    public delegate void TargetItemDelegate(Item item);
+    public event TargetItemDelegate OnTargetItem;
+
     // ここにデリバリークエストタスクのロジックを実装
     public void SetDeliveryTask(DeliveryQuest quest)
     {
@@ -45,10 +48,12 @@ public class DeliveryQuestTask : MonoBehaviour
     {
         var slot = Instantiate(deliveryItemPrefab, deliveryItemList.transform);
         slot.SetMockItem(item);
-        // slot.OnTargetItem += (it, isOwn) =>
-        // {
-        //     Debug.Log($"OrderItemSlot OnTargetItem: {it}, isOwn={isOwn}");
-        // };
+        slot.OnTargetItem += TargetItem;
+    }
+
+    private void TargetItem(Item item)
+    {
+        OnTargetItem?.Invoke(item);
     }
 
 

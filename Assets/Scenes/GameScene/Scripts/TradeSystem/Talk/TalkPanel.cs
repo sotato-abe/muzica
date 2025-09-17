@@ -11,6 +11,8 @@ public class TalkPanel : Panel
     [SerializeField] GameObject emptyAlert;
     [SerializeField] Button receiptButton;
 
+    [SerializeField] TargetItemWindow targetItemWindow;
+
     public void SetPoint(Point point)
     {
         Quest quest = point.GetActiveQuest();
@@ -24,7 +26,13 @@ public class TalkPanel : Panel
         }
         emptyAlert.SetActive(false);
         questCard.gameObject.SetActive(true);
+        questCard.OnTargetItem += TargetItem;
         receiptButton.interactable = true;
         questCard.SetQuest(quest);
+    }
+
+    public void TargetItem(Item item, bool isOwn = true)
+    {
+        targetItemWindow.TargetItem(item, isOwn);
     }
 }

@@ -15,6 +15,9 @@ public class QuestCard : MonoBehaviour
     [SerializeField] ExterminationQuestTask exterminationQuestTask;
     [SerializeField] SpecialQuestTask specialQuestTask;
 
+    public delegate void TargetItemDelegate(Item item, bool isOwn);
+    public event TargetItemDelegate OnTargetItem;
+
     private Quest currentQuest;
 
     public void SetQuest(Quest quest)
@@ -46,6 +49,7 @@ public class QuestCard : MonoBehaviour
             case QuestType.Delivery:
                 var deliveryQuest = currentQuest as DeliveryQuest;
                 deliveryQuestTask.gameObject.SetActive(true);
+                deliveryQuestTask.OnTargetItem += TargetItem;
                 deliveryQuestTask.SetDeliveryTask(deliveryQuest);
                 break;
             case QuestType.Extermination:
@@ -70,5 +74,10 @@ public class QuestCard : MonoBehaviour
         deliveryQuestTask.gameObject.SetActive(false);
         exterminationQuestTask.gameObject.SetActive(false);
         specialQuestTask.gameObject.SetActive(false);
+    }
+
+    private void TargetItem(Item item)
+    {
+        OnTargetItem?.Invoke(item, false);
     }
 }
