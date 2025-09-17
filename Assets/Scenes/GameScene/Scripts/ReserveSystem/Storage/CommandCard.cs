@@ -6,6 +6,7 @@ using TMPro;
 
 public class CommandCard : MonoBehaviour
 {
+    [SerializeField] RarityIcon cardRarity;
     [SerializeField] TextMeshProUGUI cardName;
     [SerializeField] TextMeshProUGUI descriptionText;
     [SerializeField] public Image cardFrame;
@@ -19,7 +20,7 @@ public class CommandCard : MonoBehaviour
     public void SetCommandCard(Command command)
     {
         this.gameObject.SetActive(true);
-        SetRarity(command.Base.Rarity);
+        cardRarity.SetRarityIcon(command.Base.Rarity);
         cardName.text = command.Base.Name;
         descriptionText.text = command.Base.Description;
         cardImage.sprite = command.Base.Sprite;
@@ -57,10 +58,5 @@ public class CommandCard : MonoBehaviour
             EnchantIcon newEnchant = Instantiate(enchantIconPrefab, enchantList.transform);
             newEnchant.SetEnchant(enchant);
         }
-    }
-
-    public void SetRarity(RarityType type)
-    {
-        cardFrame.color = type.GetRarityColor();
     }
 }

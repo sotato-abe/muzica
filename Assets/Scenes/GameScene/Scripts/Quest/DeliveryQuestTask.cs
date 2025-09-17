@@ -9,6 +9,8 @@ public class DeliveryQuestTask : MonoBehaviour
     [SerializeField] Image characterFrame;
     [SerializeField] TextMeshProUGUI nameTitle;
     [SerializeField] TextMeshProUGUI addressTitle;
+    [SerializeField] MockItemBlock deliveryItemPrefab;
+    [SerializeField] GameObject deliveryItemList;
 
     // ここにデリバリークエストタスクのロジックを実装
     public void SetDeliveryTask(DeliveryQuest quest)
@@ -41,7 +43,7 @@ public class DeliveryQuestTask : MonoBehaviour
 
     private void SetDeliveryItemSlot(Treasure item)
     {
-        var slot = Instantiate(rewardItemPrefab, deliveryItemList.transform);
+        var slot = Instantiate(deliveryItemPrefab, deliveryItemList.transform);
         slot.SetMockItem(item);
         // slot.OnTargetItem += (it, isOwn) =>
         // {
