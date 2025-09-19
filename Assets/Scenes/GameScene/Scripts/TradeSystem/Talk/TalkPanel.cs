@@ -16,7 +16,6 @@ public class TalkPanel : Panel
     public void SetPoint(Point point)
     {
         Quest quest = point.GetActiveQuest();
-        quest.Init();
         if (quest == null)
         {
             Debug.Log("No quest available at this point.");
@@ -25,6 +24,7 @@ public class TalkPanel : Panel
             receiptButton.interactable = false;
             return;
         }
+        quest.Init();
         emptyAlert.SetActive(false);
         questCard.gameObject.SetActive(true);
         questCard.OnTargetItem += TargetItem;

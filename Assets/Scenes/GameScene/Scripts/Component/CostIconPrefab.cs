@@ -26,6 +26,7 @@ public class CostIconPrefab : MonoBehaviour
     {
         Color32 energyColor = type.GetEnergyColor();
         backImage.color = energyColor;
+        // iconImage.color = energyColor;
 
         switch (type)
         {
