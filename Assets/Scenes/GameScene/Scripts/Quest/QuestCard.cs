@@ -140,6 +140,8 @@ public class QuestCard : MonoBehaviour
             OwnerMessage(new TalkMessage(MessageType.Other, MessagePanelType.Default, "ありがとうよ"));
             PlayerController.Instance.AddItemToBag(item);
         }
+        PlayerController.Instance.AddCoin(supplyQuest.SupplyQuestBase.CoinPrice);
+        PlayerController.Instance.AddDisc(supplyQuest.SupplyQuestBase.DiscPrice);
 
         OnReceiptQuest?.Invoke(currentQuest);
         currentQuest.isCompleted = true;
