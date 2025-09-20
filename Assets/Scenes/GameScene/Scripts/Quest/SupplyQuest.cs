@@ -29,6 +29,7 @@ public class SupplyQuest : Quest
 
     private void SetOrderItems()
     {
+        OrderItems.Clear();
         foreach (var item in SupplyQuestBase.SupplyItemBaseList)
         {
             switch (item.itemType)
@@ -54,6 +55,7 @@ public class SupplyQuest : Quest
 
     private void SetRewardItems()
     {
+        RewardItems.Clear();
         foreach (var item in SupplyQuestBase.RewardItemBaseList)
         {
             switch (item.itemType)

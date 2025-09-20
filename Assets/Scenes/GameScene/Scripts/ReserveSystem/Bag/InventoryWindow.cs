@@ -74,6 +74,7 @@ public class InventoryWindow : MonoBehaviour, IDropHandler
             if (itemBlockMap.ContainsKey(item))
             {
                 itemBlockMap[item].SetStatusText();
+                itemBlockMap[item].Show();
                 continue;
             }
             CreateItemBlock(item);

@@ -17,6 +17,8 @@ public class TalkPanel : Panel
     [SerializeField] QuestCard questCard;
     [SerializeField] GameObject emptyAlert;
 
+    private Point currentPoint;
+
     public delegate void OwnerMessageDelegate(TalkMessage message);
     public event OwnerMessageDelegate OnOwnerMessage;
 
@@ -27,6 +29,7 @@ public class TalkPanel : Panel
         bagCategory.OnChangeWindow += ChangeWindow;
         questCard.OnTargetItem += TargetItem;
         questCard.OnOwnerMessage += OwnerMessage;
+        questCard.OnReceiptQuest += ReceiptQuest;
         ChangeWindow(true);
     }
 
@@ -48,10 +51,11 @@ public class TalkPanel : Panel
 
     public void SetPoint(Point point)
     {
+        currentPoint = point;
         Quest quest = point.GetActiveQuest();
         if (quest == null)
         {
-            Debug.Log("No quest available at this point.");
+            OwnerMessage(new TalkMessage(MessageType.Other, MessagePanelType.Default, "今は頼みごとはないかな"));
             emptyAlert.SetActive(true);
             questCard.gameObject.SetActive(false);
             return;
@@ -66,5 +70,19 @@ public class TalkPanel : Panel
     public void OwnerMessage(TalkMessage message)
     {
         OnOwnerMessage?.Invoke(message);
+    }
+
+    public void ReceiptQuest(Quest quest)
+    {
+        currentPoint.ShopQuests.Remove(quest); // ポイントのアイテムリストから削除
+        questCard.gameObject.SetActive(false);
+        emptyAlert.SetActive(true);
+        UpdateUI();
+    }
+
+    public void UpdateUI()
+    {
+        inventoryWindow.SetItems();
+        storageWindow.SetCommands();
     }
 }

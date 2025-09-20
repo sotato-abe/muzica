@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SupplyQuestTask : MonoBehaviour
@@ -12,11 +14,17 @@ public class SupplyQuestTask : MonoBehaviour
     [SerializeField] CurrencyVal coinVal;
     [SerializeField] CurrencyVal discVal;
 
+    private List<OrderItemSlot> orderItemSlots = new List<OrderItemSlot>();
+    List<Item> orderItems = new List<Item>();
+
     public delegate void TargetItemDelegate(Item item);
     public event TargetItemDelegate OnTargetItem;
 
     public delegate void OwnerMessageDelegate(TalkMessage message);
     public event OwnerMessageDelegate OnOwnerMessage;
+
+    public delegate void CompletedDelegate();
+    public event CompletedDelegate OnCompleted;
 
     // ここにサプライクエストタスクのロジックを実装
     public void SetSupplyTask(SupplyQuest quest)
@@ -42,6 +50,23 @@ public class SupplyQuestTask : MonoBehaviour
         slot.SetOrderItem(item);
         slot.OnTargetItem += TargetItem;
         slot.OnOwnerMessage += OwnerMessage;
+        slot.OnSetItem += CheckAllOrderItemSet;
+        orderItemSlots.Add(slot);
+    }
+
+    public void CheckAllOrderItemSet()
+    {
+        foreach (var slot in orderItemSlots)
+        {
+            if (slot == null || !slot.IsSet)
+            {
+                OwnerMessage(new TalkMessage(MessageType.Other, MessagePanelType.Default, "まだ足りんのう"));
+                return;
+            }
+        }
+
+        OwnerMessage(new TalkMessage(MessageType.Other, MessagePanelType.Surprise, "これもらっていいんか？"));
+        OnCompleted?.Invoke();
     }
 
     private void SetRewardItemSlot(Item item)
@@ -53,6 +78,7 @@ public class SupplyQuestTask : MonoBehaviour
 
     private void ClearTask()
     {
+        orderItemSlots.Clear();
         foreach (Transform child in supplyItemList.transform)
         {
             Destroy(child.gameObject);
@@ -71,5 +97,18 @@ public class SupplyQuestTask : MonoBehaviour
     public void OwnerMessage(TalkMessage message)
     {
         OnOwnerMessage?.Invoke(message);
+    }
+
+    public List<Item> GetSupplyItems()
+    {
+        List<Item> items = new List<Item>();
+        foreach (var slot in orderItemSlots)
+        {
+            if (slot != null && slot.IsSet)
+            {
+                items.Add(slot.currentItem);
+            }
+        }
+        return items;
     }
 }

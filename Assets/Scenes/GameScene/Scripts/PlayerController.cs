@@ -114,6 +114,12 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Item Management
+
+    public bool HasBagSpace(int additionalItems = 1)
+    {
+        return PlayerCharacter.Bag >= PlayerCharacter.BagItemList.Count + additionalItems;
+    }
+
     /// <summary>
     /// アイテムをバッグに追加
     /// </summary>
@@ -198,6 +204,7 @@ public class PlayerController : MonoBehaviour
     public void RemoveItemFromBag(Item item)
     {
         if (item == null) return;
+        Debug.Log("Removing item from bag: " + item.Base.Name);
         PlayerCharacter.RemoveBagItem(item);
     }
 

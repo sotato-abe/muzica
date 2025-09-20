@@ -28,6 +28,7 @@ public class DeliveryQuest : Quest
 
     private void SetDeliveryItems()
     {
+        DeliveryItemList.Clear();
         foreach (var item in DeliveryQuestBase.DeliveryItemBaseList)
         {
             Treasure bagTreasure = new Treasure((TreasureBase)item);

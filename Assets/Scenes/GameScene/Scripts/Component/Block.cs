@@ -79,4 +79,18 @@ public class Block : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHan
     {
         Debug.Log("ItemUnit OnDrop");
     }
+
+    public void Hide()
+    {
+        // 非表示にする
+        canvasGroup.alpha = 0f;
+        canvasGroup.blocksRaycasts = false;
+    }
+
+    public void Show()
+    {
+        // 表示する
+        canvasGroup.alpha = 1f;
+        canvasGroup.blocksRaycasts = true;
+    }
 }
