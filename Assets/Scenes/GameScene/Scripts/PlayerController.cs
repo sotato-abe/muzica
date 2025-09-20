@@ -204,7 +204,6 @@ public class PlayerController : MonoBehaviour
     public void RemoveItemFromBag(Item item)
     {
         if (item == null) return;
-        Debug.Log("Removing item from bag: " + item.Base.Name);
         PlayerCharacter.RemoveBagItem(item);
     }
 
