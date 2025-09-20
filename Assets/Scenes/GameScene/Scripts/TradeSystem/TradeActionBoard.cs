@@ -7,9 +7,10 @@ public class TradeActionBoard : SlidePanel
 {
     public UnityAction OnTradeEnd;
 
+    [SerializeField] private TalkPanel talkPanel;
     [SerializeField] private ItemTradePanel itemTradePanel;
     [SerializeField] private CommandTradePanel commandTradePanel;
-    [SerializeField] private TalkPanel talkPanel;
+
     [SerializeField] private ActionIcon itemIcon;
     [SerializeField] private ActionIcon commandIcon;
     [SerializeField] private ActionIcon talkIcon;
@@ -18,22 +19,22 @@ public class TradeActionBoard : SlidePanel
     private Dictionary<TradeActionType, Panel> actionPanels;
     private Dictionary<TradeActionType, ActionIcon> actionIcons;
     private List<TradeActionType> actionTypeList;
-    private TradeActionType currentAction = TradeActionType.Item;
+    private TradeActionType currentAction = TradeActionType.Talk;
 
     private void Start()
     {
         actionPanels = new Dictionary<TradeActionType, Panel>
         {
+            {  TradeActionType.Talk, talkPanel },
             {  TradeActionType.Item, itemTradePanel },
             {  TradeActionType.Command, commandTradePanel },
-            {  TradeActionType.Talk, talkPanel },
         };
 
         actionIcons = new Dictionary<TradeActionType, ActionIcon>
         {
+            {  TradeActionType.Talk, talkIcon },
             {  TradeActionType.Item, itemIcon },
             {  TradeActionType.Command, commandIcon },
-            {  TradeActionType.Talk, talkIcon },
             {  TradeActionType.Quit, quitIcon },
         };
 

@@ -11,9 +11,11 @@ public class TradeSystem : MonoBehaviour
     [SerializeField] private CharacterSubPanel playerSubPanel; // キャラクターサブパネル
     [SerializeField] private CharacterSubPanel ownerSubPanel; // キャラクターサブパネル
     [SerializeField] private MessagePanel messagePanel; // キャラクターサブパネル
+
+    [SerializeField] TalkPanel talkPanel;
     [SerializeField] ItemTradePanel itemTradePanel;
     [SerializeField] CommandTradePanel commandTradePanel;
-    [SerializeField] TalkPanel talkPanel;
+
     [SerializeField] WorldMapPanel worldMapPanel;
     [SerializeField] SlidePanel savePanel;
 
@@ -22,9 +24,9 @@ public class TradeSystem : MonoBehaviour
     private void Start()
     {
         tradeActionBoard.OnTradeEnd += TradeEnd; // リザーブアクションボードの終了イベントを登録
+        talkPanel.OnOwnerMessage += SetOwnerMessage;
         itemTradePanel.OnOwnerMessage += SetOwnerMessage;
         commandTradePanel.OnOwnerMessage += SetOwnerMessage;
-        talkPanel.OnOwnerMessage += SetOwnerMessage;
     }
     private void Update()
     {
