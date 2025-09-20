@@ -15,8 +15,13 @@ public class QuestCard : MonoBehaviour
     [SerializeField] ExterminationQuestTask exterminationQuestTask;
     [SerializeField] SpecialQuestTask specialQuestTask;
 
+    [SerializeField] Button receiptButton;
+
     public delegate void TargetItemDelegate(Item item, bool isOwn);
     public event TargetItemDelegate OnTargetItem;
+
+    public delegate void OwnerMessageDelegate(TalkMessage message);
+    public event OwnerMessageDelegate OnOwnerMessage;
 
     private Quest currentQuest;
 
@@ -45,6 +50,7 @@ public class QuestCard : MonoBehaviour
                 var supplyQuest = currentQuest as SupplyQuest;
                 supplyQuestTask.gameObject.SetActive(true);
                 supplyQuestTask.OnTargetItem += TargetItem;
+                supplyQuestTask.OnOwnerMessage += OwnerMessage;
                 supplyQuestTask.SetSupplyTask(supplyQuest);
                 break;
 
@@ -81,5 +87,10 @@ public class QuestCard : MonoBehaviour
     private void TargetItem(Item item)
     {
         OnTargetItem?.Invoke(item, false);
+    }
+
+    public void OwnerMessage(TalkMessage message)
+    {
+        OnOwnerMessage?.Invoke(message);
     }
 }

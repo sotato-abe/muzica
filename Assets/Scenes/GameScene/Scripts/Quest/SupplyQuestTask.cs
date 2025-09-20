@@ -15,6 +15,9 @@ public class SupplyQuestTask : MonoBehaviour
     public delegate void TargetItemDelegate(Item item);
     public event TargetItemDelegate OnTargetItem;
 
+    public delegate void OwnerMessageDelegate(TalkMessage message);
+    public event OwnerMessageDelegate OnOwnerMessage;
+
     // ここにサプライクエストタスクのロジックを実装
     public void SetSupplyTask(SupplyQuest quest)
     {
@@ -38,6 +41,7 @@ public class SupplyQuestTask : MonoBehaviour
         var slot = Instantiate(orderItemSlotPrefab, supplyItemList.transform);
         slot.SetOrderItem(item);
         slot.OnTargetItem += TargetItem;
+        slot.OnOwnerMessage += OwnerMessage;
     }
 
     private void SetRewardItemSlot(Item item)
@@ -62,5 +66,10 @@ public class SupplyQuestTask : MonoBehaviour
     private void TargetItem(Item item)
     {
         OnTargetItem?.Invoke(item);
+    }
+
+    public void OwnerMessage(TalkMessage message)
+    {
+        OnOwnerMessage?.Invoke(message);
     }
 }

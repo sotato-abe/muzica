@@ -24,6 +24,7 @@ public class TradeSystem : MonoBehaviour
         tradeActionBoard.OnTradeEnd += TradeEnd; // リザーブアクションボードの終了イベントを登録
         itemTradePanel.OnOwnerMessage += SetOwnerMessage;
         commandTradePanel.OnOwnerMessage += SetOwnerMessage;
+        talkPanel.OnOwnerMessage += SetOwnerMessage;
     }
     private void Update()
     {

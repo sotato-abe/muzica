@@ -15,6 +15,9 @@ public class OrderItemSlot : MonoBehaviour, IDropHandler, IPointerEnterHandler, 
     public delegate void TargetItemDelegate(Item item);
     public event TargetItemDelegate OnTargetItem;
 
+    public delegate void OwnerMessageDelegate(TalkMessage message);
+    public event OwnerMessageDelegate OnOwnerMessage;
+
     private Color activeTransparency = new Color(1f, 1f, 1f, 1f);
     private Color inactiveTransparency = new Color(1f, 1f, 1f, 0.3f);
 
@@ -29,7 +32,16 @@ public class OrderItemSlot : MonoBehaviour, IDropHandler, IPointerEnterHandler, 
 
     public void OnDrop(PointerEventData eventData)
     {
-
+        ItemBlock droppedItemBlock = eventData.pointerDrag?.GetComponent<ItemBlock>();
+        if (droppedItemBlock.Item.Base == currentItem.Base)
+        {
+            // 既に装備中のアイテムがある場合は、バックに戻す
+            OwnerMessage(new TalkMessage(MessageType.Other, MessagePanelType.Surprise, "それじゃ！"));
+        }
+        else
+        {
+            OwnerMessage(new TalkMessage(MessageType.Other, MessagePanelType.Default, "これは違うのう"));
+        }
     }
 
     private void ClearOrderItem()
@@ -50,5 +62,10 @@ public class OrderItemSlot : MonoBehaviour, IDropHandler, IPointerEnterHandler, 
     public void OnPointerExit(PointerEventData eventData)
     {
         OnTargetItem?.Invoke(null);
+    }
+
+    public void OwnerMessage(TalkMessage message)
+    {
+        OnOwnerMessage?.Invoke(message);
     }
 }

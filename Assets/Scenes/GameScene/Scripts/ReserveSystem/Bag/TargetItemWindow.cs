@@ -25,7 +25,6 @@ public class TargetItemWindow : MonoBehaviour
 
     public void TargetItem(Item item, bool isOwn = true)
     {
-        Debug.Log($"TargetItemWindow: TargetItem {item?.Base.Name}/ {item?.Base.itemType}");
         if (item == null)
         {
             ClearTargetItem();
@@ -48,7 +47,6 @@ public class TargetItemWindow : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Unsupported item type: " + item.GetType());
             ClearTargetItem();
             return;
         }
