@@ -11,9 +11,9 @@ public class TradeActionBoard : SlidePanel
     [SerializeField] private ItemTradePanel itemTradePanel;
     [SerializeField] private CommandTradePanel commandTradePanel;
 
+    [SerializeField] private ActionIcon talkIcon;
     [SerializeField] private ActionIcon itemIcon;
     [SerializeField] private ActionIcon commandIcon;
-    [SerializeField] private ActionIcon talkIcon;
     [SerializeField] private ActionIcon quitIcon;
 
     private Dictionary<TradeActionType, Panel> actionPanels;
@@ -21,8 +21,12 @@ public class TradeActionBoard : SlidePanel
     private List<TradeActionType> actionTypeList;
     private TradeActionType currentAction = TradeActionType.Talk;
 
-    private void Start()
+    private bool isTalkPanelActive = true;
+
+    public void SetAllActive()
     {
+        talkIcon.gameObject.SetActive(true);
+        currentAction = TradeActionType.Talk;
         actionPanels = new Dictionary<TradeActionType, Panel>
         {
             {  TradeActionType.Talk, talkPanel },
@@ -33,6 +37,34 @@ public class TradeActionBoard : SlidePanel
         actionIcons = new Dictionary<TradeActionType, ActionIcon>
         {
             {  TradeActionType.Talk, talkIcon },
+            {  TradeActionType.Item, itemIcon },
+            {  TradeActionType.Command, commandIcon },
+            {  TradeActionType.Quit, quitIcon },
+        };
+
+        actionTypeList = new List<TradeActionType>(actionIcons.Keys);
+
+        ChangeActiveIcon();
+        ChangeActionPanel();
+    }
+
+    public void SetWithOutTalkActive()
+    {
+        talkIcon.gameObject.SetActive(false);
+        talkPanel.ClosePanel();
+        if (currentAction == TradeActionType.Talk)
+        {
+            currentAction = TradeActionType.Item;
+        }
+
+        actionPanels = new Dictionary<TradeActionType, Panel>
+        {
+            {  TradeActionType.Item, itemTradePanel },
+            {  TradeActionType.Command, commandTradePanel },
+        };
+
+        actionIcons = new Dictionary<TradeActionType, ActionIcon>
+        {
             {  TradeActionType.Item, itemIcon },
             {  TradeActionType.Command, commandIcon },
             {  TradeActionType.Quit, quitIcon },
@@ -92,6 +124,11 @@ public class TradeActionBoard : SlidePanel
         ChangeActionPanel();
     }
 
+    public void TalkPanelOpen()
+    {
+        ChangeAction(TradeActionType.Talk);
+    }
+
     public void ItemPanelOpen()
     {
         ChangeAction(TradeActionType.Item);
@@ -100,11 +137,6 @@ public class TradeActionBoard : SlidePanel
     public void CommandPanelOpen()
     {
         ChangeAction(TradeActionType.Command);
-    }
-
-    public void TalkPanelOpen()
-    {
-        ChangeAction(TradeActionType.Talk);
     }
 
     public void QuitTrade()

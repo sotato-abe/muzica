@@ -58,7 +58,17 @@ public class TradeSystem : MonoBehaviour
         currentPoint = point; // 現在のポイントを保存
         itemTradePanel.SetPoint(point); // アイテムトレードパネルにポイントを設定
         commandTradePanel.SetPoint(point); // コマンドトレードパネルにポイントを設定
-        talkPanel.SetPoint(point);
+        Quest quest = point.GetActiveQuest();
+        if (quest == null)
+        {
+            tradeActionBoard.SetWithOutTalkActive();
+        }
+        else
+        {
+            talkPanel.SetPoint(point);
+            talkPanel.SetQuest(quest);
+            tradeActionBoard.SetAllActive();
+        }
         Character owner = point.Owner;
         owner.Init();
         ownerSubPanel.SetOwner(owner);

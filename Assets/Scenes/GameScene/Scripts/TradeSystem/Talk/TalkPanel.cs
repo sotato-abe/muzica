@@ -18,6 +18,7 @@ public class TalkPanel : Panel
     [SerializeField] GameObject emptyAlert;
 
     private Point currentPoint;
+    private Quest currentQuest;
 
     public delegate void OwnerMessageDelegate(TalkMessage message);
     public event OwnerMessageDelegate OnOwnerMessage;
@@ -52,10 +53,13 @@ public class TalkPanel : Panel
     public void SetPoint(Point point)
     {
         currentPoint = point;
-        Quest quest = point.GetActiveQuest();
+    }
+
+    public void SetQuest(Quest quest)
+    {
+        currentQuest = quest;
         if (quest == null)
         {
-            OwnerMessage(new TalkMessage(MessageType.Other, MessagePanelType.Default, "今は頼みごとはないかな"));
             emptyAlert.SetActive(true);
             questCard.gameObject.SetActive(false);
             return;
@@ -78,6 +82,11 @@ public class TalkPanel : Panel
         questCard.gameObject.SetActive(false);
         emptyAlert.SetActive(true);
         UpdateUI();
+    }
+
+    public bool HasQuest()
+    {
+        return currentQuest != null;
     }
 
     public void UpdateUI()
