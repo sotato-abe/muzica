@@ -24,7 +24,7 @@ public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
     bool inProgress = false; // Panelがアクティブかどうか
     public bool isTarget = false; // ターゲット状態かどうか
     float turnBarFillAmount = 0f;
-    Color runningColor = new Color(255f / 255f, 0f / 255f, 74f / 255f, 1f);
+    Color runningColor = new Color(255f / 255f, 0f / 255f, 200f / 255f, 1f);
     Color activeColor = new Color(196f / 255f, 255f / 255f, 0 / 255f, 1f);
 
     public delegate void TargetCharacterDelegate(CharacterSubPanel characterSubPanel);

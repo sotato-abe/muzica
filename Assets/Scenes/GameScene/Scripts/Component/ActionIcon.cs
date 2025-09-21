@@ -12,6 +12,8 @@ public class ActionIcon : MonoBehaviour
     [SerializeField] private bool isActive = false;
     [SerializeField] Color defaultColor = new Color(0, 0, 0, 100);
     [SerializeField] Color activeColor = new Color(133, 10, 255, 200);
+    [SerializeField] TextMeshProUGUI iconText;
+
     private float defaultSize = 70f;
     private float activeScale = 1.3f;
     private float scaleDuration = 0.05f;
@@ -31,6 +33,7 @@ public class ActionIcon : MonoBehaviour
         isActive = activeFlg;
         StopAllCoroutines();
         SetColor(isActive);
+        iconText.gameObject.SetActive(isActive);
         float targetSize = isActive ? defaultSize * activeScale : defaultSize;
         StartCoroutine(ResizeOverTime(targetSize));
     }
