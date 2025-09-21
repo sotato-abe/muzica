@@ -15,6 +15,7 @@ public class BattleActionBoard : SlidePanel
     [SerializeField] private ActionIcon equipIcon2;
     [SerializeField] private ActionIcon pocketIcon;
     [SerializeField] private ActionIcon escapeIcon;
+    [SerializeField] AutoButton autoButton;
 
     private Dictionary<BattleActionType, Panel> actionPanels;
     private Dictionary<BattleActionType, ActionIcon> actionIcons;
@@ -146,6 +147,21 @@ public class BattleActionBoard : SlidePanel
         equipPanel2.ChangeExecuteActionFlg(canExecute);
         pocketPanel.ChangeExecuteActionFlg(canExecute);
         escapePanel.ChangeExecuteActionFlg(canExecute);
+
+        // オートバトル
+        if (autoButton.IsAuto)
+        {
+            if (currentAction == BattleActionType.Equip1)
+            {
+                // 現在のパネルを取得
+                equipPanel1.ExecuteAttack();
+            }
+            else if (currentAction == BattleActionType.Equip2)
+            {
+                // 現在のパネルを取得
+                equipPanel2.ExecuteAttack();
+            }
+        }
     }
 
     public void ActionEnd()
