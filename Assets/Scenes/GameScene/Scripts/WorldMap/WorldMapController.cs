@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using System;
 
 public class WorldMapController : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class WorldMapController : MonoBehaviour
     [SerializeField] private WorldBigMapCameraManager worldMapBigCamera;
     [SerializeField] WorldMapRender worldMapRender;
     [SerializeField] WorldMapPanel worldMapPanel;
+    [SerializeField] AgeTimePanel ageTimePanel;
 
     private void Awake()
     {
@@ -62,7 +64,7 @@ public class WorldMapController : MonoBehaviour
         GenerateField();
         MoveFieldPlayerPosition(direction);
         SetWorldMapPlayerPosition();
-
+        ageTimePanel.PassageOfMonth(3); // 3ヶ月進める
     }
 
     private void GenerateField()

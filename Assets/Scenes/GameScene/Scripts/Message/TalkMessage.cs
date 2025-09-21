@@ -24,19 +24,19 @@ public class TalkMessage
             case MessageType.Encount:
                 return new TalkMessage(messageType, MessagePanelType.Default, "ちょっとつきあえや");
             case MessageType.Attack:
-                return new TalkMessage(messageType, MessagePanelType.Default, "くらえ");
+                return new TalkMessage(messageType, MessagePanelType.Surprise, "くらえ");
             case MessageType.Recovery:
                 return new TalkMessage(messageType, MessagePanelType.Default, "これで大丈夫");
             case MessageType.Damage:
-                return new TalkMessage(messageType, MessagePanelType.Default, "いてぇ");
+                return new TalkMessage(messageType, MessagePanelType.Surprise, "いてぇ");
             case MessageType.Miss:
-                return new TalkMessage(messageType, MessagePanelType.Default, "ミスった！");
+                return new TalkMessage(messageType, MessagePanelType.Fear, "ミスった！");
             case MessageType.Escape:
                 return new TalkMessage(messageType, MessagePanelType.Default, "まて !");
             case MessageType.Win:
                 return new TalkMessage(messageType, MessagePanelType.Default, "よし");
             case MessageType.Lose:
-                return new TalkMessage(messageType, MessagePanelType.Default, "くそぅ");
+                return new TalkMessage(messageType, MessagePanelType.Fear, "くそぅ");
             case MessageType.Talk:
                 return new TalkMessage(messageType, MessagePanelType.Default, "おい、話があるんだ");
             case MessageType.Question:
