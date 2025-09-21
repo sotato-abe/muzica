@@ -230,7 +230,7 @@ public class BattleSystem : MonoBehaviour
                 RewardItemListText = RewardItemListText.TrimEnd(','); // 最後のカンマを削除
                 RewardText += $"アイテム: {RewardItemListText}\n";
             }
-            RewardText += $"EXP: {RewardExp}, マネー: {RewardCoin}";
+            RewardText += $"EXP: {RewardExp}, コイン: {RewardCoin}";
             messagePanel.AddMessage(MessageIconType.Battle, RewardText);
             PlayerController.Instance.AddBattleReward(RewardExp, RewardCoin, RewardItems); // バトル報酬を追加
             BattleEnd(); // 全ての敵を倒した場合はバトル終了
