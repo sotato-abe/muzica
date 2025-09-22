@@ -229,9 +229,9 @@ public class BattleSystem : MonoBehaviour
             if (RewardItemListText != "")
             {
                 RewardItemListText = RewardItemListText.TrimEnd(','); // 最後のカンマを削除
-                RewardText += $"アイテム: {RewardItemListText}\n";
+                RewardText += $"Item: {RewardItemListText}";
             }
-            RewardText += $"EXP: {RewardExp}, コイン: {RewardCoin}";
+            RewardText += $" EXP: {RewardExp}, COIN: {RewardCoin}";
             messagePanel.AddMessage(MessageIconType.Battle, RewardText);
             PlayerController.Instance.AddBattleReward(RewardExp, RewardCoin, RewardItems); // バトル報酬を追加
             BattleEnd(); // 全ての敵を倒した場合はバトル終了
