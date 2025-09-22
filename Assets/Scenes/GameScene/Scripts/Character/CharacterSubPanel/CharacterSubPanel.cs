@@ -17,6 +17,7 @@ public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
     [SerializeField] public EnergyGauge energyGauge;
     [SerializeField] public Image turnBar;
     [SerializeField] Image targetImage;
+    [SerializeField] SwitchImage numberImage;
 
     Character character;
     public Character Character => character;
@@ -75,6 +76,11 @@ public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
         energyGauge.gameObject.SetActive(false);
         turnBar.gameObject.SetActive(false);
         SetRarityColor();
+    }
+
+    public void SetNumber(int number)
+    {
+        numberImage.Switch(number);
     }
 
     public void SetOwner(Character character)

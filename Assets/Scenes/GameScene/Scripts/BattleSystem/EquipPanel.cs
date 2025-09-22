@@ -253,6 +253,7 @@ public class EquipPanel : BattleActionPanel
         if (!IsEquipmentValid()) return;
         if (!TryUseEnergy()) return;
 
+        canExecuteActionFlg = false;
         StartCoroutine(StopSlot());
     }
 

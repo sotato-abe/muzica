@@ -15,15 +15,19 @@ public class FieldEnemy : FieldCharacter
         {
             case 0:
                 IconImage.sprite = Number1;
+                IconBackImage.sprite = Number1;
                 break;
             case 1:
                 IconImage.sprite = Number2;
+                IconBackImage.sprite = Number2;
                 break;
             case 2:
                 IconImage.sprite = Number3;
+                IconBackImage.sprite = Number3;
                 break;
             default:
                 IconImage.sprite = null;
+                IconBackImage.sprite = null;
                 break;
         }
     }

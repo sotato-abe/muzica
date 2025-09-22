@@ -95,7 +95,7 @@ public class BattleSystem : MonoBehaviour
             fieldEnemy.Inversion(!isLeft); // 向きを反転
             fieldEnemy.SetNumIcon(index); // 敵の番号アイコンを設定
             fieldPlayer.Inversion(isLeft); // プレイヤーの向きを反転
-            SetEnemySubPanel(enemy, enemies.Count - (index + 1)); // 敵のサブパネルを設定
+            SetEnemySubPanel(enemy, enemies.Count - (index + 1), enemies.Count); // 敵のサブパネルを設定
             fieldEnemies.Add(fieldEnemy); // 生成した敵をリストに追加
             yield return new WaitForSeconds(0.3f);
             index++;
@@ -105,11 +105,12 @@ public class BattleSystem : MonoBehaviour
     }
 
     // 敵をサブパネルに出現させる
-    private void SetEnemySubPanel(Character enemy, int index)
+    private void SetEnemySubPanel(Character enemy, int index, int maxCount)
     {
         if (index < 0 || index >= enemySubPanels.Count) return; // インデックスが範囲外の場合は何もしない
         CharacterSubPanel subPanel = enemySubPanels[index];
         subPanel.SetEnemy(enemy); // 敵のキャラクターを設定
+        subPanel.SetNumber(maxCount - index - 1); // 敵の番号を設定
     }
 
     private (Vector3, bool, bool) GetRandomAroundFloorPosition(int range = 1)

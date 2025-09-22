@@ -10,6 +10,7 @@ public class FieldCharacter : MonoBehaviour
     public Animator animator;
     [SerializeField] SpriteRenderer CharacterImage; // スプライトイメージパネル
     [SerializeField] public SpriteRenderer IconImage; // スプライトイメージパネル
+    [SerializeField] public SpriteRenderer IconBackImage; // スプライトイメージパネル
 
     public void SetUp(Character character)
     {
