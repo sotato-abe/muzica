@@ -21,6 +21,7 @@ public class BattleActionBoard : SlidePanel
     private Dictionary<BattleActionType, ActionIcon> actionIcons;
     private List<BattleActionType> actionTypeList;
     private BattleActionType currentAction = BattleActionType.Equip1;
+    bool canChangeActionFlg = true;
 
     private void Start()
     {
@@ -43,7 +44,9 @@ public class BattleActionBoard : SlidePanel
         actionTypeList = new List<BattleActionType>(actionPanels.Keys);
 
         equipPanel1.OnActionEnd += ActionEnd;
+        equipPanel1.OnActionStart += ActionStart;
         equipPanel2.OnActionEnd += ActionEnd;
+        equipPanel2.OnActionStart += ActionStart;
         escapePanel.OnActionEnd += ActionEnd;
         escapePanel.OnEscape += BattleEnd; // 逃げるイベントを登録
 
@@ -53,6 +56,7 @@ public class BattleActionBoard : SlidePanel
 
     private void Update()
     {
+        if (!canChangeActionFlg) return;
         if (!Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.RightShift))
         {
             if (Input.GetKeyDown(KeyCode.RightArrow))
@@ -64,6 +68,11 @@ public class BattleActionBoard : SlidePanel
                 ChoiceAction(true);
             }
         }
+    }
+
+    public void SetCanChangeActionFlg(bool canChange)
+    {
+        canChangeActionFlg = canChange;
     }
 
     private void ChoiceAction(bool isLeft)
@@ -164,8 +173,14 @@ public class BattleActionBoard : SlidePanel
         }
     }
 
+    public void ActionStart()
+    {
+        SetCanChangeActionFlg(false); // アクションの切り替えを不可能にする
+    }
+
     public void ActionEnd()
     {
+        SetCanChangeActionFlg(true); // アクションの切り替えを可能にする
         ChangeExecuteActionFlg(false); // アクションを実行不可能にする
         OnActionEnd?.Invoke();
     }

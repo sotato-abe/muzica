@@ -9,6 +9,7 @@ using UnityEngine.Events;
 public class EquipPanel : BattleActionPanel
 {
     #region Events
+    public UnityAction OnActionStart;
     public UnityAction OnActionEnd;
     #endregion
 
@@ -225,6 +226,7 @@ public class EquipPanel : BattleActionPanel
         if (!IsEquipmentValid()) return;
         if (!TryUseEnergy()) return;
 
+        OnActionStart?.Invoke();
         canExecuteActionFlg = false;
         StartCoroutine(StopSlot());
     }
