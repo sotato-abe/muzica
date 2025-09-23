@@ -60,7 +60,7 @@ public class EquipPanel : BattleActionPanel
     private void OnEnable()
     {
         SetEquipment();
-        SetTargetting();
+        ShowTargetting();
     }
 
     private void Update()
@@ -131,14 +131,31 @@ public class EquipPanel : BattleActionPanel
     #endregion
 
     #region Target Management
+    private void ShowTargetting()
+    {
+        foreach (var subPanel in enemySubPanels)
+        {
+            if (!subPanel.isOpen && targetSubPanels.Contains(subPanel))
+            {
+                SetTargetting();
+                return;
+            }
+            if (subPanel.isTarget && !targetSubPanels.Contains(subPanel))
+            {
+                subPanel.SetTarget(false);
+            }
+            else if (subPanel.isOpen && targetSubPanels.Contains(subPanel))
+            {
+                subPanel.SetTarget(true);
+            }
+        }
+    }
+
     public void SetTargetting()
     {
+        ClearTarget();
         if (currentEquipment == null)
-        {
-            ClearTarget();
             return;
-        }
-        targetSubPanels.Clear();
 
         switch (currentEquipment.EquipmentBase.TargetType)
         {
@@ -169,7 +186,6 @@ public class EquipPanel : BattleActionPanel
     }
     private void SetTargetEnemyPanel(int index)
     {
-        targetSubPanels.Clear();
         foreach (var subPanel in enemySubPanels)
         {
             if (subPanel.isOpen && targetSubPanels.Count < index)
@@ -179,7 +195,7 @@ public class EquipPanel : BattleActionPanel
             }
             else
             {
-                subPanel.SetTarget(false); // ターゲット以外は非表示にする
+                subPanel.SetTarget(false);
             }
         }
     }
@@ -213,6 +229,15 @@ public class EquipPanel : BattleActionPanel
         }
         playerSubPanel.SetTarget(false);
         targetSubPanels.Clear();
+    }
+
+    public void HideTarget()
+    {
+        foreach (var subPanel in enemySubPanels)
+        {
+            subPanel.SetTarget(false);
+        }
+        playerSubPanel.SetTarget(false);
     }
     #endregion
 

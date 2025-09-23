@@ -142,6 +142,10 @@ public class BattleActionBoard : SlidePanel
             if (kvp.Key == currentAction)
             {
                 kvp.Value.PanelOpen();
+                if (kvp.Value is not EquipPanel)
+                {
+                    equipPanel1.HideTarget();
+                }
             }
             else
             {
