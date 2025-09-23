@@ -517,6 +517,31 @@ public class PlayerController : MonoBehaviour
         PlayerCharacter.TakeAttack(totalCount);
         UpdatePlayerEnergy();
     }
+
+    public void TakeGuard(TotalAttackCount totalCount)
+    {
+        for (int i = 0; i < totalCount.EnergyAttackList.Count; i++)
+        {
+            EnergyCount energyCount = totalCount.EnergyAttackList[i];
+            int guardVal = Mathf.Max(0, (int)(energyCount.val * energyCount.times));
+            if (energyCount.type == EnergyType.Life)
+            {
+                PlayerCharacter.LifeGuard += guardVal;
+            }
+            else if (energyCount.type == EnergyType.Battery)
+            {
+                PlayerCharacter.BatteryGuard += guardVal;
+            }
+        }
+        UpdatePlayerEnergy();
+    }
+
+    public void ClearGuard()
+    {
+        PlayerCharacter.LifeGuard = 0;
+        PlayerCharacter.BatteryGuard = 0;
+        UpdatePlayerEnergy();
+    }
     #endregion
 
     #region FieldPlayer

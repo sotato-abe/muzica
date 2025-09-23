@@ -55,6 +55,10 @@ public class Character
     public List<Command> SlotList { get; set; }
     public List<Item> BagItemList { get; set; }
 
+    // battle
+    public int LifeGuard { get; set; }
+    public int BatteryGuard { get; set; }
+
     public Character(CharacterBase baseData)
     {
         _base = baseData;
@@ -73,6 +77,8 @@ public class Character
         SetBaseItems();
         SetBaseCommands();
         ColStatus();
+        LifeGuard = 0;
+        BatteryGuard = 0;
     }
 
     private void SetBaseAbility()
@@ -227,12 +233,26 @@ public class Character
                         Life = Mathf.Clamp(Life + (int)(energyAttack.val * energyAttack.times), 0, MaxLife);
                     else
                     {
-                        colEnergy = Mathf.Max(0, (int)(energyAttack.val * energyAttack.times) - ColDefense);
-                        Life = Mathf.Clamp(Life - colEnergy, 0, MaxLife);
+                        int damage = Mathf.Max(0, (int)(energyAttack.val * energyAttack.times)); // 総ダメージ
+                        int damageToGuard = Mathf.Min(LifeGuard, damage);
+                        LifeGuard -= damageToGuard;
+                        int remainingDamage = damage - damageToGuard;
+                        int colAttackEnergy = Mathf.Max(0, remainingDamage - ColDefense);
+                        Life = Mathf.Clamp(Life - colAttackEnergy, 0, MaxLife);
                     }
                     break;
                 case EnergyType.Battery:
-                    Battery = Mathf.Clamp(Battery - colEnergy, 0, MaxBattery);
+                    if (energyAttack.isRecovery)
+                        Battery = Mathf.Clamp(Battery + (int)(energyAttack.val * energyAttack.times), 0, MaxBattery);
+                    else
+                    {
+                        int damage = Mathf.Max(0, (int)(energyAttack.val * energyAttack.times)); // 総ダメージ
+                        int damageToGuard = Mathf.Min(BatteryGuard, damage);
+                        BatteryGuard -= damageToGuard;
+                        int remainingDamage = damage - damageToGuard;
+                        int colAttackEnergy = Mathf.Max(0, remainingDamage - ColTechnique);
+                        Battery = Mathf.Clamp(Battery - colAttackEnergy, 0, MaxBattery);
+                    }
                     break;
                 case EnergyType.Soul:
                     Soul = Mathf.Clamp(Soul - colEnergy, 0, 100);
@@ -307,5 +327,16 @@ public class Character
         {
             return TalkMessage.GetDefaultMessage(messageType);
         }
+    }
+
+    // BattleCharacterに分離したい
+    public void UpdateLifeGuard(int guard)
+    {
+        LifeGuard = Mathf.Max(0, guard);
+    }
+
+    public void UpdateBatteryGuard(int guard)
+    {
+        BatteryGuard = Mathf.Max(0, guard);
     }
 }

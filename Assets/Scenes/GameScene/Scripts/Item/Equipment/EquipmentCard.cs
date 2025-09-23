@@ -23,6 +23,7 @@ public class EquipmentCard : Card
     [SerializeField] Sprite individualIcon;
     [SerializeField] Sprite groupIcon;
     [SerializeField] Sprite allIcon;
+    [SerializeField] Sprite guardIcon;
     [SerializeField] Sprite randomIcon;
 
     public void SetEquipmentDetail(Equipment equipment)
@@ -71,12 +72,15 @@ public class EquipmentCard : Card
             case TargetType.All:
                 targetIcon.sprite = allIcon;
                 break;
+            case TargetType.Guard:
+                targetIcon.sprite = guardIcon;
+                break;
             case TargetType.Random:
                 targetIcon.sprite = randomIcon;
                 break;
         }
     }
-    
+
     private void SetAttacks(List<EnergyCount> counts)
     {
         foreach (Transform child in attackCounterList.transform)

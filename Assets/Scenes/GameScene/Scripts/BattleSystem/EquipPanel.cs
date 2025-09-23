@@ -281,8 +281,16 @@ public class EquipPanel : BattleActionPanel
     {
         yield return StartCoroutine(slotWindow.StopSlot());
         TotalAttackCount totalCount = equipmentInfo.GetTotalCount();
-        ExecuteTargetAttack(totalCount);
-        yield return new WaitForSeconds(0.5f);
+        if (currentEquipment.EquipmentBase.TargetType == TargetType.Guard)
+        {
+            ExecuteGuardAction(totalCount);
+            yield return new WaitForSeconds(0.5f);
+        }
+        else
+        {
+            ExecuteTargetAttack(totalCount);
+            yield return new WaitForSeconds(0.5f);
+        }
     }
 
     /// <summary>
@@ -300,18 +308,13 @@ public class EquipPanel : BattleActionPanel
     }
 
     /// <summary>
-    /// 自分自身への攻撃
+    /// ガードアクションを実行
     /// </summary>
-    private void ExecuteSelfAttack(TotalAttackCount totalCount)
+    private void ExecuteGuardAction(TotalAttackCount totalCount)
     {
-        if (playerSubPanel.isOpen)
-        {
-            StartCoroutine(ExecuteAction(playerSubPanel, totalCount));
-        }
-        else
-        {
-            Debug.LogWarning("プレイヤーのキャラクターサブパネルがアクティブではありません。");
-        }
+
+        PlayerController.Instance.TakeGuard(totalCount);
+        OnActionEnd?.Invoke();
     }
 
     private void ExecuteTargetAttack(TotalAttackCount totalCount)

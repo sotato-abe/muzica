@@ -9,6 +9,7 @@ public class EnergyBar : MonoBehaviour
     [SerializeField] Image barImage;
     [SerializeField] EnergyType energyType;
     [SerializeField] DiffCounter diffCounterPrefab;
+    [SerializeField] GuardWindow guardWindow;
 
     int maxEnergy = 100;
     int currentEnergy = 0;
@@ -30,6 +31,15 @@ public class EnergyBar : MonoBehaviour
         counterText.text = $"{currentEnergy}/{maxEnergy}";
     }
 
+    public void SetGuard(int guard)
+    {
+        if (guardWindow != null)
+        {
+            guardWindow.SetGuardCounter(guard);
+            guardWindow.gameObject.SetActive(guard > 0);
+        }
+    }
+
     public IEnumerator SetValueCoroutine(int value, int maxValue)
     {
         if (value < 0) value = 0;
@@ -42,10 +52,8 @@ public class EnergyBar : MonoBehaviour
         float targetFill = (float)currentEnergy / maxEnergy;
         counterText.text = $"{currentEnergy}/{maxEnergy}";
 
-        // 🔒 GameObjectがアクティブなときだけコルーチンを起動
         if (!gameObject.activeInHierarchy)
         {
-            // アクティブじゃない場合は即時反映にフォールバック
             barImage.fillAmount = targetFill;
             yield break;
         }

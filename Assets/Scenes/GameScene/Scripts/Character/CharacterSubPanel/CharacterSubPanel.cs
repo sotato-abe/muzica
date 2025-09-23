@@ -211,9 +211,9 @@ public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
     public IEnumerator UpdateEnergyGauges()
     {
         // 各ゲージの更新コルーチンを並行実行
-        Coroutine lifeCoroutine = StartCoroutine(energyGauge.SetLifeValueCoroutine(character.Life, character.MaxLife));
-        Coroutine batteryCoroutine = StartCoroutine(energyGauge.SetBatteryValueCoroutine(character.Battery, character.MaxBattery));
-        Coroutine soulCoroutine = StartCoroutine(energyGauge.SetSoulValueCoroutine(character.Soul, 100));
+        Coroutine lifeCoroutine = StartCoroutine(energyGauge.SetLifeValueCoroutine(character.Life, character.MaxLife, character.LifeGuard));
+        Coroutine batteryCoroutine = StartCoroutine(energyGauge.SetBatteryValueCoroutine(character.Battery, character.MaxBattery, character.BatteryGuard));
+        Coroutine soulCoroutine = StartCoroutine(energyGauge.SetSoulValueCoroutine(character.Soul, 100, 0));
 
         // すべてのコルーチンが完了するまで待機
         yield return lifeCoroutine;

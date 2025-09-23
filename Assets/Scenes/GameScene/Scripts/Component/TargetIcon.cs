@@ -10,6 +10,7 @@ public class TargetIcon : MonoBehaviour
     [SerializeField] Sprite individualImage;
     [SerializeField] Sprite groupImage;
     [SerializeField] Sprite allImage;
+    [SerializeField] Sprite guardImage;
     [SerializeField] Sprite randomImage;
 
     public void SetTargetType(TargetType targetType)
@@ -27,6 +28,9 @@ public class TargetIcon : MonoBehaviour
                 break;
             case TargetType.All:
                 iconImage.sprite = allImage;
+                break;
+            case TargetType.Guard:
+                iconImage.sprite = guardImage;
                 break;
             case TargetType.Random:
                 iconImage.sprite = randomImage;
