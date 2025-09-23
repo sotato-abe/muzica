@@ -119,6 +119,7 @@ public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
 
     public void SetTarget(bool targetFlg)
     {
+        if(character == null) return;
         isTarget = targetFlg;
         targetImage.gameObject.SetActive(isTarget);
     }

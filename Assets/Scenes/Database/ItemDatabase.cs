@@ -53,11 +53,11 @@ public class ItemDatabase : MonoBehaviour
         switch (baseData.itemType)
         {
             case ItemType.Consumable:
-                return new Consumable((ConsumableBase)baseData);
+                return new Consumable((ConsumableBase)baseData, false);
             case ItemType.Equipment:
-                return new Equipment((EquipmentBase)baseData);
+                return new Equipment((EquipmentBase)baseData, false);
             case ItemType.Treasure:
-                return new Treasure((TreasureBase)baseData);
+                return new Treasure((TreasureBase)baseData, false);
             default:
                 Debug.LogError("Unknown item type: " + baseData.itemType);
                 return null;

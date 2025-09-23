@@ -42,7 +42,7 @@ public class CommandDatabase : MonoBehaviour
         }
 
         CommandBase baseData = commandDataList[commandId];
-        return new Command(baseData);
+        return new Command(baseData, false);
     }
 
     public int GetCommandId(CommandBase command)

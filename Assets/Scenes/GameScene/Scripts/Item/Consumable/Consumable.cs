@@ -12,9 +12,10 @@ public class Consumable : Item
     public override ItemBase Base => _base;
 
     // コンストラクタで base._base を設定
-    public Consumable(ConsumableBase baseData) : base(baseData)
+    public Consumable(ConsumableBase baseData, bool isNew = true) : base(baseData)
     {
         UsableCount = baseData.UsableCount;
+        this.isNew = isNew;
     }
 
     public bool UseConsumable()

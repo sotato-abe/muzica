@@ -59,7 +59,7 @@ public class EquipPanel : BattleActionPanel
     private void OnEnable()
     {
         SetEquipment();
-        ShowTargeting();
+        SetTargetting();
     }
 
     private void Update()
@@ -132,37 +132,38 @@ public class EquipPanel : BattleActionPanel
     #region Target Management
     public void SetTargetting()
     {
-        targetSubPanels.Clear();
         if (currentEquipment == null)
         {
             ClearTarget();
             return;
         }
+        targetSubPanels.Clear();
 
         switch (currentEquipment.EquipmentBase.TargetType)
         {
             case TargetType.Individual:
+                playerSubPanel.SetTarget(false);
                 SetTargetEnemyPanel(1);
                 break;
             case TargetType.Group:
+                playerSubPanel.SetTarget(false);
                 SetTargetEnemyPanel(3);
                 break;
             case TargetType.All:
+                playerSubPanel.SetTarget(true);
                 SetTargetEnemyPanel(3);
                 targetSubPanels.Add(playerSubPanel);
                 break;
             case TargetType.Self:
+                playerSubPanel.SetTarget(true);
                 SetTargetEnemyPanel(0);
                 targetSubPanels.Add(playerSubPanel);
                 break;
             default:
-                Debug.LogWarning("Unknown target type.");
+                playerSubPanel.SetTarget(true);
+                SetTargetEnemyPanel(0);
+                targetSubPanels.Add(playerSubPanel);
                 break;
-        }
-
-        foreach (var subPanel in targetSubPanels)
-        {
-            subPanel.SetTarget(true);
         }
     }
     private void SetTargetEnemyPanel(int index)
@@ -181,6 +182,7 @@ public class EquipPanel : BattleActionPanel
             }
         }
     }
+
     public void ChangeTargetEnemy(CharacterSubPanel enemySubPanel)
     {
         if (currentEquipment == null)
@@ -202,43 +204,13 @@ public class EquipPanel : BattleActionPanel
         }
     }
 
-    public void ShowTargeting()
-    {
-        if (0 == targetSubPanels.Count)
-        {
-            SetEquipment();
-            SetTargetting();
-            return;
-        }
-
-        foreach (var subPanel in enemySubPanels)
-        {
-            if (targetSubPanels.Contains(subPanel))
-            {
-                if (subPanel.isOpen)
-                {
-                    subPanel.SetTarget(true);
-                }
-                else
-                {
-                    // ターゲットが倒れているときはターゲットを再選択する
-                    SetTargetting();
-                    break;
-                }
-            }
-            else
-            {
-                subPanel.SetTarget(false);
-            }
-        }
-    }
-
     private void ClearTarget()
     {
-        foreach (var subPanel in targetSubPanels)
+        foreach (var subPanel in enemySubPanels)
         {
             subPanel.SetTarget(false);
         }
+        playerSubPanel.SetTarget(false);
         targetSubPanels.Clear();
     }
     #endregion
@@ -358,6 +330,7 @@ public class EquipPanel : BattleActionPanel
 
     public void LifeOutEnemy(CharacterSubPanel enemySubPanel)
     {
+        SetEquipment();
         SetTargetting();
     }
 }

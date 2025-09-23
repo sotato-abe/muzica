@@ -15,7 +15,6 @@ public class SwitchImage : MonoBehaviour
 
     public void Switch(int index)
     {
-        Debug.Log("SwitchImage :" +index);
         if (index == 0)
         {
             image.sprite = firstSprite;

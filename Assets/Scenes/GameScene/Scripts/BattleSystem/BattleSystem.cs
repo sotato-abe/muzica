@@ -263,6 +263,7 @@ public class BattleSystem : MonoBehaviour
         RewardItems.Clear(); // アイテムのリセット
         RewardItemListText = ""; // アイテムリストのリセット
         PlayerController.Instance.ClearGuard(); // ガードをクリア
+        playerSubPanel.SetTarget(false); // ターゲットをリセット
 
         battleActionBoard.SetActive(false, CheckAllComplete); // リザーブアクションボードを非表示にする
         playerSubPanel.SetActive(false, CheckAllComplete); // キャラクターサブパネルを非表示にする

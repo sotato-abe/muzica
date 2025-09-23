@@ -12,9 +12,10 @@ public class Equipment : Item
     public EquipmentBase EquipmentBase => _base as EquipmentBase;
     public int Level => level;
 
-    public Equipment(EquipmentBase baseData) : base(baseData)
+    public Equipment(EquipmentBase baseData, bool isNew = true) : base(baseData)
     {
         level = 1; // 初期レベルを設定
+        this.isNew = isNew;
     }
 
     public override Item Clone()

@@ -12,10 +12,11 @@ public class Command
     public CommandBase Base => _base; // CommandBase は ScriptableObject を継承している前提
     public int Level => level;
 
-    public Command(CommandBase baseData)
+    public Command(CommandBase baseData, bool isNew = true)
     {
         _base = baseData;
         level = 1;
+        this.isNew = isNew;
     }
 
     public virtual Command Clone()

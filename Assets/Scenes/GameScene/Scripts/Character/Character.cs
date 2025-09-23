@@ -136,6 +136,7 @@ public class Character
         foreach (ConsumableBase consumableBase in _base.PocketBaseList)
         {
             Consumable consumable = new Consumable(consumableBase);
+            consumable.isNew = false;
             PocketList.Add(consumable);
         }
 
@@ -146,14 +147,17 @@ public class Character
             {
                 case ItemType.Consumable:
                     Consumable bagConsumable = new Consumable((ConsumableBase)item);
+                    bagConsumable.isNew = false;
                     BagItemList.Add(bagConsumable);
                     break;
                 case ItemType.Equipment:
                     Equipment bagEquipment = new Equipment((EquipmentBase)item);
+                    bagEquipment.isNew = false;
                     BagItemList.Add(bagEquipment);
                     break;
                 case ItemType.Treasure:
                     Treasure bagTreasure = new Treasure((TreasureBase)item);
+                    bagTreasure.isNew = false;
                     BagItemList.Add(bagTreasure);
                     break;
                 default:
@@ -169,6 +173,7 @@ public class Character
         foreach (CommandBase commandBase in _base.SlotBaseList)
         {
             Command command = new Command(commandBase);
+            command.isNew = false;
             SlotList.Add(command);
         }
 
@@ -176,6 +181,7 @@ public class Character
         foreach (CommandBase commandBase in _base.StorageBaseList)
         {
             Command command = new Command(commandBase);
+            command.isNew = false;
             StorageList.Add(command);
         }
     }

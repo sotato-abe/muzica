@@ -7,9 +7,10 @@ public class Treasure : Item
 {
     public override ItemBase Base => _base;
     public TreasureBase TreasureBase => _base as TreasureBase;
-    public Treasure(TreasureBase baseData) : base(baseData)
+
+    public Treasure(TreasureBase baseData, bool isNew = true) : base(baseData)
     {
-        // 必要なら初期化ロジックもここに
+        this.isNew = isNew;
     }
 
     public override Item Clone()
