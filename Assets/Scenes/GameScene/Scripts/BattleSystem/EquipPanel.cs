@@ -53,7 +53,7 @@ public class EquipPanel : BattleActionPanel
         foreach (var subPanel in enemySubPanels)
         {
             subPanel.OnTarget += ChangeTargetEnemy;
-            subPanel.OnLifeOutAction += LifeOutEnemy; // 敵のサブパネルのライフアウトイベントを登録
+            subPanel.OnLifeOut += LifeOutEnemy; // 敵のサブパネルのライフアウトイベントを登録
         }
     }
 
@@ -311,7 +311,6 @@ public class EquipPanel : BattleActionPanel
     /// </summary>
     private void ExecuteGuardAction(TotalAttackCount totalCount)
     {
-
         PlayerController.Instance.TakeGuard(totalCount);
         OnActionEnd?.Invoke();
     }
@@ -355,8 +354,10 @@ public class EquipPanel : BattleActionPanel
     }
     #endregion
 
-    public void LifeOutEnemy(CharacterSubPanel enemySubPanel)
+    public void LifeOutEnemy()
     {
+        if (!this.gameObject.activeInHierarchy) return;
+        
         SetEquipment();
         SetTargetting();
     }

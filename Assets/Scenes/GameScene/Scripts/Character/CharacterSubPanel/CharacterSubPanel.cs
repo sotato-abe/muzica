@@ -28,6 +28,8 @@ public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
     Color runningColor = new Color(255f / 255f, 0f / 255f, 200f / 255f, 1f);
     Color activeColor = new Color(196f / 255f, 255f / 255f, 0 / 255f, 1f);
 
+    public UnityAction OnLifeOut;
+
     public delegate void TargetCharacterDelegate(CharacterSubPanel characterSubPanel);
     public event TargetCharacterDelegate OnTarget;
 
@@ -204,6 +206,7 @@ public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
             yield return StartCoroutine(SetTalkMessage(talkMessage));
             turnBar.gameObject.SetActive(false);
             StopAllCoroutines();
+            OnLifeOut?.Invoke();
             OnLifeOutAction?.Invoke(this);
         }
         yield return new WaitForSeconds(0.5f);
