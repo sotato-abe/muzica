@@ -21,7 +21,7 @@ public class EscapePanel : BattleActionPanel
 
     List<Character> enemyList = new List<Character>();
     Color activeColor = new Color(168f / 255f, 255f / 255f, 0f / 255f, 200f / 255f);
-    Color stopColor = new Color(0f / 255f, 0f / 255f, 0f / 255f, 200f / 255f);
+    Color stopColor = new Color(255f / 255f, 255f / 255f, 255f / 255f, 10f / 255f);
 
     int lifeCost = 0;
     int batteryCost = 0;
