@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
 
     #region Serialized Fields
     [Header("Player Components")]
-    [SerializeField] private CharacterSubPanel playerSubPanel;
+    [SerializeField] private PlayerSubPanel playerSubPanel;
     [SerializeField] private CurrencyPanel currencyPanel;
     [SerializeField] private PlayerCharacter defaultPlayer; // 初期用だけ
     [SerializeField] private SaveManagement saveManagement;
@@ -45,6 +45,7 @@ public class PlayerController : MonoBehaviour
             SetPlayerCharacter(defaultPlayer);
         }
         playerSubPanel.SetCharacter(PlayerCharacter);
+        PlayerCharacter.onLevelUp += LevelUp;
         UpdateCurrencyPanel();
     }
     #endregion
@@ -110,6 +111,16 @@ public class PlayerController : MonoBehaviour
         }
 
         UpdateCurrencyPanel();
+    }
+
+    public void LevelUp()
+    {
+        playerSubPanel.SetStatusText("Level Up!!");
+    }
+
+    public void SetStatusText(string status)
+    {
+        playerSubPanel.SetStatusText(status);
     }
     #endregion
 
@@ -510,6 +521,10 @@ public class PlayerController : MonoBehaviour
     public void StatusUp(StatusType type)
     {
         PlayerCharacter.StatusUp(type);
+        if (PlayerCharacter.SkillPoint <= 0)
+        {
+            playerSubPanel.SetStatusText(null);
+        }
     }
 
     public void TakeAttack(TotalAttackCount totalCount)

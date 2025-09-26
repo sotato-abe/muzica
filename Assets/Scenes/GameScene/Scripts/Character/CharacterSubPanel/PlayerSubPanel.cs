@@ -6,6 +6,7 @@ using TMPro;
 
 public class PlayerSubPanel : CharacterSubPanel
 {
+    [SerializeField] private StatusText statusText;
 
     public override void SetCharacter(Character character)
     {
@@ -13,11 +14,17 @@ public class PlayerSubPanel : CharacterSubPanel
         energyGauge.gameObject.SetActive(true);
         turnBar.gameObject.SetActive(false);
         SetEnergy();
+        SetStatusText(null);
     }
 
     public void SetBattle()
     {
         turnBar.gameObject.SetActive(true);
+    }
+
+    public void SetStatusText(string status)
+    {
+        statusText.SetText(status);
     }
 }
 

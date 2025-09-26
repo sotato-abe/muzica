@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 using TMPro;
 
 [System.Serializable]
@@ -9,6 +10,7 @@ public class PlayerCharacter : Character
 {
     private const int EQUIPMENT_COUNT = 2;
     // public int SkillPoint { get; set; } = 0;
+    public UnityAction onLevelUp;
 
     public PlayerCharacter(CharacterBase baseData) : base(baseData) { }
 
@@ -84,7 +86,9 @@ public class PlayerCharacter : Character
             Level++;
             SkillPoint++; // レベルアップ時にスキルポイントを追加
             Exp -= 100;
+            onLevelUp?.Invoke();
         }
+
     }
 
     public void AddCoin(int coin)
