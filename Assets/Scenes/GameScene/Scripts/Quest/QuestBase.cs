@@ -12,6 +12,7 @@ public class QuestBase : ScriptableObject
     [SerializeField, TextArea] string achievementMessage; // 達成メッセージ
 
     [Header("Conditions")] // 出現条件
+    [SerializeField] bool isOneTimeOnly; //TODO 一度きりフラグ　ストーリークエストなどのフラグに使う
     [SerializeField] DateTime startDateTime; // 開始日時
     [SerializeField] DateTime endDateTime; // 終了日時
     [SerializeField] List<Item> optionalItemsList; // 必要アイテムリスト
