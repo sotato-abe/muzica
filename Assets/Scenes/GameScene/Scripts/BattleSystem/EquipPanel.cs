@@ -184,6 +184,7 @@ public class EquipPanel : BattleActionPanel
                 break;
         }
     }
+    
     private void SetTargetEnemyPanel(int index)
     {
         foreach (var subPanel in enemySubPanels)

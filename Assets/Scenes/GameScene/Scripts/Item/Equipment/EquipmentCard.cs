@@ -18,6 +18,7 @@ public class EquipmentCard : Card
     [SerializeField] AttackCounter attackCounterPrefab;
     [SerializeField] EnchantIcon enchantIconPrefab;
     [SerializeField] CostIconPrefab costIconPrefab;
+    [SerializeField] EquipmentTypeIcon equipmentTypeIcon;
 
     [SerializeField] Sprite selfIcon;
     [SerializeField] Sprite individualIcon;
@@ -39,6 +40,7 @@ public class EquipmentCard : Card
         SetEnchants(equipment.EquipmentBase.EnchantList);
         SetAttacks(equipment.EquipmentBase.EnergyAttackList);
         SetStatus(equipment);
+        equipmentTypeIcon.SetEquipmentType(equipment.EquipmentBase.EquipmentType);
     }
 
     private void SetCost(List<EnergyCost> energyCostList)
