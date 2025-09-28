@@ -6,38 +6,95 @@ using UnityEngine.UI;
 public class TargetIcon : MonoBehaviour
 {
     [SerializeField] Image iconImage;
-    [SerializeField] Sprite selfImage;
-    [SerializeField] Sprite individualImage;
-    [SerializeField] Sprite groupImage;
-    [SerializeField] Sprite allImage;
-    [SerializeField] Sprite guardImage;
-    [SerializeField] Sprite randomImage;
+    [SerializeField] Sprite selfSprite;
+    [SerializeField] Sprite randomSprite;
 
-    public void SetTargetType(TargetType targetType)
+    [SerializeField] Sprite individualAttackSprite;
+    [SerializeField] Sprite groupAttackSprite;
+    [SerializeField] Sprite allAttackSprite;
+
+    [SerializeField] Sprite individualGuardSprite;
+    [SerializeField] Sprite groupGuardSprite;
+    [SerializeField] Sprite allGuardSprite;
+
+    // TODO　ガードとデバイのアイコンは再考する 
+
+    public void SetTargetType(EquipmentType equipmentType, TargetType targetType)
     {
-        switch (targetType)
+        if (equipmentType == EquipmentType.Weapon)
         {
-            case TargetType.Self:
-                iconImage.sprite = selfImage;
-                break;
-            case TargetType.Individual:
-                iconImage.sprite = individualImage;
-                break;
-            case TargetType.Group:
-                iconImage.sprite = groupImage;
-                break;
-            case TargetType.All:
-                iconImage.sprite = allImage;
-                break;
-            case TargetType.Guard:
-                iconImage.sprite = guardImage;
-                break;
-            case TargetType.Random:
-                iconImage.sprite = randomImage;
-                break;
-            default:
-                Debug.LogWarning("Unknown TargetType: " + targetType);
-                break;
+            switch (targetType)
+            {
+                case TargetType.Self:
+                    iconImage.sprite = selfSprite;
+                    break;
+                case TargetType.Individual:
+                    iconImage.sprite = individualAttackSprite;
+                    break;
+                case TargetType.Group:
+                    iconImage.sprite = groupAttackSprite;
+                    break;
+                case TargetType.All:
+                    iconImage.sprite = allAttackSprite;
+                    break;
+                case TargetType.Random:
+                    iconImage.sprite = randomSprite;
+                    break;
+                default:
+                    Debug.LogWarning("Unknown TargetType: " + targetType);
+                    break;
+            }
+            return;
+        }
+        else if (equipmentType == EquipmentType.Armor)
+        {
+            switch (targetType)
+            {
+                case TargetType.Self:
+                    iconImage.sprite = selfSprite;
+                    break;
+                case TargetType.Individual:
+                    iconImage.sprite = individualGuardSprite;
+                    break;
+                case TargetType.Group:
+                    iconImage.sprite = groupGuardSprite;
+                    break;
+                case TargetType.All:
+                    iconImage.sprite = allGuardSprite;
+                    break;
+                case TargetType.Random:
+                    iconImage.sprite = randomSprite;
+                    break;
+                default:
+                    Debug.LogWarning("Unknown TargetType: " + targetType);
+                    break;
+            }
+            return;
+        }
+        else if (equipmentType == EquipmentType.Device)
+        {
+            switch (targetType)
+            {
+                case TargetType.Self:
+                    iconImage.sprite = selfSprite;
+                    break;
+                case TargetType.Individual:
+                    iconImage.sprite = individualAttackSprite;
+                    break;
+                case TargetType.Group:
+                    iconImage.sprite = groupAttackSprite;
+                    break;
+                case TargetType.All:
+                    iconImage.sprite = allAttackSprite;
+                    break;
+                case TargetType.Random:
+                    iconImage.sprite = randomSprite;
+                    break;
+                default:
+                    Debug.LogWarning("Unknown TargetType: " + targetType);
+                    break;
+            }
+            return;
         }
     }
 }

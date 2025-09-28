@@ -6,7 +6,7 @@ using TMPro;
 
 public class EquipmentCard : Card
 {
-    [SerializeField] Image targetIcon;
+    [SerializeField] TargetIcon targetIcon;
     [SerializeField] TextMeshProUGUI powerText;
     [SerializeField] TextMeshProUGUI techniqueText;
     [SerializeField] TextMeshProUGUI defenseText;
@@ -20,13 +20,6 @@ public class EquipmentCard : Card
     [SerializeField] CostIconPrefab costIconPrefab;
     [SerializeField] EquipmentTypeIcon equipmentTypeIcon;
 
-    [SerializeField] Sprite selfIcon;
-    [SerializeField] Sprite individualIcon;
-    [SerializeField] Sprite groupIcon;
-    [SerializeField] Sprite allIcon;
-    [SerializeField] Sprite guardIcon;
-    [SerializeField] Sprite randomIcon;
-
     public void SetEquipmentDetail(Equipment equipment)
     {
         this.gameObject.SetActive(true);
@@ -36,7 +29,7 @@ public class EquipmentCard : Card
         cardImage.sprite = equipment.Base.Sprite;
         cardImage.color = new Color(1, 1, 1, 1);
         SetCost(equipment.EquipmentBase.EnergyCostList);
-        SetTarget(equipment.EquipmentBase.TargetType);
+        targetIcon.SetTargetType(equipment.EquipmentBase.EquipmentType, equipment.EquipmentBase.TargetType);
         SetEnchants(equipment.EquipmentBase.EnchantList);
         SetAttacks(equipment.EquipmentBase.EnergyAttackList);
         SetStatus(equipment);
@@ -55,31 +48,6 @@ public class EquipmentCard : Card
         {
             CostIconPrefab newCost = Instantiate(costIconPrefab, costList.transform);
             newCost.SetCostIcon(cost);
-        }
-    }
-
-    private void SetTarget(TargetType targetType)
-    {
-        switch (targetType)
-        {
-            case TargetType.Self:
-                targetIcon.sprite = selfIcon;
-                break;
-            case TargetType.Individual:
-                targetIcon.sprite = individualIcon;
-                break;
-            case TargetType.Group:
-                targetIcon.sprite = groupIcon;
-                break;
-            case TargetType.All:
-                targetIcon.sprite = allIcon;
-                break;
-            case TargetType.Guard:
-                targetIcon.sprite = guardIcon;
-                break;
-            case TargetType.Random:
-                targetIcon.sprite = randomIcon;
-                break;
         }
     }
 

@@ -284,7 +284,7 @@ public class EquipPanel : BattleActionPanel
     {
         yield return StartCoroutine(slotWindow.StopSlot());
         TotalAttackCount totalCount = equipmentInfo.GetTotalCount();
-        if (currentEquipment.EquipmentBase.TargetType == TargetType.Guard)
+        if (currentEquipment.EquipmentBase.EquipmentType == EquipmentType.Armor)
         {
             ExecuteGuardAction(totalCount);
             yield return new WaitForSeconds(0.5f);

@@ -82,7 +82,7 @@ MonoBehaviour:
   cardIcon: {fileID: 4184610011007194570}
   cardTypeColor: {fileID: 8475163235235823987}
   cardImage: {fileID: 1036822353389679597}
-  targetIcon: {fileID: 1816596138092118915}
+  targetIcon: {fileID: 3091279703331399865}
   powerText: {fileID: 1266621267783451287}
   techniqueText: {fileID: 705877398649181921}
   defenseText: {fileID: 2299194773016025277}
@@ -2163,6 +2163,7 @@ GameObject:
   - component: {fileID: 1926033001174161477}
   - component: {fileID: 2193495084344185439}
   - component: {fileID: 1816596138092118915}
+  - component: {fileID: 3091279703331399865}
   m_Layer: 0
   m_Name: Target
   m_TagString: Untagged
@@ -2227,6 +2228,27 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3091279703331399865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6729485531845219258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1c27acf218423941b0e55bbcd9db4fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  iconImage: {fileID: 1816596138092118915}
+  selfSprite: {fileID: 21300000, guid: 5946c42c21aff5e4687c9957bf3def0b, type: 3}
+  randomSprite: {fileID: 21300000, guid: 2d0e9135cdc2a634a9b3af0c9736bd43, type: 3}
+  individualAttackSprite: {fileID: 21300000, guid: 7f1c4fc781974024e9dda8e339b25da5, type: 3}
+  groupAttackSprite: {fileID: 21300000, guid: a5e383167e34cb54cb571e41dafa3bc7, type: 3}
+  allAttackSprite: {fileID: 21300000, guid: cc22199ba200b9a4791cc16b265e7fe4, type: 3}
+  individualGuardSprite: {fileID: 21300000, guid: 4b79e0c41705157448d1166fe597da35, type: 3}
+  groupGuardSprite: {fileID: 21300000, guid: d7ee3a2b7e70e2b40a7e9b485409d576, type: 3}
+  allGuardSprite: {fileID: 21300000, guid: fb84490116c7ce043a63f56f0c3fd520, type: 3}
 --- !u!1 &7118888707369416836
 GameObject:
   m_ObjectHideFlags: 0

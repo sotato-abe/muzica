@@ -62,7 +62,7 @@ public class EquipmentInfo : MonoBehaviour
 
     private void SetTargetIcon()
     {
-        targetIcon.SetTargetType(TargetType);
+        targetIcon.SetTargetType(equipment.EquipmentBase.EquipmentType, TargetType);
     }
 
     private void SetEnchants()
