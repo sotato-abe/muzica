@@ -273,7 +273,6 @@ public class PlayerController : MonoBehaviour
 
         if (PlayerCharacter.ColStorage <= PlayerCharacter.StorageList.Count)
         {
-            Debug.LogWarning("ストレージの容量を超えています。コマンドを追加できません。");
             FieldController.Instance.DropPlayerCommand(command);
             return;
         }
@@ -293,7 +292,6 @@ public class PlayerController : MonoBehaviour
         if (PlayerCharacter.StorageList.Contains(command))
         {
             PlayerCharacter.StorageList.Remove(command);
-            Debug.Log($"ストレージからコマンドを削除しました: {command.Base.Name}");
         }
         else
         {

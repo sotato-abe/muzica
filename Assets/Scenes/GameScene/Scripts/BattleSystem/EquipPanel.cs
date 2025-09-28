@@ -59,6 +59,7 @@ public class EquipPanel : BattleActionPanel
 
     private void OnEnable()
     {
+        Debug.Log("EquipPanel Enabled");
         SetEquipment();
         ShowTargetting();
     }
@@ -153,6 +154,7 @@ public class EquipPanel : BattleActionPanel
 
     public void SetTargetting()
     {
+        Debug.Log($"Setting Targetting : Type {currentEquipment?.EquipmentBase.TargetType}");
         ClearTarget();
         if (currentEquipment == null)
             return;
@@ -187,6 +189,7 @@ public class EquipPanel : BattleActionPanel
     
     private void SetTargetEnemyPanel(int index)
     {
+        Debug.Log($"Setting Target Enemy Panels: {index}");
         foreach (var subPanel in enemySubPanels)
         {
             if (subPanel.isOpen && targetSubPanels.Count < index)
@@ -358,7 +361,7 @@ public class EquipPanel : BattleActionPanel
     public void LifeOutEnemy()
     {
         if (!this.gameObject.activeInHierarchy) return;
-        
+        Debug.Log("Enemy Life Out Detected in EquipPanel");
         SetEquipment();
         SetTargetting();
     }

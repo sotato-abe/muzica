@@ -38,6 +38,10 @@ public static class EnchantTypeExtensions
     {
         return enchant switch
         {
+            EnchantType.Acceleration => true,
+            EnchantType.Lucky => true,
+            EnchantType.Gaze => true,
+            EnchantType.Analysis => true,
             EnchantType.Power => true,
             EnchantType.Adrenalin => true,
             EnchantType.Guard => true,
@@ -46,10 +50,6 @@ public static class EnchantTypeExtensions
             EnchantType.Splinter => true,
             EnchantType.Reflection => true,
             EnchantType.Camouflage => true,
-            EnchantType.Gaze => true,
-            EnchantType.Analysis => true,
-            EnchantType.Acceleration => true,
-            EnchantType.Lucky => true,
             EnchantType.Clear => true,
             _ => false
         };

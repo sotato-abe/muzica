@@ -243,7 +243,7 @@ public class Character
                         int damageToGuard = Mathf.Min(LifeGuard, damage);
                         LifeGuard -= damageToGuard;
                         int remainingDamage = damage - damageToGuard;
-                        int colAttackEnergy = Mathf.Max(0, remainingDamage - ColDefense);
+                        int colAttackEnergy = Mathf.Max(0, remainingDamage);
                         Life = Mathf.Clamp(Life - colAttackEnergy, 0, MaxLife);
                     }
                     break;
@@ -256,7 +256,7 @@ public class Character
                         int damageToGuard = Mathf.Min(BatteryGuard, damage);
                         BatteryGuard -= damageToGuard;
                         int remainingDamage = damage - damageToGuard;
-                        int colAttackEnergy = Mathf.Max(0, remainingDamage - ColTechnique);
+                        int colAttackEnergy = Mathf.Max(0, remainingDamage);
                         Battery = Mathf.Clamp(Battery - colAttackEnergy, 0, MaxBattery);
                     }
                     break;
