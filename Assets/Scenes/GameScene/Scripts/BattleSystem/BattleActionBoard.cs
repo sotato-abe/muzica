@@ -167,12 +167,12 @@ public class BattleActionBoard : SlidePanel
             if (currentAction == BattleActionType.Equip1)
             {
                 // 現在のパネルを取得
-                equipPanel1.ExecuteAttack();
+                equipPanel1.ExecuteEquipAction();
             }
             else if (currentAction == BattleActionType.Equip2)
             {
                 // 現在のパネルを取得
-                equipPanel2.ExecuteAttack();
+                equipPanel2.ExecuteEquipAction();
             }
         }
     }
