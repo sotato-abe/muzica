@@ -80,7 +80,6 @@ public class OptionGroup : MonoBehaviour
             else
             {
                 p.ClosePanel();
-                StopTimeState(false);
             }
         }
     }

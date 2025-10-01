@@ -23,6 +23,7 @@ public class WorldMapController : MonoBehaviour
     [SerializeField] WorldMapRender worldMapRender;
     [SerializeField] WorldMapPanel worldMapPanel;
     [SerializeField] AgeTimePanel ageTimePanel;
+    [SerializeField] MessagePanel messagePanel;
 
     private void Awake()
     {
@@ -78,7 +79,15 @@ public class WorldMapController : MonoBehaviour
         fieldData.isBottomOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.down);
         fieldData.isRightOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.right);
         fieldData.isLeftOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.left);
-        worldMapPanel.SetFieldName(fieldData.FieldName);
+        if (fieldData.FieldName != "")
+        {
+            worldMapPanel.SetFieldName(fieldData.FieldName);
+            messagePanel.AddMessage(MessageIconType.Field, fieldData.FieldName + "に到着した。");
+        }
+        else
+        {
+            worldMapPanel.SetFieldName("");
+        }
         FieldController.Instance.SetField(fieldData);
         fieldGenerator.SetField(fieldData, fieldTileSet);
     }

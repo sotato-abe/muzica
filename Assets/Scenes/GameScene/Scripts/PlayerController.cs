@@ -18,12 +18,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private PlayerCharacter defaultPlayer; // 初期用だけ
     [SerializeField] private SaveManagement saveManagement;
     [SerializeField] private FieldPlayer fieldPlayer;
+    [SerializeField] private MessagePanel messagePanel;
     #endregion
 
     public PlayerCharacter PlayerCharacter { get; private set; }
     public event System.Action<PlayerCharacter> OnPlayerCharacterSet;
     public EventType CurrentEventType { get; private set; } = EventType.Default;
-    [SerializeField] private MessagePanel messagePanel;
 
     #region Unity Lifecycle
     void Awake()
