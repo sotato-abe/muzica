@@ -56,7 +56,7 @@ public class BattleSystem : MonoBehaviour
         PlayerController.Instance.ChangeEventType(EventType.Battle); // イベントタイプをバトルに変更
 
         cameraManager.SetEventType(EventType.Battle); // バトル時のカメラ位置を設定
-        messagePanel.SetActive(false); // メッセージパネルを表示
+        // messagePanel.SetActive(false); // メッセージパネルを表示
         worldMapPanel.SetActive(false); // ワールドマップパネルを非表示
         savePanel.SetActive(false); // セーブパネルを非表示
 
@@ -251,7 +251,7 @@ public class BattleSystem : MonoBehaviour
         void CheckAllComplete()
         {
             completed++;
-            if (completed >= 8)
+            if (completed >= 7)
             {
                 OnBattleEnd?.Invoke();
                 transform.gameObject.SetActive(false);
@@ -271,7 +271,7 @@ public class BattleSystem : MonoBehaviour
         enemySubPanel2.SetActive(false, CheckAllComplete); // キャラクターサブパネルを非表示にする
         enemySubPanel3.SetActive(false, CheckAllComplete); // キャラクターサブパネルを非表示にする
 
-        messagePanel.SetActive(true, CheckAllComplete); // メッセージパネルを表示
+        // messagePanel.SetActive(true, CheckAllComplete); // メッセージパネルを表示
         worldMapPanel.SetActive(true, CheckAllComplete); // ワールドマップパネルを表示
         savePanel.SetActive(true, CheckAllComplete); // セーブパネルを表示
         cameraManager.SetEventType(EventType.Default); // バトル時のカメラ位置を設定

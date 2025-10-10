@@ -17,7 +17,7 @@ public class MessagePrefab : MonoBehaviour
     private int lineWidth = 700;
     private int minHeight = 50;
     private float padding = 0f;
-    private float waitingTime = 8.0f;
+    private float waitingTime = 15.0f;
 
     private Message currentMessage;
 

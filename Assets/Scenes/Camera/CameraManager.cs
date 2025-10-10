@@ -8,7 +8,7 @@ public class CameraManager : MonoBehaviour
     public float smoothSpeed = 5f; // 追従のなめらかさ
     public Vector3 offset; // 追跡位置のズレ
 
-    private Vector3 defaultPosition = new Vector3(0, 0, 0); // 通常時のカメラ位置
+    private Vector3 defaultPosition = new Vector3(-1.0f, 0, 0); // 通常時のカメラ位置
     private Vector3 battlePosition = new Vector3(0, -0.5f, 0); // バトル時のカメラ位置
     private Vector3 tradePosition = new Vector3(0, 2.5f, 0); // 取引時のカメラ位置
     private Vector3 reservePosition = new Vector3(0, 2.5f, 0); // 準備時のカメラ位置

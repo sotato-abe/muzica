@@ -82,7 +82,7 @@ public class WorldMapController : MonoBehaviour
         if (fieldData.FieldName != "")
         {
             worldMapPanel.SetFieldName(fieldData.FieldName);
-            messagePanel.AddMessage(MessageIconType.Field, fieldData.FieldName + "に到着した。");
+            messagePanel.AddMessage(MessageIconType.Field, fieldData.FieldName + "に到着した");
         }
         else
         {

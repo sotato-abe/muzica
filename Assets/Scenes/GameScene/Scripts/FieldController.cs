@@ -117,7 +117,7 @@ public class FieldController : MonoBehaviour
         }
 
         // メッセージパネルにメッセージを表示
-        messagePanel.AddMessage(MessageIconType.Field, $"{point.Base.Name} にアクセス。");
+        messagePanel.AddMessage(MessageIconType.Field, $"{point.Base.Name} にアクセス");
         OnPointEnter?.Invoke(point); // リザーブイベントを発火
     }
 
@@ -125,13 +125,13 @@ public class FieldController : MonoBehaviour
     {
         if (Random.Range(0, 100f) < ITEM_GET_PROBABILITY)
         {
-            messagePanel.AddMessage(MessageIconType.Treasure, $"宝ばこはカラだった。");
+            messagePanel.AddMessage(MessageIconType.Treasure, $"宝ばこはカラだった");
             return;
         }
 
         if (currentFieldData == null || currentFieldData.TreasureBoxItems.Count == 0)
         {
-            messagePanel.AddMessage(MessageIconType.Treasure, $"宝ばこはカラだった。");
+            messagePanel.AddMessage(MessageIconType.Treasure, $"宝ばこはカラだった");
             return;
         }
 
@@ -149,7 +149,7 @@ public class FieldController : MonoBehaviour
             if (randomValue <= cumulative)
             {
                 // ここでインベントリに追加する処理を入れればOK
-                messagePanel.AddMessage(MessageIconType.Treasure, $"{item.Name}を手に入れた。");
+                messagePanel.AddMessage(MessageIconType.Treasure, $"{item.Name}を手に入れた");
                 // item newItem = new 
 
                 Item newItem;

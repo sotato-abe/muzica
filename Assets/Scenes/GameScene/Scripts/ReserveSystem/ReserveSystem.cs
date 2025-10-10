@@ -37,7 +37,7 @@ public class ReserveSystem : MonoBehaviour
 
         cameraManager.SetEventType(EventType.Reserve); // 準備時のカメラ位置を設定
 
-        messagePanel.SetActive(false); // メッセージパネルを表示
+        // messagePanel.SetActive(false); // メッセージパネルを表示
         worldMapPanel.SetActive(false); // ワールドマップパネルを非表示
         savePanel.SetActive(false); // セーブパネルを非表示
 
@@ -54,7 +54,7 @@ public class ReserveSystem : MonoBehaviour
         void CheckAllComplete()
         {
             completed++;
-            if (completed >= 6)
+            if (completed >= 5)
             {
                 OnReserveEnd?.Invoke();
                 transform.gameObject.SetActive(false);
@@ -64,7 +64,7 @@ public class ReserveSystem : MonoBehaviour
         footer.SetActive(false, CheckAllComplete); // フッターを非表示にする
         playerSubPanel.SetActive(false, CheckAllComplete); // キャラクターサブパネルを非表示にする
 
-        messagePanel.SetActive(true, CheckAllComplete); // メッセージパネルを表示
+        // messagePanel.SetActive(true, CheckAllComplete); // メッセージパネルを表示
         worldMapPanel.SetActive(true, CheckAllComplete); // ワールドマップパネルを表示
         savePanel.SetActive(true, CheckAllComplete); // セーブパネルを表示
         cameraManager.SetEventType(EventType.Default); // 通常時のカメラ位置を設定
