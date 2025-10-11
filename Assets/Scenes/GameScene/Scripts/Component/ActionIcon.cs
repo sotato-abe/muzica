@@ -33,7 +33,7 @@ public class ActionIcon : MonoBehaviour
         isActive = activeFlg;
         StopAllCoroutines();
         SetColor(isActive);
-        iconText.gameObject.SetActive(isActive);
+        // iconText.gameObject.SetActive(isActive);
         float targetSize = isActive ? defaultSize * activeScale : defaultSize;
         StartCoroutine(ResizeOverTime(targetSize));
     }

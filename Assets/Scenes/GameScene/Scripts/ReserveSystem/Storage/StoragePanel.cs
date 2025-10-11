@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class StoragePanel : Panel
+public class StoragePanel : SlidePanel
 {
     [SerializeField] StorageWindow storageWindow;
     [SerializeField] SlotSettingWindow slotSettingWindow;

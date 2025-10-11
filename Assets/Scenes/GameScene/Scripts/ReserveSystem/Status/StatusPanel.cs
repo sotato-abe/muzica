@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class StatusPanel : Panel
+public class StatusPanel : SlidePanel
 {
     PlayerCharacter player;
     [SerializeField] CharacterCard characterCard;
