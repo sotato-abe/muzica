@@ -11,9 +11,10 @@ public class EscapePanel : BattleActionPanel
     public UnityAction OnActionEnd;
 
     [SerializeField] TextMeshProUGUI probabilityText;
-    [SerializeField] TextMeshProUGUI lifeCostText;
-    [SerializeField] TextMeshProUGUI batteryCostText;
-    [SerializeField] TextMeshProUGUI soulCostText;
+
+    [SerializeField] CostIconPrefab costIconPrefab;
+    [SerializeField] GameObject costList;
+
     [SerializeField] Image runningBar1;
     [SerializeField] Image runningBar2;
     [SerializeField] Image runningBar3;
@@ -26,6 +27,9 @@ public class EscapePanel : BattleActionPanel
     int lifeCost = 0;
     int batteryCost = 0;
     int soulCost = 0;
+
+    private List<EnergyCost> energyCostList = new List<EnergyCost>();
+
     int probability = 0;
     private bool isEscaping = false;
 
@@ -82,9 +86,29 @@ public class EscapePanel : BattleActionPanel
         batteryCost = Mathf.Max(0, player.Battery / 10);
         soulCost = player.Soul / 2;
 
-        lifeCostText.SetText(lifeCost.ToString());
-        batteryCostText.SetText(batteryCost.ToString());
-        soulCostText.SetText(soulCost.ToString());
+        energyCostList.Clear();
+        if (lifeCost > 0)
+            energyCostList.Add(new EnergyCost(EnergyType.Life, lifeCost));
+        if (batteryCost > 0)
+            energyCostList.Add(new EnergyCost(EnergyType.Battery, batteryCost));
+        if (soulCost > 0)
+            energyCostList.Add(new EnergyCost(EnergyType.Soul, soulCost));
+        SetCost(energyCostList);
+    }
+
+    private void SetCost(List<EnergyCost> energyCostList)
+    {
+        foreach (Transform child in costList.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // Costを表示する処理
+        foreach (var cost in energyCostList)
+        {
+            CostIconPrefab newCost = Instantiate(costIconPrefab, costList.transform);
+            newCost.SetCostIcon(cost);
+        }
     }
 
     private IEnumerator Escape()

@@ -60,6 +60,23 @@ public class EquipmentInfo : MonoBehaviour
         SetAttacks();
     }
 
+    public void ClearInfo()
+    {
+        equipment = new Equipment(null);
+        TargetType = TargetType.Individual;
+        targetIcon.ClearIcon();
+        EnchantList.Clear();
+        foreach (Transform child in enchantList.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        EnergyAttackList.Clear();
+        foreach (Transform child in counterList.transform)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
     private void SetTargetIcon()
     {
         targetIcon.SetTargetType(equipment.EquipmentBase.EquipmentType, TargetType);

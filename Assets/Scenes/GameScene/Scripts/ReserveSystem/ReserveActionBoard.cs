@@ -10,6 +10,7 @@ public class ReserveActionBoard : SlidePanel
     [SerializeField] private BagPanel bagPanel;
     [SerializeField] private StoragePanel storagePanel;
     [SerializeField] private StatusPanel statusPanel;
+    
     [SerializeField] private ActionIcon bagIcon;
     [SerializeField] private ActionIcon storageIcon;
     [SerializeField] private ActionIcon statusIcon;

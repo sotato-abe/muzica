@@ -93,7 +93,7 @@ public class TradeSystem : MonoBehaviour
             }
         }
 
-        tradeActionBoard.SetActive(false, CheckAllComplete); // リザーブアクションボードを表示
+        tradeActionBoard.ClosePanel(CheckAllComplete); // リザーブアクションボードを表示
         playerSubPanel.SetActive(false, CheckAllComplete); // キャラクターサブパネルを表示
         ownerSubPanel.SetActive(false, CheckAllComplete); // キャラクターサブパネルを表示
         // messagePanel.SetActive(true, CheckAllComplete); // メッセージパネルを表示

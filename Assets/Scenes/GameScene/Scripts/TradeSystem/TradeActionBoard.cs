@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -15,8 +16,9 @@ public class TradeActionBoard : SlidePanel
     [SerializeField] private ActionIcon itemIcon;
     [SerializeField] private ActionIcon commandIcon;
     [SerializeField] private ActionIcon quitIcon;
+    [SerializeField] private StatusText statusText;
 
-    private Dictionary<TradeActionType, Panel> actionPanels;
+    private Dictionary<TradeActionType, TwoColumnPanel> actionPanels;
     private Dictionary<TradeActionType, ActionIcon> actionIcons;
     private List<TradeActionType> actionTypeList;
     private TradeActionType currentAction = TradeActionType.Talk;
@@ -27,7 +29,7 @@ public class TradeActionBoard : SlidePanel
     {
         talkIcon.gameObject.SetActive(true);
         currentAction = TradeActionType.Talk;
-        actionPanels = new Dictionary<TradeActionType, Panel>
+        actionPanels = new Dictionary<TradeActionType, TwoColumnPanel>
         {
             {  TradeActionType.Talk, talkPanel },
             {  TradeActionType.Item, itemTradePanel },
@@ -51,13 +53,13 @@ public class TradeActionBoard : SlidePanel
     public void SetWithOutTalkActive()
     {
         talkIcon.gameObject.SetActive(false);
-        talkPanel.ClosePanel();
+        talkPanel.SetActive(false);
         if (currentAction == TradeActionType.Talk)
         {
             currentAction = TradeActionType.Item;
         }
 
-        actionPanels = new Dictionary<TradeActionType, Panel>
+        actionPanels = new Dictionary<TradeActionType, TwoColumnPanel>
         {
             {  TradeActionType.Item, itemTradePanel },
             {  TradeActionType.Command, commandTradePanel },
@@ -163,6 +165,7 @@ public class TradeActionBoard : SlidePanel
     {
         if (currentAction == TradeActionType.Quit)
         {
+            statusText.SetText(currentAction.GetActionText()); // ステータステキストを更新
             return;
         }
 
@@ -170,12 +173,27 @@ public class TradeActionBoard : SlidePanel
         {
             if (kvp.Key == currentAction)
             {
-                kvp.Value.PanelOpen();
+                kvp.Value.gameObject.SetActive(true);
+                kvp.Value.SetActive(true);
+                statusText.SetText(kvp.Key.GetActionText()); // ステータステキストを更新
             }
             else
             {
-                kvp.Value.ClosePanel();
+                kvp.Value.SetActive(false);
             }
         }
+    }
+
+    public void ClosePanel(Action onComplete = null)
+    {
+        foreach (var kvp in actionPanels)
+        {
+            if (kvp.Key == currentAction)
+            {
+                kvp.Value.SetActive(false);
+            }
+        }
+        this.SetActive(false);
+        onComplete?.Invoke();
     }
 }

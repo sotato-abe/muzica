@@ -5,15 +5,16 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Events;
 
-public class ItemTradePanel : Panel
+public class ItemTradePanel : TwoColumnPanel
 {
-    [SerializeField] ShopItemWindow shopItemWindow;
-    [SerializeField] TargetItemWindow targetItemWindow;
     [SerializeField] BagCategory bagCategory;
     [SerializeField] InventoryWindow inventoryWindow;
     [SerializeField] EquipmentSimpleSlot rightHandSlot;
     [SerializeField] EquipmentSimpleSlot leftHandSlot;
     [SerializeField] PocketWindow pocketWindow;
+    [SerializeField] TargetItemWindow targetItemWindow;
+
+    [SerializeField] ShopItemWindow shopItemWindow;
 
     public delegate void OwnerMessageDelegate(TalkMessage message);
     public event OwnerMessageDelegate OnOwnerMessage;
