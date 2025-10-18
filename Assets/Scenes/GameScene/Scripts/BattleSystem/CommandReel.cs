@@ -17,6 +17,7 @@ public class CommandReel : Panel
     private float slotHeight;
 
     private int padding = 20; // スロットの間隔
+    private float centerY = 60f; // 中央位置のY座標
 
     private void Start()
     {
@@ -63,6 +64,10 @@ public class CommandReel : Panel
             Command command = PlayerController.Instance.PlayerCharacter.SlotList[i];
             commands.Add(command);
         }
+        for (int i = 0; i < reelSlots.Count; i++)
+        {
+            reelSlots[i].SetCommand(commands[i % commands.Count]);
+        }
     }
 
     private void ScrollSlots()
@@ -78,11 +83,6 @@ public class CommandReel : Panel
             {
                 pos.y += (slotHeight + padding) * reelSlots.Count;
                 slotRects[i].anchoredPosition = pos;
-
-                // 順番にスプライトを変更
-                int nextIndex = currentCommandIndices[i];
-                reelSlots[i].SetCommand(commands[nextIndex]);
-                currentCommandIndices[i] = (currentCommandIndices[i] + 1) % commands.Count;
             }
         }
     }
@@ -109,7 +109,6 @@ public class CommandReel : Panel
         CommandImage closestSlot = null;
         float minDistance = float.MaxValue;
         int closestIndex = -1;
-        float centerY = 75f;
 
         // 最も近いスロットを見つける
         for (int i = 0; i < reelSlots.Count; i++)
@@ -127,7 +126,7 @@ public class CommandReel : Panel
 
         if (closestSlot != null)
         {
-            float offsetY = slotRects[closestIndex].anchoredPosition.y - centerY;
+            float offsetY = slotRects[closestIndex].anchoredPosition.y + centerY;
             Vector2[] startPositions = new Vector2[slotRects.Length];
             Vector2[] targetPositions = new Vector2[slotRects.Length];
 
@@ -174,14 +173,10 @@ public class CommandReel : Panel
     {
         CommandImage closestSlot = null;
         float minDistance = float.MaxValue;
-        float centerY = 75f;
 
-        // 各スロットの中央からの距離を計算
         for (int i = 0; i < reelSlots.Count; i++)
         {
-            float slotCenterY = slotRects[i].anchoredPosition.y;
-            float distance = Mathf.Abs(slotCenterY + centerY);
-
+            float distance = Mathf.Abs(slotRects[i].anchoredPosition.y + centerY);
             if (distance < minDistance)
             {
                 minDistance = distance;
@@ -191,5 +186,4 @@ public class CommandReel : Panel
 
         return closestSlot;
     }
-
 }

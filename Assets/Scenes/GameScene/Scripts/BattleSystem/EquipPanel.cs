@@ -53,7 +53,7 @@ public class EquipPanel : BattleActionPanel
         foreach (var subPanel in enemySubPanels)
         {
             subPanel.OnTarget += ChangeTargetEnemy;
-            subPanel.OnLifeOut += LifeOutEnemy; // 敵のサブパネルのライフアウトイベントを登録
+            subPanel.OnLifeOut += LifeOutEnemy;
         }
     }
 
@@ -293,8 +293,8 @@ public class EquipPanel : BattleActionPanel
 
     public void LifeOutEnemy()
     {
+        // gameObjectが非アクティブの場合は処理を中断
         if (!this.gameObject.activeInHierarchy) return;
-        Debug.Log("Enemy Life Out Detected in EquipPanel");
         SetEquipment();
         SetTargetting();
     }

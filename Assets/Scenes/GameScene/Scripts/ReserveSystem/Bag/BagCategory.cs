@@ -27,6 +27,18 @@ public class BagCategory : MonoBehaviour
         OnChangeWindow?.Invoke(false);
     }
 
+    public void SwitchActiveButton()
+    {
+        if (backPanel.transform.position == equipmentButton.transform.position)
+        {
+            SetPocketButtonActive();
+        }
+        else
+        {
+            SetEquipmentButtonActive();
+        }
+    }
+
     private IEnumerator SlidePanel(GameObject targetButton)
     {
         Vector3 targetPosition = targetButton.transform.position;

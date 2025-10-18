@@ -9,6 +9,7 @@ using UnityEngine.EventSystems;
 
 public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
 {
+    // public UnityAction OnEnergyOut;
     [SerializeField] Image characterImage;
     [SerializeField] Image frame;
     [SerializeField] Image nameFrame;

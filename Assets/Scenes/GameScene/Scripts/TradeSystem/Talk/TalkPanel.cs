@@ -34,6 +34,14 @@ public class TalkPanel : TwoColumnPanel
         ChangeWindow(true);
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            bagCategory.SwitchActiveButton();
+        }
+    }
+
     public void TargetItem(Item item, bool isOwn = true)
     {
         targetItemWindow.TargetItem(item, isOwn);

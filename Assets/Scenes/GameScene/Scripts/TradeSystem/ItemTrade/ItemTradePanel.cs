@@ -18,7 +18,8 @@ public class ItemTradePanel : TwoColumnPanel
 
     public delegate void OwnerMessageDelegate(TalkMessage message);
     public event OwnerMessageDelegate OnOwnerMessage;
-    
+    bool isBag = true;
+
     private void Start()
     {
         shopItemWindow.OnTargetItem += TargetItem;
@@ -31,13 +32,22 @@ public class ItemTradePanel : TwoColumnPanel
         ChangeWindow(true);
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            bagCategory.SwitchActiveButton();
+        }
+    }
+
     public void TargetItem(Item item, bool isOwn = true)
     {
         targetItemWindow.TargetItem(item, isOwn);
     }
 
-    public void ChangeWindow(bool isBag)
+    public void ChangeWindow(bool isBag = false)
     {
+        this.isBag = isBag;
         inventoryWindow.gameObject.SetActive(isBag);
         pocketWindow.gameObject.SetActive(!isBag);
     }

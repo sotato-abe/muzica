@@ -28,6 +28,14 @@ public class CommandTradePanel : TwoColumnPanel
         ChangeWindow(true);
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            bagCategory.SwitchActiveButton();
+        }
+    }
+
     public void TargetCommand(Command Command, bool isOwn = true)
     {
         targetCommandWindow.TargetCommand(Command, isOwn);
