@@ -67,7 +67,7 @@ public class BlowingPanel : MonoBehaviour
         yield return typingCoroutine;
         typingCoroutine = null;
 
-        float waitTime = Mathf.Clamp(talkMessage.message.Length * 0.2f, 2f, 6f); // 最小2秒、最大6秒
+        float waitTime = Mathf.Clamp(talkMessage.message.Length * 0.2f, 3f, 10f); // 最小3秒、最大10秒
         yield return new WaitForSeconds(waitTime);
 
         messageCoroutine = null;
@@ -78,7 +78,7 @@ public class BlowingPanel : MonoBehaviour
     {
         gameObject.SetActive(true);
         messageList.Add(talkMessage);
-        if (messageCoroutine == null)
+        if (messageCoroutine == null)   
         {
             if (gameObject.activeSelf)
             {
