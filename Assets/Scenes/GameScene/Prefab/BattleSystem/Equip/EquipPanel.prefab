@@ -1147,6 +1147,7 @@ MonoBehaviour:
   equipWindow: {fileID: 2249003143194350057}
   slotWindow: {fileID: 4177861739781360988}
   equipmentInfo: {fileID: 6775050055191546219}
+  activeButtonImage: {fileID: 1707130889460616601}
   playerSubPanel: {fileID: 0}
   enemySubPanel1: {fileID: 0}
   enemySubPanel2: {fileID: 0}
@@ -1214,7 +1215,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9411765, g: 0.34669262, b: 0, a: 1}
+  m_Color: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1277,7 +1278,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 5257036897774954934}
         m_TargetAssemblyTypeName: EquipPanel, Assembly-CSharp
-        m_MethodName: ExecuteAttack
+        m_MethodName: ExecuteEquipAction
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

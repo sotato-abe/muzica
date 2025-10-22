@@ -14,6 +14,7 @@ public class EscapePanel : BattleActionPanel
 
     [SerializeField] CostIconPrefab costIconPrefab;
     [SerializeField] GameObject costList;
+    [SerializeField] private Image activeButtonImage;
 
     [SerializeField] Image runningBar1;
     [SerializeField] Image runningBar2;
@@ -23,6 +24,9 @@ public class EscapePanel : BattleActionPanel
     List<Character> enemyList = new List<Character>();
     Color activeColor = new Color(168f / 255f, 255f / 255f, 0f / 255f, 200f / 255f);
     Color stopColor = new Color(255f / 255f, 255f / 255f, 255f / 255f, 10f / 255f);
+
+    private Color defaultButtonColor = new Color(130f / 255f, 130f / 255f, 130f / 255f, 255f / 255f);
+    private Color activeButtonColor = new Color(240f / 255f, 88f / 255f, 0f / 255f, 255f / 255f);
 
     int lifeCost = 0;
     int batteryCost = 0;
@@ -38,6 +42,10 @@ public class EscapePanel : BattleActionPanel
     {
         ProbabilityCalculation();
         CountEnergyCost();
+        if (canExecuteActionFlg)
+            activeButtonImage.color = activeButtonColor;
+        else
+            activeButtonImage.color = defaultButtonColor;
     }
 
     private void Update()
@@ -64,6 +72,15 @@ public class EscapePanel : BattleActionPanel
         this.enemyList = enemyList;
         ProbabilityCalculation();
         CountEnergyCost();
+    }
+
+    public override void ChangeExecuteActionFlg(bool canExecute)
+    {
+        base.ChangeExecuteActionFlg(canExecute);
+        if (canExecute)
+            activeButtonImage.color = activeButtonColor;
+        else
+            activeButtonImage.color = defaultButtonColor;
     }
 
     private void ProbabilityCalculation()
