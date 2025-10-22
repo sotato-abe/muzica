@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -53,7 +54,7 @@ public class EquipPanel : BattleActionPanel
         foreach (var subPanel in enemySubPanels)
         {
             subPanel.OnTarget += ChangeTargetEnemy;
-            subPanel.OnLifeOut += LifeOutEnemy;
+            subPanel.OnLifeOutAction += LifeOutEnemy;
         }
     }
 
@@ -285,17 +286,20 @@ public class EquipPanel : BattleActionPanel
     {
         if (currentEquipment == null)
         {
-            Debug.LogWarning("現在の装備が設定されていません。");
+            UnityEngine.Debug.LogWarning("現在の装備が設定されていません。");
             return false;
         }
         return true;
     }
 
-    public void LifeOutEnemy()
+    public void LifeOutEnemy(CharacterSubPanel enemySubPanel)
     {
         // gameObjectが非アクティブの場合は処理を中断
         if (!this.gameObject.activeInHierarchy) return;
-        SetEquipment();
+        // targetSubPanelsからライフアウトした敵のサブパネルを削除
+        UnityEngine.Debug.Log($"Enemy Life Out Detected : {currentEquipment.EquipmentBase?.Name}");
+        targetSubPanels.Remove(enemySubPanel);
+        // SetEquipment();
         SetTargetting();
     }
 }

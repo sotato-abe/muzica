@@ -12,7 +12,7 @@ public class AutoButton : MonoBehaviour
     bool isAuto = false;
     public bool IsAuto { get { return isAuto; } }
 
-    Color activeColor = new Color(0 / 255f, 211f / 255f, 205f / 255f, 255f / 255f);
+    Color activeColor = new Color(255f / 255f, 0f / 255f, 57f / 255f, 255f / 255f);
     Color stopColor = new Color(95f / 255f, 0f / 255f, 255f / 255f, 255f / 255f);
 
     private void OnEnable()
@@ -32,12 +32,12 @@ public class AutoButton : MonoBehaviour
         this.isAuto = isAuto;
         if (isAuto)
         {
-            buttonText.text = "Auto";
+            buttonText.text = "自動";
             buttonImage.color = activeColor;
         }
         else
         {
-            buttonText.text = "Manual";
+            buttonText.text = "手動";
             buttonImage.color = stopColor;
         }
     }
