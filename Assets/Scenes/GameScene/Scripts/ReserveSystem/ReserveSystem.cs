@@ -36,8 +36,6 @@ public class ReserveSystem : MonoBehaviour
         PlayerController.Instance.ChangeEventType(EventType.Reserve); // イベントタイプをリザーブに変更
 
         cameraManager.SetEventType(EventType.Reserve); // 準備時のカメラ位置を設定
-
-        // messagePanel.SetActive(false); // メッセージパネルを表示
         worldMapPanel.SetActive(false); // ワールドマップパネルを非表示
         optionButtonList.SetActive(false); // オプションボタンリストを非表示
 
@@ -64,7 +62,6 @@ public class ReserveSystem : MonoBehaviour
         footer.SetActive(false, CheckAllComplete); // フッターを非表示にする
         playerSubPanel.SetActive(false, CheckAllComplete); // キャラクターサブパネルを非表示にする
 
-        // messagePanel.SetActive(true, CheckAllComplete); // メッセージパネルを表示
         worldMapPanel.SetActive(true, CheckAllComplete); // ワールドマップパネルを表示
         optionButtonList.SetActive(true, CheckAllComplete); // オプションボタンリストを表示
         cameraManager.SetEventType(EventType.Default); // 通常時のカメラ位置を設定

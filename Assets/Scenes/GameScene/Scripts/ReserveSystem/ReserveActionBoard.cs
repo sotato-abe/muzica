@@ -10,7 +10,7 @@ public class ReserveActionBoard : SlidePanel
     [SerializeField] private BagPanel bagPanel;
     [SerializeField] private StoragePanel storagePanel;
     [SerializeField] private StatusPanel statusPanel;
-    
+
     [SerializeField] private ActionIcon bagIcon;
     [SerializeField] private ActionIcon storageIcon;
     [SerializeField] private ActionIcon statusIcon;
@@ -45,6 +45,15 @@ public class ReserveActionBoard : SlidePanel
         ChangeActionPanel();
     }
 
+    private void OnEnable()
+    {
+        // 初回はアクティブなアイコンとアクションパネルを更新する
+        if (actionIcons == null || actionPanels == null) return;
+
+        ChangeActiveIcon();
+        ChangeActionPanel();
+    }
+
     private void Update()
     {
         if (!Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.RightShift))
@@ -63,7 +72,7 @@ public class ReserveActionBoard : SlidePanel
         {
             if (currentAction == ReserveActionType.Quit)
             {
-                OnReserveEnd?.Invoke(); // 予約終了イベントを呼び出す
+                OnReserveEnd?.Invoke();
             }
         }
     }
