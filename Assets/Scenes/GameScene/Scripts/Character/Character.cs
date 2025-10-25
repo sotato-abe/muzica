@@ -236,28 +236,47 @@ public class Character
             {
                 case EnergyType.Life:
                     if (energyAttack.isRecovery)
+                    {
                         Life = Mathf.Clamp(Life + (int)(energyAttack.val * energyAttack.times), 0, MaxLife);
+                        SoundSystem.Instance.PlaySE(SeType.Recovery);
+                    }
                     else
                     {
-                        int damage = Mathf.Max(0, (int)(energyAttack.val * energyAttack.times)); // 総ダメージ
-                        int damageToGuard = Mathf.Min(LifeGuard, damage);
-                        LifeGuard -= damageToGuard;
-                        int remainingDamage = damage - damageToGuard;
-                        int colAttackEnergy = Mathf.Max(0, remainingDamage);
-                        Life = Mathf.Clamp(Life - colAttackEnergy, 0, MaxLife);
+                        int totalDamage = Mathf.Max(0, (int)(energyAttack.val * energyAttack.times));
+                        int remainingDamage = Mathf.Max(0, totalDamage - LifeGuard);
+
+                        LifeGuard = Mathf.Max(0, LifeGuard - totalDamage);
+                        if (remainingDamage > 0)
+                        {
+                            Life = Mathf.Clamp(Life - remainingDamage, 0, MaxLife);
+                            SoundSystem.Instance.PlaySE(SeType.Damage);
+                        }
+                        else
+                        {
+                            SoundSystem.Instance.PlaySE(SeType.Guard);
+                        }
                     }
                     break;
                 case EnergyType.Battery:
                     if (energyAttack.isRecovery)
+                    {
                         Battery = Mathf.Clamp(Battery + (int)(energyAttack.val * energyAttack.times), 0, MaxBattery);
+                        SoundSystem.Instance.PlaySE(SeType.Recovery);
+                    }
                     else
                     {
-                        int damage = Mathf.Max(0, (int)(energyAttack.val * energyAttack.times)); // 総ダメージ
-                        int damageToGuard = Mathf.Min(BatteryGuard, damage);
-                        BatteryGuard -= damageToGuard;
-                        int remainingDamage = damage - damageToGuard;
-                        int colAttackEnergy = Mathf.Max(0, remainingDamage);
-                        Battery = Mathf.Clamp(Battery - colAttackEnergy, 0, MaxBattery);
+                        int totalDamage = Mathf.Max(0, (int)(energyAttack.val * energyAttack.times)); // 総ダメージ
+                        int remainingDamage = Mathf.Max(0, totalDamage - BatteryGuard);
+                        BatteryGuard = Mathf.Max(0, BatteryGuard - totalDamage);
+                        if (remainingDamage > 0)
+                        {
+                            Battery = Mathf.Clamp(Battery - remainingDamage, 0, MaxBattery);
+                            SoundSystem.Instance.PlaySE(SeType.Damage);
+                        }
+                        else
+                        {
+                            SoundSystem.Instance.PlaySE(SeType.Guard);
+                        }
                     }
                     break;
                 case EnergyType.Soul:

@@ -34,6 +34,7 @@ public class ReserveSystem : MonoBehaviour
         if (PlayerController.Instance.CurrentEventType != EventType.Default)
             return;
         PlayerController.Instance.ChangeEventType(EventType.Reserve); // イベントタイプをリザーブに変更
+        SoundSystem.Instance.PlaySE(SeType.PanelOpen); // SEをオープンに変更
 
         cameraManager.SetEventType(EventType.Reserve); // 準備時のカメラ位置を設定
         worldMapPanel.SetActive(false); // ワールドマップパネルを非表示

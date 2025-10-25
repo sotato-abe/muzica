@@ -123,6 +123,7 @@ public class FieldController : MonoBehaviour
 
     public void OpenTreasureBox()
     {
+        SoundSystem.Instance.PlaySE(SeType.BoxOpen);
         if (Random.Range(0, 100f) < ITEM_GET_PROBABILITY)
         {
             messagePanel.AddMessage(MessageIconType.Treasure, $"宝ばこはカラだった");

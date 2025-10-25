@@ -398,6 +398,7 @@ public class PlayerController : MonoBehaviour
             Debug.LogWarning("お金またはディスクが不足しています。");
             return false;
         }
+        SoundSystem.Instance.PlaySE(SeType.UseCoin);
 
         PlayerCharacter.Coin -= coin;
         PlayerCharacter.Disc -= disc;

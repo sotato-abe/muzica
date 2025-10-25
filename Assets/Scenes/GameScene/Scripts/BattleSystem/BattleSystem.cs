@@ -65,6 +65,8 @@ public class BattleSystem : MonoBehaviour
         TalkMessage talkMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "なんだよ");
         StartCoroutine(playerSubPanel.SetTalkMessage(talkMessage)); // リザーブアクションボードを開く
         playerSubPanel.BattleStart(); // ターンバーを開始
+        SoundSystem.Instance.PlaySE(SeType.BattleStart);
+        SoundSystem.Instance.PlayBGM(BgmType.Battle);
         SetEnemy();
     }
 
@@ -276,5 +278,6 @@ public class BattleSystem : MonoBehaviour
         savePanel.SetActive(true, CheckAllComplete); // セーブパネルを表示
         cameraManager.SetEventType(EventType.Default); // バトル時のカメラ位置を設定
         PlayerController.Instance.ChangeEventType(EventType.Default); // イベントタイプをデフォルトに変更
+        SoundSystem.Instance.PlayBGM(BgmType.Field);
     }
 }
