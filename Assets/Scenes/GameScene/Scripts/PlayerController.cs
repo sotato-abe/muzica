@@ -538,13 +538,14 @@ public class PlayerController : MonoBehaviour
         {
             EnergyCount energyCount = totalCount.EnergyAttackList[i];
             int guardVal = Mathf.Max(0, (int)(energyCount.val * energyCount.times));
+            if (guardVal <= 0) continue;
             if (energyCount.type == EnergyType.Life)
             {
-                PlayerCharacter.LifeGuard += guardVal;
+                PlayerCharacter.UpdateLifeGuard(guardVal);
             }
             else if (energyCount.type == EnergyType.Battery)
             {
-                PlayerCharacter.BatteryGuard += guardVal;
+                PlayerCharacter.UpdateBatteryGuard(guardVal);
             }
         }
         UpdatePlayerEnergy();

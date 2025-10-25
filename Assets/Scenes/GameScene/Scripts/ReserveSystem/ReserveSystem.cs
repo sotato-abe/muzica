@@ -50,6 +50,7 @@ public class ReserveSystem : MonoBehaviour
     public void ResorveEnd()
     {
         int completed = 0;
+        SoundSystem.Instance.PlaySE(SeType.PanelClose);
         void CheckAllComplete()
         {
             completed++;

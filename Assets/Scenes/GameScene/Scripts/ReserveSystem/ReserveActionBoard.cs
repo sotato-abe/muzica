@@ -149,8 +149,10 @@ public class ReserveActionBoard : SlidePanel
 
     private void ChangeActionPanel()
     {
+        SoundSystem.Instance.PlaySE(SeType.Select);
         if (currentAction == ReserveActionType.Quit)
         {
+            SoundSystem.Instance.PlaySE(SeType.Select);
             statusText.SetText(currentAction.GetActionText()); // ステータステキストを更新
             return;
         }

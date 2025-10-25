@@ -163,6 +163,7 @@ public class TradeActionBoard : SlidePanel
 
     private void ChangeActionPanel()
     {
+        SoundSystem.Instance.PlaySE(SeType.Select);
         if (currentAction == TradeActionType.Quit)
         {
             statusText.SetText(currentAction.GetActionText()); // ステータステキストを更新

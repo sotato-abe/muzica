@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using System.Diagnostics;
 
 public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
 {
@@ -78,6 +79,7 @@ public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
         characterNameText.text = character.Base.Name;
         energyGauge.gameObject.SetActive(false);
         turnBar.gameObject.SetActive(false);
+        this.character.OnTalkMessage += SetMessageByType;
         SetRarityColor();
     }
 
@@ -101,6 +103,7 @@ public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
     public virtual void SetEnemy(Character character)
     {
         this.character = character;
+        this.character.OnTalkMessage += SetMessageByType;
         characterImage.sprite = character.Base.SquareSprite;
         characterNameText.text = character.Base.Name;
         energyGauge.gameObject.SetActive(true);
@@ -143,6 +146,7 @@ public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
 
     public void SetMessageByType(MessageType messageType)
     {
+        UnityEngine.Debug.Log($"Setting message of type: {messageType}");
         TalkMessage talkMessage = character.GetTalkMessageByType(messageType);
         if (talkMessage != null)
         {
@@ -171,7 +175,7 @@ public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
     {
         if (character == null)
         {
-            Debug.LogWarning("Character is not set.");
+            UnityEngine.Debug.LogWarning("Character is not set.");
             return;
         }
         energyGauge.SetLifeGauge(character.MaxLife, character.Life);
@@ -195,15 +199,13 @@ public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
         if (character == null) yield return null;
 
         StartCoroutine(JumpMotion());
-        TalkMessage talkMessage = character.GetTalkMessageByType(MessageType.Damage);
-        StartCoroutine(SetTalkMessage(talkMessage));
         character.TakeAttack(totalCount);
         yield return StartCoroutine(UpdateEnergyGauges());
 
         if (character.Life <= 0)
         {
-            Debug.LogWarning("戦闘不能");
-            talkMessage = character.GetTalkMessageByType(MessageType.Lose);
+            UnityEngine.Debug.LogWarning("戦闘不能");
+            TalkMessage talkMessage = character.GetTalkMessageByType(MessageType.Lose);
             yield return StartCoroutine(SetTalkMessage(talkMessage));
             turnBar.gameObject.SetActive(false);
             StopAllCoroutines();
@@ -230,7 +232,7 @@ public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
     {
         if (character == null)
         {
-            Debug.LogWarning("キャラクターが設定されていません。");
+            UnityEngine.Debug.LogWarning("キャラクターが設定されていません。");
             yield break;
         }
         turnBar.color = runningColor;
@@ -257,7 +259,7 @@ public class CharacterSubPanel : SlidePanel, IDropHandler, IPointerClickHandler
     {
         if (character == null)
         {
-            Debug.LogWarning("キャラクターが設定されていません。");
+            UnityEngine.Debug.LogWarning("キャラクターが設定されていません。");
             return;
         }
         if (inProgress)

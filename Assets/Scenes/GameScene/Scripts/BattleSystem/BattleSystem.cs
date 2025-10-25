@@ -192,6 +192,7 @@ public class BattleSystem : MonoBehaviour
     {
         if (characterSubPanel == null) return;
         StopAllCharacterTurnBar();
+        SoundSystem.Instance.PlayBGM(BgmType.GameOver);
         gameOverWindow.Show(); // ゲームオーバーウィンドウを表示
     }
 

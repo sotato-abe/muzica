@@ -45,6 +45,8 @@ public class TalkMessage
                 return new TalkMessage(messageType, MessagePanelType.Default, "いらっしゃい");
             case MessageType.Greetings:
                 return new TalkMessage(messageType, MessagePanelType.Default, "こんにちは");
+            case MessageType.Safe:
+                return new TalkMessage(messageType, MessagePanelType.Surprise, "セーフ");
             default:
                 return new TalkMessage(messageType, MessagePanelType.Default, "");
         }

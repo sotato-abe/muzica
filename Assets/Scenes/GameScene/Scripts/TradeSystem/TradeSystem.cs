@@ -42,8 +42,9 @@ public class TradeSystem : MonoBehaviour
             return;
 
         PlayerController.Instance.ChangeEventType(EventType.Trade); // イベントタイプをトレードに変更
+        SoundSystem.Instance.PlaySE(SeType.PanelOpen); // SEをオープンに変更
+
         cameraManager.SetEventType(EventType.Trade); // トレード時のカメラ位置を設定
-        // messagePanel.SetActive(false); // メッセージパネルを表示
         worldMapPanel.SetActive(false); // ワールドマップパネルを非表示
         savePanel.SetActive(false); // セーブパネルを非表示
 
@@ -83,6 +84,7 @@ public class TradeSystem : MonoBehaviour
     public void TradeEnd()
     {
         int completed = 0;
+        SoundSystem.Instance.PlaySE(SeType.PanelClose);
         void CheckAllComplete()
         {
             completed++;

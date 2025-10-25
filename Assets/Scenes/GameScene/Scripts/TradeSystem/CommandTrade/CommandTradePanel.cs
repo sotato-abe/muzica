@@ -43,6 +43,7 @@ public class CommandTradePanel : TwoColumnPanel
 
     public void ChangeWindow(bool isBag)
     {
+        SoundSystem.Instance.PlaySE(SeType.Select);
         storageWindow.gameObject.SetActive(isBag);
         slotSettingWindow.gameObject.SetActive(!isBag);
     }

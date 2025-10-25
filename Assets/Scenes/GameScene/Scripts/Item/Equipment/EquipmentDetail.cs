@@ -21,6 +21,7 @@ public class EquipmentDetail : MonoBehaviour
         }
         SetEquipmentBlock(equipment);
         equipmentInfo.SetInfo(equipment);
+        SoundSystem.Instance.PlaySE(SeType.Set);
         SetCosts(equipment.EquipmentBase.EnergyCostList);
     }
 

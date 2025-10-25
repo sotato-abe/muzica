@@ -137,6 +137,7 @@ public class BattleActionBoard : SlidePanel
 
     private void ChangeActionPanel()
     {
+        SoundSystem.Instance.PlaySE(SeType.Select);
         foreach (var kvp in actionPanels)
         {
             if (kvp.Key == currentAction)

@@ -59,6 +59,10 @@ public class Character
     public int LifeGuard { get; set; }
     public int BatteryGuard { get; set; }
 
+    // message
+    public delegate void TalkMessageDelegate(MessageType message);
+    public event TalkMessageDelegate OnTalkMessage;
+
     public Character(CharacterBase baseData)
     {
         _base = baseData;
@@ -250,10 +254,12 @@ public class Character
                         {
                             Life = Mathf.Clamp(Life - remainingDamage, 0, MaxLife);
                             SoundSystem.Instance.PlaySE(SeType.Damage);
+                            OnTalkMessage?.Invoke(MessageType.Damage);
                         }
                         else
                         {
                             SoundSystem.Instance.PlaySE(SeType.Guard);
+                            OnTalkMessage?.Invoke(MessageType.Safe);
                         }
                     }
                     break;
@@ -357,11 +363,13 @@ public class Character
     // BattleCharacterに分離したい
     public void UpdateLifeGuard(int guard)
     {
+        SoundSystem.Instance.PlaySE(SeType.Guard);
         LifeGuard = Mathf.Max(0, guard);
     }
 
     public void UpdateBatteryGuard(int guard)
     {
+        SoundSystem.Instance.PlaySE(SeType.Guard);
         BatteryGuard = Mathf.Max(0, guard);
     }
 }
