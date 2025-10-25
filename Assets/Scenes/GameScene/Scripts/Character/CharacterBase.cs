@@ -11,7 +11,7 @@ public class CharacterBase : ScriptableObject
     [SerializeField] Sprite sprite;
     [SerializeField] Sprite squareSprite;
     [SerializeField, TextArea] string description;
-    [SerializeField] FieldData birthplace;
+    [SerializeField] FieldBase birthplace;
 
     [Header("Status")]
     // キャラクターのエナジー
@@ -53,7 +53,7 @@ public class CharacterBase : ScriptableObject
     public Sprite Sprite { get => sprite; }
     public Sprite SquareSprite { get => squareSprite; }
     public string Description { get => description; }
-    public FieldData Birthplace { get => birthplace; }
+    public FieldBase Birthplace { get => birthplace; }
 
     public int MaxLife { get => maxLife; }
     public int MaxBattery { get => maxBattery; }

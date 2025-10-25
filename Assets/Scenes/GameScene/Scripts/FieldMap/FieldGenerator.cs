@@ -27,7 +27,7 @@ public class FieldGenerator : MonoBehaviour
 
     #region Serialized Fields
     [Header("Field Configuration")]
-    [SerializeField] private FieldData defaultFieldData;
+    [SerializeField] private FieldBase defaultFieldBase;
     [SerializeField] private PointDatabase pointDatabase;
     [SerializeField] private GameObject gateObject;
     [SerializeField] private GameObject treasureBoxObject;
@@ -64,16 +64,16 @@ public class FieldGenerator : MonoBehaviour
     #region Public Properties
     public Tilemap Tilemap => tilemap;
     public Tilemap EncountTilemap => encountTilemap;
-    public FieldData fieldData;
+    public FieldBase fieldBase;
     #endregion
 
     #region Public Methods
     /// <summary>
     /// フィールドを設定して生成する
     /// </summary>
-    /// <param name="fieldData">フィールドデータ</param>
+    /// <param name="fieldBase">フィールドデータ</param>
     /// <param name="fieldTileSet">タイルセット</param>
-    public void SetField(FieldData fieldData, FieldTileSet fieldTileSet)
+    public void SetField(FieldBase fieldBase, FieldTileSet fieldTileSet)
     {
         if (fieldTileSet == null)
         {
@@ -81,17 +81,17 @@ public class FieldGenerator : MonoBehaviour
             return;
         }
         string seed = "";
-        if (fieldData.FieldName != null && fieldData.FieldName != "")
+        if (fieldBase.FieldName != null && fieldBase.FieldName != "")
         {
-            seed = fieldData.Seed;
+            seed = fieldBase.Seed;
         }
         else
         {
-            seed = fieldData.currentPosition.x + "," + fieldData.currentPosition.y;
+            seed = fieldBase.currentPosition.x + "," + fieldBase.currentPosition.y;
         }
         Random.InitState(seed.GetHashCode());
         consistentRandom = new System.Random(seed.GetHashCode());
-        InitializeField(fieldData, fieldTileSet);
+        InitializeField(fieldBase, fieldTileSet);
         GenerateField();
     }
 
@@ -100,9 +100,9 @@ public class FieldGenerator : MonoBehaviour
     /// </summary>
     public void GenerateField()
     {
-        if (fieldData == null)
+        if (fieldBase == null)
         {
-            Debug.LogError("FieldData is not set! Call SetField first.");
+            Debug.LogError("FieldBase is not set! Call SetField first.");
             return;
         }
 
@@ -170,20 +170,20 @@ public class FieldGenerator : MonoBehaviour
     /// <summary>
     /// フィールドの初期化
     /// </summary>
-    private void InitializeField(FieldData fieldData, FieldTileSet fieldTileSet)
+    private void InitializeField(FieldBase fieldBase, FieldTileSet fieldTileSet)
     {
-        this.fieldData = fieldData ?? defaultFieldData;
-        this.groundTile = fieldTileSet.GroundTile ?? defaultFieldData.FieldTileSet.GroundTile;
-        this.areaTile = fieldTileSet.AreaTile ?? defaultFieldData.FieldTileSet.AreaTile;
+        this.fieldBase = fieldBase ?? defaultFieldBase;
+        this.groundTile = fieldTileSet.GroundTile ?? defaultFieldBase.FieldTileSet.GroundTile;
+        this.areaTile = fieldTileSet.AreaTile ?? defaultFieldBase.FieldTileSet.AreaTile;
 
         // フィールドのパラメータを設定
-        width = this.fieldData.FieldWidth;
-        height = this.fieldData.FieldHeight;
-        groundFillPercent = this.fieldData.GroundFillPercent;
-        areaFillPercent = this.fieldData.AreaFillPercent;
-        objectCount = this.fieldData.ObjectCount;
+        width = this.fieldBase.FieldWidth;
+        height = this.fieldBase.FieldHeight;
+        groundFillPercent = this.fieldBase.GroundFillPercent;
+        areaFillPercent = this.fieldBase.AreaFillPercent;
+        objectCount = this.fieldBase.ObjectCount;
         this.objectPrefabs = new GameObject[0];
-        objectPrefabs = fieldTileSet.ObjectPrefabs ?? defaultFieldData.FieldTileSet.ObjectPrefabs;
+        objectPrefabs = fieldTileSet.ObjectPrefabs ?? defaultFieldBase.FieldTileSet.ObjectPrefabs;
     }
 
     /// <summary>
@@ -310,28 +310,28 @@ public class FieldGenerator : MonoBehaviour
     /// </summary>
     private void CreateAllGates()
     {
-        if (fieldData.isTopOpen)
+        if (fieldBase.isTopOpen)
         {
             Vector2Int topGate = new Vector2Int(Random.Range(width / 4, width * 3 / 4), height - 1);
             CreateGate(topGate, Vector2Int.up);
             gatePositions[Vector2Int.up] = topGate;
         }
 
-        if (fieldData.isBottomOpen)
+        if (fieldBase.isBottomOpen)
         {
             Vector2Int bottomGate = new Vector2Int(Random.Range(width / 4, width * 3 / 4), 0);
             CreateGate(bottomGate, Vector2Int.down);
             gatePositions[Vector2Int.down] = bottomGate;
         }
 
-        if (fieldData.isRightOpen)
+        if (fieldBase.isRightOpen)
         {
             Vector2Int rightGate = new Vector2Int(width - 1, Random.Range(height / 4, height * 3 / 4));
             CreateGate(rightGate, Vector2Int.right);
             gatePositions[Vector2Int.right] = rightGate;
         }
 
-        if (fieldData.isLeftOpen)
+        if (fieldBase.isLeftOpen)
         {
             Vector2Int leftGate = new Vector2Int(0, Random.Range(height / 4, height * 3 / 4));
             CreateGate(leftGate, Vector2Int.left);
@@ -458,7 +458,7 @@ public class FieldGenerator : MonoBehaviour
     /// </summary>
     private void CreatePointObjects()
     {
-        if (fieldData.Points == null || fieldData.Points.Count == 0) return;
+        if (fieldBase.Points == null || fieldBase.Points.Count == 0) return;
 
         // ポイント専用のシードを使用
         System.Random pointRandom = new System.Random(GeneratePointSeed());
@@ -469,7 +469,7 @@ public class FieldGenerator : MonoBehaviour
         // シャッフルして一貫性のある順序を確保
         ShuffleList(validPositions, pointRandom);
 
-        int actualPointCount = Mathf.Min(fieldData.Points.Count, validPositions.Count);
+        int actualPointCount = Mathf.Min(fieldBase.Points.Count, validPositions.Count);
 
         for (int i = 0; i < actualPointCount; i++)
         {
@@ -486,8 +486,8 @@ public class FieldGenerator : MonoBehaviour
                 try
                 {
                     // PointBaseをPointに実体化させて格納
-                    // pointTrigger.SetPoint(fieldData.Points[i].ToPoint()); // PointBaseからPointに変換
-                    Point point = pointDatabase.GetPoint(fieldData.Points[i]);
+                    // pointTrigger.SetPoint(fieldBase.Points[i].ToPoint()); // PointBaseからPointに変換
+                    Point point = pointDatabase.GetPoint(fieldBase.Points[i]);
                     pointTrigger.SetPoint(point);
                 }
                 catch (System.Exception e)
@@ -685,15 +685,15 @@ public class FieldGenerator : MonoBehaviour
     /// </summary>
     private int GenerateObjectSeed()
     {
-        // fieldDataの位置とオブジェクト数を組み合わせてシードを生成
+        // fieldBaseの位置とオブジェクト数を組み合わせてシードを生成
         string seedString = "";
-        if (fieldData.FieldName != null && fieldData.FieldName != "")
+        if (fieldBase.FieldName != null && fieldBase.FieldName != "")
         {
-            seedString = fieldData.Seed;
+            seedString = fieldBase.Seed;
         }
         else
         {
-            seedString = $"{fieldData.Position.x},{fieldData.Position.y}";
+            seedString = $"{fieldBase.Position.x},{fieldBase.Position.y}";
         }
         return seedString.GetHashCode();
     }
@@ -703,8 +703,8 @@ public class FieldGenerator : MonoBehaviour
     /// </summary>
     private int GeneratePointSeed()
     {
-        // fieldDataの位置とポイント数を組み合わせてシードを生成
-        string seedString = $"{fieldData.Position.x},{fieldData.Position.y},points,{fieldData.Points?.Count ?? 0}";
+        // fieldBaseの位置とポイント数を組み合わせてシードを生成
+        string seedString = $"{fieldBase.Position.x},{fieldBase.Position.y},points,{fieldBase.Points?.Count ?? 0}";
         return seedString.GetHashCode();
     }
 

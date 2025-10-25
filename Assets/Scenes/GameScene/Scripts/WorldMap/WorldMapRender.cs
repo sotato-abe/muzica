@@ -76,18 +76,18 @@ public class WorldMapRender : MonoBehaviour
         }
     }
     /// <summary>
-    /// FieldDatabaseに登録されているFieldDataを取得
-    /// 各FieldDataのPositionにをfieldMapにIconをタイルにして配置
+    /// FieldBasebaseに登録されているFieldBaseを取得
+    /// 各FieldBaseのPositionにをfieldMapにIconをタイルにして配置
     /// </summary>
     private void RenderFieldMap()
     {
-        foreach (var fieldData in FieldDatabase.Instance.fieldDataList)
+        foreach (var fieldBase in FieldDatabase.Instance.fieldBaseList)
         {
-            if (fieldMap != null && fieldData.Icon != null)
+            if (fieldMap != null && fieldBase.Icon != null)
             {
-                Vector3Int cell = new Vector3Int(fieldData.Position.x, fieldData.Position.y, 0);
+                Vector3Int cell = new Vector3Int(fieldBase.Position.x, fieldBase.Position.y, 0);
                 Tile tile = ScriptableObject.CreateInstance<Tile>();
-                tile.sprite = fieldData.Icon;
+                tile.sprite = fieldBase.Icon;
                 fieldMap.SetTile(cell, tile);
 
                 fieldMap.SetTransformMatrix(cell, Matrix4x4.TRS(new Vector3(0, 0.15f, 0), Quaternion.identity, Vector3.one));

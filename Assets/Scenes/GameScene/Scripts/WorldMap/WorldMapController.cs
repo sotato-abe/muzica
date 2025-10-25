@@ -71,25 +71,25 @@ public class WorldMapController : MonoBehaviour
     private void GenerateField()
     {
         FieldTileSet fieldTileSet = GetTileSet(playerPosition);
-        FieldData fieldData = GetFieldData(playerPosition);
+        FieldBase fieldBase = GetFieldBase(playerPosition);
 
-        // WorldMapで周りのfieldを確認して、fieldがあればfieldDataのisTopOpenとかを設定する
-        fieldData.fieldType = fieldTileSet.FieldType;
-        fieldData.isTopOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.up);
-        fieldData.isBottomOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.down);
-        fieldData.isRightOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.right);
-        fieldData.isLeftOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.left);
-        if (fieldData.FieldName != "")
+        // WorldMapで周りのfieldを確認して、fieldがあればfieldBaseのisTopOpenとかを設定する
+        fieldBase.fieldType = fieldTileSet.FieldType;
+        fieldBase.isTopOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.up);
+        fieldBase.isBottomOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.down);
+        fieldBase.isRightOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.right);
+        fieldBase.isLeftOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.left);
+        if (fieldBase.FieldName != "")
         {
-            worldMapPanel.SetFieldName(fieldData.FieldName);
-            messagePanel.AddMessage(MessageIconType.Field, fieldData.FieldName + "に到着した");
+            worldMapPanel.SetFieldName(fieldBase.FieldName);
+            messagePanel.AddMessage(MessageIconType.Field, fieldBase.FieldName + "に到着した");
         }
         else
         {
             worldMapPanel.SetFieldName("");
         }
-        FieldController.Instance.SetField(fieldData);
-        fieldGenerator.SetField(fieldData, fieldTileSet);
+        FieldController.Instance.SetField(fieldBase);
+        fieldGenerator.SetField(fieldBase, fieldTileSet);
     }
 
     private FieldTileSet GetTileSet(Vector2Int targetPosition)
@@ -111,11 +111,11 @@ public class WorldMapController : MonoBehaviour
         return fieldTileSet;
     }
 
-    private FieldData GetFieldData(Vector2Int targetPosition)
+    private FieldBase GetFieldBase(Vector2Int targetPosition)
     {
-        FieldData fieldData = FieldDatabase.Instance.GetFieldDataByCoordinate(targetPosition);
+        FieldBase fieldBase = FieldDatabase.Instance.GetFieldBaseByCoordinate(targetPosition);
 
-        return fieldData;
+        return fieldBase;
     }
 
     private void MoveFieldPlayerPosition(Vector2Int direction)
