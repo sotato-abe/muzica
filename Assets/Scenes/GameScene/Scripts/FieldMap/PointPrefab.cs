@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PointTrigger : MonoBehaviour
+public class PointPrefab : MonoBehaviour
 {
     [SerializeField] Sprite defaultSprite; // デフォルトのスプライト
     private bool isTriggered = false;
@@ -23,7 +23,7 @@ public class PointTrigger : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogError($"PointTrigger: Null reference detected. Point: {point}, Point.Base: {point?.Base}, FieldController: {FieldController.Instance}");
+                    Debug.LogError($"PointPrefab: Null reference detected. Point: {point}, Point.Base: {point?.Base}, FieldController: {FieldController.Instance}");
                 }
             }
         }

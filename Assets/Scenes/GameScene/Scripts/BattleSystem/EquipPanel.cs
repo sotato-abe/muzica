@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 /// <summary>
 /// 装備を使用した攻撃アクションを管理するパネル
@@ -19,6 +21,7 @@ public class EquipPanel : BattleActionPanel
     [SerializeField] private EquipWindow equipWindow;
     [SerializeField] private SlotWindow slotWindow;
     [SerializeField] private EquipmentInfo equipmentInfo;
+    [SerializeField] private Image activeButtonImage;
 
     [Header("Character Panels")]
     [SerializeField] private CharacterSubPanel playerSubPanel;
@@ -29,6 +32,8 @@ public class EquipPanel : BattleActionPanel
 
     #region Private Fields
     private Equipment currentEquipment;
+    private Color defaultButtonColor = new Color(130f / 255f, 130f / 255f, 130f / 255f, 255f / 255f);
+    private Color activeButtonColor = new Color(240f / 255f, 88f / 255f, 0f / 255f, 255f / 255f);
 
     List<CharacterSubPanel> enemySubPanels = new List<CharacterSubPanel>(); // 敵のサブパネルリスト
     List<CharacterSubPanel> targetSubPanels = new List<CharacterSubPanel>();
@@ -53,7 +58,7 @@ public class EquipPanel : BattleActionPanel
         foreach (var subPanel in enemySubPanels)
         {
             subPanel.OnTarget += ChangeTargetEnemy;
-            subPanel.OnLifeOut += LifeOutEnemy; // 敵のサブパネルのライフアウトイベントを登録
+            subPanel.OnLifeOutAction += LifeOutEnemy;
         }
     }
 
@@ -92,9 +97,17 @@ public class EquipPanel : BattleActionPanel
 
     private void ChangeEquipStatus()
     {
-        if (!IsEquipmentValid()) return;
+        if (!IsEquipmentValid())
+        {
+            activeButtonImage.color = defaultButtonColor;
+            return;
+        }
         bool canUse = PlayerController.Instance.CheckEnergyCost(currentEquipment.EquipmentBase.EnergyCostList);
         equipWindow.SetStatusImage(canUse);
+        if (canUse && canExecuteActionFlg)
+            activeButtonImage.color = activeButtonColor;
+        else
+            activeButtonImage.color = defaultButtonColor;
     }
     #endregion
 
@@ -209,6 +222,21 @@ public class EquipPanel : BattleActionPanel
     #endregion
 
     #region EquipAction Execution
+    public override void ChangeExecuteActionFlg(bool canExecute)
+    {
+        base.ChangeExecuteActionFlg(canExecute);
+        if(currentEquipment == null)
+        {
+            activeButtonImage.color = defaultButtonColor;
+            return;
+        }
+        bool canUse = PlayerController.Instance.CheckEnergyCost(currentEquipment.EquipmentBase.EnergyCostList);
+        if (canExecute && canUse)
+            activeButtonImage.color = activeButtonColor;
+        else
+            activeButtonImage.color = defaultButtonColor;
+    }
+
     public void ExecuteEquipAction()
     {
         if (!canExecuteActionFlg) return;
@@ -224,9 +252,7 @@ public class EquipPanel : BattleActionPanel
     {
         bool isUsed = PlayerController.Instance.UseEnergyCost(currentEquipment.EquipmentBase.EnergyCostList);
         equipWindow.SetStatusImage(isUsed);
-        if (!isUsed)
-            return false;
-        return true;
+        return isUsed;
     }
 
     public IEnumerator StopSlot()
@@ -285,17 +311,20 @@ public class EquipPanel : BattleActionPanel
     {
         if (currentEquipment == null)
         {
-            Debug.LogWarning("現在の装備が設定されていません。");
+            UnityEngine.Debug.LogWarning("現在の装備が設定されていません。");
             return false;
         }
         return true;
     }
 
-    public void LifeOutEnemy()
+    public void LifeOutEnemy(CharacterSubPanel enemySubPanel)
     {
+        // gameObjectが非アクティブの場合は処理を中断
         if (!this.gameObject.activeInHierarchy) return;
-        Debug.Log("Enemy Life Out Detected in EquipPanel");
-        SetEquipment();
+        // targetSubPanelsからライフアウトした敵のサブパネルを削除
+        UnityEngine.Debug.Log($"Enemy Life Out Detected : {currentEquipment.EquipmentBase?.Name}");
+        targetSubPanels.Remove(enemySubPanel);
+        // SetEquipment();
         SetTargetting();
     }
 }

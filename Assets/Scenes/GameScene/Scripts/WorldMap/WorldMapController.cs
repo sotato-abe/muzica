@@ -39,7 +39,7 @@ public class WorldMapController : MonoBehaviour
 
     private void Start()
     {
-        ChangePlayerCoordinate(new Vector2Int(0, 0));
+        ChangePlayerCoordinate(DirectionType.Other);
         Vector2Int startPos = Vector2Int.up;
     }
 
@@ -50,46 +50,46 @@ public class WorldMapController : MonoBehaviour
             return;
 
         playerPosition = targetPosition;
-        GenerateField();
-        MoveFieldPlayerPosition(Vector2Int.zero); // フィールドのプレイヤー位置を更新
+        RenderFieldMap();
+        ChangeFieldPlayerPosition(DirectionType.Other); // フィールドのプレイヤー位置を更新
         SetWorldMapPlayerPosition();
     }
 
-    public void ChangePlayerCoordinate(Vector2Int direction)
+    public void ChangePlayerCoordinate(DirectionType direction)
     {
         // すでにイベント実行中のときはワールド移動をスキップする。
         if (PlayerController.Instance.CurrentEventType != EventType.Default)
             return;
 
-        playerPosition = playerPosition + direction;
-        GenerateField();
-        MoveFieldPlayerPosition(direction);
+        playerPosition = playerPosition + direction.GetDirectionVector2Int();
+        RenderFieldMap();
+        ChangeFieldPlayerPosition(direction.GetOppositeDirection()); // フィールドのプレイヤー位置を更新
         SetWorldMapPlayerPosition();
         ageTimePanel.PassageOfMonth(3); // 3ヶ月進める
     }
 
-    private void GenerateField()
+    private void RenderFieldMap()
     {
         FieldTileSet fieldTileSet = GetTileSet(playerPosition);
-        FieldData fieldData = GetFieldData(playerPosition);
+        FieldBase fieldBase = GetFieldBase(playerPosition);
 
-        // WorldMapで周りのfieldを確認して、fieldがあればfieldDataのisTopOpenとかを設定する
-        fieldData.fieldType = fieldTileSet.FieldType;
-        fieldData.isTopOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.up);
-        fieldData.isBottomOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.down);
-        fieldData.isRightOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.right);
-        fieldData.isLeftOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.left);
-        if (fieldData.FieldName != "")
+        // WorldMapで周りのfieldを確認して、fieldがあればfieldBaseのisTopOpenとかを設定する
+        fieldBase.fieldType = fieldTileSet.FieldType;
+        fieldBase.isTopOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.up);
+        fieldBase.isBottomOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.down);
+        fieldBase.isRightOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.right);
+        fieldBase.isLeftOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.left);
+        if (fieldBase.FieldName != "")
         {
-            worldMapPanel.SetFieldName(fieldData.FieldName);
-            messagePanel.AddMessage(MessageIconType.Field, fieldData.FieldName + "に到着した。");
+            worldMapPanel.SetFieldName(fieldBase.FieldName);
+            messagePanel.AddMessage(MessageIconType.Field, fieldBase.FieldName + "に到着した");
         }
         else
         {
             worldMapPanel.SetFieldName("");
         }
-        FieldController.Instance.SetField(fieldData);
-        fieldGenerator.SetField(fieldData, fieldTileSet);
+        FieldController.Instance.SetField(fieldBase);
+        fieldGenerator.SetField(fieldBase, fieldTileSet);
     }
 
     private FieldTileSet GetTileSet(Vector2Int targetPosition)
@@ -111,14 +111,14 @@ public class WorldMapController : MonoBehaviour
         return fieldTileSet;
     }
 
-    private FieldData GetFieldData(Vector2Int targetPosition)
+    private FieldBase GetFieldBase(Vector2Int targetPosition)
     {
-        FieldData fieldData = FieldDatabase.Instance.GetFieldDataByCoordinate(targetPosition);
+        FieldBase fieldBase = FieldDatabase.Instance.GetFieldBaseByCoordinate(targetPosition);
 
-        return fieldData;
+        return fieldBase;
     }
 
-    private void MoveFieldPlayerPosition(Vector2Int direction)
+    private void ChangeFieldPlayerPosition(DirectionType direction)
     {
         if (player != null)
         {

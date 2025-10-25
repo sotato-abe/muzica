@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 [CreateAssetMenu(fileName = "NewFieldData", menuName = "Field/FieldData")]
-public class FieldData : ScriptableObject
+public class FieldBase : ScriptableObject
 {
     [Header("Field settings")]
     [SerializeField] Vector2Int position = new Vector2Int(0, 0); // フィールドの位置

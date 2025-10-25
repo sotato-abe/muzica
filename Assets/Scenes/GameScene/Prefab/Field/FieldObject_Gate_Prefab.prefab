@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 2404048189020373101}
   - component: {fileID: 7848078968260953523}
   - component: {fileID: 8505424805274862813}
+  - component: {fileID: 4029847700151290885}
   - component: {fileID: -304105591553410664}
-  - component: {fileID: -3599976552395430200}
   m_Layer: 5
-  m_Name: Object_Point
+  m_Name: FieldObject_Gate_Prefab
   m_TagString: Gate
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,7 +30,7 @@ RectTransform:
   m_GameObject: {fileID: 6779465890414966303}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -89,7 +89,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -659226940, guid: d051fe1ac34111a44952b98a16508f03, type: 3}
+  m_Sprite: {fileID: 577851771, guid: d051fe1ac34111a44952b98a16508f03, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -144,17 +144,29 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0.082458496, y: 0.12207031}
-      - {x: 0.020935059, y: 0.12109375}
-      - {x: -0.04675293, y: 0.12261963}
-      - {x: -0.095703125, y: 0.11968994}
+    - - {x: 0.068847656, y: 0.22094727}
+      - {x: -0.061584473, y: 0.22363281}
+      - {x: -0.13110352, y: 0.18859863}
       - {x: -0.19281006, y: 0.11993408}
       - {x: -0.19573975, y: -0.22387695}
       - {x: 0.03112793, y: -0.22235107}
       - {x: 0.190979, y: -0.22418213}
       - {x: 0.1928711, y: 0.12231445}
-      - {x: 0.14935303, y: 0.1227417}
+      - {x: 0.12939453, y: 0.18988037}
   m_UseDelaunayMesh: 0
+--- !u!114 &4029847700151290885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6779465890414966303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 955ef4ab266eb8c4fad0529727bb5266, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destinationField: test
 --- !u!114 &-304105591553410664
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167,16 +179,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 256797bac4e9b3f44a356a652a68cc07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-3599976552395430200
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6779465890414966303}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7cbc16b7cc5b6bf489ee430411a78ef4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  defaultSprite: {fileID: -659226940, guid: d051fe1ac34111a44952b98a16508f03, type: 3}

@@ -21,6 +21,7 @@ public class TargetIcon : MonoBehaviour
 
     public void SetTargetType(EquipmentType equipmentType, TargetType targetType)
     {
+        iconImage.gameObject.SetActive(true);
         if (equipmentType == EquipmentType.Weapon)
         {
             switch (targetType)
@@ -42,6 +43,7 @@ public class TargetIcon : MonoBehaviour
                     break;
                 default:
                     Debug.LogWarning("Unknown TargetType: " + targetType);
+                    ClearIcon();
                     break;
             }
             return;
@@ -67,6 +69,7 @@ public class TargetIcon : MonoBehaviour
                     break;
                 default:
                     Debug.LogWarning("Unknown TargetType: " + targetType);
+                    ClearIcon();
                     break;
             }
             return;
@@ -92,9 +95,16 @@ public class TargetIcon : MonoBehaviour
                     break;
                 default:
                     Debug.LogWarning("Unknown TargetType: " + targetType);
+                    ClearIcon();
                     break;
             }
             return;
         }
+    }
+
+    public void ClearIcon()
+    {
+        // iconImage.sprite = null;
+        iconImage.gameObject.SetActive(false);
     }
 }

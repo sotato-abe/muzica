@@ -14,7 +14,7 @@ public class SlotSettingWindow : MonoBehaviour
     PlayerController playerController;
 
     float slotHeight; // スロットの高さ
-    float paddingWidth = 50f; // 横幅
+    float paddingWidth = 60f; // 横幅
 
     List<CommandSlot> commandSlots = new List<CommandSlot>();
     public delegate void TargetCommandDelegate(Command command, bool isOwn = true);
@@ -44,7 +44,7 @@ public class SlotSettingWindow : MonoBehaviour
     private void SetWindowSize()
     {
         // スロットのサイズを設定
-        float windowWidth = playerController.PlayerCharacter.ColMemory * 100 + paddingWidth;
+        float windowWidth = playerController.PlayerCharacter.ColMemory * 65 + paddingWidth;
         backRectTransform.sizeDelta = new Vector2(windowWidth, slotHeight);
     }
 

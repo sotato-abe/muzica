@@ -5,11 +5,10 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Events;
 
-public class BagPanel : Panel
+public class BagPanel : SlidePanel
 {
     [SerializeField] InventoryWindow inventoryWindow;
     [SerializeField] TargetItemWindow targetItemWindow;
-    [SerializeField] BagCategory bagCategory;
     [SerializeField] EquipmentWindow equipmentWindow;
     [SerializeField] PocketWindow pocketWindow;
 

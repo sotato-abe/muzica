@@ -8,12 +8,12 @@ public class EquipWindow : MonoBehaviour
 {
     [SerializeField] Image equipImage;
     [SerializeField] Image equipStatusImage;
-    [SerializeField] TextMeshProUGUI costLifeText;
-    [SerializeField] TextMeshProUGUI costBatteryText;
-    [SerializeField] TextMeshProUGUI costSoulText;
+
+    [SerializeField] CostIconPrefab costIconPrefab;
+    [SerializeField] GameObject costList;
+
     [SerializeField] EquipmentInfo equipmentInfo;
     [SerializeField] EquipStatusWindow equipStatusWindow;
-    [SerializeField] GameObject costWindow;
 
     public void SetEquipment(Equipment equipment)
     {
@@ -23,45 +23,36 @@ public class EquipWindow : MonoBehaviour
             ResetSlot();
             return;
         }
-        costWindow.SetActive(true);
         equipImage.gameObject.SetActive(true);
         equipImage.sprite = equipment.Base.Sprite;
         equipmentInfo.SetInfo(equipment);
-        SetCosts(equipment.EquipmentBase.EnergyCostList);
+        SetCost(equipment.EquipmentBase.EnergyCostList);
     }
 
-    private void SetCosts(List<EnergyCost> costs)
+    private void SetCost(List<EnergyCost> energyCostList)
     {
-        costLifeText.text = "0";
-        costBatteryText.text = "0";
-        costSoulText.text = "0";
-
-        foreach (var cost in costs)
+        foreach (Transform child in costList.transform)
         {
-            switch (cost.type)
-            {
-                case EnergyType.Life:
-                    costLifeText.text = cost.val.ToString() ?? "0";
-                    break;
-                case EnergyType.Battery:
-                    costBatteryText.text = cost.val.ToString() ?? "0";
-                    break;
-                case EnergyType.Soul:
-                    costSoulText.text = cost.val.ToString() ?? "0";
-                    break;
-            }
+            Destroy(child.gameObject);
+        }
+
+        // Costを表示する処理
+        foreach (var cost in energyCostList)
+        {
+            CostIconPrefab newCost = Instantiate(costIconPrefab, costList.transform);
+            newCost.SetCostIcon(cost);
         }
     }
 
     public void ResetSlot()
     {
-        costWindow.SetActive(false);
         equipImage.gameObject.SetActive(false);
-        costLifeText.text = "0";
-        costBatteryText.text = "0";
-        costSoulText.text = "0";
-        equipmentInfo.gameObject.SetActive(false);
         equipStatusWindow.SetStatus(EquipStatusType.Empty);
+        foreach (Transform child in costList.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        equipmentInfo.ClearInfo();
     }
 
     public void SetStatusImage(bool canUse)

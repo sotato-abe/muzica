@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Events;
 
-public class TalkPanel : Panel
+public class TalkPanel : TwoColumnPanel
 {
     [SerializeField] TargetItemWindow targetItemWindow;
     [SerializeField] TargetCommandWindow targetCommandWindow;
@@ -23,7 +23,7 @@ public class TalkPanel : Panel
     public delegate void OwnerMessageDelegate(TalkMessage message);
     public event OwnerMessageDelegate OnOwnerMessage;
 
-    private void Start()
+    public override void Start()
     {
         inventoryWindow.OnTargetItem += TargetItem;
         storageWindow.OnTargetCommand += TargetCommand;
@@ -32,6 +32,14 @@ public class TalkPanel : Panel
         questCard.OnOwnerMessage += OwnerMessage;
         questCard.OnReceiptQuest += ReceiptQuest;
         ChangeWindow(true);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            bagCategory.SwitchActiveButton();
+        }
     }
 
     public void TargetItem(Item item, bool isOwn = true)

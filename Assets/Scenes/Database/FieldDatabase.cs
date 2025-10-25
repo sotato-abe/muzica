@@ -7,9 +7,9 @@ using System.Linq;
 public class FieldDatabase : MonoBehaviour
 {
     public static FieldDatabase Instance { get; private set; }
-    [SerializeField] public FieldData defaultFieldData;
-    public List<FieldData> fieldDataList;
-    private Dictionary<Vector2Int, FieldData> dataDict;
+    [SerializeField] public FieldBase defaultFieldBase;
+    public List<FieldBase> fieldBaseList;
+    private Dictionary<Vector2Int, FieldBase> dataDict;
 
     private void Awake()
     {
@@ -25,19 +25,19 @@ public class FieldDatabase : MonoBehaviour
 
     private void Initialize()
     {
-        dataDict = new Dictionary<Vector2Int, FieldData>();
+        dataDict = new Dictionary<Vector2Int, FieldBase>();
 
-        foreach (var data in fieldDataList)
+        foreach (var data in fieldBaseList)
         {
             if (data == null)
             {
-                Debug.LogWarning("fieldDatabase: Null fieldData found in list.");
+                Debug.LogWarning("fieldBasebase: Null fieldBase found in list.");
                 continue;
             }
 
             if (dataDict.ContainsKey(data.Position))
             {
-                Debug.LogWarning($"fieldDatabase: Duplicate entry for {data.Position} found. Skipping.");
+                Debug.LogWarning($"fieldBasebase: Duplicate entry for {data.Position} found. Skipping.");
                 continue;
             }
 
@@ -45,18 +45,18 @@ public class FieldDatabase : MonoBehaviour
         }
     }
 
-    // targetPositionに基づいてpositionが一致するfieldDataを返す
-    public FieldData GetFieldDataByCoordinate(Vector2Int targetPosition)
+    // targetPositionに基づいてpositionが一致するfieldBaseを返す
+    public FieldBase GetFieldBaseByCoordinate(Vector2Int targetPosition)
     {
-        foreach (var data in fieldDataList)
+        foreach (var data in fieldBaseList)
         {
             if (data.Position == targetPosition)
             {
                 return data;
             }
         }
-        defaultFieldData.currentPosition = targetPosition;
+        defaultFieldBase.currentPosition = targetPosition;
 
-        return defaultFieldData;
+        return defaultFieldBase;
     }
 }

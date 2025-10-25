@@ -14,8 +14,8 @@ public class FieldController : MonoBehaviour
 
     [SerializeField] MessagePanel messagePanel;
     [SerializeField] private Tilemap tilemap;
-    [SerializeField] DropItem dropItemPrefab; // ドロップアイテムのプレハブ
-    [SerializeField] DropCommand dropCommandPrefab; // ドロップアイテムのプレハブ
+    [SerializeField] DropItemPrefab dropItemPrefab; // ドロップアイテムのプレハブ
+    [SerializeField] DropCommandPrefab dropCommandPrefab; // ドロップコマンドのプレハブ
     [SerializeField] FieldPlayer fieldPlayer; // プレイヤーコントローラー
     [SerializeField] List<EnemyGroup> defaultEnemyGroups = new List<EnemyGroup>();
     [SerializeField] List<EnemyGroup> desertEnemyGroups = new List<EnemyGroup>();
@@ -32,7 +32,7 @@ public class FieldController : MonoBehaviour
 
     private Dictionary<FieldType, List<EnemyGroup>> fieldTypeEnemyGroups;
 
-    private FieldData currentFieldData;
+    private FieldBase currentFieldBase;
 
     void Awake()
     {
@@ -59,15 +59,15 @@ public class FieldController : MonoBehaviour
         };
     }
 
-    public void SetField(FieldData fieldData)
+    public void SetField(FieldBase fieldData)
     {
-        currentFieldData = fieldData;
+        currentFieldBase = fieldData;
     }
 
     // 複数の敵をグループから取得するように変更する
     public List<Character> GetEnemies()
     {
-        if (currentFieldData == null)
+        if (currentFieldBase == null)
         {
             Debug.LogWarning("Current field data is null. Cannot get enemies.");
             return new List<Character>();
@@ -76,7 +76,7 @@ public class FieldController : MonoBehaviour
         List<Character> enemies = new List<Character>();
         EnemyGroup targetGroup = null;
 
-        int groupCount = currentFieldData.EnemyGroups.Count;
+        int groupCount = currentFieldBase.EnemyGroups.Count;
 
         if (groupCount == 0)
         {
@@ -87,13 +87,13 @@ public class FieldController : MonoBehaviour
             }
             else
             {
-                List<EnemyGroup> targetGroups = fieldTypeEnemyGroups[currentFieldData.fieldType];
+                List<EnemyGroup> targetGroups = fieldTypeEnemyGroups[currentFieldBase.fieldType];
                 targetGroup = targetGroups[Random.Range(0, targetGroups.Count)];
             }
         }
         else
         {
-            targetGroup = currentFieldData.EnemyGroups[Random.Range(0, groupCount)];
+            targetGroup = currentFieldBase.EnemyGroups[Random.Range(0, groupCount)];
         }
 
         if (targetGroup != null)
@@ -117,7 +117,7 @@ public class FieldController : MonoBehaviour
         }
 
         // メッセージパネルにメッセージを表示
-        messagePanel.AddMessage(MessageIconType.Field, $"{point.Base.Name} にアクセス。");
+        messagePanel.AddMessage(MessageIconType.Field, $"{point.Base.Name} にアクセス");
         OnPointEnter?.Invoke(point); // リザーブイベントを発火
     }
 
@@ -125,31 +125,31 @@ public class FieldController : MonoBehaviour
     {
         if (Random.Range(0, 100f) < ITEM_GET_PROBABILITY)
         {
-            messagePanel.AddMessage(MessageIconType.Treasure, $"宝ばこはカラだった。");
+            messagePanel.AddMessage(MessageIconType.Treasure, $"宝ばこはカラだった");
             return;
         }
 
-        if (currentFieldData == null || currentFieldData.TreasureBoxItems.Count == 0)
+        if (currentFieldBase == null || currentFieldBase.TreasureBoxItems.Count == 0)
         {
-            messagePanel.AddMessage(MessageIconType.Treasure, $"宝ばこはカラだった。");
+            messagePanel.AddMessage(MessageIconType.Treasure, $"宝ばこはカラだった");
             return;
         }
 
         // 1. 総確率を計算
-        double totalWeight = currentFieldData.TreasureBoxItems.Sum(item => item.Rarity.GetProbability());
+        double totalWeight = currentFieldBase.TreasureBoxItems.Sum(item => item.Rarity.GetProbability());
 
         // 2. ランダム値を生成（0〜totalWeight）
         double randomValue = Random.Range(0f, (float)totalWeight);
 
         // 3. 重みでアイテムを抽選
         double cumulative = 0;
-        foreach (var item in currentFieldData.TreasureBoxItems)
+        foreach (var item in currentFieldBase.TreasureBoxItems)
         {
             cumulative += item.Rarity.GetProbability();
             if (randomValue <= cumulative)
             {
                 // ここでインベントリに追加する処理を入れればOK
-                messagePanel.AddMessage(MessageIconType.Treasure, $"{item.Name}を手に入れた。");
+                messagePanel.AddMessage(MessageIconType.Treasure, $"{item.Name}を手に入れた");
                 // item newItem = new 
 
                 Item newItem;
@@ -202,7 +202,7 @@ public class FieldController : MonoBehaviour
     {
         if (item == null) return;
         Vector2 dropPosition = FindDropPosition(centerPosition);
-        DropItem dropItem = Instantiate(dropItemPrefab, dropPosition, Quaternion.identity);
+        DropItemPrefab dropItem = Instantiate(dropItemPrefab, dropPosition, Quaternion.identity);
         dropItem.Setup(item);
         StartCoroutine(dropItem.JumpMoveMotion(dropPosition));
     }
@@ -212,7 +212,7 @@ public class FieldController : MonoBehaviour
         if (command == null) return;
 
         Vector2 dropPosition = FindDropPosition(centerPosition);
-        DropCommand dropCommand = Instantiate(dropCommandPrefab, dropPosition, Quaternion.identity);
+        DropCommandPrefab dropCommand = Instantiate(dropCommandPrefab, dropPosition, Quaternion.identity);
         dropCommand.Setup(command);
         StartCoroutine(dropCommand.JumpMoveMotion(dropPosition));
     }

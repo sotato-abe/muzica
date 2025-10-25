@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -9,19 +10,21 @@ public class ReserveActionBoard : SlidePanel
     [SerializeField] private BagPanel bagPanel;
     [SerializeField] private StoragePanel storagePanel;
     [SerializeField] private StatusPanel statusPanel;
+
     [SerializeField] private ActionIcon bagIcon;
     [SerializeField] private ActionIcon storageIcon;
     [SerializeField] private ActionIcon statusIcon;
     [SerializeField] private ActionIcon quitIcon;
+    [SerializeField] private StatusText statusText;
 
-    private Dictionary<ReserveActionType, Panel> actionPanels;
+    private Dictionary<ReserveActionType, SlidePanel> actionPanels;
     private Dictionary<ReserveActionType, ActionIcon> actionIcons;
     private List<ReserveActionType> actionTypeList;
     private ReserveActionType currentAction = ReserveActionType.Bag;
 
     private void Start()
     {
-        actionPanels = new Dictionary<ReserveActionType, Panel>
+        actionPanels = new Dictionary<ReserveActionType, SlidePanel>
         {
             {  ReserveActionType.Bag, bagPanel },
             {  ReserveActionType.Storage, storagePanel },
@@ -37,6 +40,15 @@ public class ReserveActionBoard : SlidePanel
         };
 
         actionTypeList = new List<ReserveActionType>(actionIcons.Keys);
+
+        ChangeActiveIcon();
+        ChangeActionPanel();
+    }
+
+    private void OnEnable()
+    {
+        // 初回はアクティブなアイコンとアクションパネルを更新する
+        if (actionIcons == null || actionPanels == null) return;
 
         ChangeActiveIcon();
         ChangeActionPanel();
@@ -60,7 +72,7 @@ public class ReserveActionBoard : SlidePanel
         {
             if (currentAction == ReserveActionType.Quit)
             {
-                OnReserveEnd?.Invoke(); // 予約終了イベントを呼び出す
+                OnReserveEnd?.Invoke();
             }
         }
     }
@@ -139,6 +151,7 @@ public class ReserveActionBoard : SlidePanel
     {
         if (currentAction == ReserveActionType.Quit)
         {
+            statusText.SetText(currentAction.GetActionText()); // ステータステキストを更新
             return;
         }
 
@@ -146,12 +159,27 @@ public class ReserveActionBoard : SlidePanel
         {
             if (kvp.Key == currentAction)
             {
-                kvp.Value.PanelOpen();
+                kvp.Value.gameObject.SetActive(true);
+                kvp.Value.SetActive(true);
+                statusText.SetText(kvp.Key.GetActionText()); // ステータステキストを更新
             }
             else
             {
-                kvp.Value.ClosePanel();
+                kvp.Value.SetActive(false);
             }
         }
+    }
+
+    public void ClosePanel(Action onComplete = null)
+    {
+        foreach (var kvp in actionPanels)
+        {
+            if (kvp.Key == currentAction)
+            {
+                kvp.Value.SetActive(false);
+            }
+        }
+        this.SetActive(false);
+        onComplete?.Invoke();
     }
 }
