@@ -5,16 +5,16 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 
-public class DropItem : MonoBehaviour
+public class DropCommandPrefab : FieldTriggerPrefab
 {
-    private Item item;
+    private Command command;
     private bool canPickup = false;
     private float groundY; // 初期位置を保存
     private float duration = 0.4f;
 
-    public void Setup(Item droppedItem)
+    public void Setup(Command droppedCommand)
     {
-        item = droppedItem;
+        command = droppedCommand;
     }
 
     public IEnumerator JumpMoveMotion(Vector2 targetPosition)
@@ -76,13 +76,9 @@ public class DropItem : MonoBehaviour
         transform.rotation = Quaternion.Euler(0f, 0f, 0f);
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    public override void EnterAction()
     {
-        if (canPickup && other.CompareTag("Player"))
-        {
-            // アイテム取得処理
-            PlayerController.Instance.PickUpItem(item);
-            Destroy(gameObject);
-        }
+        PlayerController.Instance.AddCommandToStorage(command);
+        Destroy(gameObject);
     }
 }

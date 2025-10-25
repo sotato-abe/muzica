@@ -39,7 +39,7 @@ public class WorldMapController : MonoBehaviour
 
     private void Start()
     {
-        ChangePlayerCoordinate(new Vector2Int(0, 0));
+        ChangePlayerCoordinate(DirectionType.Other);
         Vector2Int startPos = Vector2Int.up;
     }
 
@@ -50,25 +50,25 @@ public class WorldMapController : MonoBehaviour
             return;
 
         playerPosition = targetPosition;
-        GenerateField();
-        MoveFieldPlayerPosition(Vector2Int.zero); // フィールドのプレイヤー位置を更新
+        RenderFieldMap();
+        ChangeFieldPlayerPosition(DirectionType.Other); // フィールドのプレイヤー位置を更新
         SetWorldMapPlayerPosition();
     }
 
-    public void ChangePlayerCoordinate(Vector2Int direction)
+    public void ChangePlayerCoordinate(DirectionType direction)
     {
         // すでにイベント実行中のときはワールド移動をスキップする。
         if (PlayerController.Instance.CurrentEventType != EventType.Default)
             return;
 
-        playerPosition = playerPosition + direction;
-        GenerateField();
-        MoveFieldPlayerPosition(direction);
+        playerPosition = playerPosition + direction.GetDirectionVector2Int();
+        RenderFieldMap();
+        ChangeFieldPlayerPosition(direction.GetOppositeDirection()); // フィールドのプレイヤー位置を更新
         SetWorldMapPlayerPosition();
         ageTimePanel.PassageOfMonth(3); // 3ヶ月進める
     }
 
-    private void GenerateField()
+    private void RenderFieldMap()
     {
         FieldTileSet fieldTileSet = GetTileSet(playerPosition);
         FieldBase fieldBase = GetFieldBase(playerPosition);
@@ -118,7 +118,7 @@ public class WorldMapController : MonoBehaviour
         return fieldBase;
     }
 
-    private void MoveFieldPlayerPosition(Vector2Int direction)
+    private void ChangeFieldPlayerPosition(DirectionType direction)
     {
         if (player != null)
         {

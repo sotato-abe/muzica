@@ -1,11 +1,10 @@
 using UnityEngine;
 
-public class GateTrigger : MonoBehaviour
+public class FieldTriggerPrefab : MonoBehaviour
 {
     private bool isTriggered = false;
+    [SerializeField] private float waitingTime = 0.5f; // トリガー発生までの待機時間
     private float triggerTime = 0f;
-
-    public Vector2Int direction = Vector2Int.zero; // 移動方向を指定するための変数
 
     private void OnTriggerStay2D(Collider2D other)
     {
@@ -13,10 +12,10 @@ public class GateTrigger : MonoBehaviour
         {
             triggerTime += Time.deltaTime;
 
-            if (triggerTime >= 0.5f)
+            if (triggerTime >= waitingTime)
             {
                 isTriggered = true;
-                WorldMapController.Instance.ChangePlayerCoordinate(direction);
+                EnterAction();
             }
         }
     }
@@ -28,5 +27,10 @@ public class GateTrigger : MonoBehaviour
             triggerTime = 0f;
             isTriggered = false;
         }
+    }
+
+    public virtual void EnterAction()
+    {
+
     }
 }

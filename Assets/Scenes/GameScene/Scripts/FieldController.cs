@@ -14,8 +14,8 @@ public class FieldController : MonoBehaviour
 
     [SerializeField] MessagePanel messagePanel;
     [SerializeField] private Tilemap tilemap;
-    [SerializeField] DropItem dropItemPrefab; // ドロップアイテムのプレハブ
-    [SerializeField] DropCommand dropCommandPrefab; // ドロップアイテムのプレハブ
+    [SerializeField] DropItemPrefab dropItemPrefab; // ドロップアイテムのプレハブ
+    [SerializeField] DropCommandPrefab dropCommandPrefab; // ドロップコマンドのプレハブ
     [SerializeField] FieldPlayer fieldPlayer; // プレイヤーコントローラー
     [SerializeField] List<EnemyGroup> defaultEnemyGroups = new List<EnemyGroup>();
     [SerializeField] List<EnemyGroup> desertEnemyGroups = new List<EnemyGroup>();
@@ -202,7 +202,7 @@ public class FieldController : MonoBehaviour
     {
         if (item == null) return;
         Vector2 dropPosition = FindDropPosition(centerPosition);
-        DropItem dropItem = Instantiate(dropItemPrefab, dropPosition, Quaternion.identity);
+        DropItemPrefab dropItem = Instantiate(dropItemPrefab, dropPosition, Quaternion.identity);
         dropItem.Setup(item);
         StartCoroutine(dropItem.JumpMoveMotion(dropPosition));
     }
@@ -212,7 +212,7 @@ public class FieldController : MonoBehaviour
         if (command == null) return;
 
         Vector2 dropPosition = FindDropPosition(centerPosition);
-        DropCommand dropCommand = Instantiate(dropCommandPrefab, dropPosition, Quaternion.identity);
+        DropCommandPrefab dropCommand = Instantiate(dropCommandPrefab, dropPosition, Quaternion.identity);
         dropCommand.Setup(command);
         StartCoroutine(dropCommand.JumpMoveMotion(dropPosition));
     }
