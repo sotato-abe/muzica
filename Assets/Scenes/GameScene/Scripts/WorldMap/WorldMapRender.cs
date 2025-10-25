@@ -81,7 +81,7 @@ public class WorldMapRender : MonoBehaviour
     /// </summary>
     private void RenderFieldMap()
     {
-        foreach (var fieldBase in FieldDatabase.Instance.fieldBaseList)
+        foreach (var fieldBase in FieldDatabase.Instance.FieldBaseList)
         {
             if (fieldMap != null && fieldBase.Icon != null)
             {

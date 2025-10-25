@@ -139,8 +139,10 @@ public class SaveManagement : MonoBehaviour
         loadPlayerCharacter.Exp = playerData.exp;
         loadPlayerCharacter.ColStatus();
 
-        loadPlayerCharacter.RightHandEquipment = ItemDatabase.Instance.GetItemFromId(playerData.rightEquipmentIndex) as Equipment;
-        loadPlayerCharacter.LeftHandEquipment = ItemDatabase.Instance.GetItemFromId(playerData.leftEquipmentIndex) as Equipment;
+        if (playerData.rightEquipmentIndex != -1)
+            loadPlayerCharacter.RightHandEquipment = ItemDatabase.Instance.GetItemFromId(playerData.rightEquipmentIndex) as Equipment;
+        if (playerData.leftEquipmentIndex != -1)
+            loadPlayerCharacter.LeftHandEquipment = ItemDatabase.Instance.GetItemFromId(playerData.leftEquipmentIndex) as Equipment;
 
         loadPlayerCharacter.BagItemList.Clear();
         foreach (int itemId in playerData.bagItemIndexList)
