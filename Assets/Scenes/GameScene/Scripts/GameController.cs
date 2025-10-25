@@ -40,6 +40,7 @@ public class GameController : MonoBehaviour
         }
         ageTimePanel.TimeSlip(selectedPlayData.time);
         WorldMapController.Instance.WarpPlayerCoordinate(selectedPlayData.position);
+        SoundSystem.Instance.PlayBGM(BgmType.Field);
         fieldPlayer.SetCanMove(true);
     }
 
