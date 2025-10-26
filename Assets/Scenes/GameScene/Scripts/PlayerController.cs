@@ -242,6 +242,7 @@ public class PlayerController : MonoBehaviour
         int discPrice = (int)(item.Base.DiscPrice * discountRate);
 
         // プレイヤーにコインとディスクを追加
+        SoundSystem.Instance.PlaySE(SeType.UseCoin);
         AddCoin(coinPrice);
         AddDisc(discPrice);
     }

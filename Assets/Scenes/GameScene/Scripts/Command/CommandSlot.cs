@@ -29,6 +29,7 @@ public class CommandSlot : MonoBehaviour, IDropHandler
         Command command = droppedCommandBlock.Command;
         PlayerController.Instance.AddCommandToSlot(command, SlotIndex);
         SetCommand(command);
+        SoundSystem.Instance.PlaySE(SeType.Set);
         droppedCommandBlock.RemoveCommand();
     }
 

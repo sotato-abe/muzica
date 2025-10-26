@@ -78,6 +78,7 @@ public class DropItemPrefab : FieldTriggerPrefab
 
     public override void EnterAction()
     {
+        if(!canPickup) return;
         PlayerController.Instance.PickUpItem(item);
         Destroy(gameObject);
     }
