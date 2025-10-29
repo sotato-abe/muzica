@@ -77,7 +77,7 @@ public class Point
     {
         foreach (QuestBase quest in _base.ShopQuestBaseList)
         {
-            switch (quest.questType)
+            switch (quest.QuestType)
             {
                 case QuestType.Delivery:
                     DeliveryQuest deliveryQuest = new DeliveryQuest((DeliveryQuestBase)quest);

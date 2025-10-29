@@ -9,6 +9,6 @@ public class ExterminationQuestBase : QuestBase
     [Header("Task")] // タスク
     [SerializeField] List<CharacterBase> exterminationCharactersList; // 討伐キャラクターリスト
 
-    public override QuestType questType => QuestType.Extermination;
+    public override QuestType QuestType => QuestType.Extermination;
     public List<CharacterBase> ExterminationCharactersList { get => exterminationCharactersList; }
 }

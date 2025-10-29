@@ -27,7 +27,7 @@ public class Quest
 
     public QuestType GetQuestType()
     {
-        return _base.questType;
+        return _base.QuestType;
     }
 
     public bool IsCompleted()

@@ -11,7 +11,7 @@ public class DeliveryQuestBase : QuestBase
     [SerializeField, TextArea] string address; // 配達先住所
     [SerializeField] CharacterBase deliveryCharacter; // 配達キャラクター
 
-    public override QuestType questType => QuestType.Delivery;
+    public override QuestType QuestType => QuestType.Delivery;
     public List<TreasureBase> DeliveryItemBaseList { get => deliveryItemBaseList; }
     public string Address { get => address; }
     public CharacterBase DeliveryCharacter { get => deliveryCharacter; }
