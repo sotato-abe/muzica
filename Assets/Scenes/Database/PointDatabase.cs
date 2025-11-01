@@ -5,6 +5,8 @@ using System.Linq;
 
 public class PointDatabase : MonoBehaviour
 {
+    public static PointDatabase Instance { get; private set; }
+
     List<Point> pointList = new List<Point>();
 
     private void Awake()

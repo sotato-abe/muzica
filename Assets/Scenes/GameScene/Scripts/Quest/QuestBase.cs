@@ -13,9 +13,11 @@ public class QuestBase : ScriptableObject
     [SerializeField, TextArea] string description; // 説明
 
     [Header("Conditions")] // 出現条件
-    [SerializeField] bool isOneTimeOnly; //TODO 一度きりフラグ　ストーリークエストなどのフラグに使う
-    [SerializeField] DateTime startDateTime; // 開始日時
-    [SerializeField] DateTime endDateTime; // 終了日時
+    [SerializeField] int validCount; // 有効回数
+    [SerializeField] int startYear; // 開始年
+    [SerializeField] int startMonth; // 開始月
+    [SerializeField] int endYear; // 終了年
+    [SerializeField] int endMonth; // 終了月
     [SerializeField] List<Item> optionalItemsList; // 必要アイテムリスト
 
     public virtual QuestType QuestType => QuestType.Story;
@@ -26,7 +28,8 @@ public class QuestBase : ScriptableObject
     public PointBase PointBase { get => pointBase; }
     public string Description { get => description; }
 
-    public DateTime StartDateTime { get => startDateTime; }
-    public DateTime EndDateTime { get => endDateTime; }
+    public int ValidCount { get => validCount; }
+    public DateTime StartDateTime { get => new DateTime(startYear, startMonth, 1); }
+    public DateTime EndDateTime { get => new DateTime(endYear, endMonth, 1); }
     public List<Item> OptionalItemsList { get => optionalItemsList; }
 }

@@ -591,6 +591,7 @@ Transform:
   m_Children:
   - {fileID: 1321909784}
   - {fileID: 728230995}
+  - {fileID: 1903800971}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &86657626
@@ -11601,10 +11602,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 945add212dafdc9409bbafd7d6bcbc2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ageTimePanel: {fileID: 1058362223}
   defaultFieldBase: {fileID: 11400000, guid: 66ff32772e0207b4e8c681fefe716b1e, type: 2}
   pointDatabase: {fileID: 1403834905}
   gatePrefab: {fileID: 4029847700151290885, guid: f382b421336f2c54cb37151fd400110c, type: 3}
   treasureBoxObject: {fileID: -669450994214309268, guid: d86215f7830eaa546a452e1df82b5817, type: 3}
+  questPrefab: {fileID: -1779905732517476279, guid: ebffbf4e109cefc40b8553da2757f93d, type: 3}
   pointPrefab: {fileID: -3599976552395430200, guid: fda02853ac008e748bbb0bbbdbd6d687, type: 3}
   tilemap: {fileID: 2049345914}
   encountTilemap: {fileID: 1780537654}
@@ -20373,6 +20376,55 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1016575403}
   m_CullTransparentMesh: 1
+--- !u!1 &1016875627
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1016875629}
+  - component: {fileID: 1016875628}
+  m_Layer: 0
+  m_Name: QuestDatabase
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1016875628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1016875627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33101b3b28f1fd64cb6fb87bb9760022, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  storyQuestDataList: []
+  supplyQuestDataList: []
+  deliveryQuestDataList: []
+  exterminationQuestDataList: []
+  specialQuestDataList: []
+--- !u!4 &1016875629
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1016875627}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1035247906
 GameObject:
   m_ObjectHideFlags: 0
@@ -21025,6 +21077,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5ef553cd5cd41ae4c937c34edbe982d3, type: 2}
   - {fileID: 11400000, guid: 370b611c111befe42ab27965da113a35, type: 2}
   - {fileID: 11400000, guid: d3e46af47704d264bb15234642c0d980, type: 2}
+  - {fileID: 11400000, guid: eed99d26cf1702246a805d9f3ddd18ba, type: 2}
 --- !u!1 &1154996056
 GameObject:
   m_ObjectHideFlags: 0
@@ -31535,6 +31588,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1900582818}
   m_CullTransparentMesh: 1
+--- !u!1 &1903800970
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1903800971}
+  - component: {fileID: 1903800972}
+  m_Layer: 0
+  m_Name: QuestController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1903800971
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1903800970}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 86657625}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1903800972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1903800970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52f545baaf9cfbe40b3e6ae014ffc968, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  messagePanel: {fileID: 651672342}
 --- !u!1 &1931575636
 GameObject:
   m_ObjectHideFlags: 0
@@ -37537,6 +37635,7 @@ SceneRoots:
   - {fileID: 1403834904}
   - {fileID: 2145759211}
   - {fileID: 1281071715}
+  - {fileID: 1016875629}
   - {fileID: 965851651}
   - {fileID: 854224271}
   - {fileID: 228660186}

@@ -7,4 +7,5 @@ public enum MessageIconType
     System,
     Bag,
     Treasure,
+    Quest,
 }

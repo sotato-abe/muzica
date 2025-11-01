@@ -128,7 +128,34 @@ public class PlayerController : MonoBehaviour
 
     public bool HasBagSpace(int additionalItems = 1)
     {
+        // PlayerCharacterが初期化されていない場合はfalseを返す
+        if (PlayerCharacter == null)
+        {
+            return false;
+        }
+        
         return PlayerCharacter.Bag >= PlayerCharacter.BagItemList.Count + additionalItems;
+    }
+
+    public List<Item> GetItemList()
+    {
+        List<Item> itemList = new List<Item>();
+        
+        // PlayerCharacterが初期化されていない場合は空のリストを返す
+        if (PlayerCharacter == null)
+        {
+            return itemList;
+        }
+        
+        if (0 < PlayerCharacter.BagItemList?.Count)
+        {
+            itemList.AddRange(PlayerCharacter.BagItemList);
+        }
+        if (0 < PlayerCharacter.PocketList?.Count)
+        {
+            itemList.AddRange(PlayerCharacter.PocketList);
+        }
+        return itemList;
     }
 
     /// <summary>

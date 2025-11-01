@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -26,11 +27,14 @@ public class FieldGenerator : MonoBehaviour
     #endregion
 
     #region Serialized Fields
+    [SerializeField] private AgeTimePanel ageTimePanel;
+
     [Header("DefaultField Settings")]
     [SerializeField] private FieldBase defaultFieldBase;
     [SerializeField] private PointDatabase pointDatabase;
     [SerializeField] private GatePrefab gatePrefab;
     [SerializeField] private TreasureBoxPrefab treasureBoxObject;
+    [SerializeField] private QuestPrefab questPrefab;
     [SerializeField] private PointPrefab pointPrefab;
     [SerializeField] private Tilemap tilemap;
     [SerializeField] private Tilemap encountTilemap;
@@ -68,7 +72,7 @@ public class FieldGenerator : MonoBehaviour
     {
         if (fieldTileSet == null)
         {
-            Debug.LogError("FieldTileSet is null!");
+            UnityEngine.Debug.LogError("FieldTileSet is null!");
             return;
         }
         currentFieldBase = fieldBase ?? defaultFieldBase;
@@ -128,7 +132,7 @@ public class FieldGenerator : MonoBehaviour
     {
         if (currentFieldBase == null)
         {
-            Debug.LogError("FieldBase is not set! Call SetField first.");
+            UnityEngine.Debug.LogError("FieldBase is not set! Call SetField first.");
             return;
         }
 
@@ -137,6 +141,7 @@ public class FieldGenerator : MonoBehaviour
         CreateAllGates();
         RenderField();
         CreateFieldObjects();
+        CreateQuestObjects();
         CreatePointObjects();
         CreateTreasureBoxObjects();
     }
@@ -418,7 +423,7 @@ public class FieldGenerator : MonoBehaviour
 
         // 一意のシードを使用してランダムな位置を生成
         System.Random objectRandom = new System.Random(GenerateObjectSeed());
-        List<Vector2Int> validPositions = GetValidObjectPositionsForObjects();
+        List<Vector2Int> validPositions = GetValidObjectPositions();
 
         if (validPositions.Count == 0) return;
 
@@ -438,6 +443,49 @@ public class FieldGenerator : MonoBehaviour
     }
 
     /// <summary>
+    /// クエストオブジェクトを作成
+    /// </summary>
+    private void CreateQuestObjects()
+    {
+        List<Quest> questList = new List<Quest>();
+
+        questList = QuestDatabase.Instance.GetActiveQuestByField(ageTimePanel.ageTime, currentFieldBase.fieldType);
+
+        if (questList == null || questList.Count == 0) return;
+
+        // クエスト専用のシードを使用
+        System.Random questRandom = new System.Random(GenerateObjectSeed());
+        List<Vector2Int> validPositions = GetValidObjectPositions();
+
+        if (validPositions.Count == 0) return;
+
+        // シャッフルして一貫性のある順序を確保
+        ShuffleList(validPositions, questRandom);
+
+        int actualQuestCount = Mathf.Min(questList.Count, validPositions.Count);
+
+        for (int i = 0; i < actualQuestCount; i++)
+        {
+            Vector2Int pos = validPositions[i];
+            Vector3 position = GetObjectWorldPosition(pos.x, pos.y);
+
+            // インスタンス化したオブジェクトを取得
+            QuestPrefab instantiatedQuestObject = Instantiate(questPrefab, position, Quaternion.identity, this.transform);
+            try
+            {
+                UnityEngine.Debug.Log($"Setting quest: {questList[i].Base.Title}");
+                instantiatedQuestObject.SetQuest(questList[i]);
+            }
+            catch (System.Exception e)
+            {
+                UnityEngine.Debug.LogError($"Failed to convert QuestBase to Quest: {e.Message}");
+            }
+
+            placedObjects.Add(pos);
+        }
+    }
+
+    /// <summary>
     /// ポイントオブジェクトを作成
     /// </summary>
     private void CreatePointObjects()
@@ -446,7 +494,7 @@ public class FieldGenerator : MonoBehaviour
 
         // ポイント専用のシードを使用
         System.Random pointRandom = new System.Random(GeneratePointSeed());
-        List<Vector2Int> validPositions = GetValidObjectPositionsForPoints();
+        List<Vector2Int> validPositions = GetValidObjectPositions();
 
         if (validPositions.Count == 0) return;
 
@@ -465,13 +513,12 @@ public class FieldGenerator : MonoBehaviour
             try
             {
                 // PointBaseをPointに実体化させて格納
-                // pointTrigger.SetPoint(currentFieldBase.Points[i].ToPoint()); // PointBaseからPointに変換
                 Point point = pointDatabase.GetPoint(currentFieldBase.Points[i]);
                 instantiatedPointObject.SetPoint(point);
             }
             catch (System.Exception e)
             {
-                Debug.LogError($"Failed to convert PointBase to Point: {e.Message}");
+                UnityEngine.Debug.LogError($"Failed to convert PointBase to Point: {e.Message}");
             }
 
             placedPoints.Add(pos);
@@ -687,49 +734,7 @@ public class FieldGenerator : MonoBehaviour
     }
 
     /// <summary>
-    /// オブジェクト配置用の有効な位置リストを取得（ゲートのみ考慮）
-    /// </summary>
-    private List<Vector2Int> GetValidObjectPositionsForObjects()
-    {
-        List<Vector2Int> validPositions = new List<Vector2Int>();
-
-        for (int x = 0; x < currentFieldBase.FieldWidth; x++)
-        {
-            for (int y = 0; y < currentFieldBase.FieldHeight; y++)
-            {
-                if (CanPlaceObjectBasic(x, y))
-                {
-                    validPositions.Add(new Vector2Int(x, y));
-                }
-            }
-        }
-
-        return validPositions;
-    }
-
-    /// <summary>
-    /// ポイント配置用の有効な位置リストを取得（ゲートのみ考慮）
-    /// </summary>
-    private List<Vector2Int> GetValidObjectPositionsForPoints()
-    {
-        List<Vector2Int> validPositions = new List<Vector2Int>();
-
-        for (int x = 0; x < currentFieldBase.FieldWidth; x++)
-        {
-            for (int y = 0; y < currentFieldBase.FieldHeight; y++)
-            {
-                if (CanPlaceObjectBasic(x, y))
-                {
-                    validPositions.Add(new Vector2Int(x, y));
-                }
-            }
-        }
-
-        return validPositions;
-    }
-
-    /// <summary>
-    /// 基本的なオブジェクト配置可能性をチェック（ゲートのみ考慮）
+    /// 基本的なオブジェクト配置可能性をチェック
     /// </summary>
     private bool CanPlaceObjectBasic(int x, int y)
     {

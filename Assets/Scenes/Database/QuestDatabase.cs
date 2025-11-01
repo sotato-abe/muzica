@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Diagnostics;
 
 public class QuestDatabase : MonoBehaviour
 {
     public static QuestDatabase Instance { get; private set; }
+    
     [SerializeField] List<StoryQuestBase> storyQuestDataList;
     [SerializeField] List<SupplyQuestBase> supplyQuestDataList;
     [SerializeField] List<DeliveryQuestBase> deliveryQuestDataList;
@@ -13,7 +15,7 @@ public class QuestDatabase : MonoBehaviour
     [SerializeField] List<SpecialQuestBase> specialQuestDataList;
     List<QuestBase> QuestDataList;
 
-    private List<int> finishedQuestIds = new List<int>();
+    private List<Vector2Int> ExecutionQuests = new List<Vector2Int>(); //実行済みのクエストID・実行回数
 
     private void Awake()
     {
@@ -39,7 +41,7 @@ public class QuestDatabase : MonoBehaviour
     {
         if (QuestId < 0 || QuestId >= QuestDataList.Count)
         {
-            Debug.LogWarning("Invalid Quest ID: " + QuestId);
+            UnityEngine.Debug.LogWarning("Invalid Quest ID: " + QuestId);
             return null;
         }
 
@@ -57,7 +59,7 @@ public class QuestDatabase : MonoBehaviour
             case QuestType.Special:
                 return new SpecialQuest((SpecialQuestBase)baseData);
             default:
-                Debug.LogError("Unknown Quest type: " + baseData.QuestType);
+                UnityEngine.Debug.LogError("Unknown Quest type: " + baseData.QuestType);
                 return null;
         }
     }
@@ -65,16 +67,18 @@ public class QuestDatabase : MonoBehaviour
     public List<Quest> GetActiveQuestsByTime(DateTime targetTime)
     {
         List<Quest> activeQuests = new List<Quest>();
+        List<Item> playerItems = PlayerController.Instance.GetItemList();
+
         for (int i = 0; i < QuestDataList.Count; i++)
         {
-            if (finishedQuestIds.Contains(i))
-            {
-                continue; // クリア済みクエストはスキップ
-            }
             QuestBase questBase = QuestDataList[i];
-            if (questBase.StartDateTime == null || targetTime >= questBase.StartDateTime)
+            if (ExecutionQuests.Contains(new Vector2Int(i, questBase.ValidCount)) && questBase.ValidCount >= questBase.ValidCount)
             {
-                if (questBase.EndDateTime == null || targetTime <= questBase.EndDateTime)
+                continue; // 実行済みクエストはスキップ
+            }
+            if (IsActiveDateTime(questBase, targetTime))
+            {
+                if (IsActiveItem(questBase, playerItems))
                 {
                     Quest quest = GetQuestById(i);
                     if (quest != null)
@@ -89,21 +93,24 @@ public class QuestDatabase : MonoBehaviour
 
     public List<Quest> GetActiveQuestByField(DateTime targetTime, FieldType fieldType)
     {
+        UnityEngine.Debug.Log($"Getting active quests for field type: {fieldType} at time: {targetTime} / total quests : {QuestDataList.Count}");
         List<Quest> activeQuests = new List<Quest>();
+        List<Item> playerItems = PlayerController.Instance.GetItemList();
+
         for (int i = 0; i < QuestDataList.Count; i++)
         {
-            if (finishedQuestIds.Contains(i))
+            QuestBase questBase = QuestDataList[i];
+            if (ExecutionQuests.Contains(new Vector2Int(i, questBase.ValidCount)) && questBase.ValidCount >= questBase.ValidCount)
             {
                 continue; // クリア済みクエストはスキップ
             }
-            QuestBase questBase = QuestDataList[i];
             if (questBase.FieldType != fieldType)
             {
                 continue; // フィールドタイプが一致しない場合はスキップ
             }
-            if (questBase.StartDateTime == null || targetTime >= questBase.StartDateTime)
+            if (IsActiveDateTime(questBase, targetTime))
             {
-                if (questBase.EndDateTime == null || targetTime <= questBase.EndDateTime)
+                if (IsActiveItem(questBase, playerItems))
                 {
                     Quest quest = GetQuestById(i);
                     if (quest != null)
@@ -119,20 +126,22 @@ public class QuestDatabase : MonoBehaviour
     public List<Quest> GetActiveQuestsByPoint(DateTime targetTime, PointBase pointBase)
     {
         List<Quest> activeQuests = new List<Quest>();
+        List<Item> playerItems = PlayerController.Instance.GetItemList();
+
         for (int i = 0; i < QuestDataList.Count; i++)
         {
-            if (finishedQuestIds.Contains(i))
-            {
-                continue; // クリア済みクエストはスキップ
-            }
             QuestBase questBase = QuestDataList[i];
+            if (ExecutionQuests.Contains(new Vector2Int(i, questBase.ValidCount)) && questBase.ValidCount >= questBase.ValidCount)
+            {
+                continue; // 実行済みクエストはスキップ
+            }
             if (questBase.PointBase != pointBase)
             {
                 continue; // ポイントが一致しない場合はスキップ
             }
-            if (questBase.StartDateTime == null || targetTime >= questBase.StartDateTime)
+            if (IsActiveDateTime(questBase, targetTime))
             {
-                if (questBase.EndDateTime == null || targetTime <= questBase.EndDateTime)
+                if (IsActiveItem(questBase, playerItems))
                 {
                     Quest quest = GetQuestById(i);
                     if (quest != null)
@@ -143,6 +152,30 @@ public class QuestDatabase : MonoBehaviour
             }
         }
         return activeQuests;
+    }
+
+    private bool IsActiveDateTime(QuestBase questBase, DateTime targetTime)
+    {
+        if (questBase.StartDateTime == null || targetTime >= questBase.StartDateTime)
+        {
+            if (questBase.EndDateTime == null || targetTime <= questBase.EndDateTime)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool IsActiveItem(QuestBase questBase, List<Item> playerItems)
+    {
+        foreach (Item requiredItem in questBase.OptionalItemsList)
+        {
+            if (!playerItems.Contains(requiredItem))
+            {
+                return false; // 必要アイテムが不足している場合
+            }
+        }
+        return true;
     }
 
     public int GetQuestId(QuestBase Quest)
@@ -156,9 +189,14 @@ public class QuestDatabase : MonoBehaviour
 
     public void MarkQuestAsFinished(int questId)
     {
-        if (!finishedQuestIds.Contains(questId))
+        if (ExecutionQuests.Contains(new Vector2Int(questId, 0)))
         {
-            finishedQuestIds.Add(questId);
+            int index = ExecutionQuests.IndexOf(new Vector2Int(questId, 0));
+            ExecutionQuests[index] = new Vector2Int(questId, ExecutionQuests[index].y + 1);
+        }
+        else
+        {
+            ExecutionQuests.Add(new Vector2Int(questId, 1));
         }
     }
 }

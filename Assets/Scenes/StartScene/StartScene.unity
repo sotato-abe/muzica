@@ -1246,6 +1246,56 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &924216061
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 924216063}
+  - component: {fileID: 924216062}
+  m_Layer: 0
+  m_Name: QuestDatabase
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &924216062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924216061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33101b3b28f1fd64cb6fb87bb9760022, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  storyQuestDataList:
+  - {fileID: 11400000, guid: f7301aef26ad3f74d842219c340a85c7, type: 2}
+  supplyQuestDataList: []
+  deliveryQuestDataList: []
+  exterminationQuestDataList: []
+  specialQuestDataList: []
+--- !u!4 &924216063
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924216061}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 924.4689, y: 455.35156, z: -7.595985}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &1041802235 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1102153604137395202, guid: 4e896f7479476b84ca1745e56e3b64f5, type: 3}
@@ -2713,4 +2763,5 @@ SceneRoots:
   - {fileID: 79507210}
   - {fileID: 1052577077}
   - {fileID: 749698479}
+  - {fileID: 924216063}
   - {fileID: 369454484}
