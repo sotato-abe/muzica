@@ -93,7 +93,6 @@ public class QuestDatabase : MonoBehaviour
 
     public List<Quest> GetActiveQuestByField(DateTime targetTime, FieldType fieldType)
     {
-        UnityEngine.Debug.Log($"Getting active quests for field type: {fieldType} at time: {targetTime} / total quests : {QuestDataList.Count}");
         List<Quest> activeQuests = new List<Quest>();
         List<Item> playerItems = PlayerController.Instance.GetItemList();
 

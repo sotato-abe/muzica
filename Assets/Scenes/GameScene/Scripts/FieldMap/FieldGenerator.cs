@@ -473,7 +473,6 @@ public class FieldGenerator : MonoBehaviour
             QuestPrefab instantiatedQuestObject = Instantiate(questPrefab, position, Quaternion.identity, this.transform);
             try
             {
-                UnityEngine.Debug.Log($"Setting quest: {questList[i].Base.Title}");
                 instantiatedQuestObject.SetQuest(questList[i]);
             }
             catch (System.Exception e)

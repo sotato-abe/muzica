@@ -7,6 +7,7 @@ public class GameController : MonoBehaviour
 {
     [SerializeField] private AgeTimePanel ageTimePanel;
     [SerializeField] ReserveSystem reserveSystem;
+    [SerializeField] QuestSystem questSystem;
     [SerializeField] BattleSystem battleSystem;
     [SerializeField] TradeSystem tradeSystem;
     [SerializeField] FieldPlayer fieldPlayer;
@@ -22,7 +23,9 @@ public class GameController : MonoBehaviour
         reserveSystem.OnReserveEnd += ReserveEnd; // リザーブ終了イベントを登録
         battleSystem.OnBattleEnd += BattleEnd; // バトル終了イベントを登録
         tradeSystem.OnTradeEnd += TradeEnd; // リザーブ終了イベントを登録
+        questSystem.OnQuestEnd += QuestEnd; // クエスト終了イベントを登録
         fieldController.OnPointEnter += TradeStart;
+        fieldController.OnQuestEnter += QuestStart;
         LoadPlayData();
     }
 
@@ -46,6 +49,7 @@ public class GameController : MonoBehaviour
 
     public void ReserveStart()
     {
+        fieldPlayer.SetCanMove(false); // プレイヤーの移動を停止
         reserveSystem.gameObject.SetActive(true); // リザーブシステムを非表示にする
         ageTimePanel.SetTimeSpeed(TimeState.Live);
         reserveSystem.ReserveStart(); // リザーブ開始処理を呼び出す
@@ -57,6 +61,7 @@ public class GameController : MonoBehaviour
         ageTimePanel.SetTimeSpeed(TimeState.Fast);
         fieldPlayer.SetCanMove(true); // プレイヤーの移動を再開
     }
+
     public void BattleStart()
     {
         battleSystem.gameObject.SetActive(true); // リザーブシステムを非表示にする
@@ -82,6 +87,21 @@ public class GameController : MonoBehaviour
     public void TradeEnd()
     {
         tradeSystem.gameObject.SetActive(false); // リザーブシステムを非表示にする
+        ageTimePanel.SetTimeSpeed(TimeState.Fast);
+        fieldPlayer.SetCanMove(true); // プレイヤーの移動を再開
+    }
+
+    public void QuestStart(Quest quest)
+    {
+        questSystem.gameObject.SetActive(true); // クエストシステムを表示する
+        ageTimePanel.SetTimeSpeed(TimeState.Live);
+        questSystem.QuestStart(quest); // クエスト開始処理を呼び出す
+        fieldPlayer.SetCanMove(false); // プレイヤーの移動を停止
+    }
+
+    public void QuestEnd()
+    {
+        questSystem.gameObject.SetActive(false); // クエストシステムを非表示にする
         ageTimePanel.SetTimeSpeed(TimeState.Fast);
         fieldPlayer.SetCanMove(true); // プレイヤーの移動を再開
     }

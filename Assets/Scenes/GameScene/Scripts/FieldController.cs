@@ -4,11 +4,14 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.Tilemaps;
 using UnityEngine.Events;
+using System.Diagnostics;
 
 public class FieldController : MonoBehaviour
 {
     public delegate void PointEnterDelegate(Point point);
     public event PointEnterDelegate OnPointEnter;
+    public delegate void QuestEnterDelegate(Quest quest);
+    public event QuestEnterDelegate OnQuestEnter;
     private const int ITEM_GET_PROBABILITY = 30;
     public static FieldController Instance { get; private set; }
 
@@ -69,7 +72,7 @@ public class FieldController : MonoBehaviour
     {
         if (currentFieldBase == null)
         {
-            Debug.LogWarning("Current field data is null. Cannot get enemies.");
+            UnityEngine.Debug.LogWarning("Current field data is null. Cannot get enemies.");
             return new List<Character>();
         }
 
@@ -102,17 +105,30 @@ public class FieldController : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("No target group found for enemies.");
+            UnityEngine.Debug.LogWarning("No target group found for enemies.");
         }
 
         return enemies;
+    }
+
+    public void EnterQuest(Quest quest)
+    {
+        if (quest == null)
+        {
+            UnityEngine.Debug.LogWarning("Quest is null. Cannot enter quest.");
+            return;
+        }
+
+        // メッセージパネルにメッセージを表示
+        messagePanel.AddMessage(MessageIconType.Field, $"{quest.Base.Title} にアクセス");
+        OnQuestEnter?.Invoke(quest); // クエストイベントを発火
     }
 
     public void EnterPoint(Point point)
     {
         if (point == null)
         {
-            Debug.LogWarning("Point is null. Cannot enter point.");
+            UnityEngine.Debug.LogWarning("Point is null. Cannot enter point.");
             return;
         }
 
@@ -169,7 +185,7 @@ public class FieldController : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogWarning("未対応のItemBase型：" + item.GetType().Name);
+                    UnityEngine.Debug.LogWarning("未対応のItemBase型：" + item.GetType().Name);
                     return;
                 }
                 PlayerController.Instance.AddItemToBag(newItem);
@@ -178,7 +194,7 @@ public class FieldController : MonoBehaviour
         }
 
         // 予備処理（念のため）
-        Debug.LogWarning("抽選失敗（このメッセージは基本出ない）");
+        UnityEngine.Debug.LogWarning("抽選失敗（このメッセージは基本出ない）");
     }
 
     public void DropPlayerItem(Item item)

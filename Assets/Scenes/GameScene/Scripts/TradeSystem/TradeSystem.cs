@@ -98,7 +98,6 @@ public class TradeSystem : MonoBehaviour
         tradeActionBoard.ClosePanel(CheckAllComplete); // リザーブアクションボードを表示
         playerSubPanel.SetActive(false, CheckAllComplete); // キャラクターサブパネルを表示
         ownerSubPanel.SetActive(false, CheckAllComplete); // キャラクターサブパネルを表示
-        // messagePanel.SetActive(true, CheckAllComplete); // メッセージパネルを表示
         worldMapPanel.SetActive(true, CheckAllComplete); // ワールドマップパネルを表示
         savePanel.SetActive(true, CheckAllComplete); // セーブパネルを表示
         cameraManager.SetEventType(EventType.Default); // バトル時のカメラ位置を設定
