@@ -11,7 +11,8 @@ public class QuestSystem : MonoBehaviour
     
     public static QuestSystem Instance { get; private set; }
 
-    [SerializeField] MessagePanel messagePanel;
+    [SerializeField] private CameraManager cameraManager;
+    [SerializeField] private QuestActionBoard questActionBoard; // クエストアクションボード
     [SerializeField] WorldMapPanel worldMapPanel;
     [SerializeField] TalkPanel talkPanel;
 
@@ -23,6 +24,7 @@ public class QuestSystem : MonoBehaviour
             return;
         }
         Instance = this;
+        questActionBoard.OnQuestEnd += QuestEnd;
     }
 
     private void Update()
@@ -41,11 +43,10 @@ public class QuestSystem : MonoBehaviour
             return;
         }
 
-        // メッセージパネルにメッセージを表示
+        cameraManager.SetEventType(EventType.Trade); // トレード時のカメラ位置を設定
         worldMapPanel.SetActive(false); // ワールドマップパネルを非表示
         talkPanel.SetQuest(quest);
-        talkPanel.SetActive(true);
-        messagePanel.AddMessage(MessageIconType.Quest, $"{quest.Base.Title} を発見");
+        questActionBoard.SetActive(true); // クエストアクションボードを表示
     }
 
     public void QuestEnd()
@@ -55,12 +56,14 @@ public class QuestSystem : MonoBehaviour
         void CheckAllComplete()
         {
             completed++;
-            if (completed >= 1)
+            if (completed >= 2)
             {
                 OnQuestEnd?.Invoke();
                 transform.gameObject.SetActive(false);
             }
         }
+        questActionBoard.ClosePanel(CheckAllComplete); // クエストアクションボードを表示
         worldMapPanel.SetActive(true, CheckAllComplete); // ワールドマップパネルを表示
+        cameraManager.SetEventType(EventType.Default); // バトル時のカメラ位置を設定
     }
 }

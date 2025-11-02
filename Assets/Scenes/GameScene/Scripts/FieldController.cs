@@ -120,7 +120,7 @@ public class FieldController : MonoBehaviour
         }
 
         // メッセージパネルにメッセージを表示
-        messagePanel.AddMessage(MessageIconType.Field, $"{quest.Base.Title} にアクセス");
+        messagePanel.AddMessage(MessageIconType.Quest, $"{quest.Base.Title} を発見");
         OnQuestEnter?.Invoke(quest); // クエストイベントを発火
     }
 
