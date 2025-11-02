@@ -75,6 +75,7 @@ public class QuestCard : MonoBehaviour
                 var workQuest = currentQuest as WorkQuest;
                 workQuestTask.SetTask(workQuest);
                 workQuestTask.gameObject.SetActive(true);
+                receiptButton.gameObject.SetActive(true);
                 break;
             case QuestType.Special:
                 var specialQuest = currentQuest as SpecialQuest;
@@ -118,6 +119,7 @@ public class QuestCard : MonoBehaviour
             case QuestType.Extermination:
                 break;
             case QuestType.Work:
+                ReceiptWorkTask();
                 break;
             case QuestType.Special:
                 break;
@@ -171,6 +173,28 @@ public class QuestCard : MonoBehaviour
         }
 
         OwnerMessage(new TalkMessage(MessageType.Other, MessagePanelType.Default, "よろしく頼むよ"));
+        OnReceiptQuest?.Invoke(currentQuest);
+        currentQuest.isCompleted = true;
+    }
+
+    private void ReceiptWorkTask()
+    {
+        WorkQuest workQuest = currentQuest as WorkQuest;
+        List<Item> rewardItems = workQuest.RewardItems;
+        // 作業クエストの受領処理をここに実装
+        foreach (Item item in rewardItems)
+        {
+            PlayerController.Instance.AddItemToBag(item);
+        }
+        if (workQuest.WorkQuestBase.CoinPrice > 0)
+        {
+            PlayerController.Instance.AddCoin(workQuest.WorkQuestBase.CoinPrice);
+        }
+        if (workQuest.WorkQuestBase.DiscPrice > 0)
+        {
+            PlayerController.Instance.AddDisc(workQuest.WorkQuestBase.DiscPrice);
+        }
+        AgeTimePanel.Instance.PassageOfMonth(workQuest.WorkQuestBase.Month);
         OnReceiptQuest?.Invoke(currentQuest);
         currentQuest.isCompleted = true;
     }

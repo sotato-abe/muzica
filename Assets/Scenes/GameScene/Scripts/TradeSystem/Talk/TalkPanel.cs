@@ -86,7 +86,10 @@ public class TalkPanel : TwoColumnPanel
 
     public void ReceiptQuest(Quest quest)
     {
-        currentPoint.ShopQuests.Remove(quest); // ポイントのアイテムリストから削除
+        if (currentPoint != null)
+        {
+            currentPoint.ShopQuests.Remove(quest); // ポイントのアイテムリストから削除
+        }
         questCard.gameObject.SetActive(false);
         emptyAlert.SetActive(true);
         UpdateUI();

@@ -7,6 +7,8 @@ using System;
 
 public class AgeTimePanel : MonoBehaviour
 {
+    public static AgeTimePanel Instance { get; private set; }
+
     [SerializeField] private TextMeshProUGUI ageTimeField;  // 表示用のTextMeshProUGUIフィールド
     [SerializeField] StatePanelController statePanel;
     [SerializeField] PointDatabase pointDatabase;
@@ -16,6 +18,15 @@ public class AgeTimePanel : MonoBehaviour
     public TimeState timeSpeed = TimeState.Fast;
     private int lastYear; // 直前の年を記録
 
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
     private void Start()
     {
         SetTimeSpeed(TimeState.Fast);
