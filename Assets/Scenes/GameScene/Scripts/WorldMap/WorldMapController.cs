@@ -65,7 +65,7 @@ public class WorldMapController : MonoBehaviour
         RenderFieldMap();
         ChangeFieldPlayerPosition(direction.GetOppositeDirection()); // フィールドのプレイヤー位置を更新
         SetWorldMapPlayerPosition();
-        ageTimePanel.PassageOfMonth(3); // 3ヶ月進める
+        ageTimePanel.PassageOfMonth(2); // 2ヶ月進める
     }
 
     private void RenderFieldMap()

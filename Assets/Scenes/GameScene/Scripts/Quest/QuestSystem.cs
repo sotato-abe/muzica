@@ -13,8 +13,10 @@ public class QuestSystem : MonoBehaviour
 
     [SerializeField] private CameraManager cameraManager;
     [SerializeField] private QuestActionBoard questActionBoard; // クエストアクションボード
-    [SerializeField] WorldMapPanel worldMapPanel;
     [SerializeField] TalkPanel talkPanel;
+
+    [SerializeField] WorldMapPanel worldMapPanel;
+    [SerializeField] SlidePanel savePanel;
 
     private void Awake()
     {
@@ -45,6 +47,8 @@ public class QuestSystem : MonoBehaviour
 
         cameraManager.SetEventType(EventType.Trade); // トレード時のカメラ位置を設定
         worldMapPanel.SetActive(false); // ワールドマップパネルを非表示
+        savePanel.SetActive(false); // セーブパネルを非表示
+
         talkPanel.SetQuest(quest);
         questActionBoard.SetActive(true); // クエストアクションボードを表示
     }
@@ -56,7 +60,7 @@ public class QuestSystem : MonoBehaviour
         void CheckAllComplete()
         {
             completed++;
-            if (completed >= 2)
+            if (completed >= 3)
             {
                 OnQuestEnd?.Invoke();
                 transform.gameObject.SetActive(false);
@@ -64,6 +68,7 @@ public class QuestSystem : MonoBehaviour
         }
         questActionBoard.ClosePanel(CheckAllComplete); // クエストアクションボードを表示
         worldMapPanel.SetActive(true, CheckAllComplete); // ワールドマップパネルを表示
+        savePanel.SetActive(true, CheckAllComplete); // セーブパネルを表示
         cameraManager.SetEventType(EventType.Default); // バトル時のカメラ位置を設定
     }
 }

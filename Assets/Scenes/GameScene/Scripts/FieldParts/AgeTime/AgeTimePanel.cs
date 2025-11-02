@@ -62,9 +62,18 @@ public class AgeTimePanel : MonoBehaviour
 
     public void PassageOfMonth(int months)
     {
-        // 現在の時間にスリップタイムを加算する
-        ageTime = ageTime.AddMonths(months);
-        UpdateAgeTimeField();
+        StartCoroutine(PassageOfTime(months));
+    }
+
+    private IEnumerator PassageOfTime(int months)
+    {
+        // 現在時刻からからageTimeごとに0.3秒かけて加算して表示を更新する
+        for (int i = 0; i < months; i++)
+        {
+            ageTime = ageTime.AddMonths(1);
+            UpdateAgeTimeField();
+            yield return new WaitForSeconds(0.3f);
+        }
     }
 
     // ageTimeFieldに時間を表示

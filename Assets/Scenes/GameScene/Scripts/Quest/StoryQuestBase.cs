@@ -6,4 +6,5 @@ using System;
 [CreateAssetMenu(fileName = "NewStoryQuest", menuName = "Quest/Story")]
 public class StoryQuestBase : QuestBase
 {
+    public override QuestType QuestType => QuestType.Story;
 }

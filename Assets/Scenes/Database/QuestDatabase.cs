@@ -12,6 +12,7 @@ public class QuestDatabase : MonoBehaviour
     [SerializeField] List<SupplyQuestBase> supplyQuestDataList;
     [SerializeField] List<DeliveryQuestBase> deliveryQuestDataList;
     [SerializeField] List<ExterminationQuestBase> exterminationQuestDataList;
+    [SerializeField] List<WorkQuestBase> workQuestDataList;
     [SerializeField] List<SpecialQuestBase> specialQuestDataList;
     List<QuestBase> QuestDataList;
 
@@ -34,6 +35,7 @@ public class QuestDatabase : MonoBehaviour
         QuestDataList.AddRange(supplyQuestDataList);
         QuestDataList.AddRange(deliveryQuestDataList);
         QuestDataList.AddRange(exterminationQuestDataList);
+        QuestDataList.AddRange(workQuestDataList);
         QuestDataList.AddRange(specialQuestDataList);
     }
 
@@ -56,6 +58,8 @@ public class QuestDatabase : MonoBehaviour
                 return new DeliveryQuest((DeliveryQuestBase)baseData);
             case QuestType.Extermination:
                 return new ExterminationQuest((ExterminationQuestBase)baseData);
+            case QuestType.Work:
+                return new WorkQuest((WorkQuestBase)baseData);
             case QuestType.Special:
                 return new SpecialQuest((SpecialQuestBase)baseData);
             default:

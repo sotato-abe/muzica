@@ -14,6 +14,7 @@ public class QuestCard : MonoBehaviour
     [SerializeField] SupplyQuestTask supplyQuestTask;
     [SerializeField] DeliveryQuestTask deliveryQuestTask;
     [SerializeField] ExterminationQuestTask exterminationQuestTask;
+    [SerializeField] WorkQuestTask workQuestTask;
     [SerializeField] SpecialQuestTask specialQuestTask;
 
     [SerializeField] ReceiptButton receiptButton;
@@ -70,6 +71,11 @@ public class QuestCard : MonoBehaviour
                 var exterminationQuest = currentQuest as ExterminationQuest;
                 exterminationQuestTask.gameObject.SetActive(true);
                 break;
+            case QuestType.Work:
+                var workQuest = currentQuest as WorkQuest;
+                workQuestTask.SetTask(workQuest);
+                workQuestTask.gameObject.SetActive(true);
+                break;
             case QuestType.Special:
                 var specialQuest = currentQuest as SpecialQuest;
                 specialQuestTask.gameObject.SetActive(true);
@@ -110,6 +116,8 @@ public class QuestCard : MonoBehaviour
                 ReceiptDeliveryTask();
                 break;
             case QuestType.Extermination:
+                break;
+            case QuestType.Work:
                 break;
             case QuestType.Special:
                 break;
