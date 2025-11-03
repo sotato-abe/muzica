@@ -21,7 +21,6 @@ public class FieldBase : ScriptableObject
     [SerializeField, TextArea] string description;
 
     [Header("Objects")]
-    [SerializeField] int objectCount = 5;
     [SerializeField] List<PointBase> points = new List<PointBase>();
     [SerializeField] List<ItemBase> treasureBoxItems = new List<ItemBase>();
 
@@ -49,7 +48,6 @@ public class FieldBase : ScriptableObject
     public string Description { get => description; }
 
     // Objects
-    public int ObjectCount { get => objectCount; }
     public List<PointBase> Points { get => points; }
     public List<ItemBase> TreasureBoxItems { get => treasureBoxItems; }
     public List<EnemyGroup> EnemyGroups { get => enemyGroups; }
