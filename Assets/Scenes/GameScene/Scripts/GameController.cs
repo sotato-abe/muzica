@@ -38,7 +38,7 @@ public class GameController : MonoBehaviour
             defaultPlayer.Init();
             selectedPlayData.playerData = saveManagement.PlayerDataConverter(defaultPlayer);
             selectedPlayData.position = defaultPlayer.Base.Birthplace.Position;
-            selectedPlayData.time = new DateTime(2030, 4, 1);
+            selectedPlayData.time = new DateTime(2030, 10, 1);
             GameScene.selectedPlayData = selectedPlayData;
         }
         ageTimePanel.TimeSlip(selectedPlayData.time);

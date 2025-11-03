@@ -150,7 +150,7 @@ public class LoadController : MonoBehaviour
         }
         playData.playerData = playerData;
         playData.position = character.Base.Birthplace.Position;
-        playData.time = new DateTime(2030, 12, 1); 
+        playData.time = new DateTime(2030, 1, 1); 
 
         return playData;
     }
