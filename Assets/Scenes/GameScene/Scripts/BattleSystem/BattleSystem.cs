@@ -96,7 +96,7 @@ public class BattleSystem : MonoBehaviour
             fieldEnemy.SetUp(enemy); // バトラーの設定を行う
             fieldEnemy.Inversion(!isLeft); // 向きを反転
             fieldEnemy.SetNumIcon(index); // 敵の番号アイコンを設定
-            fieldPlayer.Inversion(isLeft); // プレイヤーの向きを反転
+            fieldPlayer.OrientationChange(isLeft); // プレイヤーの向きを反転
             SetEnemySubPanel(enemy, enemies.Count - (index + 1), enemies.Count); // 敵のサブパネルを設定
             fieldEnemies.Add(fieldEnemy); // 生成した敵をリストに追加
             yield return new WaitForSeconds(0.3f);
@@ -165,6 +165,7 @@ public class BattleSystem : MonoBehaviour
     // 仮の敵ターン
     private IEnumerator EnemyAttack(TotalAttackCount totalAttackCount)
     {
+        fieldPlayer.SetAnimation(AnimationType.Damage);
         yield return StartCoroutine(playerSubPanel.TakeAttackCoroutine(totalAttackCount));
         OnActionEnd(); // アクション終了イベントを呼び出す
     }
@@ -192,6 +193,7 @@ public class BattleSystem : MonoBehaviour
     {
         if (characterSubPanel == null) return;
         StopAllCharacterTurnBar();
+        fieldPlayer.SetAnimation(AnimationType.Death);
         SoundSystem.Instance.PlayBGM(BgmType.GameOver);
         gameOverWindow.Show(); // ゲームオーバーウィンドウを表示
     }

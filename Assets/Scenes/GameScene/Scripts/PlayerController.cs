@@ -576,6 +576,7 @@ public class PlayerController : MonoBehaviour
                 PlayerCharacter.UpdateBatteryGuard(guardVal);
             }
         }
+        fieldPlayer.SetAnimation(AnimationType.Buff);
         UpdatePlayerEnergy();
     }
 

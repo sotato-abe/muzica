@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -25,6 +26,7 @@ public class FieldCharacter : MonoBehaviour
 
     public virtual void SetAnimation(AnimationType animationType)
     {
+        UnityEngine.Debug.Log($"Setting animation: {animationType}");
         switch (animationType)
         {
             case AnimationType.Attack:
@@ -46,7 +48,7 @@ public class FieldCharacter : MonoBehaviour
                 animator.SetTrigger("Death");
                 break;
             default:
-                Debug.LogWarning($"Unknown animation type: {animationType}");
+                UnityEngine.Debug.LogWarning($"Unknown animation type: {animationType}");
                 break;
         }
     }

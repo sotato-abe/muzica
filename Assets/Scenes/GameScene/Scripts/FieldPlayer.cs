@@ -7,6 +7,7 @@ public class FieldPlayer : FieldCharacter
 {
     public UnityAction OnReserveStart; // リザーブイベント
     public UnityAction OnBattleStart; // バトルイベント
+    [SerializeField] RectTransform characterRectTransform;
     [SerializeField] private LayerMask encountLayer;
     private float moveSpeed = 2f;
     private float encountRadius = 0.1f;
@@ -20,7 +21,6 @@ public class FieldPlayer : FieldCharacter
 
     private void Start()
     {
-        animator = GetComponent<Animator>(); // ← 基底クラスの animator を使用
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -42,11 +42,11 @@ public class FieldPlayer : FieldCharacter
 
         if (moveInput.x < 0)
         {
-            Inversion(true); // 左向き
+            OrientationChange(true); // 左向き
         }
         else if (moveInput.x > 0)
         {
-            Inversion(false); // 右向き
+            OrientationChange(false); // 右向き
         }
 
         if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Return))
@@ -55,6 +55,11 @@ public class FieldPlayer : FieldCharacter
             moveInput = Vector2.zero; // ← ここでも念のためリセット
             OnReserveStart?.Invoke();
         }
+    }
+
+    public void OrientationChange(bool isLeft)
+    {
+        characterRectTransform.localScale = new Vector3(isLeft ? -2 : 2, 2, 2);
     }
 
     void FixedUpdate()

@@ -17,6 +17,7 @@ public class EquipPanel : BattleActionPanel
 
     #region Serialized Fields
     [Header("UI Components")]
+    [SerializeField] private FieldPlayer fieldPlayer;
     [SerializeField] private TargetCommandWindow targetCommandWindow;
     [SerializeField] private EquipWindow equipWindow;
     [SerializeField] private SlotWindow slotWindow;
@@ -274,6 +275,7 @@ public class EquipPanel : BattleActionPanel
     private void ExecuteGuardAction(TotalAttackCount totalCount)
     {
         PlayerController.Instance.TakeGuard(totalCount);
+        fieldPlayer.SetAnimation(AnimationType.Buff);
         OnActionEnd?.Invoke();
     }
 
@@ -285,6 +287,7 @@ public class EquipPanel : BattleActionPanel
         if (enemySubPanel2.isOpen && enemySubPanel2.isTarget) targetSubPanels.Add(enemySubPanel2);
         if (enemySubPanel3.isOpen && enemySubPanel3.isTarget) targetSubPanels.Add(enemySubPanel3);
 
+        fieldPlayer.SetAnimation(AnimationType.Attack);
         foreach (var subPanel in targetSubPanels)
         {
             StartCoroutine(ExecuteAttack(subPanel, totalCount));
