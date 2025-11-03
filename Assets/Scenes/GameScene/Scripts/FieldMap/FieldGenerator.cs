@@ -141,10 +141,13 @@ public class FieldGenerator : MonoBehaviour
         CreateAllGates();
         RenderField();
         CreateFieldObjects();
-        CreateQuestObjects();
         CreatePointObjects();
+        CreateQuestObjects();
         CreateTreasureBoxObjects();
     }
+    #endregion
+
+    #region MapRender Methods
 
     /// <summary>
     /// フィールドをクリアする
@@ -292,11 +295,88 @@ public class FieldGenerator : MonoBehaviour
     }
 
     /// <summary>
+    /// フィールドのタイルをレンダリング
+    /// </summary>
+    private void RenderField()
+    {
+        for (int x = 0; x < currentFieldBase.FieldWidth; x++)
+        {
+            for (int y = 0; y < currentFieldBase.FieldHeight; y++)
+            {
+                Vector3Int tilePosition = new Vector3Int(x, y, 0);
+
+                TileType tileType = (TileType)mapBase[x, y];
+                TileBase tileToPlace = GetTileForType(tileType);
+
+                if (tileType == TileType.Area)
+                {
+                    encountTilemap.SetTile(tilePosition, tileToPlace);
+                }
+
+                if (tileToPlace != null)
+                {
+                    tilemap.SetTile(tilePosition, tileToPlace);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// タイプに対応するタイルを取得
+    /// </summary>
+    private TileBase GetTileForType(TileType tileType)
+    {
+        return tileType switch
+        {
+            TileType.Ground => groundTile,
+            TileType.Area => areaTile,
+            TileType.Gate => groundTile,
+            _ => null
+        };
+    }
+
+    /// <summary>
+    /// マップを初期化
+    /// </summary>
+    private void InitializeMaps()
+    {
+        mapBase = new int[currentFieldBase.FieldWidth, currentFieldBase.FieldHeight];
+        areaMapBase = new int[currentFieldBase.FieldWidth, currentFieldBase.FieldHeight];
+    }
+
+    #endregion
+
+    #region GateObject Methods
+
+    /// <summary>
     /// 有効なマップ位置かチェック
     /// </summary>
     private bool IsValidMapPosition(int x, int y)
     {
         return x >= 0 && x < currentFieldBase.FieldWidth && y >= 0 && y < currentFieldBase.FieldHeight;
+    }
+
+    /// <summary>
+    /// ゲート位置を取得
+    /// </summary>
+    private Vector2Int GetGatePosition(DirectionType direction)
+    {
+        if (gatePositions.TryGetValue(direction, out Vector2Int gatePos))
+        {
+            return gatePos;
+        }
+
+        // デフォルトは下ゲート
+        return gatePositions.GetValueOrDefault(DirectionType.Bottom, Vector2Int.zero);
+    }
+
+    /// <summary>
+    /// 地面または草かチェック
+    /// </summary>
+    private bool IsGroundOrArea(Vector2Int pos)
+    {
+        return mapBase[pos.x, pos.y] == (int)TileType.Ground ||
+               mapBase[pos.x, pos.y] == (int)TileType.Area;
     }
 
     /// <summary>
@@ -380,15 +460,6 @@ public class FieldGenerator : MonoBehaviour
     }
 
     /// <summary>
-    /// 地面または草かチェック
-    /// </summary>
-    private bool IsGroundOrArea(Vector2Int pos)
-    {
-        return mapBase[pos.x, pos.y] == (int)TileType.Ground ||
-               mapBase[pos.x, pos.y] == (int)TileType.Area;
-    }
-
-    /// <summary>
     /// パスを作成
     /// </summary>
     private void CreatePath(Vector2Int start, Dictionary<Vector2Int, Vector2Int> cameFrom)
@@ -414,138 +485,21 @@ public class FieldGenerator : MonoBehaviour
         instantiatedGatePrefab.directionType = direction;
     }
 
-    /// <summary>
-    /// フィールドオブジェクトを作成
-    /// </summary>
-    private void CreateFieldObjects()
-    {
-        if (fieldObjectPrefabs == null || fieldObjectPrefabs.Length == 0) return;
+    #endregion
 
-        // 一意のシードを使用してランダムな位置を生成
-        System.Random objectRandom = new System.Random(GenerateObjectSeed());
-        List<Vector2Int> validPositions = GetValidObjectPositions();
-
-        if (validPositions.Count == 0) return;
-
-        // シャッフルして一貫性のある順序を確保
-        ShuffleList(validPositions, objectRandom);
-
-        int actualObjectCount = Mathf.Min(currentFieldBase.ObjectCount, validPositions.Count);
-
-        for (int i = 0; i < actualObjectCount; i++)
-        {
-            Vector2Int pos = validPositions[i];
-            Vector3 position = GetObjectWorldPosition(pos.x, pos.y);
-            GameObject prefab = fieldObjectPrefabs[objectRandom.Next(0, fieldObjectPrefabs.Length)];
-            Instantiate(prefab, position, Quaternion.identity, this.transform);
-            placedObjects.Add(pos);
-        }
-    }
+    #region FieldObject Methods
 
     /// <summary>
-    /// クエストオブジェクトを作成
+    /// リストをシャッフル（Fisher-Yates shuffle）
     /// </summary>
-    private void CreateQuestObjects()
+    private void ShuffleList<T>(List<T> list, System.Random random)
     {
-        List<Quest> questList = new List<Quest>();
-
-        questList = QuestDatabase.Instance.GetActiveQuestByField(ageTimePanel.ageTime, currentFieldBase.fieldType);
-
-        if (questList == null || questList.Count == 0) return;
-
-        // クエスト専用のシードを使用
-        System.Random questRandom = new System.Random(GenerateObjectSeed());
-        List<Vector2Int> validPositions = GetValidObjectPositions();
-
-        if (validPositions.Count == 0) return;
-
-        // シャッフルして一貫性のある順序を確保
-        ShuffleList(validPositions, questRandom);
-
-        int actualQuestCount = Mathf.Min(questList.Count, validPositions.Count);
-
-        for (int i = 0; i < actualQuestCount; i++)
+        for (int i = list.Count - 1; i > 0; i--)
         {
-            Vector2Int pos = validPositions[i];
-            Vector3 position = GetObjectWorldPosition(pos.x, pos.y);
-
-            // インスタンス化したオブジェクトを取得
-            QuestPrefab instantiatedQuestObject = Instantiate(questPrefab, position, Quaternion.identity, this.transform);
-            try
-            {
-                instantiatedQuestObject.SetQuest(questList[i]);
-            }
-            catch (System.Exception e)
-            {
-                UnityEngine.Debug.LogError($"Failed to convert QuestBase to Quest: {e.Message}");
-            }
-
-            placedObjects.Add(pos);
-        }
-    }
-
-    /// <summary>
-    /// ポイントオブジェクトを作成
-    /// </summary>
-    private void CreatePointObjects()
-    {
-        if (currentFieldBase.Points == null || currentFieldBase.Points.Count == 0) return;
-
-        // ポイント専用のシードを使用
-        System.Random pointRandom = new System.Random(GeneratePointSeed());
-        List<Vector2Int> validPositions = GetValidObjectPositions();
-
-        if (validPositions.Count == 0) return;
-
-        // シャッフルして一貫性のある順序を確保
-        ShuffleList(validPositions, pointRandom);
-
-        int actualPointCount = Mathf.Min(currentFieldBase.Points.Count, validPositions.Count);
-
-        for (int i = 0; i < actualPointCount; i++)
-        {
-            Vector2Int pos = validPositions[i];
-            Vector3 position = GetObjectWorldPosition(pos.x, pos.y);
-
-            // インスタンス化したオブジェクトを取得
-            PointPrefab instantiatedPointObject = Instantiate(pointPrefab, position, Quaternion.identity, this.transform);
-            try
-            {
-                // PointBaseをPointに実体化させて格納
-                Point point = pointDatabase.GetPoint(currentFieldBase.Points[i]);
-                instantiatedPointObject.SetPoint(point);
-            }
-            catch (System.Exception e)
-            {
-                UnityEngine.Debug.LogError($"Failed to convert PointBase to Point: {e.Message}");
-            }
-
-            placedPoints.Add(pos);
-        }
-    }
-
-    /// <summary>
-    /// 宝箱オブジェクトを作成
-    /// </summary>
-    private void CreateTreasureBoxObjects()
-    {
-        int placed = 0;
-        System.Random trueRandom = new System.Random();
-
-        int treasureCount = trueRandom.Next(0, TREASURE_BOX_COUNT);
-
-        while (placed < treasureCount)
-        {
-            int x = trueRandom.Next(0, currentFieldBase.FieldWidth);
-            int y = trueRandom.Next(0, currentFieldBase.FieldHeight);
-
-            if (CanPlaceObject(x, y))
-            {
-                Vector3 fieldPos = GetObjectWorldPosition(x, y);
-                Instantiate(treasureBoxObject, fieldPos, Quaternion.identity, this.transform);
-                placedGates.Add(new Vector2Int(x, y));
-                placed++;
-            }
+            int j = random.Next(0, i + 1);
+            T temp = list[i];
+            list[i] = list[j];
+            list[j] = temp;
         }
     }
 
@@ -577,6 +531,7 @@ public class FieldGenerator : MonoBehaviour
         return mapBase[x, y] == (int)TileType.Ground || mapBase[x, y] == (int)TileType.Area;
     }
 
+
     /// <summary>
     /// オブジェクトのワールド座標を取得
     /// </summary>
@@ -585,56 +540,6 @@ public class FieldGenerator : MonoBehaviour
         Vector3Int tilePos = new Vector3Int(x, y, 0);
         return tilemap.CellToWorld(tilePos) +
                new Vector3(OBJECT_POSITION_OFFSET, OBJECT_POSITION_OFFSET, 0f);
-    }
-
-    /// <summary>
-    /// フィールドのタイルをレンダリング
-    /// </summary>
-    private void RenderField()
-    {
-        for (int x = 0; x < currentFieldBase.FieldWidth; x++)
-        {
-            for (int y = 0; y < currentFieldBase.FieldHeight; y++)
-            {
-                Vector3Int tilePosition = new Vector3Int(x, y, 0);
-
-                TileType tileType = (TileType)mapBase[x, y];
-                TileBase tileToPlace = GetTileForType(tileType);
-
-                if (tileType == TileType.Area)
-                {
-                    encountTilemap.SetTile(tilePosition, tileToPlace);
-                }
-
-                if (tileToPlace != null)
-                {
-                    tilemap.SetTile(tilePosition, tileToPlace);
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    /// タイプに対応するタイルを取得
-    /// </summary>
-    private TileBase GetTileForType(TileType tileType)
-    {
-        return tileType switch
-        {
-            TileType.Ground => groundTile,
-            TileType.Area => areaTile,
-            TileType.Gate => groundTile,
-            _ => null
-        };
-    }
-
-    /// <summary>
-    /// マップを初期化
-    /// </summary>
-    private void InitializeMaps()
-    {
-        mapBase = new int[currentFieldBase.FieldWidth, currentFieldBase.FieldHeight];
-        areaMapBase = new int[currentFieldBase.FieldWidth, currentFieldBase.FieldHeight];
     }
 
     /// <summary>
@@ -659,20 +564,6 @@ public class FieldGenerator : MonoBehaviour
                 Destroy(obj);
             }
         }
-    }
-
-    /// <summary>
-    /// ゲート位置を取得
-    /// </summary>
-    private Vector2Int GetGatePosition(DirectionType direction)
-    {
-        if (gatePositions.TryGetValue(direction, out Vector2Int gatePos))
-        {
-            return gatePos;
-        }
-
-        // デフォルトは下ゲート
-        return gatePositions.GetValueOrDefault(DirectionType.Bottom, Vector2Int.zero);
     }
 
     /// <summary>
@@ -762,16 +653,137 @@ public class FieldGenerator : MonoBehaviour
     }
 
     /// <summary>
-    /// リストをシャッフル（Fisher-Yates shuffle）
+    /// フィールドオブジェクトを作成
     /// </summary>
-    private void ShuffleList<T>(List<T> list, System.Random random)
+    private void CreateFieldObjects()
     {
-        for (int i = list.Count - 1; i > 0; i--)
+        if (fieldObjectPrefabs == null || fieldObjectPrefabs.Length == 0) return;
+
+        // 一意のシードを使用してランダムな位置を生成
+        System.Random objectRandom = new System.Random(GenerateObjectSeed());
+        List<Vector2Int> validPositions = GetValidObjectPositions();
+
+        if (validPositions.Count == 0) return;
+
+        // シャッフルして一貫性のある順序を確保
+        ShuffleList(validPositions, objectRandom);
+
+        int actualObjectCount = Mathf.Min(currentFieldBase.ObjectCount, validPositions.Count);
+
+        for (int i = 0; i < actualObjectCount; i++)
         {
-            int j = random.Next(0, i + 1);
-            T temp = list[i];
-            list[i] = list[j];
-            list[j] = temp;
+            Vector2Int pos = validPositions[i];
+            Vector3 position = GetObjectWorldPosition(pos.x, pos.y);
+            GameObject prefab = fieldObjectPrefabs[objectRandom.Next(0, fieldObjectPrefabs.Length)];
+            Instantiate(prefab, position, Quaternion.identity, this.transform);
+            placedObjects.Add(pos);
+        }
+    }
+
+    /// <summary>
+    /// ポイントオブジェクトを作成
+    /// </summary>
+    private void CreatePointObjects()
+    {
+        if (currentFieldBase.Points == null || currentFieldBase.Points.Count == 0) return;
+
+        // ポイント専用のシードを使用
+        System.Random pointRandom = new System.Random(GeneratePointSeed());
+        List<Vector2Int> validPositions = GetValidObjectPositions();
+
+        if (validPositions.Count == 0) return;
+
+        // シャッフルして一貫性のある順序を確保
+        ShuffleList(validPositions, pointRandom);
+
+        int actualPointCount = Mathf.Min(currentFieldBase.Points.Count, validPositions.Count);
+
+        for (int i = 0; i < actualPointCount; i++)
+        {
+            Vector2Int pos = validPositions[i];
+            Vector3 position = GetObjectWorldPosition(pos.x, pos.y);
+
+            // インスタンス化したオブジェクトを取得
+            PointPrefab instantiatedPointObject = Instantiate(pointPrefab, position, Quaternion.identity, this.transform);
+            try
+            {
+                // PointBaseをPointに実体化させて格納
+                Point point = pointDatabase.GetPoint(currentFieldBase.Points[i]);
+                instantiatedPointObject.SetPoint(point);
+            }
+            catch (System.Exception e)
+            {
+                UnityEngine.Debug.LogError($"Failed to convert PointBase to Point: {e.Message}");
+            }
+
+            placedPoints.Add(pos);
+        }
+    }
+
+    /// <summary>
+    /// クエストオブジェクトを作成
+    /// </summary>
+    private void CreateQuestObjects()
+    {
+        List<Quest> questList = new List<Quest>();
+
+        questList = QuestDatabase.Instance.GetActiveQuestByField(ageTimePanel.ageTime, currentFieldBase.fieldType);
+
+        if (questList == null || questList.Count == 0) return;
+
+        // クエスト専用のシードを使用
+        System.Random questRandom = new System.Random(GenerateObjectSeed());
+        List<Vector2Int> validPositions = GetValidObjectPositions();
+
+        if (validPositions.Count == 0) return;
+
+        // シャッフルして一貫性のある順序を確保
+        ShuffleList(validPositions, questRandom);
+
+        int actualQuestCount = Mathf.Min(questList.Count, validPositions.Count);
+
+        for (int i = 0; i < actualQuestCount; i++)
+        {
+            Vector2Int pos = validPositions[i];
+            Vector3 position = GetObjectWorldPosition(pos.x, pos.y);
+
+            // インスタンス化したオブジェクトを取得
+            QuestPrefab instantiatedQuestObject = Instantiate(questPrefab, position, Quaternion.identity, this.transform);
+            try
+            {
+                instantiatedQuestObject.SetQuest(questList[i]);
+            }
+            catch (System.Exception e)
+            {
+                UnityEngine.Debug.LogError($"Failed to convert QuestBase to Quest: {e.Message}");
+            }
+
+            placedObjects.Add(pos);
+        }
+    }
+
+    /// <summary>
+    /// 宝箱オブジェクトを作成
+    /// </summary>
+    private void CreateTreasureBoxObjects()
+    {
+        int placed = 0;
+        System.Random trueRandom = new System.Random();
+
+        int treasureCount = trueRandom.Next(0, TREASURE_BOX_COUNT);
+
+        while (placed < treasureCount)
+        {
+            int x = trueRandom.Next(0, currentFieldBase.FieldWidth);
+            int y = trueRandom.Next(0, currentFieldBase.FieldHeight);
+
+            if (CanPlaceObject(x, y))
+            {
+                Vector3 fieldPos = GetObjectWorldPosition(x, y);
+                Instantiate(treasureBoxObject, fieldPos, Quaternion.identity, this.transform);
+                placedGates.Add(new Vector2Int(x, y));
+                placed++;
+            }
         }
     }
     #endregion

@@ -190,7 +190,18 @@ public class QuestDatabase : MonoBehaviour
         return QuestDataList.IndexOf(Quest);
     }
 
-    public void MarkQuestAsFinished(int questId)
+    public void MarkQuestAsFinished(QuestBase questBase)
+    {
+        int questId = GetQuestId(questBase);
+        if (questId == -1)
+        {
+            UnityEngine.Debug.LogWarning("Attempted to mark an invalid quest as finished.");
+            return;
+        }
+        MarkQuestAsFinishedById(questId);
+    }
+
+    public void MarkQuestAsFinishedById(int questId)
     {
         if (ExecutionQuests.Contains(new Vector2Int(questId, 0)))
         {

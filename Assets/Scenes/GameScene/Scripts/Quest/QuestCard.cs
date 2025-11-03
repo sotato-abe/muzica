@@ -127,6 +127,7 @@ public class QuestCard : MonoBehaviour
                 Debug.LogWarning("Unknown quest type");
                 break;
         }
+        QuestDatabase.Instance.MarkQuestAsFinished(currentQuest.Base);
     }
 
     private void ReceiptSupplyTask()
@@ -205,6 +206,7 @@ public class QuestCard : MonoBehaviour
         supplyQuestTask.gameObject.SetActive(false);
         deliveryQuestTask.gameObject.SetActive(false);
         exterminationQuestTask.gameObject.SetActive(false);
+        workQuestTask.gameObject.SetActive(false);
         specialQuestTask.gameObject.SetActive(false);
     }
 
