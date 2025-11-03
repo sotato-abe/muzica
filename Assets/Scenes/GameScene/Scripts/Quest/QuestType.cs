@@ -30,12 +30,12 @@ public static class QuestTypeExtensions
     {
         return questType switch
         {
-            QuestType.Story => "受け取る",
-            QuestType.Supply => "納品",
-            QuestType.Delivery => "受領",
+            QuestType.Story => "進める",
+            QuestType.Supply => "納品する",
+            QuestType.Delivery => "引き受ける",
             QuestType.Extermination => "討伐完了",
-            QuestType.Work => "作業完了",
-            QuestType.Special => "了解",
+            QuestType.Work => "引き受ける",
+            QuestType.Special => "進める",
             _ => "不明"
         };
     }
