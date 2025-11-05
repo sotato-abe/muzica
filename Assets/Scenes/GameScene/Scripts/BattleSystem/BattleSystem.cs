@@ -158,6 +158,8 @@ public class BattleSystem : MonoBehaviour
         }
         EnemyCharacter enemyCharacter = enemySubPanel.Character as EnemyCharacter;
         TotalAttackCount totalAttackCount = enemyCharacter.EnemyAttack();
+        FieldCharacter fieldEnemy = fieldEnemies.Find(e => e.Character == enemySubPanel.Character);
+        fieldEnemy.SetAnimation(AnimationType.Attack);
         StartCoroutine(enemySubPanel.UpdateEnergyGauges());
         StartCoroutine(EnemyAttack(totalAttackCount)); // ターンを再開
     }
@@ -217,10 +219,17 @@ public class BattleSystem : MonoBehaviour
 
         if (fieldEnemy != null)
         {
-            fieldEnemies.Remove(fieldEnemy); // フィールドの敵リストから削除
-            Destroy(fieldEnemy.gameObject); // 敵キャラクターを削除
+            StartCoroutine(DeadEnemy(fieldEnemy));
             // characterSubPanel.gameObject.SetActive(false); // キャラクターサブパネルを非表示
         }
+    }
+
+    private IEnumerator DeadEnemy(FieldCharacter fieldEnemy)
+    {
+        fieldEnemy.SetAnimation(AnimationType.Death);
+        yield return new WaitForSeconds(3f); // 死亡アニメーションの待機時間
+        fieldEnemies.Remove(fieldEnemy); // フィールドの敵リストから削除
+        Destroy(fieldEnemy.gameObject); // 敵キャラクターを削除
 
         StartCoroutine(CheckEnemies());
     }
