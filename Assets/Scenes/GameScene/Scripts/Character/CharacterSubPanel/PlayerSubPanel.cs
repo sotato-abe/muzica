@@ -4,11 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class PlayerSubPanel : CharacterSubPanel
+public class PlayerSubPanel : BattleCharacterSubPanel
 {
     [SerializeField] private StatusText statusText;
 
-    public override void SetCharacter(Character character)
+    #region Character Setup
+    public void SetPlayer(Character character)
     {
         base.SetCharacter(character);
         energyGauge.gameObject.SetActive(true);
@@ -16,6 +17,7 @@ public class PlayerSubPanel : CharacterSubPanel
         SetEnergy();
         SetStatusText(null);
     }
+    #endregion
 
     public void SetBattle()
     {

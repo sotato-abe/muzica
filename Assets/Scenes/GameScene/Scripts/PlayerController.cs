@@ -44,7 +44,8 @@ public class PlayerController : MonoBehaviour
             defaultPlayer.Init();
             SetPlayerCharacter(defaultPlayer);
         }
-        playerSubPanel.SetCharacter(PlayerCharacter);
+        playerSubPanel.SetPlayer(PlayerCharacter);
+        playerSubPanel.SetFieldCharacter(fieldPlayer);
         PlayerCharacter.onLevelUp += LevelUp;
         UpdateCurrencyPanel();
     }
@@ -71,7 +72,7 @@ public class PlayerController : MonoBehaviour
         }
         PlayerCharacter = loadCharcter;
         PlayerCharacter.Init();
-        playerSubPanel.SetCharacter(PlayerCharacter);
+        playerSubPanel.SetPlayer(PlayerCharacter);
         UpdateCurrencyPanel();
 
         OnPlayerCharacterSet?.Invoke(PlayerCharacter);

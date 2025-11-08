@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,9 +10,9 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] private CameraManager cameraManager;
     [SerializeField] private BattleActionBoard battleActionBoard;
     [SerializeField] private PlayerSubPanel playerSubPanel; // キャラクターサブパネル
-    [SerializeField] private CharacterSubPanel enemySubPanel1; // キャラクターサブパネル
-    [SerializeField] private CharacterSubPanel enemySubPanel2; // キャラクターサブパネル
-    [SerializeField] private CharacterSubPanel enemySubPanel3; // キャラクターサブパネル
+    [SerializeField] private EnemySubPanel enemySubPanel1; // キャラクターサブパネル
+    [SerializeField] private EnemySubPanel enemySubPanel2; // キャラクターサブパネル
+    [SerializeField] private EnemySubPanel enemySubPanel3; // キャラクターサブパネル
     [SerializeField] private MessagePanel messagePanel; // キャラクターサブパネル
     [SerializeField] WorldMapPanel worldMapPanel;
     [SerializeField] SlidePanel savePanel;
@@ -21,8 +22,7 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] private GameObject enemyGroupArea; // 敵キャラクターの親オブジェクト
     [SerializeField] AgeTimePanel ageTimePanel;
 
-    List<FieldCharacter> fieldEnemies = new List<FieldCharacter>(); // フィールドの敵リスト
-    List<CharacterSubPanel> enemySubPanels = new List<CharacterSubPanel>(); // 敵のサブパネルリスト
+    List<EnemySubPanel> enemySubPanels = new List<EnemySubPanel>(); // 敵のサブパネルリスト
 
     int RewardExp = 0; // 経験値のカウント
     int RewardCoin = 0; // ゴールドのカウント
@@ -43,7 +43,7 @@ public class BattleSystem : MonoBehaviour
         enemySubPanels.Add(enemySubPanel3);
 
         playerSubPanel.OnActiveTurn += ActivePlayerTurn;
-        foreach (CharacterSubPanel enemySubPanel in enemySubPanels)
+        foreach (EnemySubPanel enemySubPanel in enemySubPanels)
         {
             enemySubPanel.OnActiveTurn += ActiveEnemyTurn;
         }
@@ -93,12 +93,10 @@ public class BattleSystem : MonoBehaviour
             }
             (Vector3 targetPos, bool isLeft, bool isFront) = GetRandomAroundFloorPosition();
             FieldEnemy fieldEnemy = Instantiate(fieldEnemyPrefab, targetPos, Quaternion.identity, enemyGroupArea.transform);
-            fieldEnemy.SetUp(enemy); // バトラーの設定を行う
             fieldEnemy.Inversion(!isLeft); // 向きを反転
             fieldEnemy.SetNumIcon(index); // 敵の番号アイコンを設定
             fieldPlayer.OrientationChange(isLeft); // プレイヤーの向きを反転
-            SetEnemySubPanel(enemy, enemies.Count - (index + 1), enemies.Count); // 敵のサブパネルを設定
-            fieldEnemies.Add(fieldEnemy); // 生成した敵をリストに追加
+            SetEnemySubPanel(enemy, fieldEnemy, enemies.Count - (index + 1), enemies.Count); // 敵のサブパネルを設定
             yield return new WaitForSeconds(0.3f);
             index++;
         }
@@ -107,11 +105,11 @@ public class BattleSystem : MonoBehaviour
     }
 
     // 敵をサブパネルに出現させる
-    private void SetEnemySubPanel(Character enemy, int index, int maxCount)
+    private void SetEnemySubPanel(Character enemy, FieldEnemy fieldEnemy, int index, int maxCount)
     {
         if (index < 0 || index >= enemySubPanels.Count) return; // インデックスが範囲外の場合は何もしない
-        CharacterSubPanel subPanel = enemySubPanels[index];
-        subPanel.SetEnemy(enemy); // 敵のキャラクターを設定
+        EnemySubPanel subPanel = enemySubPanels[index];
+        subPanel.SetEnemy(enemy, fieldEnemy); // 敵のキャラクターを設定
         subPanel.SetNumber(maxCount - index - 1); // 敵の番号を設定
     }
 
@@ -148,18 +146,11 @@ public class BattleSystem : MonoBehaviour
     }
 
     // TODO：敵の攻撃を実装する
-    public void ActiveEnemyTurn(CharacterSubPanel enemySubPanel)
+    public void ActiveEnemyTurn(BattleCharacterSubPanel enemySubPanel)
     {
         StopAllCharacterTurnBar();
-        if (fieldEnemies.Count == 0)
-        {
-            Debug.LogWarning("敵がいません。");
-            return;
-        }
         EnemyCharacter enemyCharacter = enemySubPanel.Character as EnemyCharacter;
         TotalAttackCount totalAttackCount = enemyCharacter.EnemyAttack();
-        FieldCharacter fieldEnemy = fieldEnemies.Find(e => e.Character == enemySubPanel.Character);
-        fieldEnemy.SetAnimation(AnimationType.Attack);
         StartCoroutine(enemySubPanel.UpdateEnergyGauges());
         StartCoroutine(EnemyAttack(totalAttackCount)); // ターンを再開
     }
@@ -175,7 +166,7 @@ public class BattleSystem : MonoBehaviour
     private void StopAllCharacterTurnBar()
     {
         playerSubPanel.PauseTurnBar(); // プレイヤーのターンバーを停止
-        foreach (CharacterSubPanel enemySubPanel in enemySubPanels)
+        foreach (EnemySubPanel enemySubPanel in enemySubPanels)
         {
             enemySubPanel.PauseTurnBar(); // 敵のターンバーを停止
         }
@@ -184,7 +175,7 @@ public class BattleSystem : MonoBehaviour
     private void OnActionEnd()
     {
         playerSubPanel.ReStartTurnBar();
-        foreach (CharacterSubPanel enemySubPanel in enemySubPanels)
+        foreach (EnemySubPanel enemySubPanel in enemySubPanels)
         {
             if (enemySubPanel.isOpen)
                 enemySubPanel.ReStartTurnBar();
@@ -195,20 +186,16 @@ public class BattleSystem : MonoBehaviour
     {
         if (characterSubPanel == null) return;
         StopAllCharacterTurnBar();
-        fieldPlayer.SetAnimation(AnimationType.Death);
         SoundSystem.Instance.PlayBGM(BgmType.GameOver);
         gameOverWindow.Show(); // ゲームオーバーウィンドウを表示
     }
 
-    public void LifeOutEnemy(CharacterSubPanel characterSubPanel)
+    public void LifeOutEnemy(CharacterSubPanel enemySubPanel)
     {
-        if (characterSubPanel == null) return;
-        characterSubPanel.SetActive(false);
-
-        FieldCharacter fieldEnemy = fieldEnemies.Find(e => e.Character == characterSubPanel.Character);
-        RewardExp += fieldEnemy.Character.Exp; // 経験値を加算
-        RewardCoin += fieldEnemy.Character.Coin; // ゴールドを加算
-        foreach (Item item in characterSubPanel.Character.BagItemList)
+        if (enemySubPanel == null) return;
+        RewardExp += enemySubPanel.Character.Exp; // 経験値を加算
+        RewardCoin += enemySubPanel.Character.Coin; // ゴールドを加算
+        foreach (Item item in enemySubPanel.Character.BagItemList)
         {
             if (Random.Range(0, 100) < item.Base.Rarity.GetProbability())
             {
@@ -216,29 +203,20 @@ public class BattleSystem : MonoBehaviour
                 RewardItemListText += $"{item.Base.Name},";
             }
         }
-
-        if (fieldEnemy != null)
-        {
-            StartCoroutine(DeadEnemy(fieldEnemy));
-            // characterSubPanel.gameObject.SetActive(false); // キャラクターサブパネルを非表示
-        }
-    }
-
-    private IEnumerator DeadEnemy(FieldCharacter fieldEnemy)
-    {
-        fieldEnemy.SetAnimation(AnimationType.Death);
-        yield return new WaitForSeconds(3f); // 死亡アニメーションの待機時間
-        fieldEnemies.Remove(fieldEnemy); // フィールドの敵リストから削除
-        Destroy(fieldEnemy.gameObject); // 敵キャラクターを削除
-
         StartCoroutine(CheckEnemies());
     }
 
     private IEnumerator CheckEnemies()
     {
-        if (fieldEnemies.Count == 0)
+        // ActiveなEnemySubPanelの数を数える
+        int activeEnemyCount = 0;
+        foreach (EnemySubPanel enemySubPanel in enemySubPanels)
         {
-            yield return new WaitForSeconds(1f); // 少し待機してから処理を続行
+            if (enemySubPanel.isOpen)
+                activeEnemyCount++;
+        }
+        if (activeEnemyCount == 0)
+        {
             string RewardText = "バトルに勝利した\n";
             if (RewardItemListText != "")
             {
@@ -256,11 +234,6 @@ public class BattleSystem : MonoBehaviour
     public void BattleEnd()
     {
         int completed = 0;
-        foreach (FieldCharacter fieldEnemy in fieldEnemies)
-        {
-            Destroy(fieldEnemy.gameObject); // 敵キャラクターを削除
-        }
-        fieldEnemies.Clear(); // 敵キャラクターのリストをクリア
 
         void CheckAllComplete()
         {

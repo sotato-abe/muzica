@@ -73,7 +73,6 @@ public class TradeSystem : MonoBehaviour
         Character owner = point.Owner;
         owner.Init();
         ownerSubPanel.SetOwner(owner);
-        ownerSubPanel.SetNumber(-1);
     }
 
     public void SetOwnerMessage(TalkMessage message)

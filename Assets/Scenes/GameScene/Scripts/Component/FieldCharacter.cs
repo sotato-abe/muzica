@@ -6,16 +6,14 @@ using UnityEngine.Events;
 
 public class FieldCharacter : MonoBehaviour
 {
-    Character character;
-    public Character Character => character;
     public Animator animator;
     [SerializeField] SpriteRenderer CharacterImage; // スプライトイメージパネル
     [SerializeField] public SpriteRenderer IconImage; // スプライトイメージパネル
     [SerializeField] public SpriteRenderer IconBackImage; // スプライトイメージパネル
 
-    public void SetUp(Character character)
+    // TODO characterTypeをenumで管理してここで渡してスプライトを切り替える
+    public void SetUp()
     {
-        this.character = character;
         StartCoroutine(JumpMotion());
     }
 

@@ -25,10 +25,10 @@ public class EquipPanel : BattleActionPanel
     [SerializeField] private Image activeButtonImage;
 
     [Header("Character Panels")]
-    [SerializeField] private CharacterSubPanel playerSubPanel;
-    [SerializeField] private CharacterSubPanel enemySubPanel1;
-    [SerializeField] private CharacterSubPanel enemySubPanel2;
-    [SerializeField] private CharacterSubPanel enemySubPanel3;
+    [SerializeField] private PlayerSubPanel playerSubPanel;
+    [SerializeField] private EnemySubPanel enemySubPanel1;
+    [SerializeField] private EnemySubPanel enemySubPanel2;
+    [SerializeField] private EnemySubPanel enemySubPanel3;
     #endregion
 
     #region Private Fields
@@ -36,8 +36,8 @@ public class EquipPanel : BattleActionPanel
     private Color defaultButtonColor = new Color(130f / 255f, 130f / 255f, 130f / 255f, 255f / 255f);
     private Color activeButtonColor = new Color(240f / 255f, 88f / 255f, 0f / 255f, 255f / 255f);
 
-    List<CharacterSubPanel> enemySubPanels = new List<CharacterSubPanel>(); // 敵のサブパネルリスト
-    List<CharacterSubPanel> targetSubPanels = new List<CharacterSubPanel>();
+    List<EnemySubPanel> enemySubPanels = new List<EnemySubPanel>(); // 敵のサブパネルリスト
+    List<BattleCharacterSubPanel> targetSubPanels = new List<BattleCharacterSubPanel>();
 
     [Header("Equipment Settings")]
     public BodyPartType bodyPartType = BodyPartType.None;
@@ -206,18 +206,18 @@ public class EquipPanel : BattleActionPanel
         }
     }
 
-    public void ChangeTargetEnemy(CharacterSubPanel enemySubPanel)
+    public void ChangeTargetEnemy(BattleCharacterSubPanel targetSubPanel)
     {
         if (currentEquipment == null)
             return;
         if (currentEquipment.EquipmentBase.EquipmentType == EquipmentType.Armor)
             return;
 
-        if (currentEquipment.EquipmentBase.TargetType == TargetType.Individual && enemySubPanel.isOpen)
+        if (currentEquipment.EquipmentBase.TargetType == TargetType.Individual && targetSubPanel.isOpen)
         {
             ClearTarget();
-            targetSubPanels.Add(enemySubPanel);
-            enemySubPanel.SetTarget(true);
+            targetSubPanels.Add(targetSubPanel);
+            targetSubPanel.SetTarget(true);
         }
     }
     #endregion
@@ -281,7 +281,7 @@ public class EquipPanel : BattleActionPanel
 
     private void ExecuteAttackAction(TotalAttackCount totalCount)
     {
-        List<CharacterSubPanel> targetSubPanels = new List<CharacterSubPanel>();
+        List<BattleCharacterSubPanel> targetSubPanels = new List<BattleCharacterSubPanel>();
 
         if (enemySubPanel1.isOpen && enemySubPanel1.isTarget) targetSubPanels.Add(enemySubPanel1);
         if (enemySubPanel2.isOpen && enemySubPanel2.isTarget) targetSubPanels.Add(enemySubPanel2);
@@ -294,7 +294,7 @@ public class EquipPanel : BattleActionPanel
         }
     }
 
-    private IEnumerator ExecuteAttack(CharacterSubPanel characterSubPanel, TotalAttackCount totalCount)
+    private IEnumerator ExecuteAttack(BattleCharacterSubPanel characterSubPanel, TotalAttackCount totalCount)
     {
         yield return StartCoroutine(characterSubPanel.TakeAttackCoroutine(totalCount));
         OnActionEnd?.Invoke();
@@ -320,14 +320,12 @@ public class EquipPanel : BattleActionPanel
         return true;
     }
 
-    public void LifeOutEnemy(CharacterSubPanel enemySubPanel)
+    public void LifeOutEnemy(BattleCharacterSubPanel enemySubPanel)
     {
         // gameObjectが非アクティブの場合は処理を中断
         if (!this.gameObject.activeInHierarchy) return;
         // targetSubPanelsからライフアウトした敵のサブパネルを削除
-        UnityEngine.Debug.Log($"Enemy Life Out Detected : {currentEquipment.EquipmentBase?.Name}");
         targetSubPanels.Remove(enemySubPanel);
-        // SetEquipment();
         SetTargetting();
     }
 }
