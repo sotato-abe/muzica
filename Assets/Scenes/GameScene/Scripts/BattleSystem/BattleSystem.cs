@@ -190,6 +190,10 @@ public class BattleSystem : MonoBehaviour
         if (characterSubPanel == null) return;
         StopAllCharacterTurnBar();
         SoundSystem.Instance.PlayBGM(BgmType.GameOver);
+        foreach (EnemySubPanel enemySubPanel in enemySubPanels)
+        {
+            enemySubPanel.PauseTurnBar(); // 敵のターンバーを停止
+        }
         gameOverWindow.Show(); // ゲームオーバーウィンドウを表示
     }
 
