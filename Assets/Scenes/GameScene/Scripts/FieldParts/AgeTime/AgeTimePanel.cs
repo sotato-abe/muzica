@@ -12,7 +12,6 @@ public class AgeTimePanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI ageTimeField;  // 表示用のTextMeshProUGUIフィールド
     [SerializeField] StatePanelController statePanel;
     [SerializeField] PointDatabase pointDatabase;
-    [SerializeField] InformationPanel informationPanel;
 
     public int yearsElapsed = 0;        // 経過時間
     public DateTime ageTime;        // 現在の時間
@@ -109,7 +108,7 @@ public class AgeTimePanel : MonoBehaviour
         List<Information> activeInformations = InformationDatabase.Instance.GetActiveInformationsByTime(targetTime);
         foreach (Information information in activeInformations)
         {
-            informationPanel.SetInformation(information);
+            InformationPanel.Instance.SetInformation(information);
         }
     }
 }

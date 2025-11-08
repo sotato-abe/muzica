@@ -18,6 +18,7 @@ public class FieldBase : ScriptableObject
     [Header("Field information")]
     [SerializeField] Sprite icon; // ワールドマップで表示されるアイコン
     [SerializeField] string fieldName = "";
+    [SerializeField] Sprite fieldSprite; // フィールドのスプライト
     [SerializeField, TextArea] string description;
 
     [Header("Objects")]
@@ -45,6 +46,7 @@ public class FieldBase : ScriptableObject
     // Field information
     public Sprite Icon { get => icon; }
     public string FieldName { get => fieldName; }
+    public Sprite FieldSprite { get => fieldSprite; }
     public string Description { get => description; }
 
     // Objects

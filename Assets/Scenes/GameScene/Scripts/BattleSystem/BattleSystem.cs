@@ -22,6 +22,7 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] private GameObject enemyGroupArea; // 敵キャラクターの親オブジェクト
     [SerializeField] AgeTimePanel ageTimePanel;
 
+    List<FieldCharacter> fieldEnemies = new List<FieldCharacter>(); // フィールド上の敵キャラクターリスト
     List<EnemySubPanel> enemySubPanels = new List<EnemySubPanel>(); // 敵のサブパネルリスト
 
     int RewardExp = 0; // 経験値のカウント
@@ -73,6 +74,7 @@ public class BattleSystem : MonoBehaviour
     // TODO 敵を倒した時に更新で使用する
     private void SetEnemy()
     {
+        fieldEnemies.Clear();
         List<Character> enemies = FieldController.Instance.GetEnemies();
         battleActionBoard.SetEnemyList(enemies);
         StartCoroutine(AppearanceEnemies(enemies));
@@ -93,6 +95,7 @@ public class BattleSystem : MonoBehaviour
             }
             (Vector3 targetPos, bool isLeft, bool isFront) = GetRandomAroundFloorPosition();
             FieldEnemy fieldEnemy = Instantiate(fieldEnemyPrefab, targetPos, Quaternion.identity, enemyGroupArea.transform);
+            fieldEnemies.Add(fieldEnemy);
             fieldEnemy.Inversion(!isLeft); // 向きを反転
             fieldEnemy.SetNumIcon(index); // 敵の番号アイコンを設定
             fieldPlayer.OrientationChange(isLeft); // プレイヤーの向きを反転
@@ -234,6 +237,17 @@ public class BattleSystem : MonoBehaviour
     public void BattleEnd()
     {
         int completed = 0;
+        if (fieldEnemies != null)
+        {
+            foreach (FieldCharacter fieldEnemy in fieldEnemies)
+            {
+                if (fieldEnemy != null)
+                {
+                    Destroy(fieldEnemy.gameObject); // フィールド上の敵キャラクターを削除
+                }
+            }
+            fieldEnemies.Clear();
+        }
 
         void CheckAllComplete()
         {

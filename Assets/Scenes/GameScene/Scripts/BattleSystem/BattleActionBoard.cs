@@ -138,6 +138,14 @@ public class BattleActionBoard : SlidePanel
     private void ChangeActionPanel()
     {
         SoundSystem.Instance.PlaySE(SeType.Select);
+        if (currentAction == BattleActionType.Equip1 || currentAction == BattleActionType.Equip2)
+        {
+            autoButton.gameObject.SetActive(true);
+        }
+        else
+        {
+            autoButton.gameObject.SetActive(false);
+        }
         foreach (var kvp in actionPanels)
         {
             if (kvp.Key == currentAction)

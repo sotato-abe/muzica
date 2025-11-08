@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+
 
 public class PlayerSubPanel : BattleCharacterSubPanel
 {
@@ -27,6 +29,19 @@ public class PlayerSubPanel : BattleCharacterSubPanel
     public void SetStatusText(string status)
     {
         statusText.SetText(status);
+    }
+
+    public override void SetActive(bool activeFlg, Action onComplete = null)
+    {
+        fixedDisplayFlg = activeFlg;
+        if (!activeFlg)
+        {
+            StopAllCoroutines();
+            turnBar.gameObject.SetActive(false);
+            blowingPanel.gameObject.SetActive(false);
+        }
+        this.gameObject.SetActive(true);
+        base.SetActive(activeFlg, onComplete);
     }
 }
 
