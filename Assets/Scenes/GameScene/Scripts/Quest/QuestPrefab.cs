@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class QuestPrefab : MonoBehaviour
 {
-    [SerializeField] Sprite defaultSprite; // デフォルトのスプライト
     private bool isTriggered = false;
     private float triggerTime = 0f;
     public Quest quest;
@@ -43,15 +42,5 @@ public class QuestPrefab : MonoBehaviour
     public void SetQuest(Quest newQuest)
     {
         quest = newQuest;
-        ChangeSpriteRenderer(); // スプライトを更新
-    }
-
-    private void ChangeSpriteRenderer()
-    {
-        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
-        if (spriteRenderer != null)
-        {
-            spriteRenderer.sprite = defaultSprite; // Null チェックを追加
-        }
     }
 }
