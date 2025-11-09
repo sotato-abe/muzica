@@ -12,7 +12,7 @@ public static class TradeActionTypeExtensions
     {
         return actionType switch
         {
-            TradeActionType.Talk => "Talk",
+            TradeActionType.Talk => "Quest",
             TradeActionType.Item => "Item",
             TradeActionType.Command => "Command",
             TradeActionType.Quit => "Quit",
