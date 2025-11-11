@@ -91,11 +91,11 @@ public class GameController : MonoBehaviour
         fieldPlayer.SetCanMove(true); // プレイヤーの移動を再開
     }
 
-    public void QuestStart(Quest quest)
+    public void QuestStart(List<Quest> quests)
     {
         questSystem.gameObject.SetActive(true); // クエストシステムを表示する
         ageTimePanel.SetTimeSpeed(TimeState.Live);
-        questSystem.QuestStart(quest); // クエスト開始処理を呼び出す
+        questSystem.QuestStart(quests); // クエスト開始処理を呼び出す
         fieldPlayer.SetCanMove(false); // プレイヤーの移動を停止
     }
 

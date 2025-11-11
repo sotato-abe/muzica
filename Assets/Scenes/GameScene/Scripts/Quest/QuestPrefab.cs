@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
 
@@ -5,7 +7,7 @@ public class QuestPrefab : MonoBehaviour
 {
     private bool isTriggered = false;
     private float triggerTime = 0f;
-    public Quest quest;
+    public List<Quest> quests;
 
     private void OnTriggerStay2D(Collider2D other)
     {
@@ -16,15 +18,10 @@ public class QuestPrefab : MonoBehaviour
             if (triggerTime >= 0.5f)
             {
                 // Null チェックを追加
-                if (quest != null && quest.Base != null && FieldController.Instance != null)
+                if (quests != null && quests.Count > 0 && FieldController.Instance != null)
                 {
-                    UnityEngine.Debug.Log("QuestPrefab: Triggering quest event for Quest Title: " + quest.Base.Title);
-                    FieldController.Instance.EnterQuest(quest);
+                    FieldController.Instance.EnterQuestBoard(quests);
                     isTriggered = true; // イベント発動後、フラグを立てる
-                }
-                else
-                {
-                    UnityEngine.Debug.LogError($"QuestPrefab: Null reference detected. Quest: {quest}, Quest.Base: {quest?.Base}");
                 }
             }
         }
@@ -39,8 +36,8 @@ public class QuestPrefab : MonoBehaviour
         }
     }
 
-    public void SetQuest(Quest newQuest)
+    public void SetQuest(List<Quest> newQuests)
     {
-        quest = newQuest;
+        quests = newQuests;
     }
 }

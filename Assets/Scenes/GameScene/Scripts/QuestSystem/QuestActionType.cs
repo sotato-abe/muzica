@@ -1,6 +1,6 @@
 public enum QuestActionType
 {
-        Talk,
+        Quest,
         Quit,
 }
 
@@ -10,7 +10,7 @@ public static class QuestActionTypeExtensions
     {
         return actionType switch
         {
-            QuestActionType.Talk => "Talk",
+            QuestActionType.Quest => "Quest",
             QuestActionType.Quit => "Quit",
             _ => "Unknown"
         };

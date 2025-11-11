@@ -8,13 +8,14 @@ using UnityEngine.Events;
 public class QuestSystem : MonoBehaviour
 {
     public UnityAction OnQuestEnd; // クエストイベント
-    
+
     public static QuestSystem Instance { get; private set; }
 
     [SerializeField] private CameraManager cameraManager;
+    [SerializeField] BagWindow bagWindow;
+    [SerializeField] TargetItemWindow targetItemWindow;
+    [SerializeField] TargetCommandWindow targetCommandWindow;
     [SerializeField] private QuestActionBoard questActionBoard; // クエストアクションボード
-    [SerializeField] TalkPanel talkPanel;
-
     [SerializeField] WorldMapPanel worldMapPanel;
     [SerializeField] SlidePanel savePanel;
 
@@ -27,6 +28,9 @@ public class QuestSystem : MonoBehaviour
         }
         Instance = this;
         questActionBoard.OnQuestEnd += QuestEnd;
+        questActionBoard.OnTargetItem += targetItemWindow.TargetItem;
+        bagWindow.OnTargetItem += targetItemWindow.TargetItem;
+        bagWindow.OnTargetCommand += targetCommandWindow.TargetCommand;
     }
 
     private void Update()
@@ -37,19 +41,18 @@ public class QuestSystem : MonoBehaviour
         }
     }
 
-    public void QuestStart(Quest quest)
+    public void QuestStart(List<Quest> quests)
     {
-        if (quest == null)
+        if (quests == null || quests.Count == 0)
         {
             Debug.LogWarning("Quest is null. Cannot enter quest.");
             return;
         }
-
+        bagWindow.SetActive(true); // キャラクターサブパネルを表示
         cameraManager.SetEventType(EventType.Trade); // トレード時のカメラ位置を設定
         worldMapPanel.SetActive(false); // ワールドマップパネルを非表示
         savePanel.SetActive(false); // セーブパネルを非表示
-
-        talkPanel.SetQuest(quest);
+        questActionBoard.SetQuest(quests);
         questActionBoard.SetActive(true); // クエストアクションボードを表示
     }
 
@@ -60,15 +63,17 @@ public class QuestSystem : MonoBehaviour
         void CheckAllComplete()
         {
             completed++;
-            if (completed >= 3)
+            if (completed >= 4)
             {
                 OnQuestEnd?.Invoke();
                 transform.gameObject.SetActive(false);
             }
         }
+        bagWindow.SetActive(false, CheckAllComplete); // キャラクタサブパネルを非表示
         questActionBoard.ClosePanel(CheckAllComplete); // クエストアクションボードを表示
         worldMapPanel.SetActive(true, CheckAllComplete); // ワールドマップパネルを表示
         savePanel.SetActive(true, CheckAllComplete); // セーブパネルを表示
         cameraManager.SetEventType(EventType.Default); // バトル時のカメラ位置を設定
+        PlayerController.Instance.ChangeEventType(EventType.Default); // イベントタイプをデフォルトに変更
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class QuestCard : MonoBehaviour
+public class QuestCardPrefab : SlidePanel
 {
     [SerializeField] RarityIcon questRarity;
     [SerializeField] TextMeshProUGUI questTitle;
@@ -73,8 +73,9 @@ public class QuestCard : MonoBehaviour
                 break;
             case QuestType.Work:
                 var workQuest = currentQuest as WorkQuest;
-                workQuestTask.SetWorkTask(workQuest);
                 workQuestTask.gameObject.SetActive(true);
+                workQuestTask.OnTargetItem += TargetItem;
+                workQuestTask.SetWorkTask(workQuest);
                 receiptButton.gameObject.SetActive(true);
                 break;
             case QuestType.Special:

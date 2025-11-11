@@ -192,7 +192,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.9254902, g: 0.15686275, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -298,7 +298,7 @@ GameObject:
   - component: {fileID: 6038087885288693270}
   - component: {fileID: 4152796139650689358}
   m_Layer: 0
-  m_Name: ActionIcon
+  m_Name: QuitActionIcon
   m_TagString: ActionIcon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -326,7 +326,7 @@ RectTransform:
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 70, y: 70}
-  m_Pivot: {x: 0.5, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5737338734608857211
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -349,8 +349,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backImage: {fileID: 2991267087298690909}
   isActive: 0
-  defaultColor: {r: 0, g: 0, b: 0, a: 200}
-  activeColor: {r: 0.3906652, g: 0.029373322, b: 0.74901974, a: 200}
+  defaultColor: {r: 0.9254902, g: 0.15686275, b: 0, a: 200}
+  activeColor: {r: 0.9254902, g: 0.15686275, b: 0, a: 200}
   iconText: {fileID: 2984742567675912219}
 --- !u!114 &6038087885288693270
 MonoBehaviour:
@@ -420,7 +420,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -40, y: -40}
+  m_SizeDelta: {x: -36, y: -36}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5010992637395136426
 CanvasRenderer:
@@ -450,7 +450,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a2aea8e427154a64488824e17f9e94d2, type: 3}
+  m_Sprite: {fileID: 324980484, guid: bf3b17938e9f1c0409d7ff7c199cd449, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

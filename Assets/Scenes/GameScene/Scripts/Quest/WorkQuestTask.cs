@@ -19,7 +19,7 @@ public class WorkQuestTask : MonoBehaviour
     public delegate void CompletedDelegate();
     public event CompletedDelegate OnCompleted;
 
-    public void SetTask(WorkQuest quest)
+    public void SetWorkTask(WorkQuest quest)
     {
         // サプライクエストのタスク設定ロジックをここに実装
         if (quest == null) return;

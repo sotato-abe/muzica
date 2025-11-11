@@ -10,7 +10,7 @@ public class FieldController : MonoBehaviour
 {
     public delegate void PointEnterDelegate(Point point);
     public event PointEnterDelegate OnPointEnter;
-    public delegate void QuestEnterDelegate(Quest quest);
+    public delegate void QuestEnterDelegate(List<Quest> quests);
     public event QuestEnterDelegate OnQuestEnter;
     private const int ITEM_GET_PROBABILITY = 30;
     public static FieldController Instance { get; private set; }
@@ -111,17 +111,14 @@ public class FieldController : MonoBehaviour
         return enemies;
     }
 
-    public void EnterQuest(Quest quest)
+    public void EnterQuestBoard(List<Quest> quests)
     {
-        if (quest == null)
+        if (quests == null || quests.Count == 0)
         {
-            UnityEngine.Debug.LogWarning("Quest is null. Cannot enter quest.");
+            UnityEngine.Debug.LogWarning("Quests are null or empty. Cannot enter quest board.");
             return;
         }
-
-        // メッセージパネルにメッセージを表示
-        messagePanel.AddMessage(MessageIconType.Quest, $"{quest.Base.Title} を発見");
-        OnQuestEnter?.Invoke(quest); // クエストイベントを発火
+        OnQuestEnter?.Invoke(quests); // クエストイベントを発火
     }
 
     public void EnterPoint(Point point)

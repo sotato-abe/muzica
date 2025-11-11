@@ -660,7 +660,7 @@ public class FieldGenerator : MonoBehaviour
         questList = QuestDatabase.Instance.GetActiveQuestByField(ageTimePanel.ageTime, currentFieldBase.fieldType);
         if (questList == null || questList.Count == 0) return;
 
-        List<Vector2Int> validPositions = GetValidObjectPositions("quest", questList.Count);
+        List<Vector2Int> validPositions = GetValidObjectPositions("quest", 1);
         if (validPositions.Count == 0) return;
 
         for (int i = 0; i < validPositions.Count; i++)
@@ -673,7 +673,7 @@ public class FieldGenerator : MonoBehaviour
             try
             {
                 placedObjects.Add(pos);
-                instantiatedQuestObject.SetQuest(questList[i]);
+                instantiatedQuestObject.SetQuest(questList);
             }
             catch (System.Exception e)
             {
