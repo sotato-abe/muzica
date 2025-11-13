@@ -8,7 +8,7 @@ using UnityEngine.Events;
 public class ItemTradePanel : TwoColumnPanel
 {
     [SerializeField] BagCategory bagCategory;
-    [SerializeField] InventoryWindow inventoryWindow;
+    [SerializeField] ItemBoxWindow itemBoxWindow;
     [SerializeField] EquipmentSimpleSlot rightHandSlot;
     [SerializeField] EquipmentSimpleSlot leftHandSlot;
     [SerializeField] PocketWindow pocketWindow;
@@ -23,7 +23,7 @@ public class ItemTradePanel : TwoColumnPanel
     {
         shopItemWindow.OnTargetItem += TargetItem;
         shopItemWindow.OnOwnerMessage += OwnerMessage;
-        inventoryWindow.OnTargetItem += TargetItem;
+        itemBoxWindow.OnTargetItem += TargetItem;
         rightHandSlot.OnTargetItem += TargetItem;
         leftHandSlot.OnTargetItem += TargetItem;
         pocketWindow.OnTargetItem += TargetItem;
@@ -47,7 +47,7 @@ public class ItemTradePanel : TwoColumnPanel
     public void ChangeWindow(bool isBag)
     {
         SoundSystem.Instance.PlaySE(SeType.Select);
-        inventoryWindow.gameObject.SetActive(isBag);
+        itemBoxWindow.gameObject.SetActive(isBag);
         pocketWindow.gameObject.SetActive(!isBag);
     }
 

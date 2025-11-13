@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class InventoryWindow : MonoBehaviour, IDropHandler
+public class ItemBoxWindow : MonoBehaviour, IDropHandler
 {
     [SerializeField] ItemBlock itemBlockPrefab;
     [SerializeField] GameObject refusalBlockPrefab;

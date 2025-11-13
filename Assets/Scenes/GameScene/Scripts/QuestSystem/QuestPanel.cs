@@ -11,7 +11,7 @@ public class QuestPanel : TwoColumnPanel
     [SerializeField] TargetCommandWindow targetCommandWindow;
 
     [SerializeField] BagCategory bagCategory;
-    [SerializeField] InventoryWindow inventoryWindow;
+    [SerializeField] ItemBoxWindow itemBoxWindow;
     [SerializeField] StorageWindow storageWindow;
 
     [SerializeField] QuestCard questCard;
@@ -25,7 +25,7 @@ public class QuestPanel : TwoColumnPanel
 
     public override void Start()
     {
-        inventoryWindow.OnTargetItem += TargetItem;
+        itemBoxWindow.OnTargetItem += TargetItem;
         storageWindow.OnTargetCommand += TargetCommand;
         bagCategory.OnChangeWindow += ChangeWindow;
         questCard.OnTargetItem += TargetItem;
@@ -54,7 +54,7 @@ public class QuestPanel : TwoColumnPanel
 
     public void ChangeWindow(bool isBag)
     {
-        inventoryWindow.gameObject.SetActive(isBag);
+        itemBoxWindow.gameObject.SetActive(isBag);
         storageWindow.gameObject.SetActive(!isBag);
     }
 
@@ -102,7 +102,7 @@ public class QuestPanel : TwoColumnPanel
 
     public void UpdateUI()
     {
-        inventoryWindow.SetItems();
+        itemBoxWindow.SetItems();
         storageWindow.SetCommands();
     }
 }

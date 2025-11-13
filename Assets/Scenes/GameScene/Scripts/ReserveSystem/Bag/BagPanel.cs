@@ -7,7 +7,7 @@ using UnityEngine.Events;
 
 public class BagPanel : SlidePanel
 {
-    [SerializeField] InventoryWindow inventoryWindow;
+    [SerializeField] ItemBoxWindow itemBoxWindow;
     [SerializeField] TargetItemWindow targetItemWindow;
     [SerializeField] EquipmentWindow equipmentWindow;
     [SerializeField] PocketWindow pocketWindow;
@@ -16,13 +16,13 @@ public class BagPanel : SlidePanel
     {
         equipmentWindow.OnUpdateInventory += UpdateInvenotry;
         equipmentWindow.OnTargetItem += TargetItem;
-        inventoryWindow.OnTargetItem += TargetItem;
+        itemBoxWindow.OnTargetItem += TargetItem;
         pocketWindow.OnTargetItem += TargetItem;
     }
 
     public void UpdateInvenotry()
     {
-        inventoryWindow.SetItems();
+        itemBoxWindow.SetItems();
     }
 
     public void TargetItem(Item item, bool isOwn = true)
