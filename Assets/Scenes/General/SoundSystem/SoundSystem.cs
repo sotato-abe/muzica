@@ -14,6 +14,10 @@ public class SoundSystem : MonoBehaviour
 
     private float fadeTime = 0.8f;
 
+    private float masterVolume = 1.0f;
+    private float bgmVolume = 1.0f;
+    private float seVolume = 1.0f;
+
     private void Awake()
     {
         if (Instance == null)
@@ -28,6 +32,7 @@ public class SoundSystem : MonoBehaviour
         }
     }
 
+    #region BGM
     public void PlayBGM(BgmType bgmType)
     {
         StopBGM();
@@ -63,6 +68,7 @@ public class SoundSystem : MonoBehaviour
         if (!bgmSource.isPlaying) return;
         StartCoroutine(FadeOutBGM());
     }
+    #endregion
 
     private IEnumerator FadeOutBGM()
     {
@@ -76,6 +82,7 @@ public class SoundSystem : MonoBehaviour
         bgmSource.volume = startVolume;
     }
 
+    #region SE
     public void PlaySE(SeType seType)
     {
         SeBase seData = seClipList.Find(s => s.SeType() == seType);
@@ -88,4 +95,41 @@ public class SoundSystem : MonoBehaviour
             Debug.LogWarning($"SoundSystem: SE of type {seType} not found.");
         }
     }
+    #endregion
+
+    #region Volume Control
+    public void SetMasterVolume(float volume)
+    {
+        masterVolume = volume;
+        bgmSource.volume = bgmVolume * masterVolume;
+        seSource.volume = seVolume * masterVolume;
+    }
+
+    public float GetMasterVolume()
+    {
+        return masterVolume;
+    }
+
+    public void SetBGMVolume(float volume)
+    {
+        bgmVolume = volume;
+        bgmSource.volume = bgmVolume * masterVolume;
+    }
+
+    public float GetBGMVolume()
+    {
+        return bgmVolume;
+    }
+
+    public void SetSEVolume(float volume)
+    {
+        seVolume = volume;
+        seSource.volume = seVolume * masterVolume;
+    }
+
+    public float GetSEVolume()
+    {
+        return seVolume;
+    }
+    #endregion
 }
