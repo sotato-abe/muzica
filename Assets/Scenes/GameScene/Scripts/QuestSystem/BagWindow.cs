@@ -7,9 +7,9 @@ using UnityEngine.Events;
 
 public class BagWindow : SlidePanel
 {
-    [SerializeField] BagCategory bagCategory;
+    [SerializeField] CategorySwitch categorySwitch;
     [SerializeField] ItemBoxWindow itemBoxWindow;
-    [SerializeField] StorageWindow storageWindow;
+    [SerializeField] CommandBoxWindow commandBoxWindow;
 
     public delegate void TargetItemDelegate(Item item, bool isOwn = true);
     public event TargetItemDelegate OnTargetItem;
@@ -20,8 +20,8 @@ public class BagWindow : SlidePanel
     public void Start()
     {
         itemBoxWindow.OnTargetItem += TargetItem;
-        storageWindow.OnTargetCommand += TargetCommand;
-        bagCategory.OnChangeWindow += ChangeWindow;
+        commandBoxWindow.OnTargetCommand += TargetCommand;
+        categorySwitch.OnChangeWindow += ChangeWindow;
         ChangeWindow(true);
     }
 
@@ -29,7 +29,7 @@ public class BagWindow : SlidePanel
     {
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
         {
-            bagCategory.SwitchActiveButton();
+            categorySwitch.SwitchActiveButton();
         }
     }
 
@@ -46,12 +46,12 @@ public class BagWindow : SlidePanel
     public void ChangeWindow(bool isBag)
     {
         itemBoxWindow.gameObject.SetActive(isBag);
-        storageWindow.gameObject.SetActive(!isBag);
+        commandBoxWindow.gameObject.SetActive(!isBag);
     }
 
     public void SetupBagUI()
     {
         itemBoxWindow.SetItems();
-        storageWindow.SetCommands();
+        commandBoxWindow.SetCommands();
     }
 }

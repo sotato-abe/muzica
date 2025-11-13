@@ -7,7 +7,7 @@ using UnityEngine.Events;
 
 public class ItemTradePanel : TwoColumnPanel
 {
-    [SerializeField] BagCategory bagCategory;
+    [SerializeField] CategorySwitch categorySwitch;
     [SerializeField] ItemBoxWindow itemBoxWindow;
     [SerializeField] EquipmentSimpleSlot rightHandSlot;
     [SerializeField] EquipmentSimpleSlot leftHandSlot;
@@ -27,7 +27,7 @@ public class ItemTradePanel : TwoColumnPanel
         rightHandSlot.OnTargetItem += TargetItem;
         leftHandSlot.OnTargetItem += TargetItem;
         pocketWindow.OnTargetItem += TargetItem;
-        bagCategory.OnChangeWindow += ChangeWindow;
+        categorySwitch.OnChangeWindow += ChangeWindow;
         ChangeWindow(true);
     }
 
@@ -35,7 +35,7 @@ public class ItemTradePanel : TwoColumnPanel
     {
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
         {
-            bagCategory.SwitchActiveButton();
+            categorySwitch.SwitchActiveButton();
         }
     }
 

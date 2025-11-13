@@ -8,13 +8,13 @@ using UnityEngine.EventSystems;
 
 public class StoragePanel : SlidePanel
 {
-    [SerializeField] StorageWindow storageWindow;
+    [SerializeField] CommandBoxWindow commandBoxWindow;
     [SerializeField] SlotSettingWindow slotSettingWindow;
     [SerializeField] TargetCommandWindow targetCommandWindow;
 
     private void Start()
     {
-        storageWindow.OnTargetCommand += TargetCommand;
+        commandBoxWindow.OnTargetCommand += TargetCommand;
         slotSettingWindow.OnTargetCommand += TargetCommand;
     }
 

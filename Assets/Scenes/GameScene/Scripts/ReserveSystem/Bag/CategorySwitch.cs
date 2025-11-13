@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BagCategory : MonoBehaviour
+public class CategorySwitch : MonoBehaviour
 {
     [SerializeField] GameObject equipmentButton;
     [SerializeField] GameObject pocketButton;

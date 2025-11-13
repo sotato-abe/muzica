@@ -9,8 +9,8 @@ public class CommandTradePanel : TwoColumnPanel
 {
     [SerializeField] TargetCommandWindow targetCommandWindow;
 
-    [SerializeField] BagCategory bagCategory;
-    [SerializeField] StorageWindow storageWindow;
+    [SerializeField] CategorySwitch categorySwitch;
+    [SerializeField] CommandBoxWindow commandBoxWindow;
     [SerializeField] SlotSettingWindow slotSettingWindow;
 
     [SerializeField] ShopCommandWindow shopCommandWindow;
@@ -22,9 +22,9 @@ public class CommandTradePanel : TwoColumnPanel
     {
         shopCommandWindow.OnTargetCommand += TargetCommand;
         shopCommandWindow.OnOwnerMessage += OwnerMessage;
-        storageWindow.OnTargetCommand += TargetCommand;
+        commandBoxWindow.OnTargetCommand += TargetCommand;
         slotSettingWindow.OnTargetCommand += TargetCommand;
-        bagCategory.OnChangeWindow += ChangeWindow;
+        categorySwitch.OnChangeWindow += ChangeWindow;
         ChangeWindow(true);
     }
 
@@ -32,7 +32,7 @@ public class CommandTradePanel : TwoColumnPanel
     {
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
         {
-            bagCategory.SwitchActiveButton();
+            categorySwitch.SwitchActiveButton();
         }
     }
 
@@ -44,7 +44,7 @@ public class CommandTradePanel : TwoColumnPanel
     public void ChangeWindow(bool isBag)
     {
         SoundSystem.Instance.PlaySE(SeType.Select);
-        storageWindow.gameObject.SetActive(isBag);
+        commandBoxWindow.gameObject.SetActive(isBag);
         slotSettingWindow.gameObject.SetActive(!isBag);
     }
 

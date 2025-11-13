@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class StorageWindow : MonoBehaviour, IDropHandler
+public class CommandBoxWindow : MonoBehaviour, IDropHandler
 {
     [SerializeField] CommandBlock commandBlockPrefab;
     [SerializeField] GameObject refusalBlockPrefab;

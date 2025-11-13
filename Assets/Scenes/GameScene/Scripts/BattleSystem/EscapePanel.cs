@@ -58,13 +58,25 @@ public class EscapePanel : BattleActionPanel
 
     public void ExecuteAction()
     {
-        if (!canExecuteActionFlg && !isEscaping)
-        {
-            Debug.LogWarning("アクションが実行できません。");
-            return;
-        }
+        if (!canExecuteActionFlg && !isEscaping) return;
+        if (!TryUseEnergy()) return;
 
         StartCoroutine(Escape());
+    }
+
+    private bool TryUseEnergy()
+    {
+        List<EnergyCost> energyCosts = new List<EnergyCost>();
+        if (lifeCost > 0)
+            energyCosts.Add(new EnergyCost(EnergyType.Life, lifeCost));
+        if (batteryCost > 0)
+            energyCosts.Add(new EnergyCost(EnergyType.Battery, batteryCost));
+        if (soulCost > 0)
+            energyCosts.Add(new EnergyCost(EnergyType.Soul, soulCost));
+        if( energyCosts.Count == 0)
+            return true;
+        bool isUsed = PlayerController.Instance.UseEnergyCost(energyCosts);
+        return isUsed;
     }
 
     public void SetEnemyList(List<Character> enemyList)
@@ -101,7 +113,7 @@ public class EscapePanel : BattleActionPanel
         PlayerCharacter player = PlayerController.Instance.PlayerCharacter;
         lifeCost = Mathf.Max(0, player.Life / 10);
         batteryCost = Mathf.Max(0, player.Battery / 10);
-        soulCost = player.Soul / 2;
+        soulCost = player.Soul / 5;
 
         energyCostList.Clear();
         if (lifeCost > 0)
@@ -137,8 +149,8 @@ public class EscapePanel : BattleActionPanel
         PlayerController.Instance.UseEnergyCost(energyCosts);
 
         yield return StartCoroutine(RunningCoroutine());
-
-        if (Random.Range(0, 100) < probability)
+        int rand = Random.Range(0, 100);
+        if (rand < probability)
         {
             // 逃げる成功
             yield return new WaitForSeconds(1f);
@@ -149,6 +161,7 @@ public class EscapePanel : BattleActionPanel
         else
         {
             // 逃げる失敗
+            UnityEngine.Debug.Log($"{probability}/{rand}");
             PlayerController.Instance.SetPlayerMessageByType(MessageType.Miss);
         }
         RunningOff();

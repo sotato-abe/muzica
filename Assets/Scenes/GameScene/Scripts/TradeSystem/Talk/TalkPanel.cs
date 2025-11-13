@@ -10,9 +10,9 @@ public class TalkPanel : TwoColumnPanel
     [SerializeField] TargetItemWindow targetItemWindow;
     [SerializeField] TargetCommandWindow targetCommandWindow;
 
-    [SerializeField] BagCategory bagCategory;
+    [SerializeField] CategorySwitch categorySwitch;
     [SerializeField] ItemBoxWindow itemBoxWindow;
-    [SerializeField] StorageWindow storageWindow;
+    [SerializeField] CommandBoxWindow commandBoxWindow;
 
     [SerializeField] QuestCard questCard;
     [SerializeField] GameObject emptyAlert;
@@ -26,8 +26,8 @@ public class TalkPanel : TwoColumnPanel
     public override void Start()
     {
         itemBoxWindow.OnTargetItem += TargetItem;
-        storageWindow.OnTargetCommand += TargetCommand;
-        bagCategory.OnChangeWindow += ChangeWindow;
+        commandBoxWindow.OnTargetCommand += TargetCommand;
+        categorySwitch.OnChangeWindow += ChangeWindow;
         questCard.OnTargetItem += TargetItem;
         questCard.OnOwnerMessage += OwnerMessage;
         questCard.OnReceiptQuest += ReceiptQuest;
@@ -38,7 +38,7 @@ public class TalkPanel : TwoColumnPanel
     {
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
         {
-            bagCategory.SwitchActiveButton();
+            categorySwitch.SwitchActiveButton();
         }
     }
 
@@ -55,7 +55,7 @@ public class TalkPanel : TwoColumnPanel
     public void ChangeWindow(bool isBag)
     {
         itemBoxWindow.gameObject.SetActive(isBag);
-        storageWindow.gameObject.SetActive(!isBag);
+        commandBoxWindow.gameObject.SetActive(!isBag);
     }
 
     public void SetPoint(Point point)
@@ -103,6 +103,6 @@ public class TalkPanel : TwoColumnPanel
     public void UpdateUI()
     {
         itemBoxWindow.SetItems();
-        storageWindow.SetCommands();
+        commandBoxWindow.SetCommands();
     }
 }

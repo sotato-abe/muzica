@@ -88,6 +88,7 @@ public class QuestActionBoard : SlidePanel
         {
             Destroy(card.gameObject);
         }
+        questCardList.Clear();
         foreach (var quest in quests)
         {
             QuestCardPrefab card = Instantiate(questCardPrefab, questCardArea.transform);
@@ -105,6 +106,7 @@ public class QuestActionBoard : SlidePanel
 
     private void SetActionIcons()
     {
+        actionIconList.Clear();
         GameObject[] objects = GameObject.FindGameObjectsWithTag("ActionIcon");
         foreach (var obj in objects)
         {
@@ -159,6 +161,7 @@ public class QuestActionBoard : SlidePanel
     {
         int completed = 0;
         int completeIndex = 1;
+
 
         if (currentIndex < questCardList.Count)
         {
