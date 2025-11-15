@@ -44,6 +44,15 @@ public class InformationPanel : SlidePanel
         StartCoroutine(DisplayInformation());
     }
 
+    public void SetPointInformation(PointBase pointBase)
+    {
+        titleText.text = pointBase.Name;
+        descriptionText.text = pointBase.Description;
+        image.sprite = pointBase.Image;
+        SetPanelSize();
+        StartCoroutine(DisplayInformation());
+    }
+
     private IEnumerator DisplayInformation()
     {
         this.SetActive(true);

@@ -128,9 +128,6 @@ public class FieldController : MonoBehaviour
             UnityEngine.Debug.LogWarning("Point is null. Cannot enter point.");
             return;
         }
-
-        // メッセージパネルにメッセージを表示
-        messagePanel.AddMessage(MessageIconType.Field, $"{point.Base.Name} にアクセス");
         OnPointEnter?.Invoke(point); // リザーブイベントを発火
     }
 

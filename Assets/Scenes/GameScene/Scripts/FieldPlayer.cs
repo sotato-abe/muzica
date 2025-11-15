@@ -51,7 +51,6 @@ public class FieldPlayer : FieldCharacter
 
         if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Return))
         {
-            canMove = false;
             moveInput = Vector2.zero; // ← ここでも念のためリセット
             OnReserveStart?.Invoke();
         }
@@ -100,7 +99,6 @@ public class FieldPlayer : FieldCharacter
         {
             if (Random.value < encountChance)
             {
-                SetCanMove(false); // プレイヤーの移動を停止
                 animator.SetBool("isRunning", false);
                 OnBattleStart?.Invoke();
             }

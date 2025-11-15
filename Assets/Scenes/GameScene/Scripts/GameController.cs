@@ -15,6 +15,7 @@ public class GameController : MonoBehaviour
     [SerializeField] SaveManagement saveManagement;
     [SerializeField] private PlayerCharacter defaultPlayer; // テスト用
 
+    private GameStateType currentGameState;
 
     private void Start()
     {
@@ -49,6 +50,9 @@ public class GameController : MonoBehaviour
 
     public void ReserveStart()
     {
+        if (currentGameState != GameStateType.Field)
+            return;
+        currentGameState = GameStateType.Reserve;
         fieldPlayer.SetCanMove(false); // プレイヤーの移動を停止
         reserveSystem.gameObject.SetActive(true); // リザーブシステムを非表示にする
         ageTimePanel.SetTimeSpeed(TimeState.Live);
@@ -60,10 +64,15 @@ public class GameController : MonoBehaviour
         reserveSystem.gameObject.SetActive(false); // リザーブシステムを非表示にする
         ageTimePanel.SetTimeSpeed(TimeState.Fast);
         fieldPlayer.SetCanMove(true); // プレイヤーの移動を再開
+        currentGameState = GameStateType.Field;
     }
 
     public void BattleStart()
     {
+        if (currentGameState != GameStateType.Field)
+            return;
+        currentGameState = GameStateType.Battle;
+        fieldPlayer.SetCanMove(false); // プレイヤーの移動を停止
         battleSystem.gameObject.SetActive(true); // リザーブシステムを非表示にする
         ageTimePanel.SetTimeSpeed(TimeState.Live);
         battleSystem.BattleStart(); // リザーブ開始処理を呼び出す
@@ -74,14 +83,19 @@ public class GameController : MonoBehaviour
         battleSystem.gameObject.SetActive(false); // リザーブシステムを非表示にする
         ageTimePanel.SetTimeSpeed(TimeState.Fast);
         fieldPlayer.SetCanMove(true); // プレイヤーの移動を再開
+        currentGameState = GameStateType.Field;
     }
 
     public void TradeStart(Point point)
     {
+        if (currentGameState != GameStateType.Field)
+            return;
+        currentGameState = GameStateType.Trade;
+        InformationPanel.Instance.SetPointInformation(point.Base);
+        fieldPlayer.SetCanMove(false); // プレイヤーの移動を停止
         tradeSystem.gameObject.SetActive(true); // リザーブシステムを非表示にする
         ageTimePanel.SetTimeSpeed(TimeState.Live);
         tradeSystem.TradeStart(point); // リザーブ開始処理を呼び出す
-        fieldPlayer.SetCanMove(false); // プレイヤーの移動を停止
     }
 
     public void TradeEnd()
@@ -89,14 +103,18 @@ public class GameController : MonoBehaviour
         tradeSystem.gameObject.SetActive(false); // リザーブシステムを非表示にする
         ageTimePanel.SetTimeSpeed(TimeState.Fast);
         fieldPlayer.SetCanMove(true); // プレイヤーの移動を再開
+        currentGameState = GameStateType.Field;
     }
 
     public void QuestStart(List<Quest> quests)
     {
+        if (currentGameState != GameStateType.Field)
+            return;
+        currentGameState = GameStateType.Quest;
+        fieldPlayer.SetCanMove(false); // プレイヤーの移動を停止
         questSystem.gameObject.SetActive(true); // クエストシステムを表示する
         ageTimePanel.SetTimeSpeed(TimeState.Live);
         questSystem.QuestStart(quests); // クエスト開始処理を呼び出す
-        fieldPlayer.SetCanMove(false); // プレイヤーの移動を停止
     }
 
     public void QuestEnd()
@@ -104,5 +122,6 @@ public class GameController : MonoBehaviour
         questSystem.gameObject.SetActive(false); // クエストシステムを非表示にする
         ageTimePanel.SetTimeSpeed(TimeState.Fast);
         fieldPlayer.SetCanMove(true); // プレイヤーの移動を再開
+        currentGameState = GameStateType.Field;
     }
 }
