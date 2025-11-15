@@ -150,7 +150,7 @@ public class BattleActionBoard : SlidePanel
         {
             if (kvp.Key == currentAction)
             {
-                kvp.Value.PanelOpen();
+                kvp.Value.WindowOpen();
                 if (kvp.Value is not EquipPanel)
                 {
                     equipPanel1.HideTarget();
@@ -158,7 +158,7 @@ public class BattleActionBoard : SlidePanel
             }
             else
             {
-                kvp.Value.PanelClose();
+                kvp.Value.WindowClose();
             }
         }
     }

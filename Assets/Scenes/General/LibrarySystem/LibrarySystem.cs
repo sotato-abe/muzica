@@ -12,7 +12,7 @@ public class LibrarySystem : SystemPanel
 
     private void Awake()
     {
-        CloseWindow();
+        PanelClose();
         categorySelectWindow.OnChangeTarget += ChangeCategory;
         categorySelectWindow.OnSelectAction += SelectActiveWindow;
         for (int i = 0; i < categoryWindows.Count; i++)
@@ -21,21 +21,21 @@ public class LibrarySystem : SystemPanel
         }
     }
 
-    public override void OpenWindow()
+    public override void PanelOpen()
     {
-        base.OpenWindow();
-        categorySelectWindow.PanelOpen();
+        base.PanelOpen();
+        categorySelectWindow.WindowOpen();
         int selectedIndex = categorySelectWindow.GetCurrentIndex();
         ChangeCategory(selectedIndex);
     }
 
-    public override void CloseWindow()
+    public override void PanelClose()
     {
-        base.CloseWindow();
-        categorySelectWindow.PanelClose();
+        base.PanelClose();
+        categorySelectWindow.WindowClose();
         for (int i = 0; i < categoryWindows.Count; i++)
         {
-            categoryWindows[i].PanelClose();
+            categoryWindows[i].WindowClose();
         }
     }
 
@@ -45,11 +45,11 @@ public class LibrarySystem : SystemPanel
         {
             if (i == index)
             {
-                categoryWindows[i].PanelOpen();
+                categoryWindows[i].WindowOpen();
             }
             else
             {
-                categoryWindows[i].PanelClose();
+                categoryWindows[i].WindowClose();
             }
         }
     }

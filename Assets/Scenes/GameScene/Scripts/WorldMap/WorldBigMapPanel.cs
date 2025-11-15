@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class WorldBigMapPanel : Panel
+public class WorldBigMapWindow : Panel
 {
     [SerializeField] WorldBigMapCameraManager worldMapCameraManager;
     // [SerializeField] AgeTimePanel ageTimePanel;
@@ -41,7 +41,7 @@ public class WorldBigMapPanel : Panel
 
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.E))
         {
-            PanelClose();
+            WindowClose();
         }
     }
 
@@ -51,16 +51,16 @@ public class WorldBigMapPanel : Panel
         if (isActive)
         {
             // ageTimePanel.SetTimeSpeed(TimeState.Live); // 時間を止める
-            PanelOpen();
+            WindowOpen();
         }
         else
         {
             // ageTimePanel.SetTimeSpeed(TimeState.Fast); // 時間を進める
-            PanelClose();
+            WindowClose();
         }
     }
 
-    private void PanelClose()
+    private void WindowClose()
     {
         isActive = false;
         // ageTimePanel.SetTimeSpeed(TimeState.Fast); // 時間を進める

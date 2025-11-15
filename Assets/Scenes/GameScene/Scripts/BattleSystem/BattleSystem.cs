@@ -15,12 +15,12 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] private EnemySubPanel enemySubPanel3; // キャラクターサブパネル
     [SerializeField] private MessagePanel messagePanel; // キャラクターサブパネル
     [SerializeField] WorldMapPanel worldMapPanel;
-    [SerializeField] SlidePanel savePanel;
     [SerializeField] GameOverWindow gameOverWindow;
     [SerializeField] FieldPlayer fieldPlayer; //キャラクター
     [SerializeField] FieldEnemy fieldEnemyPrefab; //敵キャラクター
     [SerializeField] private GameObject enemyGroupArea; // 敵キャラクターの親オブジェクト
     [SerializeField] AgeTimePanel ageTimePanel;
+    [SerializeField] SlidePanel optionActionBoard;
 
     List<FieldCharacter> fieldEnemies = new List<FieldCharacter>(); // フィールド上の敵キャラクターリスト
     List<EnemySubPanel> enemySubPanels = new List<EnemySubPanel>(); // 敵のサブパネルリスト
@@ -59,7 +59,7 @@ public class BattleSystem : MonoBehaviour
         cameraManager.SetEventType(EventType.Battle); // バトル時のカメラ位置を設定
         // messagePanel.SetActive(false); // メッセージパネルを表示
         worldMapPanel.SetActive(false); // ワールドマップパネルを非表示
-        savePanel.SetActive(false); // セーブパネルを非表示
+        optionActionBoard.SetActive(false); // セーブパネルを非表示
 
         playerSubPanel.SetActive(true); // キャラクターサブパネルを表示
         battleActionBoard.SetActive(true); // リザーブアクションボードを表示
@@ -278,7 +278,7 @@ public class BattleSystem : MonoBehaviour
 
         // messagePanel.SetActive(true, CheckAllComplete); // メッセージパネルを表示
         worldMapPanel.SetActive(true, CheckAllComplete); // ワールドマップパネルを表示
-        savePanel.SetActive(true, CheckAllComplete); // セーブパネルを表示
+        optionActionBoard.SetActive(true, CheckAllComplete); // セーブパネルを表示
         cameraManager.SetEventType(EventType.Default); // バトル時のカメラ位置を設定
         PlayerController.Instance.ChangeEventType(EventType.Default); // イベントタイプをデフォルトに変更
         SoundSystem.Instance.PlayBGM(BgmType.Field);

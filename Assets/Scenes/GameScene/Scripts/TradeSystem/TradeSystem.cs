@@ -17,7 +17,7 @@ public class TradeSystem : MonoBehaviour
     [SerializeField] CommandTradePanel commandTradePanel;
 
     [SerializeField] WorldMapPanel worldMapPanel;
-    [SerializeField] SlidePanel savePanel;
+    [SerializeField] SlidePanel optionActionBoard;
 
     private Point currentPoint;
 
@@ -46,7 +46,7 @@ public class TradeSystem : MonoBehaviour
 
         cameraManager.SetEventType(EventType.Trade); // トレード時のカメラ位置を設定
         worldMapPanel.SetActive(false); // ワールドマップパネルを非表示
-        savePanel.SetActive(false); // セーブパネルを非表示
+        optionActionBoard.SetActive(false); // セーブパネルを非表示
 
         playerSubPanel.SetActive(true); // キャラクターサブパネルを表示
         playerSubPanel.SetMessageByType(MessageType.Entrance); // プレイヤーのメッセージを設定
@@ -94,11 +94,11 @@ public class TradeSystem : MonoBehaviour
             }
         }
 
-        tradeActionBoard.PanelClose(CheckAllComplete); // リザーブアクションボードを表示
+        tradeActionBoard.WindowClose(CheckAllComplete); // リザーブアクションボードを表示
         playerSubPanel.SetActive(false, CheckAllComplete); // キャラクターサブパネルを表示
         ownerSubPanel.SetActive(false, CheckAllComplete); // キャラクターサブパネルを表示
         worldMapPanel.SetActive(true, CheckAllComplete); // ワールドマップパネルを表示
-        savePanel.SetActive(true, CheckAllComplete); // セーブパネルを表示
+        optionActionBoard.SetActive(true, CheckAllComplete); // セーブパネルを表示
         cameraManager.SetEventType(EventType.Default); // バトル時のカメラ位置を設定
         PlayerController.Instance.ChangeEventType(EventType.Default); // イベントタイプをデフォルトに変更
     }

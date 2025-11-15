@@ -7,9 +7,9 @@ public class OptionSystem : MonoBehaviour
 {
     [SerializeField] Image backPanel;
 
-    [SerializeField] WorldBigMapPanel worldBigMapPanel;
-    [SerializeField] LibraryPanel libraryPanel;
-    [SerializeField] SavePanel savePanel;
+    [SerializeField] WorldBigMapWindow worldBigMapWindow;
+    [SerializeField] LibraryWindow libraryWindow;
+    [SerializeField] SaveWindow saveWindow;
     [SerializeField] SettingWindow settingWindow;
     [SerializeField] AgeTimePanel ageTimePanel;
 
@@ -22,9 +22,9 @@ public class OptionSystem : MonoBehaviour
     {
         panelList = new List<Panel>
         {
-            worldBigMapPanel,
-            libraryPanel,
-            savePanel,
+            worldBigMapWindow,
+            libraryWindow,
+            saveWindow,
             settingWindow
         };
     }
@@ -37,8 +37,8 @@ public class OptionSystem : MonoBehaviour
             {
                 if (panel.isActive)
                 {
-                    panel.PanelClose();
-                    CloseWindow();
+                    panel.WindowClose();
+                    PanelClose();
                     PlayerController.Instance.SetFieldPlayerMove(true);
                     StopTimeState(false);
                     break;
@@ -46,13 +46,13 @@ public class OptionSystem : MonoBehaviour
             }
         }
     }
-    public void OpenWindow()
+    public void PanelOpen()
     {
         SoundSystem.Instance.PlaySE(SeType.PanelOpen); // SEをオープンに変更
         StartCoroutine(BlockChange(true));
     }
 
-    public void CloseWindow()
+    public void PanelClose()
     {
         SoundSystem.Instance.PlaySE(SeType.PanelClose);
         StartCoroutine(BlockChange(false));
@@ -75,19 +75,19 @@ public class OptionSystem : MonoBehaviour
         backPanel.raycastTarget = isOpen;
     }
 
-    public void SwitchWorldBigMapPanel()
+    public void SwitchWorldBigMapWindow()
     {
-        SwitchPanel(worldBigMapPanel);
+        SwitchPanel(worldBigMapWindow);
     }
 
-    public void SwitchLibraryPanel()
+    public void SwitchLibraryWindow()
     {
-        SwitchPanel(libraryPanel);
+        SwitchPanel(libraryWindow);
     }
 
-    public void SwitchSavePanel()
+    public void SwitchSaveWindow()
     {
-        SwitchPanel(savePanel);
+        SwitchPanel(saveWindow);
     }
 
     public void SwitchSettingWindow()
@@ -102,21 +102,21 @@ public class OptionSystem : MonoBehaviour
         {
             if (p == panel && !p.isActive)
             {
-                p.PanelOpen();
-                OpenWindow();
+                p.WindowOpen();
+                PanelOpen();
                 PlayerController.Instance.SetFieldPlayerMove(false);
                 StopTimeState(true);
             }
             else if (p == panel && p.isActive)
             {
-                p.PanelClose();
-                CloseWindow();
+                p.WindowClose();
+                PanelClose();
                 PlayerController.Instance.SetFieldPlayerMove(true);
                 StopTimeState(false);
             }
             else
             {
-                p.PanelClose();
+                p.WindowClose();
             }
         }
     }

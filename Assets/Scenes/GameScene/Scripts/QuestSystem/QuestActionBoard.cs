@@ -107,14 +107,11 @@ public class QuestActionBoard : SlidePanel
     private void SetActionIcons()
     {
         actionIconList.Clear();
-        GameObject[] objects = GameObject.FindGameObjectsWithTag("ActionIcon");
-        foreach (var obj in objects)
+        foreach (var icon in actionIconList)
         {
-            if (obj != null)
-            {
-                Destroy(obj);
-            }
+            Destroy(icon.gameObject);
         }
+        actionIconList.Clear();
         actionIconArea.transform.DetachChildren();
         for (int i = 0; i < panelCount; i++)
         {
@@ -157,7 +154,7 @@ public class QuestActionBoard : SlidePanel
         }
     }
 
-    public void PanelClose(Action onComplete = null)
+    public void WindowClose(Action onComplete = null)
     {
         int completed = 0;
         int completeIndex = 1;

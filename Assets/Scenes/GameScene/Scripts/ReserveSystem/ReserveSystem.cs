@@ -15,7 +15,7 @@ public class ReserveSystem : MonoBehaviour
     [SerializeField] private CharacterSubPanel playerSubPanel; // キャラクターサブパネル
     [SerializeField] private MessagePanel messagePanel; // キャラクターサブパネル
     [SerializeField] WorldMapPanel worldMapPanel;
-    [SerializeField] SlidePanel optionButtonList;
+    [SerializeField] SlidePanel optionActionBoard;
 
     private void Start()
     {
@@ -38,7 +38,7 @@ public class ReserveSystem : MonoBehaviour
 
         cameraManager.SetEventType(EventType.Reserve); // 準備時のカメラ位置を設定
         worldMapPanel.SetActive(false); // ワールドマップパネルを非表示
-        optionButtonList.SetActive(false); // オプションボタンリストを非表示
+        optionActionBoard.SetActive(false); // オプションボタンリストを非表示
 
         footer.SetActive(true); // フッターを非表示にする
         playerSubPanel.SetActive(true); // キャラクターサブパネルを表示
@@ -60,12 +60,12 @@ public class ReserveSystem : MonoBehaviour
                 transform.gameObject.SetActive(false);
             }
         }
-        reserveActionBoard.PanelClose(CheckAllComplete); // リザーブアクションボードを非表示にする
+        reserveActionBoard.WindowClose(CheckAllComplete); // リザーブアクションボードを非表示にする
         footer.SetActive(false, CheckAllComplete); // フッターを非表示にする
         playerSubPanel.SetActive(false, CheckAllComplete); // キャラクターサブパネルを非表示にする
 
         worldMapPanel.SetActive(true, CheckAllComplete); // ワールドマップパネルを表示
-        optionButtonList.SetActive(true, CheckAllComplete); // オプションボタンリストを表示
+        optionActionBoard.SetActive(true, CheckAllComplete); // オプションボタンリストを表示
         cameraManager.SetEventType(EventType.Default); // 通常時のカメラ位置を設定
         PlayerController.Instance.ChangeEventType(EventType.Default); // イベントタイプをデフォルトに変更
     }

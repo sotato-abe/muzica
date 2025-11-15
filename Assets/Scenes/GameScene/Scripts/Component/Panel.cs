@@ -24,15 +24,15 @@ public class Panel : MonoBehaviour
         isActive = !isActive; // フラグをトグル
         if (isActive)
         {
-            PanelOpen();
+            WindowOpen();
         }
         else
         {
-            PanelClose();
+            WindowClose();
         }
     }
 
-    public virtual void PanelOpen()
+    public virtual void WindowOpen()
     {
         isActive = true;
         transform.gameObject.SetActive(isActive);
@@ -42,7 +42,7 @@ public class Panel : MonoBehaviour
         }
     }
 
-    public virtual void PanelClose()
+    public virtual void WindowClose()
     {
         isActive = false;
         transform.gameObject.SetActive(isActive);

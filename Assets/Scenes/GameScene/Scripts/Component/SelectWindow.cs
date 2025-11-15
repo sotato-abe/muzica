@@ -50,15 +50,15 @@ public class SelectWindow : Panel
         }
     }
 
-    public override void PanelOpen()
+    public override void WindowOpen()
     {
-        base.PanelOpen();
+        base.WindowOpen();
         isCursolActive = true;
     }
 
-    public override void PanelClose()
+    public override void WindowClose()
     {
-        base.PanelClose();
+        base.WindowClose();
         isCursolActive = false;
     }
 

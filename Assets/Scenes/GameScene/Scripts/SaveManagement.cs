@@ -12,7 +12,7 @@ public class SaveManagement : MonoBehaviour
 {
     [SerializeField] AgeTimePanel ageTimePanel;
     [SerializeField] SlidePanel saveButtonList;
-    [SerializeField] SavePanel savePanel;
+    
     public PlayData playData;
     public const string RELATIVE_PATH = "playData.json";
     public const string FILE_NAME = "playData";

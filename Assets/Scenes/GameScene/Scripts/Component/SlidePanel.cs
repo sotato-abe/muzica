@@ -49,6 +49,4 @@ public class SlidePanel : MonoBehaviour
         onComplete?.Invoke();
         slideCoroutine = null;
     }
-
-
 }

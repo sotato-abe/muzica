@@ -10,18 +10,18 @@ public class SettingSystem : SystemPanel
 
     private void Awake()
     {
-        CloseWindow();
+        PanelClose();
     }
 
-    public override void OpenWindow()
+    public override void PanelOpen()
     {
-        base.OpenWindow();
-        settingWindow.PanelOpen();
+        base.PanelOpen();
+        settingWindow.WindowOpen();
     }
 
-    public override void CloseWindow()
+    public override void PanelClose()
     {
-        base.CloseWindow();
-        settingWindow.PanelClose();
+        base.PanelClose();
+        settingWindow.WindowClose();
     }
 }

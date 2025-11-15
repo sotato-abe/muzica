@@ -9,12 +9,12 @@ public class SystemPanel : MonoBehaviour
     private Color activeBackPanelColor = new Color(0f, 0f, 0f, 200f / 255f);
     private Color inactiveBackPanelColor = new Color(0f, 0f, 0f, 0f);
 
-    public virtual void OpenWindow()
+    public virtual void PanelOpen()
     {
         StartCoroutine(BlockChange(true));
     }
 
-    public virtual void CloseWindow()
+    public virtual void PanelClose()
     {
         StartCoroutine(BlockChange(false));
     }
