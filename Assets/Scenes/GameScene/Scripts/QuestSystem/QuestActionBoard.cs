@@ -124,6 +124,7 @@ public class QuestActionBoard : SlidePanel
 
     private void ChangeActiveIcon()
     {
+        SoundSystem.Instance.PlaySE(SeType.Select);
         for (int i = 0; i < actionIconList.Count; i++)
         {
             actionIconList[i].SetActive(i == currentIndex);
