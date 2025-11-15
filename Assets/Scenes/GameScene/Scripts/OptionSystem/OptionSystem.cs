@@ -55,6 +55,14 @@ public class OptionSystem : MonoBehaviour
     public void PanelClose()
     {
         SoundSystem.Instance.PlaySE(SeType.PanelClose);
+        foreach (var panel in panelList)
+        {
+            if (panel.isActive)
+            {
+                panel.WindowClose();
+            }
+        }
+        PlayerController.Instance.SetFieldPlayerMove(true);
         StartCoroutine(BlockChange(false));
     }
 
