@@ -16,11 +16,11 @@ public class OptionSystem : MonoBehaviour
     private Color blockColor = new Color(0f, 0f, 0f, 200f / 255f);
     private Color inBlockColor = new Color(0f, 0f, 0f, 0f);
 
-    private List<Panel> panelList;
+    private List<Window> panelList;
 
     private void Start()
     {
-        panelList = new List<Panel>
+        panelList = new List<Window>
         {
             worldBigMapWindow,
             libraryWindow,
@@ -103,7 +103,7 @@ public class OptionSystem : MonoBehaviour
         SwitchPanel(settingWindow);
     }
 
-    private void SwitchPanel(Panel panel)
+    private void SwitchPanel(Window panel)
     {
         SoundSystem.Instance.PlaySE(SeType.Select);
         foreach (var p in panelList)

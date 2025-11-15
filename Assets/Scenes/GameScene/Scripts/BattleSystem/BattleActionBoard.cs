@@ -17,7 +17,7 @@ public class BattleActionBoard : SlidePanel
     [SerializeField] private ActionIcon escapeIcon;
     [SerializeField] AutoButton autoButton;
 
-    private Dictionary<BattleActionType, Panel> actionPanels;
+    private Dictionary<BattleActionType, Window> actionWindows;
     private Dictionary<BattleActionType, ActionIcon> actionIcons;
     private List<BattleActionType> actionTypeList;
     private BattleActionType currentAction = BattleActionType.Equip1;
@@ -25,7 +25,7 @@ public class BattleActionBoard : SlidePanel
 
     private void Start()
     {
-        actionPanels = new Dictionary<BattleActionType, Panel>
+        actionWindows = new Dictionary<BattleActionType, Window>
         {
             {  BattleActionType.Equip1, equipPanel1 },
             {  BattleActionType.Equip2, equipPanel2 },
@@ -41,7 +41,7 @@ public class BattleActionBoard : SlidePanel
             {  BattleActionType.Escape, escapeIcon },
         };
 
-        actionTypeList = new List<BattleActionType>(actionPanels.Keys);
+        actionTypeList = new List<BattleActionType>(actionWindows.Keys);
 
         equipPanel1.OnActionEnd += ActionEnd;
         equipPanel1.OnActionStart += ActionStart;
@@ -77,7 +77,7 @@ public class BattleActionBoard : SlidePanel
 
     private void ChoiceAction(bool isLeft)
     {
-        // actionPanelsから現在のアクションのインデックスを取得
+        // actionWindowsから現在のアクションのインデックスを取得
         int currentIndex = actionTypeList.IndexOf(currentAction);
         if (isLeft)
         {
@@ -146,7 +146,7 @@ public class BattleActionBoard : SlidePanel
         {
             autoButton.gameObject.SetActive(false);
         }
-        foreach (var kvp in actionPanels)
+        foreach (var kvp in actionWindows)
         {
             if (kvp.Key == currentAction)
             {

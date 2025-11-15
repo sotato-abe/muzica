@@ -1,5 +1,5 @@
 using UnityEngine;
 
-public class LibraryWindow : Panel
+public class LibraryWindow : Window
 {
 }

@@ -4,7 +4,7 @@ using UnityEngine.Events;
 using System.Collections;
 using System.Collections.Generic;
 
-public class SelectWindow : Panel
+public class SelectWindow : Window
 {
     [SerializeField] public List<SelectElement> selectElements;
     [SerializeField] Image backgroundImage;

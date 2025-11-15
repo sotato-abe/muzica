@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class SlotWindow : Panel
+public class SlotWindow : Window
 {
     [SerializeField] CommandReel commandReel1;
     [SerializeField] CommandReel commandReel2;

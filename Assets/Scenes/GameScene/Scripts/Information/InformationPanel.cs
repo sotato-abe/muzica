@@ -30,7 +30,7 @@ public class InformationPanel : SlidePanel
     {
         titleText.text = information.Base.Title;
         descriptionText.text = information.Base.Description;
-        image.sprite = information.Base.Sprite;
+        SetImage(information.Base.Sprite);
         SetPanelSize();
         StartCoroutine(DisplayInformation());
     }
@@ -39,16 +39,29 @@ public class InformationPanel : SlidePanel
     {
         titleText.text = fieldBase.FieldName;
         descriptionText.text = fieldBase.Description;
-        image.sprite = fieldBase.FieldSprite;
+        SetImage(fieldBase.FieldSprite);
         SetPanelSize();
         StartCoroutine(DisplayInformation());
+    }
+
+    private void SetImage(Sprite sprite)
+    {
+        if (sprite != null)
+        {
+            image.gameObject.SetActive(true);
+            image.sprite = sprite;
+        }
+        else
+        {
+            image.gameObject.SetActive(false);
+        }
     }
 
     public void SetPointInformation(PointBase pointBase)
     {
         titleText.text = pointBase.Name;
         descriptionText.text = pointBase.Description;
-        image.sprite = pointBase.Image;
+        SetImage(pointBase.Image);
         SetPanelSize();
         StartCoroutine(DisplayInformation());
     }

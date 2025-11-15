@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Events;
 
-public class SaveWindow : Panel
+public class SaveWindow : Window
 {
     [SerializeField] SaveDataButton saveDataButton1;
     [SerializeField] SaveDataButton saveDataButton2;

@@ -8,20 +8,35 @@ public class SettingSystem : SystemPanel
 
     [SerializeField] SettingWindow settingWindow;
 
+    private bool isActive = false;
+
     private void Awake()
     {
         PanelClose();
+    }
+
+    
+    private void Update()
+    {
+        if(!isActive) return;
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            PanelClose();
+        }
     }
 
     public override void PanelOpen()
     {
         base.PanelOpen();
         settingWindow.WindowOpen();
+        isActive = true;
     }
 
     public override void PanelClose()
     {
         base.PanelClose();
         settingWindow.WindowClose();
+        isActive = false;
     }
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Panel : MonoBehaviour
+public class Window : MonoBehaviour
 {
     public UnityAction OnActionExecute;
     public UnityAction OnActionExit;

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
-public class CommandReel : Panel
+public class CommandReel : Window
 {
     [SerializeField] int reelNum = 1; // リールの数
     [SerializeField] List<CommandImage> reelSlots; // Slot1〜3をアサイン

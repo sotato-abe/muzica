@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class BattleActionPanel : Panel
+public class BattleActionPanel : Window
 {
     public bool canExecuteActionFlg = false;
 

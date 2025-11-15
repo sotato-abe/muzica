@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SettingWindow : Panel
+public class SettingWindow : Window
 {
     [SerializeField] Slider masterSlider;
     [SerializeField] Slider bgmSlider;

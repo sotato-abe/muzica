@@ -15,6 +15,7 @@ public class LibrarySystem : SystemPanel
         PanelClose();
         categorySelectWindow.OnChangeTarget += ChangeCategory;
         categorySelectWindow.OnSelectAction += SelectActiveWindow;
+        categorySelectWindow.OnCancelAction += PanelClose;
         for (int i = 0; i < categoryWindows.Count; i++)
         {
             categoryWindows[i].OnCancelAction += CancelActiveWindow;

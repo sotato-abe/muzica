@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class WorldBigMapWindow : Panel
+public class WorldBigMapWindow : Window
 {
     [SerializeField] WorldBigMapCameraManager worldMapCameraManager;
     // [SerializeField] AgeTimePanel ageTimePanel;
