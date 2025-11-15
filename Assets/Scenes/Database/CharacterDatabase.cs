@@ -7,6 +7,8 @@ public class CharacterDatabase : MonoBehaviour
     public static CharacterDatabase Instance { get; private set; }
 
     [SerializeField] private List<CharacterBase> characterDataList;
+    [SerializeField] private List<CharacterBase> ownerDataList;
+    [SerializeField] private List<CharacterBase> enemyDataList;
 
     private void Awake()
     {
@@ -62,5 +64,14 @@ public class CharacterDatabase : MonoBehaviour
     public int GetCharacterId(CharacterBase character)
     {
         return characterDataList.IndexOf(character);
+    }
+
+    public List<CharacterBase> GetAllCharacterBases()
+    {
+        List<CharacterBase> allCharacterDataList = new List<CharacterBase>();
+        allCharacterDataList.AddRange(characterDataList);
+        allCharacterDataList.AddRange(ownerDataList);
+        allCharacterDataList.AddRange(enemyDataList);
+        return allCharacterDataList;
     }
 }

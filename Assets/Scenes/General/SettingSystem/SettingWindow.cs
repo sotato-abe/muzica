@@ -7,7 +7,6 @@ public class SettingWindow : Panel
     [SerializeField] Slider bgmSlider;
     [SerializeField] Slider seSlider;
 
-
     private void Start()
     {
         masterSlider.value = SoundSystem.Instance.GetMasterVolume();
