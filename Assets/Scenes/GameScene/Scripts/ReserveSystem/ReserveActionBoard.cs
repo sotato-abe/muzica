@@ -172,7 +172,7 @@ public class ReserveActionBoard : SlidePanel
         }
     }
 
-    public void ClosePanel(Action onComplete = null)
+    public void PanelClose(Action onComplete = null)
     {
         foreach (var kvp in actionPanels)
         {

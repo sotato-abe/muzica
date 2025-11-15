@@ -37,7 +37,7 @@ public class OptionSystem : MonoBehaviour
             {
                 if (panel.isActive)
                 {
-                    panel.ClosePanel();
+                    panel.PanelClose();
                     CloseWindow();
                     PlayerController.Instance.SetFieldPlayerMove(true);
                     StopTimeState(false);
@@ -109,14 +109,14 @@ public class OptionSystem : MonoBehaviour
             }
             else if (p == panel && p.isActive)
             {
-                p.ClosePanel();
+                p.PanelClose();
                 CloseWindow();
                 PlayerController.Instance.SetFieldPlayerMove(true);
                 StopTimeState(false);
             }
             else
             {
-                p.ClosePanel();
+                p.PanelClose();
             }
         }
     }

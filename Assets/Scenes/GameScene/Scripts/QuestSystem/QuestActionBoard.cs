@@ -157,7 +157,7 @@ public class QuestActionBoard : SlidePanel
         }
     }
 
-    public void ClosePanel(Action onComplete = null)
+    public void PanelClose(Action onComplete = null)
     {
         int completed = 0;
         int completeIndex = 1;

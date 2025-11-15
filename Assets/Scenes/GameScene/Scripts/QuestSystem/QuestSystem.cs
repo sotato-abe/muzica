@@ -70,7 +70,7 @@ public class QuestSystem : MonoBehaviour
             }
         }
         bagWindow.SetActive(false, CheckAllComplete); // キャラクタサブパネルを非表示
-        questActionBoard.ClosePanel(CheckAllComplete); // クエストアクションボードを表示
+        questActionBoard.PanelClose(CheckAllComplete); // クエストアクションボードを表示
         worldMapPanel.SetActive(true, CheckAllComplete); // ワールドマップパネルを表示
         savePanel.SetActive(true, CheckAllComplete); // セーブパネルを表示
         cameraManager.SetEventType(EventType.Default); // バトル時のカメラ位置を設定

@@ -158,7 +158,7 @@ public class BattleActionBoard : SlidePanel
             }
             else
             {
-                kvp.Value.ClosePanel();
+                kvp.Value.PanelClose();
             }
         }
     }

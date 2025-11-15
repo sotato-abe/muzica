@@ -28,7 +28,7 @@ public class Panel : MonoBehaviour
         }
         else
         {
-            ClosePanel();
+            PanelClose();
         }
     }
 
@@ -42,7 +42,7 @@ public class Panel : MonoBehaviour
         }
     }
 
-    public virtual void ClosePanel()
+    public virtual void PanelClose()
     {
         isActive = false;
         transform.gameObject.SetActive(isActive);

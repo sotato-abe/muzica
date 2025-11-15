@@ -56,9 +56,9 @@ public class SelectWindow : Panel
         isCursolActive = true;
     }
 
-    public override void ClosePanel()
+    public override void PanelClose()
     {
-        base.ClosePanel();
+        base.PanelClose();
         isCursolActive = false;
     }
 

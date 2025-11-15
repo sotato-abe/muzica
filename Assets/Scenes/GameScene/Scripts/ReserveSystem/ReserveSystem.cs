@@ -60,7 +60,7 @@ public class ReserveSystem : MonoBehaviour
                 transform.gameObject.SetActive(false);
             }
         }
-        reserveActionBoard.ClosePanel(CheckAllComplete); // リザーブアクションボードを非表示にする
+        reserveActionBoard.PanelClose(CheckAllComplete); // リザーブアクションボードを非表示にする
         footer.SetActive(false, CheckAllComplete); // フッターを非表示にする
         playerSubPanel.SetActive(false, CheckAllComplete); // キャラクターサブパネルを非表示にする
 

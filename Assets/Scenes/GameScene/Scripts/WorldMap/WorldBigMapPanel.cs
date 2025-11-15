@@ -41,7 +41,7 @@ public class WorldBigMapPanel : Panel
 
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.E))
         {
-            ClosePanel();
+            PanelClose();
         }
     }
 
@@ -56,11 +56,11 @@ public class WorldBigMapPanel : Panel
         else
         {
             // ageTimePanel.SetTimeSpeed(TimeState.Fast); // 時間を進める
-            ClosePanel();
+            PanelClose();
         }
     }
 
-    private void ClosePanel()
+    private void PanelClose()
     {
         isActive = false;
         // ageTimePanel.SetTimeSpeed(TimeState.Fast); // 時間を進める

@@ -32,10 +32,10 @@ public class LibrarySystem : SystemPanel
     public override void CloseWindow()
     {
         base.CloseWindow();
-        categorySelectWindow.ClosePanel();
+        categorySelectWindow.PanelClose();
         for (int i = 0; i < categoryWindows.Count; i++)
         {
-            categoryWindows[i].ClosePanel();
+            categoryWindows[i].PanelClose();
         }
     }
 
@@ -49,7 +49,7 @@ public class LibrarySystem : SystemPanel
             }
             else
             {
-                categoryWindows[i].ClosePanel();
+                categoryWindows[i].PanelClose();
             }
         }
     }

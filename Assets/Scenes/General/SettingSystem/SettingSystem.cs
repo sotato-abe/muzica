@@ -22,6 +22,6 @@ public class SettingSystem : SystemPanel
     public override void CloseWindow()
     {
         base.CloseWindow();
-        settingWindow.ClosePanel();
+        settingWindow.PanelClose();
     }
 }
