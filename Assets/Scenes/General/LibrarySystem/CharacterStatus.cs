@@ -12,6 +12,8 @@ public class CharacterStatus : MonoBehaviour
     [SerializeField] TextMeshProUGUI techniqueValText;
     [SerializeField] TextMeshProUGUI speedValText;
     [SerializeField] TextMeshProUGUI luckValText;
+    [SerializeField] GameObject abilityListWindow;
+    [SerializeField] AbilityBlock abilityBlockPrefab;
 
     public void SetCharacter(Character character)
     {
@@ -22,5 +24,19 @@ public class CharacterStatus : MonoBehaviour
         techniqueValText.text = character.Technique.ToString();
         speedValText.text = character.Speed.ToString();
         luckValText.text = character.Luck.ToString();
+        SetAbility(character);
+    }
+
+    private void SetAbility(Character character)
+    {
+        foreach (Transform child in abilityListWindow.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        foreach (Ability ability in character.AbilityList)
+        {
+            AbilityBlock block = Instantiate(abilityBlockPrefab, abilityListWindow.transform);
+            block.Setup(ability);
+        }
     }
 }
