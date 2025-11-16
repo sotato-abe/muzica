@@ -9,6 +9,7 @@ public class QuestCardPrefab : SlidePanel
     [SerializeField] RarityIcon questRarity;
     [SerializeField] TextMeshProUGUI questTitle;
     [SerializeField] TextMeshProUGUI descriptionText;
+    [SerializeField] GameObject stampCompleted;
 
     [SerializeField] StoryQuestTask storyQuestTask;
     [SerializeField] SupplyQuestTask supplyQuestTask;
@@ -29,6 +30,20 @@ public class QuestCardPrefab : SlidePanel
     public event ReceiptQuest OnReceiptQuest;
 
     private Quest currentQuest;
+    bool isCompleted = false;
+    
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            UnityEngine.Debug.Log("Return Key Pressed");
+            if (receiptButton.gameObject.activeSelf)
+            {
+                UnityEngine.Debug.Log("Receipt Task");
+                ReceiptTask();
+            }
+        }
+    }
 
     public void SetQuest(Quest quest)
     {
@@ -40,7 +55,7 @@ public class QuestCardPrefab : SlidePanel
         questTitle.text = quest.Base.Title;
         descriptionText.text = quest.Base.Description;
         questRarity.SetRarityIcon(quest.Base.Rarity);
-
+        StampCompleted(quest.isCompleted);
         SetTask();
     }
 
@@ -108,6 +123,7 @@ public class QuestCardPrefab : SlidePanel
 
     public void ReceiptTask()
     {
+        if (currentQuest.isCompleted) return;
         // クエスト受領の処理をここに実装
         switch (currentQuest.GetQuestType())
         {
@@ -128,7 +144,15 @@ public class QuestCardPrefab : SlidePanel
                 Debug.LogWarning("Unknown quest type");
                 break;
         }
+        isCompleted = true;
+        StampCompleted(true);
         QuestDatabase.Instance.MarkQuestAsFinished(currentQuest.Base);
+    }
+
+    private void StampCompleted(bool completed)
+    {
+        stampCompleted.gameObject.SetActive(completed);
+        // クエスト完了スタンプの表示処理をここに実装
     }
 
     private void ReceiptSupplyTask()

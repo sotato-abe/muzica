@@ -29,7 +29,7 @@ public class QuestActionBoard : SlidePanel
         currentIndex = 0;
         panelCount = quests.Count; // クエスト数 + 終了アイコン（0スタートなので+1はしない）
         questCardList = new List<QuestCardPrefab>();
-        questCardArea.transform.DetachChildren();
+        // questCardArea.transform.DetachChildren();
         SetActionIcons();
         SetActionPanels(quests);
         ChangeActiveIcon();
@@ -84,7 +84,7 @@ public class QuestActionBoard : SlidePanel
 
     private void SetActionPanels(List<Quest> quests)
     {
-        foreach (var card in questCardList)
+        foreach (var card in questCardArea.GetComponentsInChildren<QuestCardPrefab>())
         {
             Destroy(card.gameObject);
         }
