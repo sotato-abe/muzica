@@ -39,12 +39,12 @@ public class SelectWindow : Window
             MoveCursol(-1);
         }
 
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.RightArrow))
         {
             OnSelectAction?.Invoke();
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.LeftArrow))
         {
             OnCancelAction?.Invoke();
         }
