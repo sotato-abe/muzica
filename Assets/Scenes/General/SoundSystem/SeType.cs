@@ -12,4 +12,6 @@ public enum SeType
     UseCoin, // コイン使用
     Select, // 選択
     Set, // セット
+    Stamp, // スタンプ
+    Cursol, // カーソル
 }

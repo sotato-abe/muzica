@@ -145,6 +145,7 @@ public class QuestCardPrefab : SlidePanel
                 break;
         }
         isCompleted = true;
+        SoundSystem.Instance.PlaySE(SeType.Stamp);
         StampCompleted(true);
         QuestDatabase.Instance.MarkQuestAsFinished(currentQuest.Base);
     }

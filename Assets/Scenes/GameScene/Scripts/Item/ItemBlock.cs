@@ -87,6 +87,8 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
     public void SetTarget(bool activeFlg)
     {
         if (isActive == activeFlg) return;
+        // TODO：いいカーソル音があれば追加する（チッッて感じの音）
+        // SoundSystem.Instance.PlaySE(SeType.Cursol);
         isActive = activeFlg;
         Color bgColor = cursor.color;
         bgColor.a = isActive ? 1f : 0f;
