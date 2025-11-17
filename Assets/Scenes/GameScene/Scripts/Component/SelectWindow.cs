@@ -94,6 +94,7 @@ public class SelectWindow : Window
 
     private void ChangeTargetCursol()
     {
+        SoundSystem.Instance.PlaySE(SeType.Select);
         for (int i = 0; i < selectElements.Count; i++)
         {
             selectElements[i].SetIndex(i);

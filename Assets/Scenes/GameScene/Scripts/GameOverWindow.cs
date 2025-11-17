@@ -5,12 +5,13 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
-public class GameOverWindow : MonoBehaviour
+public class GameOverWindow : SystemPanel
 {
     public void Show()
     {
         // ゲームオーバーウィンドウを表示する処理
         gameObject.SetActive(true);
+        PanelOpen();
     }
 
     // menuButtonのクリックイベントを設定

@@ -54,6 +54,7 @@ public class LoadDataButton : MonoBehaviour
 
     private void OnButtonClick()
     {
+        SoundSystem.Instance.PlaySE(SeType.Select);
         if (isLoaded)
         {
             OnStartGame?.Invoke(saveIndex);

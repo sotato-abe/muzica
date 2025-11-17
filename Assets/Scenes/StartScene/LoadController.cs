@@ -24,8 +24,8 @@ public class LoadController : MonoBehaviour
 
     private void Start()
     {
-        startButton.onClick.AddListener(StartGame);
         LoadData();
+        startButton.onClick.AddListener(StartGame);
         loadDataButton1.OnStartGame += LoadGame;
         loadDataButton2.OnStartGame += LoadGame;
         loadDataButton3.OnStartGame += LoadGame;
@@ -56,10 +56,9 @@ public class LoadController : MonoBehaviour
 
     void StartGame()
     {
-
         PlayData selectedPlayData = PlayerDataConverter(CharacterIndex.Sola);
         GameScene.selectedPlayData = selectedPlayData;
-        SceneManager.LoadScene("GameScene");
+        ChangeSceneEffect();
     }
 
     void LoadGame(int index)
@@ -72,6 +71,14 @@ public class LoadController : MonoBehaviour
             _ => null,
         };
         GameScene.selectedPlayData = selectedPlayData;
+        ChangeSceneEffect();
+    }
+
+    private void ChangeSceneEffect()
+    {
+        // TODO：シーン移動のエフェクトを再生してからシーン移動
+        // 画面が拡大しながら黒にフェードしていく感じ
+        // 逆に読み込先のシーンでは黒から画面が拡大しながらフェードインしていく感じ
         SceneManager.LoadScene("GameScene");
     }
 
@@ -150,7 +157,7 @@ public class LoadController : MonoBehaviour
         }
         playData.playerData = playerData;
         playData.position = character.Base.Birthplace.Position;
-        playData.time = new DateTime(2030, 1, 1); 
+        playData.time = new DateTime(2030, 1, 1);
 
         return playData;
     }
