@@ -10,9 +10,11 @@ public class SoundSystem : MonoBehaviour
     [SerializeField] private AudioSource seSource;
 
     [SerializeField] List<BgmBase> bgmClipList;
+    [SerializeField] List<AreaBgmBase> areaBgmList;
     [SerializeField] List<SeBase> seClipList;
 
-    private float fadeTime = 0.8f;
+    private float fadeInTime = 0f;
+    private float fadeOutTime = 0.8f;
 
     private float masterVolume = 1.0f;
     private float bgmVolume = 1.0f;
@@ -35,7 +37,6 @@ public class SoundSystem : MonoBehaviour
     #region BGM
     public void PlayBGM(BgmType bgmType)
     {
-        StopBGM();
         BgmBase bgmData = bgmClipList.Find(b => b.BgmType() == bgmType);
         if (bgmData != null)
         {
@@ -47,17 +48,48 @@ public class SoundSystem : MonoBehaviour
         }
     }
 
+    public void SetAreaBGM(FieldType fieldType)
+    {
+        AreaBgmBase bgmData = areaBgmList.Find(b => b.FieldType() == fieldType);
+
+
+        if (bgmData != null)
+        {
+            StartCoroutine(FadeInBGM(bgmData.BgmClip()));
+        }
+        else
+        {
+            Debug.LogWarning($"SoundSystem: BGM of type {fieldType} not found.");
+        }
+    }
+
+    public void SetBGM(AudioClip bgmClip)
+    {
+        if (bgmClip != null)
+        {
+            StartCoroutine(FadeInBGM(bgmClip));
+        }
+        else
+        {
+            Debug.LogWarning($"SoundSystem: Field BGM data is null.");
+        }
+    }
+
     private IEnumerator FadeInBGM(AudioClip newClip)
     {
+
+        if (bgmSource.clip == newClip)
+            yield break;
+        StopBGM();
         if (bgmSource.isPlaying)
             yield return StartCoroutine(FadeOutBGM());
         bgmSource.clip = newClip;
         bgmSource.volume = 0;
         bgmSource.Play();
 
-        for (float t = 0; t < fadeTime; t += Time.deltaTime)
+        for (float t = 0; t < fadeInTime; t += Time.deltaTime)
         {
-            bgmSource.volume = Mathf.Lerp(0, 1, t / fadeTime);
+            bgmSource.volume = Mathf.Lerp(0, 1, t / fadeInTime);
             yield return null;
         }
         bgmSource.volume = 1;
@@ -73,9 +105,9 @@ public class SoundSystem : MonoBehaviour
     private IEnumerator FadeOutBGM()
     {
         float startVolume = bgmSource.volume;
-        for (float t = 0; t < fadeTime; t += Time.deltaTime)
+        for (float t = 0; t < fadeOutTime; t += Time.deltaTime)
         {
-            bgmSource.volume = Mathf.Lerp(startVolume, 0, t / fadeTime);
+            bgmSource.volume = Mathf.Lerp(startVolume, 0, t / fadeOutTime);
             yield return null;
         }
         bgmSource.Stop();

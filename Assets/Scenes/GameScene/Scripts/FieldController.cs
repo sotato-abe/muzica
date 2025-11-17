@@ -8,12 +8,13 @@ using System.Diagnostics;
 
 public class FieldController : MonoBehaviour
 {
+    public static FieldController Instance { get; private set; }
+
     public delegate void PointEnterDelegate(Point point);
     public event PointEnterDelegate OnPointEnter;
     public delegate void QuestEnterDelegate(List<Quest> quests);
     public event QuestEnterDelegate OnQuestEnter;
     private const int ITEM_GET_PROBABILITY = 30;
-    public static FieldController Instance { get; private set; }
 
     [SerializeField] MessagePanel messagePanel;
     [SerializeField] private Tilemap tilemap;
@@ -65,6 +66,19 @@ public class FieldController : MonoBehaviour
     public void SetField(FieldBase fieldData)
     {
         currentFieldBase = fieldData;
+        PlayFieldBGM();
+    }
+
+    public void PlayFieldBGM()
+    {
+        if (currentFieldBase != null && currentFieldBase.SecterBgm != null)
+        {
+            SoundSystem.Instance.SetBGM(currentFieldBase.SecterBgm);
+        }
+        else
+        {
+            SoundSystem.Instance.SetAreaBGM(currentFieldBase.fieldType);
+        }
     }
 
     // 複数の敵をグループから取得するように変更する

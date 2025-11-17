@@ -13,7 +13,7 @@ public class GameController : MonoBehaviour
     [SerializeField] FieldPlayer fieldPlayer;
     [SerializeField] FieldController fieldController;
     [SerializeField] SaveManagement saveManagement;
-    [SerializeField] private PlayerCharacter defaultPlayer; // テスト用
+    [SerializeField] private PlayerCharacter defaultPlayer; // TODO : テスト用　➙　早急にロードか新規か分岐するように修正
 
     private GameStateType currentGameState;
 
@@ -44,7 +44,6 @@ public class GameController : MonoBehaviour
         }
         ageTimePanel.TimeSlip(selectedPlayData.time);
         WorldMapController.Instance.WarpPlayerCoordinate(selectedPlayData.position);
-        SoundSystem.Instance.PlayBGM(BgmType.Field);
         fieldPlayer.SetCanMove(true);
     }
 

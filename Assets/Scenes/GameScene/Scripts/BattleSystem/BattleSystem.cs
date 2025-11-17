@@ -281,6 +281,6 @@ public class BattleSystem : MonoBehaviour
         optionActionBoard.SetActive(true, CheckAllComplete); // セーブパネルを表示
         cameraManager.SetEventType(EventType.Default); // バトル時のカメラ位置を設定
         PlayerController.Instance.ChangeEventType(EventType.Default); // イベントタイプをデフォルトに変更
-        SoundSystem.Instance.PlayBGM(BgmType.Field);
+        FieldController.Instance.PlayFieldBGM();
     }
 }
