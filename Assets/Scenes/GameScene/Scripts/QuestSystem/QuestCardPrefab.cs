@@ -107,6 +107,11 @@ public class QuestCardPrefab : SlidePanel
 
     private void SetReceiptTypeButton()
     {
+        if(currentQuest == null || currentQuest.isCompleted)
+        {
+            receiptButton.gameObject.SetActive(false);
+            return;
+        }
         QuestType type = currentQuest.GetQuestType();
         if (type == QuestType.Story || type == QuestType.Special)
         {
@@ -148,11 +153,13 @@ public class QuestCardPrefab : SlidePanel
         SoundSystem.Instance.PlaySE(SeType.Stamp);
         StampCompleted(true);
         QuestDatabase.Instance.MarkQuestAsFinished(currentQuest.Base);
+        receiptButton.gameObject.SetActive(false);
     }
 
     private void StampCompleted(bool completed)
     {
         stampCompleted.gameObject.SetActive(completed);
+        receiptButton.gameObject.SetActive(completed == false);
         // クエスト完了スタンプの表示処理をここに実装
     }
 

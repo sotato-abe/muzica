@@ -91,6 +91,11 @@ public class QuestCard : MonoBehaviour
 
     private void SetReceiptTypeButton()
     {
+        if (currentQuest == null || currentQuest.isCompleted)
+        {
+            receiptButton.gameObject.SetActive(false);
+            return;
+        }
         QuestType type = currentQuest.GetQuestType();
         if (type == QuestType.Story || type == QuestType.Special)
         {
@@ -128,6 +133,7 @@ public class QuestCard : MonoBehaviour
                 break;
         }
         QuestDatabase.Instance.MarkQuestAsFinished(currentQuest.Base);
+        receiptButton.gameObject.SetActive(false);
     }
 
     private void ReceiptSupplyTask()
