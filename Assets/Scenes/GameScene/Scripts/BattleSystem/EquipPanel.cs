@@ -226,7 +226,7 @@ public class EquipPanel : BattleActionPanel
     public override void ChangeExecuteActionFlg(bool canExecute)
     {
         base.ChangeExecuteActionFlg(canExecute);
-        if(currentEquipment == null)
+        if (currentEquipment == null)
         {
             activeButtonImage.color = defaultButtonColor;
             return;
@@ -244,7 +244,7 @@ public class EquipPanel : BattleActionPanel
         if (!IsEquipmentValid()) return;
         if (!TryUseEnergy()) return;
 
-        SoundSystem.Instance.PlaySE(SeType.Select);
+        SoundSystem.Instance.PlaySE(SeType.Execute);
         OnActionStart?.Invoke();
         canExecuteActionFlg = false;
         StartCoroutine(StopSlot());
@@ -259,6 +259,7 @@ public class EquipPanel : BattleActionPanel
 
     public IEnumerator StopSlot()
     {
+        yield return new WaitForSeconds(1f);
         yield return StartCoroutine(slotWindow.StopSlot());
         TotalAttackCount totalCount = equipmentInfo.GetTotalCount();
         if (currentEquipment.EquipmentBase.EquipmentType == EquipmentType.Armor)

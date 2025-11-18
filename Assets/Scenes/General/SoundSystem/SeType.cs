@@ -14,4 +14,5 @@ public enum SeType
     Set, // セット
     Stamp, // スタンプ
     Cursol, // カーソル
+    Execute, // 実行
 }

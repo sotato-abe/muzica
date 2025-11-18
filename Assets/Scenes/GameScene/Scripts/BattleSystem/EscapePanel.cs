@@ -60,7 +60,8 @@ public class EscapePanel : BattleActionPanel
     {
         if (!canExecuteActionFlg && !isEscaping) return;
         if (!TryUseEnergy()) return;
-
+        
+        SoundSystem.Instance.PlaySE(SeType.Execute);
         StartCoroutine(Escape());
     }
 
