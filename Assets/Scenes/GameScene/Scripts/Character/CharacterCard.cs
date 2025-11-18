@@ -16,6 +16,7 @@ public class CharacterCard : MonoBehaviour
     [SerializeField] Image characterImage;
     [SerializeField] GameObject rarityStarSprite;
     [SerializeField] GameObject rarityList;
+    
     public void Setup(Character character)
     {
         this.character = character;

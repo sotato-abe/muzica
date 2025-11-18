@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
-public class LoadDataButton : MonoBehaviour
+public class LoadDataButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private Button button;
     [SerializeField] private GameObject loadDisc;
@@ -14,6 +15,7 @@ public class LoadDataButton : MonoBehaviour
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private TextMeshProUGUI timeText;
     [SerializeField] private TextMeshProUGUI eventText;
+    [SerializeField] GameObject loadIcon;
     [SerializeField] int saveIndex;
 
     public delegate void LoadGameDelegate(int index);
@@ -24,6 +26,7 @@ public class LoadDataButton : MonoBehaviour
     private void Start()
     {
         button.onClick.AddListener(OnButtonClick);
+        loadIcon.SetActive(false);
     }
 
     public void Setup(SimpleData loadData)
@@ -59,5 +62,16 @@ public class LoadDataButton : MonoBehaviour
         {
             OnStartGame?.Invoke(saveIndex);
         }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        SoundSystem.Instance.PlaySE(SeType.Select);
+        loadIcon.SetActive(true);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        loadIcon.SetActive(false);
     }
 }

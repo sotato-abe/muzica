@@ -17,7 +17,7 @@ public class ButtonUX : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // SoundSystem.Instance.PlaySE(SeType.Cursol);
+        SoundSystem.Instance.PlaySE(SeType.Select);
         text.color = Color.white;
     }
 
