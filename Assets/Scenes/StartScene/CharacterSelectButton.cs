@@ -35,7 +35,7 @@ public class CharacterSelectButton : MonoBehaviour, IPointerEnterHandler, IPoint
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        SoundSystem.Instance.PlaySE(SeType.Select);
+        SoundSystem.Instance.PlaySE(SeType.Cursol);
         frameImage.color = activeColor;
         OnSelectCharacter?.Invoke(characterIndex);
     }

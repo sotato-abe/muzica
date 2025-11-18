@@ -66,7 +66,7 @@ public class LoadDataButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        SoundSystem.Instance.PlaySE(SeType.Select);
+        SoundSystem.Instance.PlaySE(SeType.Cursol);
         loadIcon.SetActive(true);
     }
 

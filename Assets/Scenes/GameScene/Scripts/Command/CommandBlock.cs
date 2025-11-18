@@ -75,8 +75,7 @@ public class CommandBlock : Block, IPointerEnterHandler, IPointerExitHandler
     public void SetTarget(bool activeFlg)
     {
         if (isActive == activeFlg) return;
-        // TODO：いいカーソル音があれば追加する（チッッて感じの音）
-        // SoundSystem.Instance.PlaySE(SeType.Cursol);
+        SoundSystem.Instance.PlaySE(SeType.Cursol);
         statusText.SetActive(false);
         isActive = activeFlg;
         Color bgColor = cursor.color;
