@@ -9,7 +9,10 @@ public class DeliveryQuest : Quest
     public override QuestBase Base => _base;
     public DeliveryQuestBase DeliveryQuestBase => _base as DeliveryQuestBase;
 
-    public List<Treasure> DeliveryItemList = new List<Treasure>();
+    public List<Item> DeliveryItemList = new List<Item>();
+    public List<Item> RewardItems = new List<Item>();
+
+    public bool isShipping = false;
 
     public DeliveryQuest(DeliveryQuestBase baseData) : base(baseData)
     {
@@ -31,8 +34,8 @@ public class DeliveryQuest : Quest
         DeliveryItemList.Clear();
         foreach (var item in DeliveryQuestBase.DeliveryItemBaseList)
         {
-            Treasure bagTreasure = new Treasure((TreasureBase)item);
-            DeliveryItemList.Add(bagTreasure);
+            Item deliveryItem = new Item((ItemBase)item);
+            DeliveryItemList.Add(deliveryItem);
         }
     }
 }

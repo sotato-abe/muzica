@@ -18,7 +18,6 @@ public class QuestBase : ScriptableObject
     [SerializeField] int startMonth; // 開始月
     [SerializeField] int endYear; // 終了年
     [SerializeField] int endMonth; // 終了月
-    [SerializeField] List<Item> optionalItemsList; // 必要アイテムリスト
 
     public virtual QuestType QuestType => QuestType.Story;
 
@@ -31,5 +30,4 @@ public class QuestBase : ScriptableObject
     public int ValidCount { get => validCount; }
     public DateTime StartDateTime { get => new DateTime(startYear, startMonth, 1); }
     public DateTime EndDateTime { get => new DateTime(endYear, endMonth, 1); }
-    public List<Item> OptionalItemsList { get => optionalItemsList; }
 }

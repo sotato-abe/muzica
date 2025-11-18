@@ -6,13 +6,24 @@ using System;
 [CreateAssetMenu(fileName = "NewDeliveryQuest", menuName = "Quest/Delivery")]
 public class DeliveryQuestBase : QuestBase
 {
-    [Header("Task")] // タスク
-    [SerializeField] List<TreasureBase> deliveryItemBaseList; // 運搬アイテムリスト
-    [SerializeField, TextArea] string address; // 配達先住所
-    [SerializeField] CharacterBase deliveryCharacter; // 配達キャラクター
-
     public override QuestType QuestType => QuestType.Delivery;
+
+    [Header("Task")] // タスク
+    [SerializeField] List<TreasureBase> deliveryItemBaseList; //発送・ 納品アイテムリスト
+
+    [Header("Rewards")] // 報酬
+    [SerializeField] List<ItemBase> rewardItemBaseList; // 報酬アイテムリスト
+    [SerializeField] int coinPrice = 0;
+    [SerializeField] int discPrice = 0;
+
+    [Header("Shipping")] // 発送
+    [SerializeField, TextArea] string shippingDescription; // 説明
+    [SerializeField] PointBase shippingPointBase; // 発送元（ここが入っていればサプライクエストになる）
+
+    public string ShippingDescription { get => shippingDescription; }
+    public PointBase ShippingPointBase { get => shippingPointBase; }
     public List<TreasureBase> DeliveryItemBaseList { get => deliveryItemBaseList; }
-    public string Address { get => address; }
-    public CharacterBase DeliveryCharacter { get => deliveryCharacter; }
+    public List<ItemBase> RewardItemBaseList { get => rewardItemBaseList; }
+    public int CoinPrice { get => coinPrice; }
+    public int DiscPrice { get => discPrice; }
 }

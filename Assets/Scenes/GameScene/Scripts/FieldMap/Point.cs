@@ -87,10 +87,6 @@ public class Point
                     StoryQuest storyQuest = new StoryQuest((StoryQuestBase)quest);
                     ShopQuests.Add(storyQuest);
                     break;
-                case QuestType.Supply:
-                    SupplyQuest supplyQuest = new SupplyQuest((SupplyQuestBase)quest);
-                    ShopQuests.Add(supplyQuest);
-                    break;
                 case QuestType.Extermination:
                     ExterminationQuest exterminationQuest = new ExterminationQuest((ExterminationQuestBase)quest);
                     ShopQuests.Add(exterminationQuest);

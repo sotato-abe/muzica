@@ -1,54 +1,89 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
 public class DeliveryQuestTask : MonoBehaviour
 {
-    [Header("Task")] // タスク
-    [SerializeField] Image characterImage;
-    [SerializeField] Image characterFrame;
-    [SerializeField] TextMeshProUGUI nameTitle;
-    [SerializeField] TextMeshProUGUI addressTitle;
-    [SerializeField] MockItemBlock deliveryItemPrefab;
+    [SerializeField] OrderItemSlot orderItemSlotPrefab;
+    [SerializeField] MockItemBlock rewardItemPrefab;
     [SerializeField] GameObject deliveryItemList;
+    [SerializeField] GameObject rewardItemList;
+    [SerializeField] CurrencyVal coinVal;
+    [SerializeField] CurrencyVal discVal;
+
+    private List<OrderItemSlot> orderItemSlots = new List<OrderItemSlot>();
+    List<Item> orderItems = new List<Item>();
 
     public delegate void TargetItemDelegate(Item item);
     public event TargetItemDelegate OnTargetItem;
 
-    // ここにデリバリークエストタスクのロジックを実装
+    public delegate void OwnerMessageDelegate(TalkMessage message);
+    public event OwnerMessageDelegate OnOwnerMessage;
+
+    public delegate void CompletedDelegate();
+    public event CompletedDelegate OnCompleted;
+
+    // ここにサプライクエストタスクのロジックを実装
     public void SetDeliveryTask(DeliveryQuest quest)
     {
+        // サプライクエストのタスク設定ロジックをここに実装
         if (quest == null) return;
         ClearTask();
-        // サプライクエストのタスク設定ロジックをここに実装
-        SetDeliveryCharacter(quest);
         foreach (var item in quest.DeliveryItemList)
         {
             SetDeliveryItemSlot(item);
         }
+        foreach (var item in quest.RewardItems)
+        {
+            SetRewardItemSlot(item);
+        }
+        coinVal.SetCurrencyVal(quest.DeliveryQuestBase.CoinPrice);
+        discVal.SetCurrencyVal(quest.DeliveryQuestBase.DiscPrice);
     }
 
-    private void SetDeliveryCharacter(DeliveryQuest quest)
+    private void SetDeliveryItemSlot(Item item)
     {
-        if (quest == null) return;
-        var character = quest.DeliveryQuestBase.DeliveryCharacter;
-        if (character == null) return;
-        characterImage.sprite = character.SquareSprite;
-        Color frameColor = character.Rarity.GetRarityColor();
-        characterFrame.color = frameColor;
-        nameTitle.text = character.Name;
-
-        string raw = quest.DeliveryQuestBase.Address;
-        string address = string.IsNullOrWhiteSpace(raw) ? "不明" : raw;
-
-        addressTitle.text = address;
+        var slot = Instantiate(orderItemSlotPrefab, deliveryItemList.transform);
+        slot.SetOrderItem(item);
+        slot.OnTargetItem += TargetItem;
+        slot.OnOwnerMessage += OwnerMessage;
+        slot.OnSetItem += CheckAllOrderItemSet;
+        orderItemSlots.Add(slot);
     }
 
-    private void SetDeliveryItemSlot(Treasure item)
+    public void CheckAllOrderItemSet()
     {
-        var slot = Instantiate(deliveryItemPrefab, deliveryItemList.transform);
+        foreach (var slot in orderItemSlots)
+        {
+            if (slot == null || !slot.IsSet)
+            {
+                OwnerMessage(new TalkMessage(MessageType.Other, MessagePanelType.Default, "まだ足りんのう"));
+                return;
+            }
+        }
+
+        OwnerMessage(new TalkMessage(MessageType.Other, MessagePanelType.Surprise, "これもらっていいんか？"));
+        OnCompleted?.Invoke();
+    }
+
+    private void SetRewardItemSlot(Item item)
+    {
+        var slot = Instantiate(rewardItemPrefab, rewardItemList.transform);
         slot.SetMockItem(item);
         slot.OnTargetItem += TargetItem;
+    }
+
+    private void ClearTask()
+    {
+        orderItemSlots.Clear();
+        foreach (Transform child in deliveryItemList.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        foreach (Transform child in rewardItemList.transform)
+        {
+            Destroy(child.gameObject);
+        }
     }
 
     private void TargetItem(Item item)
@@ -56,15 +91,21 @@ public class DeliveryQuestTask : MonoBehaviour
         OnTargetItem?.Invoke(item);
     }
 
-
-    private void ClearTask()
+    public void OwnerMessage(TalkMessage message)
     {
-        characterImage.sprite = null;
-        nameTitle.text = string.Empty;
+        OnOwnerMessage?.Invoke(message);
+    }
 
-        foreach (Transform child in deliveryItemList.transform)
+    public List<Item> GetDeliveryItems()
+    {
+        List<Item> items = new List<Item>();
+        foreach (var slot in orderItemSlots)
         {
-            Destroy(child.gameObject);
+            if (slot != null && slot.IsSet)
+            {
+                items.Add(slot.currentItem);
+            }
         }
+        return items;
     }
 }

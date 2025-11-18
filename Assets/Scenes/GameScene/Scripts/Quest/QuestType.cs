@@ -3,7 +3,6 @@ using UnityEngine;
 public enum QuestType
 {
     Story, // ストーリー
-    Supply, // 納品
     Delivery, // 運搬
     Extermination, // 討伐
     Work, // 作業
@@ -17,7 +16,6 @@ public static class QuestTypeExtensions
         return questType switch
         {
             QuestType.Story => new Color(255 / 255f, 215 / 255f, 0 / 255f),
-            QuestType.Supply => new Color(34 / 255f, 139 / 255f, 34 / 255f),
             QuestType.Delivery => new Color(30 / 255f, 144 / 255f, 255 / 255f),
             QuestType.Extermination => new Color(220 / 255f, 20 / 255f, 60 / 255f),
             QuestType.Work => new Color(255 / 255f, 165 / 0f, 0 / 255f),
@@ -31,7 +29,6 @@ public static class QuestTypeExtensions
         return questType switch
         {
             QuestType.Story => "進める",
-            QuestType.Supply => "納品する",
             QuestType.Delivery => "引き受ける",
             QuestType.Extermination => "討伐完了",
             QuestType.Work => "引き受ける",

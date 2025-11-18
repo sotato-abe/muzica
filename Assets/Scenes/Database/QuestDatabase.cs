@@ -7,9 +7,8 @@ using System.Diagnostics;
 public class QuestDatabase : MonoBehaviour
 {
     public static QuestDatabase Instance { get; private set; }
-    
+
     [SerializeField] List<StoryQuestBase> storyQuestDataList;
-    [SerializeField] List<SupplyQuestBase> supplyQuestDataList;
     [SerializeField] List<DeliveryQuestBase> deliveryQuestDataList;
     [SerializeField] List<ExterminationQuestBase> exterminationQuestDataList;
     [SerializeField] List<WorkQuestBase> workQuestDataList;
@@ -32,7 +31,6 @@ public class QuestDatabase : MonoBehaviour
 
         QuestDataList = new List<QuestBase>();
         QuestDataList.AddRange(storyQuestDataList);
-        QuestDataList.AddRange(supplyQuestDataList);
         QuestDataList.AddRange(deliveryQuestDataList);
         QuestDataList.AddRange(exterminationQuestDataList);
         QuestDataList.AddRange(workQuestDataList);
@@ -52,8 +50,6 @@ public class QuestDatabase : MonoBehaviour
         {
             case QuestType.Story:
                 return new StoryQuest((StoryQuestBase)baseData);
-            case QuestType.Supply:
-                return new SupplyQuest((SupplyQuestBase)baseData);
             case QuestType.Delivery:
                 return new DeliveryQuest((DeliveryQuestBase)baseData);
             case QuestType.Extermination:
@@ -82,13 +78,10 @@ public class QuestDatabase : MonoBehaviour
             }
             if (IsActiveDateTime(questBase, targetTime))
             {
-                if (IsActiveItem(questBase, playerItems))
+                Quest quest = GetQuestById(i);
+                if (quest != null)
                 {
-                    Quest quest = GetQuestById(i);
-                    if (quest != null)
-                    {
-                        activeQuests.Add(quest);
-                    }
+                    activeQuests.Add(quest);
                 }
             }
         }
@@ -113,13 +106,10 @@ public class QuestDatabase : MonoBehaviour
             }
             if (IsActiveDateTime(questBase, targetTime))
             {
-                if (IsActiveItem(questBase, playerItems))
+                Quest quest = GetQuestById(i);
+                if (quest != null)
                 {
-                    Quest quest = GetQuestById(i);
-                    if (quest != null)
-                    {
-                        activeQuests.Add(quest);
-                    }
+                    activeQuests.Add(quest);
                 }
             }
         }
@@ -144,13 +134,10 @@ public class QuestDatabase : MonoBehaviour
             }
             if (IsActiveDateTime(questBase, targetTime))
             {
-                if (IsActiveItem(questBase, playerItems))
+                Quest quest = GetQuestById(i);
+                if (quest != null)
                 {
-                    Quest quest = GetQuestById(i);
-                    if (quest != null)
-                    {
-                        activeQuests.Add(quest);
-                    }
+                    activeQuests.Add(quest);
                 }
             }
         }
@@ -167,18 +154,6 @@ public class QuestDatabase : MonoBehaviour
             }
         }
         return false;
-    }
-
-    private bool IsActiveItem(QuestBase questBase, List<Item> playerItems)
-    {
-        foreach (Item requiredItem in questBase.OptionalItemsList)
-        {
-            if (!playerItems.Contains(requiredItem))
-            {
-                return false; // 必要アイテムが不足している場合
-            }
-        }
-        return true;
     }
 
     public int GetQuestId(QuestBase Quest)

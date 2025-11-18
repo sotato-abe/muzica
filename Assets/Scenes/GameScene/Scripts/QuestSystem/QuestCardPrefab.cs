@@ -12,7 +12,7 @@ public class QuestCardPrefab : SlidePanel
     [SerializeField] GameObject stampCompleted;
 
     [SerializeField] StoryQuestTask storyQuestTask;
-    [SerializeField] SupplyQuestTask supplyQuestTask;
+    [SerializeField] ShippingQuestTask shippingQuestTask;
     [SerializeField] DeliveryQuestTask deliveryQuestTask;
     [SerializeField] ExterminationQuestTask exterminationQuestTask;
     [SerializeField] WorkQuestTask workQuestTask;
@@ -31,7 +31,7 @@ public class QuestCardPrefab : SlidePanel
 
     private Quest currentQuest;
     bool isCompleted = false;
-    
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Return))
@@ -67,21 +67,23 @@ public class QuestCardPrefab : SlidePanel
                 var storyQuest = currentQuest as StoryQuest;
                 storyQuestTask.gameObject.SetActive(true);
                 break;
-            case QuestType.Supply:
-                var supplyQuest = currentQuest as SupplyQuest;
-                supplyQuestTask.gameObject.SetActive(true);
-                supplyQuestTask.OnTargetItem += TargetItem;
-                supplyQuestTask.OnOwnerMessage += OwnerMessage;
-                supplyQuestTask.OnCompleted += ActiveButtonStatus;
-                supplyQuestTask.SetSupplyTask(supplyQuest);
-                break;
             case QuestType.Delivery:
                 var deliveryQuest = currentQuest as DeliveryQuest;
-                deliveryQuestTask.gameObject.SetActive(true);
-                deliveryQuestTask.OnTargetItem += TargetItem;
-                deliveryQuestTask.SetDeliveryTask(deliveryQuest);
-                receiptButton.gameObject.SetActive(true);
-                break;
+                if (deliveryQuest.isShipping)
+                {
+                    shippingQuestTask.gameObject.SetActive(true);
+                    shippingQuestTask.OnTargetItem += TargetItem;
+                    shippingQuestTask.SetShippingTask(deliveryQuest);
+                    break;
+                }
+                else
+                {
+                    deliveryQuestTask.gameObject.SetActive(true);
+                    deliveryQuestTask.OnTargetItem += TargetItem;
+                    deliveryQuestTask.SetDeliveryTask(deliveryQuest);
+                    receiptButton.gameObject.SetActive(true);
+                    break;
+                }
             case QuestType.Extermination:
                 var exterminationQuest = currentQuest as ExterminationQuest;
                 exterminationQuestTask.gameObject.SetActive(true);
@@ -107,7 +109,7 @@ public class QuestCardPrefab : SlidePanel
 
     private void SetReceiptTypeButton()
     {
-        if(currentQuest == null || currentQuest.isCompleted)
+        if (currentQuest == null || currentQuest.isCompleted)
         {
             receiptButton.gameObject.SetActive(false);
             return;
@@ -132,9 +134,6 @@ public class QuestCardPrefab : SlidePanel
         // クエスト受領の処理をここに実装
         switch (currentQuest.GetQuestType())
         {
-            case QuestType.Supply:
-                ReceiptSupplyTask();
-                break;
             case QuestType.Delivery:
                 ReceiptDeliveryTask();
                 break;
@@ -163,52 +162,49 @@ public class QuestCardPrefab : SlidePanel
         // クエスト完了スタンプの表示処理をここに実装
     }
 
-    private void ReceiptSupplyTask()
-    {
-        SupplyQuest supplyQuest = currentQuest as SupplyQuest;
-        List<Item> orderItems = supplyQuestTask.GetSupplyItems();
-        foreach (Item item in orderItems)
-        {
-            PlayerController.Instance.RemoveItemFromBag(item);
-        }
-
-        List<Item> rewardItems = supplyQuest.RewardItems;
-        bool hasSpace = PlayerController.Instance.HasBagSpace(rewardItems.Count);
-        if (!hasSpace)
-        {
-            OwnerMessage(new TalkMessage(MessageType.Other, MessagePanelType.Default, "バッグに空きが無いよ"));
-            return;
-        }
-        foreach (Item item in rewardItems)
-        {
-            OwnerMessage(new TalkMessage(MessageType.Other, MessagePanelType.Default, "ありがとうよ"));
-            PlayerController.Instance.AddItemToBag(item);
-        }
-        PlayerController.Instance.AddCoin(supplyQuest.SupplyQuestBase.CoinPrice);
-        PlayerController.Instance.AddDisc(supplyQuest.SupplyQuestBase.DiscPrice);
-
-        OnReceiptQuest?.Invoke(currentQuest);
-        currentQuest.isCompleted = true;
-    }
-
     private void ReceiptDeliveryTask()
     {
         DeliveryQuest deliveryQuest = currentQuest as DeliveryQuest;
-        List<Treasure> rewardItems = deliveryQuest.DeliveryItemList;
-        bool hasSpace = PlayerController.Instance.HasBagSpace(rewardItems.Count);
-        if (!hasSpace)
+        if (deliveryQuest.isShipping)
         {
-            OwnerMessage(new TalkMessage(MessageType.Other, MessagePanelType.Default, "バッグに空きが無いよ"));
-            return;
+            List<Item> deliveryItems = deliveryQuest.DeliveryItemList;
+            bool hasSpace = PlayerController.Instance.HasBagSpace(deliveryItems.Count);
+            if (!hasSpace)
+            {
+                OwnerMessage(new TalkMessage(MessageType.Other, MessagePanelType.Default, "バッグに空きが無いよ"));
+                return;
+            }
+            foreach (Item item in deliveryItems)
+            {
+                PlayerController.Instance.AddItemToBag(item);
+            }
+            OwnerMessage(new TalkMessage(MessageType.Other, MessagePanelType.Default, "よろしく頼むよ"));
+            OnReceiptQuest?.Invoke(currentQuest);
+            // クエスト実行中のステータスをつける。
+            currentQuest.Status = QuestStatus.InProgress;
         }
-        foreach (Item item in rewardItems)
+        else
         {
-            PlayerController.Instance.AddItemToBag(item);
-        }
+            // 配達するアイテムをバッグから削除（コントローラー側で一気に削除トライ（bool）ができるようにする）
+            List<Item> deliveryItems = deliveryQuest.DeliveryItemList;
+            foreach (Item item in deliveryItems)
+            {
+                PlayerController.Instance.RemoveItemFromBag(item);
+            }
 
-        OwnerMessage(new TalkMessage(MessageType.Other, MessagePanelType.Default, "よろしく頼むよ"));
-        OnReceiptQuest?.Invoke(currentQuest);
-        currentQuest.isCompleted = true;
+            List<Item> rewardItems = deliveryQuest.RewardItems;
+            foreach (Item item in rewardItems)
+            {
+                PlayerController.Instance.AddItemToBag(item);
+            }
+            PlayerController.Instance.AddCoin(deliveryQuest.DeliveryQuestBase.CoinPrice);
+            PlayerController.Instance.AddDisc(deliveryQuest.DeliveryQuestBase.DiscPrice);
+
+            OwnerMessage(new TalkMessage(MessageType.Other, MessagePanelType.Default, "ありがとうよ"));
+            OnReceiptQuest?.Invoke(currentQuest);
+            currentQuest.isCompleted = true;
+            currentQuest.Status = QuestStatus.Completed;
+        }
     }
 
     private void ReceiptWorkTask()
@@ -236,7 +232,7 @@ public class QuestCardPrefab : SlidePanel
     private void ClearTask()
     {
         storyQuestTask.gameObject.SetActive(false);
-        supplyQuestTask.gameObject.SetActive(false);
+        shippingQuestTask.gameObject.SetActive(false);
         deliveryQuestTask.gameObject.SetActive(false);
         exterminationQuestTask.gameObject.SetActive(false);
         workQuestTask.gameObject.SetActive(false);
