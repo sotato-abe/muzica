@@ -84,7 +84,7 @@ public class BattleSystem : MonoBehaviour
     private IEnumerator AppearanceEnemies(List<Character> enemies)
     {
         int index = 0;
-        int LevelIncreaseCount = ageTimePanel.yearsElapsed * 2; // 1年ごとに2レベル上昇
+        int LevelIncreaseCount = ageTimePanel.yearsElapsed * 1; // 1年ごとに1レベル上昇
 
         foreach (Character enemy in enemies)
         {

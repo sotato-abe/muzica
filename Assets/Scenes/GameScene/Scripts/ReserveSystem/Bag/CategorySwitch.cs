@@ -41,6 +41,7 @@ public class CategorySwitch : MonoBehaviour
 
     private IEnumerator SlidePanel(GameObject targetButton)
     {
+        SoundSystem.Instance.PlaySE(SeType.Select);
         Vector3 targetPosition = targetButton.transform.position;
         Vector3 startPosition = backPanel.transform.position;
         float duration = 0.2f;
