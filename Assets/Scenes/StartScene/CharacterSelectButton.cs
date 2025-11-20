@@ -22,6 +22,8 @@ public class CharacterSelectButton : MonoBehaviour, IPointerEnterHandler, IPoint
     int width = 100;
     int defaultHeight = 60;
 
+    float resizeDuration = 0.1f;
+
     private void Start()
     {
         frameImage.color = inactiveColor;
@@ -50,12 +52,28 @@ public class CharacterSelectButton : MonoBehaviour, IPointerEnterHandler, IPoint
         if (isSelected)
         {
             frameImage.color = activeColor;
-            buttonTransform.sizeDelta = new Vector2(width, width);
+            StartCoroutine(SmoothResize(buttonTransform, new Vector2(width, width)));
         }
         else
         {
             frameImage.color = inactiveColor;
-            buttonTransform.sizeDelta = new Vector2(width, defaultHeight);
+            StartCoroutine(SmoothResize(buttonTransform, new Vector2(width, defaultHeight)));
         }
+    }
+
+    // サイズ変更をスムーズに行うコルーチン
+    private IEnumerator SmoothResize(RectTransform rectTransform, Vector2 targetSize)
+    {
+        Vector2 initialSize = rectTransform.sizeDelta;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < resizeDuration)
+        {
+            rectTransform.sizeDelta = Vector2.Lerp(initialSize, targetSize, (elapsedTime / resizeDuration));
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        rectTransform.sizeDelta = targetSize;
     }
 }
