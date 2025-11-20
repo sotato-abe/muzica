@@ -16,12 +16,50 @@ public class CharacterSelectController : MonoBehaviour
     private List<CharacterSelectButton> characterSelectButtons = new List<CharacterSelectButton>();
     private Character selectedCharacter;
 
+    public bool isActive = true;
+
     private void Start()
     {
         CreateCharacterSelectButtons();
         CharacterSelect(0);
     }
 
+    private void Update()
+    {
+        if (!isActive) return;
+
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            ChoiceCharracter(false);
+        }
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            ChoiceCharracter(true);
+        }
+
+    }
+
+    private void ChoiceCharracter(bool isLeft)
+    {
+        int currentIndex = characterBaseList.IndexOf(selectedCharacter.Base);
+        if (isLeft)
+        {
+            currentIndex--;
+            if (currentIndex < 0)
+            {
+                currentIndex = characterBaseList.Count - 1;
+            }
+        }
+        else
+        {
+            currentIndex++;
+            if (currentIndex >= characterBaseList.Count)
+            {
+                currentIndex = 0;
+            }
+        }
+        CharacterSelect(currentIndex);
+    }
 
     private void CreateCharacterSelectButtons()
     {

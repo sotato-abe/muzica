@@ -9,6 +9,7 @@ public class LibrarySystem : SystemPanel
 
     [SerializeField] SelectWindow categorySelectWindow;
     [SerializeField] List<SelectWindow> categoryWindows;
+    [SerializeField] CharacterSelectController characterSelectController;
 
     private void Awake()
     {
@@ -24,6 +25,7 @@ public class LibrarySystem : SystemPanel
 
     public override void PanelOpen()
     {
+        characterSelectController.isActive = false;
         base.PanelOpen();
         categorySelectWindow.WindowOpen();
         int selectedIndex = categorySelectWindow.GetCurrentIndex();
@@ -38,6 +40,7 @@ public class LibrarySystem : SystemPanel
         {
             categoryWindows[i].WindowClose();
         }
+        characterSelectController.isActive = true;
     }
 
     public void ChangeCategory(int index)
