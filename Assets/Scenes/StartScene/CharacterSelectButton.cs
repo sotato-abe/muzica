@@ -14,7 +14,7 @@ public class CharacterSelectButton : MonoBehaviour, IPointerEnterHandler, IPoint
     public delegate void SelectCharacterDelegate(int index);
     public event SelectCharacterDelegate OnSelectCharacter;
 
-    private int characterIndex;
+    public int characterIndex;
 
     Color activeColor = new Color(196f / 255f, 255f / 255f, 0 / 255f, 1f);
     Color inactiveColor = new Color(255f / 255f, 255f / 255f, 255f / 255f, 200f / 255f);

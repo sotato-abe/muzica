@@ -255,6 +255,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterDataList:
   - {fileID: 11400000, guid: 13fe08926d5c4ab4f928e096b0e76e6f, type: 2}
+  - {fileID: 11400000, guid: 63d0aff62b9b3ee4a8b40e9cda21f36c, type: 2}
   - {fileID: 11400000, guid: 2668a915055a17243b143ffac7057499, type: 2}
   ownerDataList:
   - {fileID: 11400000, guid: 84072fecf888cc942bd33dfaa8e98bf6, type: 2}
@@ -776,7 +777,7 @@ GameObject:
   - component: {fileID: 199610412}
   - component: {fileID: 199610413}
   m_Layer: 5
-  m_Name: LoadController
+  m_Name: CharacterLoadSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -818,10 +819,13 @@ MonoBehaviour:
   loadDataButton1: {fileID: 1330501365}
   loadDataButton2: {fileID: 1904758346}
   loadDataButton3: {fileID: 2066162997}
+  characterSelectController: {fileID: 281545991}
   sola:
     _base: {fileID: 11400000, guid: 2668a915055a17243b143ffac7057499, type: 2}
   huh:
     _base: {fileID: 11400000, guid: 13fe08926d5c4ab4f928e096b0e76e6f, type: 2}
+  tera:
+    _base: {fileID: 11400000, guid: 63d0aff62b9b3ee4a8b40e9cda21f36c, type: 2}
 --- !u!1 &201468270
 GameObject:
   m_ObjectHideFlags: 0
@@ -1113,7 +1117,7 @@ GameObject:
   - component: {fileID: 281545990}
   - component: {fileID: 281545991}
   m_Layer: 5
-  m_Name: PlayCharacterList
+  m_Name: CharacterSelectController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

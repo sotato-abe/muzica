@@ -3,24 +3,23 @@ using UnityEngine.UI;
 using System;
 using UnityEngine.SceneManagement;
 
-public class LoadController : MonoBehaviour
+public class CharacterLoadSystem : MonoBehaviour
 {
     [SerializeField] Button startButton;
     [SerializeField] LoadDataButton loadDataButton1;
     [SerializeField] LoadDataButton loadDataButton2;
     [SerializeField] LoadDataButton loadDataButton3;
+    [SerializeField] CharacterSelectController characterSelectController;
+
     [SerializeField] private PlayerCharacter sola;
     [SerializeField] private PlayerCharacter huh;
+    [SerializeField] private PlayerCharacter tera;
 
     public const string FILE_NAME1 = "playData1.json";
     public const string FILE_NAME2 = "playData2.json";
     public const string FILE_NAME3 = "playData3.json";
 
-    private enum CharacterIndex
-    {
-        Sola,
-        Huh
-    }
+    private CharacterIndex currentCharacterIndex = CharacterIndex.Sola;
 
     private void Start()
     {
@@ -29,48 +28,75 @@ public class LoadController : MonoBehaviour
         loadDataButton1.OnStartGame += LoadGame;
         loadDataButton2.OnStartGame += LoadGame;
         loadDataButton3.OnStartGame += LoadGame;
+        characterSelectController.CharacterSelect(0);
+        characterSelectController.OnCharacterSelect += SelectPlayerCharacter;
     }
 
     private void LoadData()
     {
-        PlayData playData1 = Persistance.Load<PlayData>(FILE_NAME1);
-        PlayData playData2 = Persistance.Load<PlayData>(FILE_NAME2);
-        PlayData playData3 = Persistance.Load<PlayData>(FILE_NAME3);
+        string characterPrefix = currentCharacterIndex.GetCharacterFileName();
+        PlayData playData1 = Persistance.Load<PlayData>(characterPrefix + FILE_NAME1);
+        PlayData playData2 = Persistance.Load<PlayData>(characterPrefix + FILE_NAME2);
+        PlayData playData3 = Persistance.Load<PlayData>(characterPrefix + FILE_NAME3);
 
         if (playData1 != null)
         {
             SimpleData simpleData = new SimpleData(playData1);
             loadDataButton1.Setup(simpleData);
         }
+        else
+        {
+            loadDataButton1.Setup(null);
+        }
         if (playData2 != null)
         {
             SimpleData simpleData = new SimpleData(playData2);
             loadDataButton2.Setup(simpleData);
         }
+        else
+        {
+            loadDataButton2.Setup(null);
+        }
+
         if (playData3 != null)
         {
             SimpleData simpleData = new SimpleData(playData3);
             loadDataButton3.Setup(simpleData);
         }
+        else
+        {
+            loadDataButton3.Setup(null);
+        }
     }
 
     void StartGame()
     {
-        PlayData selectedPlayData = PlayerDataConverter(CharacterIndex.Sola);
+        PlayData selectedPlayData = PlayerDataConverter(currentCharacterIndex);
         GameScene.selectedPlayData = selectedPlayData;
+        GameScene.currentCharacterIndex = currentCharacterIndex;
         ChangeSceneEffect();
+    }
+
+    public void SelectPlayerCharacter(int characterIndex)
+    {
+        UnityEngine.Debug.Log("Selected Character Index: " + characterIndex);
+        currentCharacterIndex = (CharacterIndex)characterIndex;
+        UnityEngine.Debug.Log("currentCharacterIndex: " + currentCharacterIndex);
+        LoadData();
     }
 
     void LoadGame(int index)
     {
+        string characterPrefix = currentCharacterIndex.GetCharacterFileName();
         PlayData selectedPlayData = index switch
         {
-            1 => Persistance.Load<PlayData>(FILE_NAME1),
-            2 => Persistance.Load<PlayData>(FILE_NAME2),
-            3 => Persistance.Load<PlayData>(FILE_NAME3),
+            1 => Persistance.Load<PlayData>(characterPrefix + FILE_NAME1),
+            2 => Persistance.Load<PlayData>(characterPrefix + FILE_NAME2),
+            3 => Persistance.Load<PlayData>(characterPrefix + FILE_NAME3),
             _ => null,
         };
         GameScene.selectedPlayData = selectedPlayData;
+        GameScene.currentCharacterIndex = currentCharacterIndex;
         ChangeSceneEffect();
     }
 
@@ -87,8 +113,9 @@ public class LoadController : MonoBehaviour
         PlayData playData = new PlayData();
         PlayerCharacter character = characterIndex switch
         {
-            CharacterIndex.Sola => sola,
             CharacterIndex.Huh => huh,
+            CharacterIndex.Tera => tera,
+            CharacterIndex.Sola => sola,
             _ => null
         };
         character.Init();

@@ -12,26 +12,31 @@ public class SaveManagement : MonoBehaviour
 {
     [SerializeField] AgeTimePanel ageTimePanel;
     [SerializeField] SlidePanel saveButtonList;
-    
-    public PlayData playData;
-    public const string RELATIVE_PATH = "playData.json";
+
+    // public PlayData playData;
+
     public const string FILE_NAME = "playData";
     public const string FILE_EXTENSION = ".json";
 
     public void SavePlayData(int index)
     {
+        PlayData playData = new PlayData();
         playData.position = WorldMapController.Instance.playerPosition;
         playData.time = ageTimePanel.ageTime;
         playData.yearsElapsed = ageTimePanel.yearsElapsed;
         PlayerData playerData = PlayerDataConverter(PlayerController.Instance.PlayerCharacter);
         playData.playerData = playerData;
-        string filePath = $"{FILE_NAME}{index}{FILE_EXTENSION}";
+
+        string characterPrefix = PlayerController.Instance.playerCharacterIndex.GetCharacterFileName();
+        string filePath = $"{characterPrefix}{FILE_NAME}{index}{FILE_EXTENSION}";
         Persistance.Save(filePath, playData);
     }
 
     private void LoadPlayData(int index)
     {
-        string filePath = $"{FILE_NAME}{index}{FILE_EXTENSION}";
+        PlayData playData = new PlayData();
+        string characterPrefix = PlayerController.Instance.playerCharacterIndex.GetCharacterFileName();
+        string filePath = $"{characterPrefix}{FILE_NAME}{index}{FILE_EXTENSION}";
         playData = Persistance.Load<PlayData>(filePath);
         PlayerCharacter loadCharacter = LoadPlayerCharacter(playData.playerData);
         PlayerController.Instance.SetPlayerCharacter(loadCharacter);
@@ -41,7 +46,9 @@ public class SaveManagement : MonoBehaviour
 
     public SimpleData GetSaveData(int index)
     {
-        string filePath = $"{FILE_NAME}{index}{FILE_EXTENSION}";
+        PlayData playData = new PlayData();
+        string characterPrefix = PlayerController.Instance.playerCharacterIndex.GetCharacterFileName();
+        string filePath = $"{characterPrefix}{FILE_NAME}{index}{FILE_EXTENSION}";
         playData = Persistance.Load<PlayData>(filePath);
         if (playData == null) return null;
         return new SimpleData(playData);

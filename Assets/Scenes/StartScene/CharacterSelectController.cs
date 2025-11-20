@@ -10,12 +10,16 @@ public class CharacterSelectController : MonoBehaviour
     [SerializeField] CharacterSelectButton characterButtonPrefab;
     [SerializeField] CharacterCard characterCard;
 
+    public delegate void CharacterSelectDelegate(int index);
+    public event CharacterSelectDelegate OnCharacterSelect;
+
     private List<CharacterSelectButton> characterSelectButtons = new List<CharacterSelectButton>();
     private Character selectedCharacter;
 
     private void Start()
     {
         CreateCharacterSelectButtons();
+        CharacterSelect(0);
     }
 
 
@@ -42,8 +46,8 @@ public class CharacterSelectController : MonoBehaviour
 
     public void CharacterSelect(int index)
     {
+        OnCharacterSelect?.Invoke(index);
         selectedCharacter = new Character(characterBaseList[index]);
-        Debug.Log("Selected Character: " + selectedCharacter.Base.Name);
         characterCard.Setup(selectedCharacter);
         for (int i = 0; i < characterSelectButtons.Count; i++)
         {

@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private MessagePanel messagePanel;
     #endregion
 
+    public CharacterIndex playerCharacterIndex;
     public PlayerCharacter PlayerCharacter { get; private set; }
     public event System.Action<PlayerCharacter> OnPlayerCharacterSet;
     public EventType CurrentEventType { get; private set; } = EventType.Default;
@@ -35,6 +36,7 @@ public class PlayerController : MonoBehaviour
     {
         // 初期状態はインスペクタでセットされたデフォルトを使う
         PlayData selectedPlayData = GameScene.selectedPlayData;
+        playerCharacterIndex = GameScene.currentCharacterIndex;
         if (selectedPlayData != null)
         {
             PlayerCharacter = saveManagement.LoadPlayerCharacter(GameScene.selectedPlayData.playerData);
