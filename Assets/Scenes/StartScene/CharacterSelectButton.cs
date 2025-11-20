@@ -37,14 +37,13 @@ public class CharacterSelectButton : MonoBehaviour, IPointerEnterHandler, IPoint
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        SoundSystem.Instance.PlaySE(SeType.Cursol);
-        frameImage.color = activeColor;
+        // frameImage.color = activeColor;
         OnSelectCharacter?.Invoke(characterIndex);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        frameImage.color = inactiveColor;
+        // frameImage.color = inactiveColor;
     }
 
     public void SelectButton(bool isSelected)
@@ -52,6 +51,7 @@ public class CharacterSelectButton : MonoBehaviour, IPointerEnterHandler, IPoint
         if (isSelected)
         {
             frameImage.color = activeColor;
+            SoundSystem.Instance.PlaySE(SeType.Cursol);
             StartCoroutine(SmoothResize(buttonTransform, new Vector2(width, width)));
         }
         else
