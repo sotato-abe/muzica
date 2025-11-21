@@ -15,4 +15,7 @@ public enum SeType
     Stamp, // スタンプ
     Cursol, // カーソル
     Execute, // 実行
+    Play, // プレイ
+    ReelHit, // スロットリールヒット
+    ReelMiss, // スロットリールミス
 }

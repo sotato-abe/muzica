@@ -97,10 +97,12 @@ public class CommandReel : Window
         CommandImage closestSlot = GetClosestSlotToCenter();
         if (closestSlot.command == null)
         {
+            // SoundSystem.Instance.PlaySE(SeType.ReelMiss);
             return null;
         }
 
         // スロットのコマンドをリセット
+        // SoundSystem.Instance.PlaySE(SeType.ReelHit);
         return closestSlot.command;
     }
 
@@ -159,6 +161,7 @@ public class CommandReel : Window
             for (int i = 0; i < slotRects.Length; i++)
             {
                 slotRects[i].anchoredPosition = targetPositions[i];
+                SoundSystem.Instance.PlaySE(SeType.ReelMiss);
             }
         }
     }

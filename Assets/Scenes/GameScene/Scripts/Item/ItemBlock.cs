@@ -87,7 +87,8 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
     public void SetTarget(bool activeFlg)
     {
         if (isActive == activeFlg) return;
-        SoundSystem.Instance.PlaySE(SeType.Cursol);
+        if (activeFlg)
+            SoundSystem.Instance.PlaySE(SeType.Cursol);
         isActive = activeFlg;
         Color bgColor = cursor.color;
         bgColor.a = isActive ? 1f : 0f;

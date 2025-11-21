@@ -244,7 +244,7 @@ public class EquipPanel : BattleActionPanel
         if (!IsEquipmentValid()) return;
         if (!TryUseEnergy()) return;
 
-        SoundSystem.Instance.PlaySE(SeType.Execute);
+        SoundSystem.Instance.PlaySE(SeType.Play);
         OnActionStart?.Invoke();
         canExecuteActionFlg = false;
         StartCoroutine(StopSlot());

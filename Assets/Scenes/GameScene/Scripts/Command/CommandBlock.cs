@@ -75,7 +75,8 @@ public class CommandBlock : Block, IPointerEnterHandler, IPointerExitHandler
     public void SetTarget(bool activeFlg)
     {
         if (isActive == activeFlg) return;
-        SoundSystem.Instance.PlaySE(SeType.Cursol);
+        if (activeFlg)
+            SoundSystem.Instance.PlaySE(SeType.Cursol);
         statusText.SetActive(false);
         isActive = activeFlg;
         Color bgColor = cursor.color;
