@@ -18,4 +18,5 @@ public enum SeType
     Play, // プレイ
     ReelHit, // スロットリールヒット
     ReelMiss, // スロットリールミス
+    TimeSlip, // タイムスリップ
 }

@@ -49,9 +49,15 @@ public class CharacterSelectButton : MonoBehaviour, IPointerEnterHandler, IPoint
     public void SelectButton(bool isSelected)
     {
         if (isSelected)
+            SoundSystem.Instance.PlaySE(SeType.Cursol);
+        SetActiveButton(isSelected);
+    }
+
+    public void SetActiveButton(bool isSelected)
+    {
+        if (isSelected)
         {
             frameImage.color = activeColor;
-            SoundSystem.Instance.PlaySE(SeType.Cursol);
             StartCoroutine(SmoothResize(buttonTransform, new Vector2(width, width)));
         }
         else

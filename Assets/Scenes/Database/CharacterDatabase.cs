@@ -6,7 +6,7 @@ public class CharacterDatabase : MonoBehaviour
 {
     public static CharacterDatabase Instance { get; private set; }
 
-    [SerializeField] private List<CharacterBase> characterDataList;
+    [SerializeField] private List<PlayCharacterBase> playerDataList;
     [SerializeField] private List<CharacterBase> ownerDataList;
     [SerializeField] private List<CharacterBase> enemyDataList;
 
@@ -23,55 +23,35 @@ public class CharacterDatabase : MonoBehaviour
         }
     }
 
-    public CharacterBase LoadCharacterData(int characterId)
-    {
-        if (characterId < 0 || characterId >= characterDataList.Count)
-        {
-            Debug.LogError("Invalid character ID: " + characterId);
-            return null;
-        }
-
-        return characterDataList[characterId];
-    }
-
-    public Character GetCharacterFromId(int characterId)
-    {
-        if (characterId < 0 || characterId >= characterDataList.Count)
-        {
-            Debug.LogError("Invalid character ID: " + characterId);
-            return null;
-        }
-
-        CharacterBase baseData = characterDataList[characterId];
-        Character loadCharacter = new Character(baseData);
-        Debug.Log($"GetCharacterFromId: {loadCharacter.Base.name}, ID: {characterId}");
-        return loadCharacter;
-    }
-
     public PlayerCharacter GetPlayerCharacterFromId(int characterId)
     {
-        if (characterId < 0 || characterId >= characterDataList.Count)
+        if (characterId < 0 || characterId >= playerDataList.Count)
         {
             Debug.LogError("Invalid character ID: " + characterId);
             return null;
         }
 
-        CharacterBase baseData = characterDataList[characterId];
+        CharacterBase baseData = playerDataList[characterId].Base;
         PlayerCharacter loadCharacter = new PlayerCharacter(baseData);
         return loadCharacter;
     }
 
     public int GetCharacterId(CharacterBase character)
     {
-        return characterDataList.IndexOf(character);
+        return playerDataList.FindIndex(pc => pc.Base == character);
     }
 
     public List<CharacterBase> GetAllCharacterBases()
     {
         List<CharacterBase> allCharacterDataList = new List<CharacterBase>();
-        allCharacterDataList.AddRange(characterDataList);
+        allCharacterDataList.AddRange( playerDataList.ConvertAll(pc => pc.Base));
         allCharacterDataList.AddRange(ownerDataList);
         allCharacterDataList.AddRange(enemyDataList);
         return allCharacterDataList;
+    }
+
+    public PlayCharacterBase GetCharacterByIndex(CharacterIndex characterIndex)
+    {
+        return playerDataList.Find(pc => pc.CharacterIndex == characterIndex);
     }
 }

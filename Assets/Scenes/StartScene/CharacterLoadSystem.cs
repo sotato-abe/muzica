@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class CharacterLoadSystem : MonoBehaviour
 {
-    [SerializeField] Button startButton;
+    [SerializeField] StartButton startButton;
     [SerializeField] LoadDataButton loadDataButton1;
     [SerializeField] LoadDataButton loadDataButton2;
     [SerializeField] LoadDataButton loadDataButton3;
@@ -24,7 +24,7 @@ public class CharacterLoadSystem : MonoBehaviour
     private void Start()
     {
         LoadData();
-        startButton.onClick.AddListener(StartGame);
+        startButton.OnClick += StartGame;
         loadDataButton1.OnStartGame += LoadGame;
         loadDataButton2.OnStartGame += LoadGame;
         loadDataButton3.OnStartGame += LoadGame;
@@ -79,10 +79,18 @@ public class CharacterLoadSystem : MonoBehaviour
 
     public void SelectPlayerCharacter(int characterIndex)
     {
-        UnityEngine.Debug.Log("Selected Character Index: " + characterIndex);
         currentCharacterIndex = (CharacterIndex)characterIndex;
-        UnityEngine.Debug.Log("currentCharacterIndex: " + currentCharacterIndex);
         LoadData();
+        SetStartButton();
+    }
+
+    private void SetStartButton()
+    {
+        PlayCharacterBase characterBase = CharacterDatabase.Instance.GetCharacterByIndex(currentCharacterIndex);
+        if (characterBase != null)
+        {
+            startButton.Setup(characterBase.StoryName);
+        }
     }
 
     void LoadGame(int index)

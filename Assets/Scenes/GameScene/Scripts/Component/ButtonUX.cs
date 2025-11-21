@@ -8,20 +8,20 @@ using TMPro;
 
 public class ButtonUX : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
-    [SerializeField] TextMeshProUGUI text;
+    [SerializeField] public TextMeshProUGUI text;
 
-    public void OnPointerClick(PointerEventData eventData)
+    public virtual void OnPointerClick(PointerEventData eventData)
     {
         SoundSystem.Instance.PlaySE(SeType.Select);
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
+    public virtual void OnPointerEnter(PointerEventData eventData)
     {
         SoundSystem.Instance.PlaySE(SeType.Cursol);
         text.color = Color.white;
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    public virtual void OnPointerExit(PointerEventData eventData)
     {
         text.color = Color.black;
     }

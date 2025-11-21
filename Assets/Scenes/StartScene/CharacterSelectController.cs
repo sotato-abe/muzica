@@ -21,7 +21,9 @@ public class CharacterSelectController : MonoBehaviour
     private void Start()
     {
         CreateCharacterSelectButtons();
-        CharacterSelect(0);
+        selectedCharacter = new Character(characterBaseList[0]);
+        characterSelectButtons[0].SetActiveButton(true);
+        OnCharacterSelect?.Invoke(0);
     }
 
     private void Update()

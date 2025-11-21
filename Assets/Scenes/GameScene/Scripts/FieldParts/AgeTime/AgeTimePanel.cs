@@ -44,6 +44,7 @@ public class AgeTimePanel : MonoBehaviour
         ageTime = targetTime;
         lastYear = ageTime.Year;
         lastMonth = ageTime.Month;
+        SoundSystem.Instance.PlaySE(SeType.TimeSlip);
         UpdateAgeTimeField();
     }
 
@@ -80,6 +81,7 @@ public class AgeTimePanel : MonoBehaviour
 
     public void PassageOfMonth(int months)
     {
+        SoundSystem.Instance.PlaySE(SeType.TimeSlip);
         StartCoroutine(PassageOfTime(months));
     }
 

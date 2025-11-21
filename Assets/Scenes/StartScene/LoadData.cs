@@ -12,6 +12,7 @@ public class PlayData
     public int yearsElapsed = 0;
     public Vector2Int position;
     public PlayerData playerData;
+    public string sceneName = "StartScene";
 }
 
 public class PlayerData
@@ -66,7 +67,7 @@ public class SimpleData
         this.level = loadPlayerCharacter.Level;
         this.time = playData.time;
         this.position = playData.position;
-        this.sceneName = "test";
+        this.sceneName = playData.sceneName;
         this.characterSprite = loadPlayerCharacter.Base.SquareSprite;
     }
 }
