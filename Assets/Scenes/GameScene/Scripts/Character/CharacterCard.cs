@@ -6,39 +6,25 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using TMPro;
 
-// バックで使用するアイテムのクラス
-// 装備、消耗品、トレジャーをすべて受け入れてバックに表示するためのクラス
 public class CharacterCard : MonoBehaviour
 {
     Character character;
-    [SerializeField] RarityIcon cardRarity;
-    [SerializeField] TextMeshProUGUI characterName;
-    [SerializeField] Image characterImage;
-    [SerializeField] GameObject rarityStarSprite;
-    [SerializeField] GameObject rarityList;
+    [SerializeField] CardTitle cardTitle;
+    [SerializeField] Image cardImage;
+    [SerializeField] Image rarityFrame;
+    [SerializeField] StatusLayer statusLayer;
     
     public void Setup(Character character)
     {
         this.character = character;
-        characterName.text = character.Base.Name;
-        characterImage.sprite = character.Base.Sprite;
-        SetRarity((int)character.Base.Rarity + 1);
+        cardTitle.SetCardTitle(character.Base.Rarity, character.Base.Name);
+        cardImage.sprite = character.Base.Sprite;
+        SetRarity(character.Base.Rarity);
+        statusLayer.SetCharacterStatus(character);
     }
 
-    private void SetRarity(int level)
+    private void SetRarity(RarityType rarity)
     {
-        cardRarity.SetRarityIcon(character.Base.Rarity);
-        // レベルに応じて星を表示
-        foreach (Transform child in rarityList.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
-        for (int i = 0; i < level; i++)
-        {
-            GameObject star = Instantiate(rarityStarSprite, rarityList.transform);
-            star.SetActive(true);
-            star.transform.localScale = Vector3.one; // スケールをリセット
-        }
+        rarityFrame.color = rarity.GetRarityColor();
     }
 }

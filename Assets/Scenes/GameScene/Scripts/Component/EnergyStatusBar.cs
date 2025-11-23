@@ -3,10 +3,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class EnergyBar : MonoBehaviour
+public class EnergyStatusBar : MonoBehaviour
 {
     [SerializeField] EnergyType energyType;
     [SerializeField] TextMeshProUGUI counterText;
+    [SerializeField] TextMeshProUGUI backText;
     [SerializeField] Image barImage;
     [SerializeField] DiffCounter diffCounterPrefab;
     [SerializeField] GuardWindow guardWindow;
@@ -28,7 +29,8 @@ public class EnergyBar : MonoBehaviour
 
         float fillAmount = (float)currentEnergy / maxEnergy;
         barImage.fillAmount = Mathf.Clamp01(fillAmount);
-        counterText.text = $"{currentEnergy}/{maxEnergy}";
+        counterText.text = $"{currentEnergy}";
+        backText.text = $"{currentEnergy}";
     }
 
     public void SetGuard(int guard)
@@ -50,7 +52,8 @@ public class EnergyBar : MonoBehaviour
         currentEnergy = value;
 
         float targetFill = (float)currentEnergy / maxEnergy;
-        counterText.text = $"{currentEnergy}/{maxEnergy}";
+        counterText.text = $"{currentEnergy}";
+        backText.text = $"{currentEnergy}";
 
         if (!gameObject.activeInHierarchy)
         {
