@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 public class StatusLayer : MonoBehaviour
 {
@@ -14,7 +15,8 @@ public class StatusLayer : MonoBehaviour
     [SerializeField] TextMeshProUGUI speedText;
     [SerializeField] TextMeshProUGUI luckText;
 
-    [SerializeField] GameObject equipArea;
+    [SerializeField] EquipSlot rightHandSlot;
+    [SerializeField] EquipSlot leftHandSlot;
 
     public void SetCharacterStatus(Character character)
     {
@@ -27,5 +29,13 @@ public class StatusLayer : MonoBehaviour
         defenseText.text = character.Defense.ToString();
         speedText.text = character.Speed.ToString();
         luckText.text = character.Luck.ToString();
+
+        SetCharacterEquip(character);
+    }
+
+    private void SetCharacterEquip(Character character)
+    {
+        rightHandSlot.SetEquip(character.RightHandEquipment);
+        leftHandSlot.SetEquip(character.LeftHandEquipment);
     }
 }
