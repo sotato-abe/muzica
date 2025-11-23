@@ -75,7 +75,8 @@ public class BattleSystem : MonoBehaviour
     private void SetEnemy()
     {
         fieldEnemies.Clear();
-        List<Character> enemies = FieldController.Instance.GetEnemies();
+        FieldType currentFieldType = FieldController.Instance.GetCurrentFieldType();
+        List<Character> enemies = CharacterDatabase.Instance.GetFieldEnemies(currentFieldType);
         battleActionBoard.SetEnemyList(enemies);
         StartCoroutine(AppearanceEnemies(enemies));
     }

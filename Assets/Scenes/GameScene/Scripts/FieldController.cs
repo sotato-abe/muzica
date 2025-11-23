@@ -21,20 +21,6 @@ public class FieldController : MonoBehaviour
     [SerializeField] DropItemPrefab dropItemPrefab; // ドロップアイテムのプレハブ
     [SerializeField] DropCommandPrefab dropCommandPrefab; // ドロップコマンドのプレハブ
     [SerializeField] FieldPlayer fieldPlayer; // プレイヤーコントローラー
-    [SerializeField] List<EnemyGroup> defaultEnemyGroups = new List<EnemyGroup>();
-    [SerializeField] List<EnemyGroup> desertEnemyGroups = new List<EnemyGroup>();
-    [SerializeField] List<EnemyGroup> wildernessEnemyGroups = new List<EnemyGroup>();
-    [SerializeField] List<EnemyGroup> grasslandsEnemyGroups = new List<EnemyGroup>();
-    [SerializeField] List<EnemyGroup> wetlandsEnemyGroups = new List<EnemyGroup>();
-    [SerializeField] List<EnemyGroup> snowEnemyGroups = new List<EnemyGroup>();
-    [SerializeField] List<EnemyGroup> rockEnemyGroups = new List<EnemyGroup>();
-    [SerializeField] List<EnemyGroup> magmaEnemyGroups = new List<EnemyGroup>();
-    [SerializeField] List<EnemyGroup> pollutionEnemyGroups = new List<EnemyGroup>();
-    [SerializeField] List<EnemyGroup> seaEnemyGroups = new List<EnemyGroup>();
-    [SerializeField] List<EnemyGroup> oceanEnemyGroups = new List<EnemyGroup>();
-    [SerializeField] List<EnemyGroup> outfieldEnemyGroups = new List<EnemyGroup>();
-
-    private Dictionary<FieldType, List<EnemyGroup>> fieldTypeEnemyGroups;
 
     private FieldBase currentFieldBase;
 
@@ -46,27 +32,25 @@ public class FieldController : MonoBehaviour
             return;
         }
         Instance = this;
-
-        fieldTypeEnemyGroups = new Dictionary<FieldType, List<EnemyGroup>>
-        {
-            { FieldType.Default, defaultEnemyGroups },
-            { FieldType.Desert, desertEnemyGroups },
-            { FieldType.Wilderness, wildernessEnemyGroups },
-            { FieldType.Grasslands, grasslandsEnemyGroups },
-            { FieldType.Wetlands, wetlandsEnemyGroups },
-            { FieldType.Snow, snowEnemyGroups },
-            { FieldType.Rock, rockEnemyGroups },
-            { FieldType.Magma, magmaEnemyGroups },
-            { FieldType.Pollution, pollutionEnemyGroups },
-            { FieldType.Sea, seaEnemyGroups },
-            { FieldType.Ocean, oceanEnemyGroups }
-        };
     }
 
     public void SetField(FieldBase fieldData)
     {
         currentFieldBase = fieldData;
         PlayFieldBGM();
+    }
+
+    public FieldType GetCurrentFieldType()
+    {
+        if (currentFieldBase != null)
+        {
+            return currentFieldBase.fieldType;
+        }
+        else
+        {
+            UnityEngine.Debug.LogWarning("Current FieldBase is null. Returning Default FieldType.");
+            return FieldType.Default;
+        }
     }
 
     public void PlayFieldBGM()
@@ -79,50 +63,6 @@ public class FieldController : MonoBehaviour
         {
             SoundSystem.Instance.SetAreaBGM(currentFieldBase.fieldType);
         }
-    }
-
-    // 複数の敵をグループから取得するように変更する
-    public List<Character> GetEnemies()
-    {
-        if (currentFieldBase == null)
-        {
-            UnityEngine.Debug.LogWarning("Current field data is null. Cannot get enemies.");
-            return new List<Character>();
-        }
-
-        List<Character> enemies = new List<Character>();
-        EnemyGroup targetGroup = null;
-
-        int groupCount = currentFieldBase.EnemyGroups.Count;
-
-        if (groupCount == 0)
-        {
-            // アウトフィールド
-            if (Random.Range(0, 100) < 20 && outfieldEnemyGroups.Count > 0)
-            {
-                targetGroup = outfieldEnemyGroups[Random.Range(0, outfieldEnemyGroups.Count)];
-            }
-            else
-            {
-                List<EnemyGroup> targetGroups = fieldTypeEnemyGroups[currentFieldBase.fieldType];
-                targetGroup = targetGroups[Random.Range(0, targetGroups.Count)];
-            }
-        }
-        else
-        {
-            targetGroup = currentFieldBase.EnemyGroups[Random.Range(0, groupCount)];
-        }
-
-        if (targetGroup != null)
-        {
-            enemies.AddRange(targetGroup.GetRandomCharacterList());
-        }
-        else
-        {
-            UnityEngine.Debug.LogWarning("No target group found for enemies.");
-        }
-
-        return enemies;
     }
 
     public void EnterQuestBoard(List<Quest> quests)
