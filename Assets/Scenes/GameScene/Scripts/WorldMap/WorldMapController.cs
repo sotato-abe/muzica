@@ -81,13 +81,11 @@ public class WorldMapController : MonoBehaviour
         fieldBase.isLeftOpen = worldMapRender.HasFieldMap(playerPosition + Vector2Int.left);
         if (fieldBase.FieldName != "")
         {
-            worldMapPanel.SetFieldName(fieldBase.FieldName);
-            // messagePanel.AddMessage(MessageIconType.Field, fieldBase.FieldName + "に到着した");
-            InformationPanel.Instance.SetFieldInformation(fieldBase);
+            worldMapPanel.SetFieldData(fieldBase);
         }
         else
         {
-            worldMapPanel.SetFieldName("");
+            worldMapPanel.ClearFieldData();
         }
         FieldController.Instance.SetField(fieldBase);
         fieldGenerator.SetField(fieldBase, fieldTileSet);
