@@ -8,14 +8,15 @@ public class TreasureCard : Card
 {
     [SerializeField] TextMeshProUGUI description;
 
-    public void SetTreasureDetail(Treasure treasure)
+    public override void SetCard(Item item)
     {
-        this.gameObject.SetActive(true);
-        SetRarity(treasure.Base.Rarity);
-        SetCardType(ItemType.Treasure);
-        description.text = treasure.Base.Description;
-        cardName.text = treasure.Base.Name;
-        cardImage.sprite = treasure.Base.Sprite;
-        cardImage.color = new Color(1, 1, 1, 1);
+        base.SetCard(item);
+        Treasure treasure = item as Treasure;
+        SetDescription(treasure.Base.Description);
+    }
+
+    public void SetDescription(string descriptionText)
+    {
+        description.text = descriptionText;
     }
 }

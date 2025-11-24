@@ -4,43 +4,49 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class CommandCard : MonoBehaviour
+public class CommandCard : Card
 {
-    [SerializeField] RarityIcon cardRarity;
-    [SerializeField] TextMeshProUGUI cardName;
     [SerializeField] TextMeshProUGUI descriptionText;
-    [SerializeField] public Image cardFrame;
-    [SerializeField] Image cardImage;
+    [SerializeField] GameObject costSpace;
     [SerializeField] GameObject enchantList;
-    [SerializeField] GameObject attackCounterList;
-    [SerializeField] AttackCounter attackCounterPrefab;
-    [SerializeField] EnchantIcon enchantIconPrefab;
-    [SerializeField] EnergyCostIcon energyCostIconPrefab;
+    [SerializeField] GameObject attackSpace;
+
+    [SerializeField] CostIconPrefab costIconPrefab;
+    [SerializeField] AttackPrefab attackPrefab;
+    [SerializeField] EnchantPrefab enchantPrefab;
+
 
     public void SetCommandCard(Command command)
     {
-        this.gameObject.SetActive(true);
-        cardRarity.SetRarityIcon(command.Base.Rarity);
-        cardName.text = command.Base.Name;
+        base.SetCommand(command);
         descriptionText.text = command.Base.Description;
-        cardImage.sprite = command.Base.Sprite;
-        cardImage.color = new Color(1, 1, 1, 1);
-        SetAttacks(command.Base.EnergyAttackList);
+        SetCost(command.Base.EnergyCostList);
+        SetAttacks(command.Base.AttackList);
         SetEnchants(command.Base.EnchantList);
     }
-
-    private void SetAttacks(List<EnergyCount> counts)
+    private void SetCost(List<EnergyCost> energyCostList)
     {
-        foreach (Transform child in attackCounterList.transform)
+        foreach (Transform child in costSpace.transform)
         {
             Destroy(child.gameObject);
         }
-
-        // EnergyCostを表示する処理
-        foreach (var count in counts)
+        foreach (var cost in energyCostList)
         {
-            AttackCounter newCounter = Instantiate(attackCounterPrefab, attackCounterList.transform);
-            newCounter.SetCounter(count);
+            CostIconPrefab newCost = Instantiate(costIconPrefab, costSpace.transform);
+            newCost.SetCostIcon(cost);
+        }
+    }
+
+    private void SetAttacks(List<Attack> attacks)
+    {
+        foreach (Transform child in attackSpace.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        foreach (var attack in attacks)
+        {
+            AttackPrefab attackPrefabInstance = Instantiate(attackPrefab, attackSpace.transform);
+            attackPrefabInstance.SetAttack(attack);
         }
     }
 
@@ -55,7 +61,7 @@ public class CommandCard : MonoBehaviour
         // エンチャントを表示する処理
         foreach (var enchant in enchants)
         {
-            EnchantIcon newEnchant = Instantiate(enchantIconPrefab, enchantList.transform);
+            EnchantPrefab newEnchant = Instantiate(enchantPrefab, enchantList.transform);
             newEnchant.SetEnchant(enchant);
         }
     }

@@ -138,7 +138,7 @@ public class ItemBoxWindow : MonoBehaviour, IDropHandler
         if (itemBlock.OriginalParent != this.transform) return false;
 
         Item item = itemBlock.Item;
-        PlayerController.Instance.RemoveItemFromBag(itemBlock.Item);
+        PlayerController.Instance.RemoveItemFromBag(item);
         itemBlock.RemovePlaceholder();
         itemBlockMap.Remove(item);
         Destroy(itemBlock.gameObject);

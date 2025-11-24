@@ -6,9 +6,9 @@ using UnityEngine.UI;
 public class EquipmentDetail : MonoBehaviour
 {
     [SerializeField] public GameObject blockSlot;
-    [SerializeField] TargetIcon targetIcon;
+    // [SerializeField] TargetIcon targetIcon;
     [SerializeField] GameObject costList;
-    [SerializeField] EquipmentInfo equipmentInfo;
+    // [SerializeField] EquipmentInfo equipmentInfo;
     [SerializeField] public ItemBlock itemBlockPrefab;
     [SerializeField] EnergyCostIcon energyCostIconPrefab;
 
@@ -20,7 +20,7 @@ public class EquipmentDetail : MonoBehaviour
             return;
         }
         SetEquipmentBlock(equipment);
-        equipmentInfo.SetInfo(equipment);
+        // equipmentInfo.SetInfo(equipment);
         SoundSystem.Instance.PlaySE(SeType.Set);
         SetCosts(equipment.EquipmentBase.EnergyCostList);
     }
@@ -61,6 +61,6 @@ public class EquipmentDetail : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-        equipmentInfo.gameObject.SetActive(false);
+        // equipmentInfo.gameObject.SetActive(false);
     }
 }

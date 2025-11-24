@@ -8,24 +8,20 @@ public class EquipWindow : MonoBehaviour
 {
     [SerializeField] Image equipImage;
     [SerializeField] Image equipStatusImage;
-
     [SerializeField] CostIconPrefab costIconPrefab;
     [SerializeField] GameObject costList;
 
-    [SerializeField] EquipmentInfo equipmentInfo;
     [SerializeField] EquipStatusWindow equipStatusWindow;
 
     public void SetEquipment(Equipment equipment)
     {
         if (equipment == null || equipment.Base == null)
         {
-            Debug.LogWarning("Equipment base is null, cannot set equipment.");
             ResetSlot();
             return;
         }
         equipImage.gameObject.SetActive(true);
         equipImage.sprite = equipment.Base.Sprite;
-        equipmentInfo.SetInfo(equipment);
         SetCost(equipment.EquipmentBase.EnergyCostList);
     }
 
@@ -52,7 +48,6 @@ public class EquipWindow : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-        equipmentInfo.ClearInfo();
     }
 
     public void SetStatusImage(bool canUse)

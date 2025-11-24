@@ -32,17 +32,17 @@ public class TargetItemWindow : MonoBehaviour
         }
         if (item is Consumable consumable)
         {
-            consumableCard.SetConsumableDetail(consumable);
+            consumableCard.SetCard(item);
             consumableCard.gameObject.SetActive(true);
         }
         else if (item is Equipment equipment)
         {
-            equipmentCard.SetEquipmentDetail(equipment);
+            equipmentCard.SetCard(item);
             equipmentCard.gameObject.SetActive(true);
         }
         else if (item is Treasure treasure)
         {
-            treasureCard.SetTreasureDetail(treasure);
+            treasureCard.SetCard(item);
             treasureCard.gameObject.SetActive(true);
         }
         else

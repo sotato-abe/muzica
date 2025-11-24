@@ -58,6 +58,7 @@ public class Character
     // battle
     public int LifeGuard { get; set; }
     public int BatteryGuard { get; set; }
+    public List<Enchant> EnchantList { get; set; }
 
     // message
     public delegate void TalkMessageDelegate(MessageType message);
@@ -83,6 +84,7 @@ public class Character
         ColStatus();
         LifeGuard = 0;
         BatteryGuard = 0;
+        EnchantList = new List<Enchant>();
     }
 
     private void SetBaseAbility()
@@ -203,16 +205,7 @@ public class Character
         int DiffStorage = 0;
         int DiffPocket = 0;
 
-        foreach (Equipment equipment in EquipmentList)
-        {
-            DiffLife += equipment.EquipmentBase.Life;
-            DiffBattery += equipment.EquipmentBase.Battery;
-            DiffPower += equipment.EquipmentBase.Power;
-            DiffTechnique += equipment.EquipmentBase.Technique;
-            DiffDefense += equipment.EquipmentBase.Defense;
-            DiffSpeed += equipment.EquipmentBase.Speed;
-            DiffLuck += equipment.EquipmentBase.Luck;
-        }
+        // TODO Enchantによる強化を追加
 
         ColLife = MaxLife + DiffLife;
         Life = Mathf.Min(Life, ColLife); // LifeがMaxLifeを超えないようにする
@@ -228,72 +221,110 @@ public class Character
         ColPocket = Pocket + DiffPocket;
     }
 
-    public void TakeAttack(TotalAttackCount totalCount)
+    public void TakeTotalAttack(TotalAttack totalAttack)
     {
-        List<EnergyCount> energyAttackList = totalCount.EnergyAttackList;
-        foreach (var energyAttack in energyAttackList)
-        {
-            // エネルギー攻撃の処理
-            int isRecovery = energyAttack.isRecovery ? -1 : 1;
-            int colEnergy = (int)(energyAttack.val * energyAttack.times) * isRecovery;
-            switch (energyAttack.type)
-            {
-                case EnergyType.Life:
-                    if (energyAttack.isRecovery)
-                    {
-                        Life = Mathf.Clamp(Life + (int)(energyAttack.val * energyAttack.times), 0, MaxLife);
-                        SoundSystem.Instance.PlaySE(SeType.Recovery);
-                    }
-                    else
-                    {
-                        int totalDamage = Mathf.Max(0, (int)(energyAttack.val * energyAttack.times));
-                        int remainingDamage = Mathf.Max(0, totalDamage - LifeGuard);
+        TakeAttackList(totalAttack.AttackList);
+        TakeEnchantList(totalAttack.EnchantList);
+    }
 
-                        LifeGuard = Mathf.Max(0, LifeGuard - totalDamage);
-                        if (remainingDamage > 0)
+    public void TakeAttackList(List<Attack> attackList)
+    {
+        foreach (Attack attack in attackList)
+        {
+            switch (attack.AttackType)
+            {
+                case AttackType.SoloLifeUp:
+                case AttackType.GroupLifeUp:
+                    Life += Mathf.FloorToInt(attack.Val * attack.Times);
+                    Life = Mathf.Min(Life, ColLife);
+                    break;
+                case AttackType.SoloBatteryUp:
+                case AttackType.GroupBatteryUp:
+                    Battery += Mathf.FloorToInt(attack.Val * attack.Times);
+                    Battery = Mathf.Min(Battery, ColBattery);
+                    break;
+                case AttackType.SoloSoulUp:
+                case AttackType.GroupSoulUp:
+                    Soul += Mathf.FloorToInt(attack.Val * attack.Times);
+                    Soul = Mathf.Min(Soul, 100);
+                    break;
+                case AttackType.SoloLifeDown:
+                case AttackType.GroupLifeDown:
+                    int damage = Mathf.FloorToInt(attack.Val * attack.Times);
+                    if (LifeGuard > 0)
+                    {
+                        if (LifeGuard >= damage)
                         {
-                            Life = Mathf.Clamp(Life - remainingDamage, 0, MaxLife);
-                            SoundSystem.Instance.PlaySE(SeType.Damage);
-                            OnTalkMessage?.Invoke(MessageType.Damage);
+                            LifeGuard -= damage;
+                            damage = 0;
                         }
                         else
                         {
-                            SoundSystem.Instance.PlaySE(SeType.Guard);
-                            OnTalkMessage?.Invoke(MessageType.Safe);
+                            damage -= LifeGuard;
+                            LifeGuard = 0;
                         }
                     }
+                    Life -= damage;
+                    Life = Mathf.Max(Life, 0);
                     break;
-                case EnergyType.Battery:
-                    if (energyAttack.isRecovery)
+                case AttackType.SoloBatteryDown:
+                case AttackType.GroupBatteryDown:
+                    int btryDamage = Mathf.FloorToInt(attack.Val * attack.Times);
+                    if (BatteryGuard > 0)
                     {
-                        Battery = Mathf.Clamp(Battery + (int)(energyAttack.val * energyAttack.times), 0, MaxBattery);
-                        SoundSystem.Instance.PlaySE(SeType.Recovery);
-                    }
-                    else
-                    {
-                        int totalDamage = Mathf.Max(0, (int)(energyAttack.val * energyAttack.times)); // 総ダメージ
-                        int remainingDamage = Mathf.Max(0, totalDamage - BatteryGuard);
-                        BatteryGuard = Mathf.Max(0, BatteryGuard - totalDamage);
-                        if (remainingDamage > 0)
+                        if (BatteryGuard >= btryDamage)
                         {
-                            Battery = Mathf.Clamp(Battery - remainingDamage, 0, MaxBattery);
-                            SoundSystem.Instance.PlaySE(SeType.Damage);
+                            BatteryGuard -= btryDamage;
+                            btryDamage = 0;
                         }
                         else
                         {
-                            SoundSystem.Instance.PlaySE(SeType.Guard);
+                            btryDamage -= BatteryGuard;
+                            BatteryGuard = 0;
                         }
                     }
+                    Battery -= btryDamage;
+                    Battery = Mathf.Max(Battery, 0);
                     break;
-                case EnergyType.Soul:
-                    Soul = Mathf.Clamp(Soul - colEnergy, 0, 100);
+                case AttackType.SoloSoulDown:
+                case AttackType.GroupSoulDown:
+                    Soul -= Mathf.FloorToInt(attack.Val * attack.Times);
+                    Soul = Mathf.Max(Soul, 0);
+                    break;
+                case AttackType.SoloGuard:
+                case AttackType.GroupGuard:
+                    LifeGuard += Mathf.FloorToInt(attack.Val * attack.Times);
+                    break;
+                case AttackType.SoloSecurity:
+                case AttackType.GroupSecurity:
+                    BatteryGuard += Mathf.FloorToInt(attack.Val * attack.Times);
                     break;
                 default:
-                    Debug.LogWarning($"Unknown energy type: {energyAttack.type}");
+                    Debug.LogWarning("未実装のAttackTypeです: " + attack.AttackType);
                     break;
             }
-
         }
+    }
+
+    public void TakeEnchantList(List<Enchant> enchantList)
+    {
+        foreach (Enchant enchant in enchantList)
+        {
+            Enchant existingEnchant = EnchantList.Find(e => e.Type == enchant.Type);
+            if (existingEnchant != null)
+            {
+                existingEnchant.Val += enchant.Val;
+            }
+            else
+            {
+                EnchantList.Add(enchant);
+            }
+        }
+    }
+
+    public void ClearEnchantList()
+    {
+        EnchantList.Clear();
     }
 
     public void StatusUp(StatusType type)

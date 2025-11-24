@@ -6,93 +6,103 @@ using TMPro;
 
 public class EquipmentCard : Card
 {
-    [SerializeField] TargetIcon targetIcon;
-    [SerializeField] TextMeshProUGUI powerText;
-    [SerializeField] TextMeshProUGUI techniqueText;
-    [SerializeField] TextMeshProUGUI defenseText;
-    [SerializeField] TextMeshProUGUI speedText;
-    [SerializeField] TextMeshProUGUI luckText;
-    [SerializeField] GameObject attackCounterList;
-    [SerializeField] GameObject enchantList;
-    [SerializeField] GameObject costList;
-    [SerializeField] AttackCounter attackCounterPrefab;
-    [SerializeField] EnchantIcon enchantIconPrefab;
     [SerializeField] CostIconPrefab costIconPrefab;
-    [SerializeField] EquipmentTypeIcon equipmentTypeIcon;
+    [SerializeField] AttackPrefab attackPrefab;
+    [SerializeField] EnchantPrefab enchantPrefab;
 
-    public void SetEquipmentDetail(Equipment equipment)
+    [SerializeField] GameObject costSpace;
+    [SerializeField] GameObject attackSpace;
+    [SerializeField] GameObject enchantSpace;
+
+    private Equipment currentEquipment;
+
+    private List<Attack> attackList = new List<Attack>();
+    private List<Enchant> enchantList = new List<Enchant>();
+
+    public override void SetCard(Item item)
     {
-        this.gameObject.SetActive(true);
-        SetRarity(equipment.Base.Rarity);
-        SetCardType(ItemType.Equipment);
-        cardName.text = equipment.Base.Name;
-        cardImage.sprite = equipment.Base.Sprite;
-        cardImage.color = new Color(1, 1, 1, 1);
+        base.SetCard(item);
+        Equipment equipment = item as Equipment;
+        currentEquipment = equipment;
         SetCost(equipment.EquipmentBase.EnergyCostList);
-        targetIcon.SetTargetType(equipment.EquipmentBase.EquipmentType, equipment.EquipmentBase.TargetType);
+        SetAttacks(equipment.EquipmentBase.AttackList);
         SetEnchants(equipment.EquipmentBase.EnchantList);
-        SetAttacks(equipment.EquipmentBase.EnergyAttackList);
-        SetStatus(equipment);
-        equipmentTypeIcon.SetEquipmentType(equipment.EquipmentBase.EquipmentType);
     }
 
     private void SetCost(List<EnergyCost> energyCostList)
     {
-        foreach (Transform child in costList.transform)
+        foreach (Transform child in costSpace.transform)
         {
             Destroy(child.gameObject);
         }
-
-        // Costを表示する処理
         foreach (var cost in energyCostList)
         {
-            CostIconPrefab newCost = Instantiate(costIconPrefab, costList.transform);
+            CostIconPrefab newCost = Instantiate(costIconPrefab, costSpace.transform);
             newCost.SetCostIcon(cost);
         }
     }
 
-    private void SetAttacks(List<EnergyCount> counts)
+    private void SetAttacks(List<Attack> attacks)
     {
-        foreach (Transform child in attackCounterList.transform)
+        foreach (Transform child in attackSpace.transform)
         {
             Destroy(child.gameObject);
         }
-
-        // EnergyCostを表示する処理
-        foreach (var count in counts)
+        attackList.Clear();
+        foreach (var attack in attacks)
         {
-            AttackCounter newCounter = Instantiate(attackCounterPrefab, attackCounterList.transform);
-            newCounter.SetCounter(count);
+            AttackPrefab attackPrefabInstance = Instantiate(attackPrefab, attackSpace.transform);
+            attackPrefabInstance.SetAttack(attack);
+            attackList.Add(attack);
         }
     }
 
     private void SetEnchants(List<Enchant> enchants)
     {
 
-        foreach (Transform child in enchantList.transform)
+        foreach (Transform child in enchantSpace.transform)
         {
             Destroy(child.gameObject);
         }
-
-        // エンチャントを表示する処理
+        enchantList.Clear();
         foreach (var enchant in enchants)
         {
-            EnchantIcon newEnchant = Instantiate(enchantIconPrefab, enchantList.transform);
+            EnchantPrefab newEnchant = Instantiate(enchantPrefab, enchantSpace.transform);
             newEnchant.SetEnchant(enchant);
+            enchantList.Add(enchant);
         }
     }
 
-    private void SetStatus(Equipment equipment)
+    public void CommandUpdate(Command command)
     {
-        powerText.text = ConvertStatusText(equipment.EquipmentBase.Power);
-        techniqueText.text = ConvertStatusText(equipment.EquipmentBase.Technique);
-        defenseText.text = ConvertStatusText(equipment.EquipmentBase.Defense);
-        speedText.text = ConvertStatusText(equipment.EquipmentBase.Speed);
-        luckText.text = ConvertStatusText(equipment.EquipmentBase.Luck);
+        // TODO : コマンドによる強化を実装
+        // 一致するAttackがあったらカウントを増やす
+        // 一致するEnchantがあったらカウントを増やす
+
     }
 
-    private string ConvertStatusText(int val)
+    public TotalAttack GetTotalAttack()
     {
-        return 0 < val ? val.ToString() : "-";
+        TotalAttack totalAttack = new TotalAttack();
+        totalAttack.AttackList = attackList;
+        totalAttack.EnchantList = enchantList;
+        return totalAttack;
+    }
+
+    public void ResetCard()
+    {
+        SetCost(currentEquipment.EquipmentBase.EnergyCostList);
+        SetAttacks(currentEquipment.EquipmentBase.AttackList);
+        SetEnchants(currentEquipment.EquipmentBase.EnchantList);
+    }
+
+    public List<Attack> GetAttackList()
+    {
+        return currentEquipment.EquipmentBase.AttackList;
+    }
+
+    public List<Enchant> GetEnchantList()
+    {
+        return currentEquipment.EquipmentBase.EnchantList;
     }
 }

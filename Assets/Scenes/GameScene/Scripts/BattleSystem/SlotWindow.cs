@@ -8,7 +8,7 @@ public class SlotWindow : Window
     [SerializeField] CommandReel commandReel1;
     [SerializeField] CommandReel commandReel2;
     [SerializeField] CommandReel commandReel3;
-    [SerializeField] private EquipmentInfo equipmentInfo;
+    [SerializeField] private EquipmentCard equipmentCard;
 
     private float startInterval = 0.3f; // リール開始の遅延時間
     private float stopInterval = 0.8f; // リール停止の遅延時間
@@ -25,10 +25,10 @@ public class SlotWindow : Window
 
     public IEnumerator StopSlot()
     {
-        equipmentInfo.CommandUpdate(commandReel1.StopReel());
+        equipmentCard.CommandUpdate(commandReel1.StopReel());
         yield return new WaitForSeconds(stopInterval);
-        equipmentInfo.CommandUpdate(commandReel2.StopReel());
+        equipmentCard.CommandUpdate(commandReel2.StopReel());
         yield return new WaitForSeconds(stopInterval);
-        equipmentInfo.CommandUpdate(commandReel3.StopReel());
+        equipmentCard.CommandUpdate(commandReel3.StopReel());
     }
 }

@@ -8,53 +8,52 @@ public class ConsumableCard : Card
 {
     [SerializeField] TextMeshProUGUI description;
     [SerializeField] TextMeshProUGUI countText;
-    [SerializeField] GameObject attackCounterList;
-    [SerializeField] GameObject enchantList;
-    [SerializeField] AttackCounter attackCounterPrefab;
-    [SerializeField] EnchantIcon enchantIconPrefab;
+    [SerializeField] AttackPrefab attackPrefab;
+    [SerializeField] EnchantPrefab enchantPrefab;
 
-    public void SetConsumableDetail(Consumable consumable)
+    [SerializeField] GameObject attackSpace;
+    [SerializeField] GameObject enchantSpace;
+
+    private Consumable currentConsumable;
+
+    public override void SetCard(Item item)
     {
-        this.gameObject.SetActive(true);
-        SetRarity(consumable.Base.Rarity);
-        SetCardType(ItemType.Consumable);
-        cardName.text = consumable.Base.Name;
-        description.text = consumable.Base.Description;
-        cardImage.sprite = consumable.Base.Sprite;
-        cardImage.color = new Color(1, 1, 1, 1);
-        SetEnchants(consumable.ConsumableBase.EnchantList);
-        SetAttacks(consumable.ConsumableBase.EnergyAttackList);
-        countText.text = consumable.UsableCount.ToString();
+        base.SetCard(item);
+        currentConsumable = item as Consumable;
+        description.text = currentConsumable.Base.Description;
+        countText.text = currentConsumable.UsableCount.ToString();
+        SetAttack(currentConsumable.ConsumableBase.Attack);
+        SetEnchants(currentConsumable.ConsumableBase.EnchantList);
+    }
+
+    private void SetAttack(Attack attack)
+    {
+        foreach (Transform child in attackSpace.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        AttackPrefab attackPrefabInstance = Instantiate(attackPrefab, attackSpace.transform);
+        attackPrefabInstance.SetAttack(attack);
     }
 
     private void SetEnchants(List<Enchant> enchants)
     {
-
-        foreach (Transform child in enchantList.transform)
+        foreach (Transform child in enchantSpace.transform)
         {
             Destroy(child.gameObject);
         }
-
-        // エンチャントを表示する処理
         foreach (var enchant in enchants)
         {
-            EnchantIcon newEnchant = Instantiate(enchantIconPrefab, enchantList.transform);
+            EnchantPrefab newEnchant = Instantiate(enchantPrefab, enchantSpace.transform);
             newEnchant.SetEnchant(enchant);
         }
     }
 
-    private void SetAttacks(List<EnergyCount> counts)
+    public TotalAttack GetTotalAttack()
     {
-        foreach (Transform child in attackCounterList.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
-        // EnergyCostを表示する処理
-        foreach (var count in counts)
-        {
-            AttackCounter newCounter = Instantiate(attackCounterPrefab, attackCounterList.transform);
-            newCounter.SetCounter(count);
-        }
+        TotalAttack totalAttack = new TotalAttack();
+        totalAttack.AttackList = currentConsumable.ConsumableBase.Attack != null ? new List<Attack> { currentConsumable.ConsumableBase.Attack } : new List<Attack>();
+        totalAttack.EnchantList = currentConsumable.ConsumableBase.EnchantList;
+        return totalAttack;
     }
 }

@@ -15,7 +15,6 @@ public class BagPanel : SlidePanel
     private void Start()
     {
         equipmentWindow.OnUpdateInventory += UpdateInvenotry;
-        equipmentWindow.OnTargetItem += TargetItem;
         itemBoxWindow.OnTargetItem += TargetItem;
         pocketWindow.OnTargetItem += TargetItem;
     }

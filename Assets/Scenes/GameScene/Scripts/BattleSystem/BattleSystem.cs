@@ -104,7 +104,6 @@ public class BattleSystem : MonoBehaviour
             yield return new WaitForSeconds(0.3f);
             index++;
         }
-        battleActionBoard.EnemyAppearanced();
         yield break; // 全ての敵を出現させたらnullを返す
     }
 
@@ -154,16 +153,16 @@ public class BattleSystem : MonoBehaviour
     {
         StopAllCharacterTurnBar();
         EnemyCharacter enemyCharacter = enemySubPanel.Character as EnemyCharacter;
-        TotalAttackCount totalAttackCount = enemyCharacter.EnemyAttack();
+        TotalAttack totalAttack = enemyCharacter.EnemyAttack();
         StartCoroutine(enemySubPanel.UpdateEnergyGauges());
-        StartCoroutine(EnemyAttack(totalAttackCount)); // ターンを再開
+        StartCoroutine(EnemyAttack(totalAttack)); // ターンを再開
     }
 
     // 仮の敵ターン
-    private IEnumerator EnemyAttack(TotalAttackCount totalAttackCount)
+    private IEnumerator EnemyAttack(TotalAttack totalAttack)
     {
         fieldPlayer.SetAnimation(AnimationType.Damage);
-        yield return StartCoroutine(playerSubPanel.TakeAttackCoroutine(totalAttackCount));
+        yield return StartCoroutine(playerSubPanel.TakeAttackCoroutine(totalAttack));
         OnActionEnd(); // アクション終了イベントを呼び出す
     }
 

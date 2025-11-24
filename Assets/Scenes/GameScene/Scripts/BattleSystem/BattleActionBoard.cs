@@ -151,10 +151,6 @@ public class BattleActionBoard : SlidePanel
             if (kvp.Key == currentAction)
             {
                 kvp.Value.WindowOpen();
-                if (kvp.Value is not EquipPanel)
-                {
-                    equipPanel1.HideTarget();
-                }
             }
             else
             {
@@ -201,18 +197,6 @@ public class BattleActionBoard : SlidePanel
     public void SetEnemyList(List<Character> enemyList)
     {
         escapePanel.SetEnemyList(enemyList);
-    }
-
-    public void EnemyAppearanced()
-    {
-        if (equipPanel1.isActive)
-        {
-            equipPanel1.SetTargetting();
-        }
-        if (equipPanel2.isActive)
-        {
-            equipPanel2.SetTargetting();
-        }
     }
 
     public void BattleEnd()

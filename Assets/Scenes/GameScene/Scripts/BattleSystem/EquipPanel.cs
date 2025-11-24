@@ -18,10 +18,8 @@ public class EquipPanel : BattleActionPanel
     #region Serialized Fields
     [Header("UI Components")]
     [SerializeField] private FieldPlayer fieldPlayer;
-    [SerializeField] private TargetCommandWindow targetCommandWindow;
-    [SerializeField] private EquipWindow equipWindow;
     [SerializeField] private SlotWindow slotWindow;
-    [SerializeField] private EquipmentInfo equipmentInfo;
+    [SerializeField] private EquipmentCard equipmentCard;
     [SerializeField] private Image activeButtonImage;
 
     [Header("Character Panels")]
@@ -55,18 +53,11 @@ public class EquipPanel : BattleActionPanel
         enemySubPanels.Add(enemySubPanel3);
         enemySubPanels.Add(enemySubPanel2);
         enemySubPanels.Add(enemySubPanel1);
-
-        foreach (var subPanel in enemySubPanels)
-        {
-            subPanel.OnTarget += ChangeTargetEnemy;
-            subPanel.OnLifeOutAction += LifeOutEnemy;
-        }
     }
 
     private void OnEnable()
     {
         SetEquipment();
-        ShowTargetting();
     }
 
     private void Update()
@@ -85,14 +76,13 @@ public class EquipPanel : BattleActionPanel
         if (currentEquipment == null)
         {
             slotWindow.gameObject.SetActive(false);
-            equipWindow.ResetSlot();
+            equipmentCard.gameObject.SetActive(false);
             currentEquipment = null;
-            ClearTarget();
             return;
         }
         slotWindow.gameObject.SetActive(true);
-        equipWindow.SetEquipment(currentEquipment);
-        equipmentInfo.SetInfo(currentEquipment);
+        equipmentCard.gameObject.SetActive(true);
+        equipmentCard.SetCard(currentEquipment);
         ChangeEquipStatus();
     }
 
@@ -104,121 +94,10 @@ public class EquipPanel : BattleActionPanel
             return;
         }
         bool canUse = PlayerController.Instance.CheckEnergyCost(currentEquipment.EquipmentBase.EnergyCostList);
-        equipWindow.SetStatusImage(canUse);
         if (canUse && canExecuteActionFlg)
             activeButtonImage.color = activeButtonColor;
         else
             activeButtonImage.color = defaultButtonColor;
-    }
-    #endregion
-
-    #region Target Management
-    private void ShowTargetting()
-    {
-        if (targetSubPanels.Count == 0)
-        {
-            SetTargetting(); // ターゲットが設定されていない場合は新たに設定
-            return;
-        }
-
-        foreach (var subPanel in enemySubPanels)
-        {
-            if (targetSubPanels.Contains(subPanel))
-            {
-                if (!subPanel.isOpen)
-                {
-                    SetTargetting(); // ターゲットに含まれているけど閉じている場合はターゲットを再設定
-                    return;
-                }
-                else
-                {
-                    subPanel.SetTarget(true); // ターゲットに含まれていて開いている場合はターゲット表示を維持
-                    continue;
-                }
-            }
-            if (subPanel.isTarget)
-            {
-                subPanel.SetTarget(false); // ターゲットに含まれていない場合はターゲット表示を解除
-                continue;
-            }
-        }
-    }
-
-    public void HideTarget()
-    {
-        foreach (var subPanel in enemySubPanels)
-        {
-            subPanel.SetTarget(false);
-        }
-        playerSubPanel.SetTarget(false);
-    }
-
-    private void ClearTarget()
-    {
-        HideTarget();
-        targetSubPanels.Clear();
-    }
-
-    public void SetTargetting()
-    {
-        ClearTarget();
-        if (!IsEquipmentValid())
-            return;
-        if (currentEquipment.EquipmentBase.EquipmentType == EquipmentType.Armor)
-        {
-            playerSubPanel.SetTarget(true);
-            return;
-        }
-
-        switch (currentEquipment.EquipmentBase.TargetType)
-        {
-            case TargetType.Individual:
-                playerSubPanel.SetTarget(false);
-                SetTargetEnemyPanel(1);
-                break;
-            case TargetType.Group:
-                playerSubPanel.SetTarget(false);
-                SetTargetEnemyPanel(3);
-                break;
-            case TargetType.All:
-                playerSubPanel.SetTarget(true);
-                SetTargetEnemyPanel(3);
-                targetSubPanels.Add(playerSubPanel);
-                break;
-            default:
-                break;
-        }
-    }
-
-    private void SetTargetEnemyPanel(int index)
-    {
-        foreach (var subPanel in enemySubPanels)
-        {
-            if (subPanel.isOpen && targetSubPanels.Count < index)
-            {
-                targetSubPanels.Add(subPanel);
-                subPanel.SetTarget(true);
-            }
-            else
-            {
-                subPanel.SetTarget(false);
-            }
-        }
-    }
-
-    public void ChangeTargetEnemy(BattleCharacterSubPanel targetSubPanel)
-    {
-        if (currentEquipment == null)
-            return;
-        if (currentEquipment.EquipmentBase.EquipmentType == EquipmentType.Armor)
-            return;
-
-        if (currentEquipment.EquipmentBase.TargetType == TargetType.Individual && targetSubPanel.isOpen)
-        {
-            ClearTarget();
-            targetSubPanels.Add(targetSubPanel);
-            targetSubPanel.SetTarget(true);
-        }
     }
     #endregion
 
@@ -253,61 +132,68 @@ public class EquipPanel : BattleActionPanel
     private bool TryUseEnergy()
     {
         bool isUsed = PlayerController.Instance.UseEnergyCost(currentEquipment.EquipmentBase.EnergyCostList);
-        equipWindow.SetStatusImage(isUsed);
         return isUsed;
     }
 
-    public IEnumerator StopSlot()
+    private IEnumerator StopSlot()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.3f);
         yield return StartCoroutine(slotWindow.StopSlot());
-        TotalAttackCount totalCount = equipmentInfo.GetTotalCount();
-        if (currentEquipment.EquipmentBase.EquipmentType == EquipmentType.Armor)
-        {
-            ExecuteGuardAction(totalCount);
-            yield return new WaitForSeconds(0.5f);
-        }
-        else
-        {
-            ExecuteAttackAction(totalCount);
-            yield return new WaitForSeconds(0.5f);
-        }
-    }
-
-    private void ExecuteGuardAction(TotalAttackCount totalCount)
-    {
-        PlayerController.Instance.TakeGuard(totalCount);
-        fieldPlayer.SetAnimation(AnimationType.Buff);
+        TotalAttack totalAttack = equipmentCard.GetTotalAttack();
+        PlayerController.Instance.TakeTotalAttack(totalAttack.GetPositiveTotalAttack(true));
+        yield return StartCoroutine(ExecuteTargetAttack(totalAttack.GetPositiveTotalAttack(false)));
+        yield return new WaitForSeconds(0.5f);
+        RestartSlot();
+        equipmentCard.ResetCard();
         OnActionEnd?.Invoke();
     }
 
-    private void ExecuteAttackAction(TotalAttackCount totalCount)
+    private IEnumerator ExecuteTargetAttack(TotalAttack totalAttack)
     {
+        if (totalAttack.AttackList.Count == 0 && totalAttack.EnchantList.Count == 0)
+            yield return null; // 攻撃がない場合は処理を終了
+        List<Attack> attacks = totalAttack.AttackList;
         List<BattleCharacterSubPanel> targetSubPanels = new List<BattleCharacterSubPanel>();
 
-        if (enemySubPanel1.isOpen && enemySubPanel1.isTarget) targetSubPanels.Add(enemySubPanel1);
-        if (enemySubPanel2.isOpen && enemySubPanel2.isTarget) targetSubPanels.Add(enemySubPanel2);
-        if (enemySubPanel3.isOpen && enemySubPanel3.isTarget) targetSubPanels.Add(enemySubPanel3);
-
-        fieldPlayer.SetAnimation(AnimationType.Attack);
-        foreach (var subPanel in targetSubPanels)
+        foreach (var attack in attacks)
         {
-            StartCoroutine(ExecuteAttack(subPanel, totalCount));
-        }
-    }
+            TotalAttack singleAttackTotal = new TotalAttack
+            {
+                AttackList = new List<Attack> { attack },
+                EnchantList = totalAttack.EnchantList
+            };
 
-    private IEnumerator ExecuteAttack(BattleCharacterSubPanel characterSubPanel, TotalAttackCount totalCount)
-    {
-        yield return StartCoroutine(characterSubPanel.TakeAttackCoroutine(totalCount));
-        OnActionEnd?.Invoke();
-        RestartSlot();
+            if (attack.AttackType.IsGroupAttack())
+            {
+                // 全体攻撃の場合、開いている全ての敵に攻撃を行う
+                foreach (var targetSubPanel in enemySubPanels)
+                {
+                    if(!targetSubPanel.isOpen) continue;
+                    fieldPlayer.SetAnimation(AnimationType.Attack);
+                    yield return StartCoroutine(targetSubPanel.TakeAttackCoroutine(singleAttackTotal));
+                }
+            }
+            else
+            {
+                // 単体攻撃の場合、最初に開いている敵に攻撃を行う
+                foreach (var enemySubPanel in enemySubPanels)
+                {
+                    if (enemySubPanel.isOpen)
+                    {
+                        fieldPlayer.SetAnimation(AnimationType.Attack);
+                        yield return StartCoroutine(enemySubPanel.TakeAttackCoroutine(singleAttackTotal));
+                        break; // 最初に見つけた開いている敵に攻撃したらループを抜ける
+                    }
+                }
+            }
+        }
     }
 
     public void RestartSlot()
     {
         if (!IsEquipmentValid() || !gameObject.activeInHierarchy)
             return;
-        equipmentInfo.SetInfo(currentEquipment);
+        equipmentCard.ResetCard();
         StartCoroutine(slotWindow.StartSlot());
     }
     #endregion
@@ -328,6 +214,5 @@ public class EquipPanel : BattleActionPanel
         if (!this.gameObject.activeInHierarchy) return;
         // targetSubPanelsからライフアウトした敵のサブパネルを削除
         targetSubPanels.Remove(enemySubPanel);
-        SetTargetting();
     }
 }

@@ -100,21 +100,18 @@ public class BattleCharacterSubPanel : CharacterSubPanel, IDropHandler, IPointer
 
     private void UseConsumable(Consumable consumable)
     {
-        TotalAttackCount totalCount = new TotalAttackCount
+        TotalAttack totalAttack = new TotalAttack
         {
-            TargetType = consumable.ConsumableBase.TargetType,
-            EnergyAttackList = consumable.ConsumableBase.EnergyAttackList,
+            AttackList = new List<Attack> { consumable.ConsumableBase.Attack },
             EnchantList = consumable.ConsumableBase.EnchantList
         };
-        Character.TakeAttack(totalCount);
+        Character.TakeTotalAttack(totalAttack);
         StartCoroutine(UpdateEnergyGauges());
     }
 
     public void BattleStart()
     {
-        UnityEngine.Debug.Log("Battle Start initiated.");
         if (Character == null) return;
-        UnityEngine.Debug.Log($"Character {Character.Base.Name} is starting battle.");
         // ターンバーを開始
         this.gameObject.SetActive(true);
         fixedDisplayFlg = true;
@@ -123,12 +120,12 @@ public class BattleCharacterSubPanel : CharacterSubPanel, IDropHandler, IPointer
         turnBarCoroutine = StartCoroutine(StartTurnBar());
     }
 
-    public IEnumerator TakeAttackCoroutine(TotalAttackCount totalCount)
+    public IEnumerator TakeAttackCoroutine(TotalAttack totalAttack)
     {
         if (Character == null) yield return null;
 
         StartCoroutine(JumpMotion());
-        Character.TakeAttack(totalCount);
+        Character.TakeTotalAttack(totalAttack);
         FieldCharacter.SetAnimation(AnimationType.Damage);
         yield return StartCoroutine(UpdateEnergyGauges());
 
@@ -152,7 +149,6 @@ public class BattleCharacterSubPanel : CharacterSubPanel, IDropHandler, IPointer
 
     public virtual IEnumerator LifeOut()
     {
-        UnityEngine.Debug.Log($"Character {Character.Base.Name} is executing LifeOut.");
         turnBar.gameObject.SetActive(false);
         TalkMessage talkMessage = Character.GetTalkMessageByType(MessageType.Lose);
         FieldCharacter.SetAnimation(AnimationType.Death);

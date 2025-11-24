@@ -18,8 +18,8 @@ public class EquipSlot : MonoBehaviour
             return;
         }
         equipImage.sprite = equipment.Base.Sprite;
-        rarityFrameImage.color = equipment.Base.Rarity.GetRarityColor();
         equipBlock.gameObject.SetActive(true);
+        rarityFrameImage.color = equipment.Base.Rarity.GetRarityColor();
     }
 
     public void ClearEquip()

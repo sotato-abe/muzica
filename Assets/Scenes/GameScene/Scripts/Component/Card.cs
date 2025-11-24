@@ -6,19 +6,23 @@ using TMPro;
 
 public class Card : MonoBehaviour
 {
-    [SerializeField] public TextMeshProUGUI cardName;
-    [SerializeField] RarityIcon questRarity;
-    [SerializeField] public Image cardIcon;
-    [SerializeField] public Image cardTypeColor;
-    [SerializeField] public Image cardImage;
+    [SerializeField] CardTitle cardTitle;
+    [SerializeField] Image cardTypeIcon;
+    [SerializeField] Image cardImage;
 
-    public void SetRarity(RarityType type)
+    public virtual void SetCard(Item item)
     {
-        questRarity.SetRarityIcon(type);
+        this.gameObject.SetActive(true);
+        cardImage.sprite = item.Base.Sprite;
+        cardTypeIcon.color = item.Base.Rarity.GetRarityColor();
+        cardTitle.SetCardTitle(item.Base.Rarity, item.Base.Name);
     }
 
-    public void SetCardType(ItemType type)
+    public virtual void SetCommand(Command command)
     {
-        cardTypeColor.color = type.GetItemTypeColor();
+        this.gameObject.SetActive(true);
+        cardImage.sprite = command.Base.Sprite;
+        cardTypeIcon.color = command.Base.Rarity.GetRarityColor();
+        cardTitle.SetCardTitle(command.Base.Rarity, command.Base.Name);
     }
 }

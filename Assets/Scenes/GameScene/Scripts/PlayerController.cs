@@ -136,20 +136,20 @@ public class PlayerController : MonoBehaviour
         {
             return false;
         }
-        
+
         return PlayerCharacter.Bag >= PlayerCharacter.BagItemList.Count + additionalItems;
     }
 
     public List<Item> GetItemList()
     {
         List<Item> itemList = new List<Item>();
-        
+
         // PlayerCharacterが初期化されていない場合は空のリストを返す
         if (PlayerCharacter == null)
         {
             return itemList;
         }
-        
+
         if (0 < PlayerCharacter.BagItemList?.Count)
         {
             itemList.AddRange(PlayerCharacter.BagItemList);
@@ -205,6 +205,39 @@ public class PlayerController : MonoBehaviour
             return PlayerCharacter.LeftHandEquipment;
         else
             return null; // 他のボディパーツは未実装
+    }
+
+    public void SetEquip(Equipment equipment, int equipIndex)
+    {
+        if (equipment == null) return;
+        if (equipIndex == 0)
+        {
+            if (PlayerCharacter.RightHandEquipment != null)
+            {
+                AddItemToBag(PlayerCharacter.RightHandEquipment.Clone());
+            }
+            PlayerCharacter.RightHandEquipment = equipment.Clone() as Equipment;
+        }
+        else if (equipIndex == 1)
+        {
+            if (PlayerCharacter.LeftHandEquipment != null)
+            {
+                AddItemToBag(PlayerCharacter.LeftHandEquipment.Clone());
+            }
+            PlayerCharacter.LeftHandEquipment = equipment.Clone() as Equipment;
+        }
+    }
+
+    public void RemoveEquip(int equipIndex)
+    {
+        if (equipIndex == 0)
+        {
+            PlayerCharacter.RightHandEquipment = null;
+        }
+        else if (equipIndex == 1)
+        {
+            PlayerCharacter.LeftHandEquipment = null;
+        }
     }
 
     public void SetEquipmentByBodyPart(BodyPartType bodyPartType, Equipment equipment)
@@ -557,29 +590,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void TakeAttack(TotalAttackCount totalCount)
+    public void TakeTotalAttack(TotalAttack totalAttack)
     {
-        PlayerCharacter.TakeAttack(totalCount);
-        UpdatePlayerEnergy();
-    }
+        if (totalAttack.AttackList.Count == 0 && totalAttack.EnchantList.Count == 0)
+            return;
 
-    public void TakeGuard(TotalAttackCount totalCount)
-    {
-        for (int i = 0; i < totalCount.EnergyAttackList.Count; i++)
-        {
-            EnergyCount energyCount = totalCount.EnergyAttackList[i];
-            int guardVal = Mathf.Max(0, (int)(energyCount.val * energyCount.times));
-            if (guardVal <= 0) continue;
-            if (energyCount.type == EnergyType.Life)
-            {
-                PlayerCharacter.UpdateLifeGuard(guardVal);
-            }
-            else if (energyCount.type == EnergyType.Battery)
-            {
-                PlayerCharacter.UpdateBatteryGuard(guardVal);
-            }
-        }
-        fieldPlayer.SetAnimation(AnimationType.Buff);
+        PlayerCharacter.TakeTotalAttack(totalAttack);
         UpdatePlayerEnergy();
     }
 

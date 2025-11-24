@@ -82,30 +82,16 @@ public class EnemyCharacter : Character
     }
 
 
-    public TotalAttackCount EnemyAttack()
+    public TotalAttack EnemyAttack()
     {
         Equipment activeEquipment = GetRandomActiveEquipment();
-        TotalAttackCount totalAttackCount = new TotalAttackCount();
+        TotalAttack totalAttack = new TotalAttack();
         if (activeEquipment != null)
         {
             // アクティブな装備がある場合、攻撃を実行
             // Lifeへのアタックがある時エネミーのColPowerを加算する
-            foreach (EnergyCount original in activeEquipment.EquipmentBase.EnergyAttackList)
-            {
-                EnergyCount attack = new EnergyCount(original);
-                if (attack.type == EnergyType.Life && attack.isRecovery == false)
-                {
-                    attack.val += ColPower;
-                }
-                if (attack.type == EnergyType.Battery && attack.isRecovery == false)
-                {
-                    attack.val += ColTechnique;
-                }
-                totalAttackCount.EnergyAttackList.Add(attack);
-            }
-
-            totalAttackCount.EnchantList.AddRange(activeEquipment.EquipmentBase.EnchantList);
-
+            totalAttack.AttackList.AddRange(activeEquipment.EquipmentBase.AttackList);
+            totalAttack.EnchantList.AddRange(activeEquipment.EquipmentBase.EnchantList);
             //コストを消費
             foreach (EnergyCost energyCost in activeEquipment.EquipmentBase.EnergyCostList)
             {
@@ -127,8 +113,11 @@ public class EnemyCharacter : Character
         {
             Debug.Log("No active equipment available for attack.");
         }
+        TotalAttack positiveTotalAttack = totalAttack.GetPositiveTotalAttack(true);
+        TakeTotalAttack(positiveTotalAttack);
 
-        return totalAttackCount;
+        TotalAttack negativeTotalAttack = totalAttack.GetPositiveTotalAttack(false);
+        return negativeTotalAttack;
     }
 
     private Equipment GetRandomActiveEquipment()
