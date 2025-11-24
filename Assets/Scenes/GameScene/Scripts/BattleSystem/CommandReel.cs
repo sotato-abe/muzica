@@ -87,23 +87,22 @@ public class CommandReel : Window
         }
     }
 
-    public Command StopReel()
+    public IEnumerator StopReel()
     {
         isSpinning = false; // 回転を停止
 
         // スムーズな移動でスロットを中央に配置
-        StartCoroutine(SmoothMoveToCenter());
+        yield return StartCoroutine(SmoothMoveToCenter());
+    }
 
+    public Command GetActiveCommand()
+    {
         CommandImage closestSlot = GetClosestSlotToCenter();
-        if (closestSlot.command == null)
+        if (closestSlot != null)
         {
-            // SoundSystem.Instance.PlaySE(SeType.ReelMiss);
-            return null;
+            return closestSlot.command;
         }
-
-        // スロットのコマンドをリセット
-        // SoundSystem.Instance.PlaySE(SeType.ReelHit);
-        return closestSlot.command;
+        return null;
     }
 
     private IEnumerator SmoothMoveToCenter()

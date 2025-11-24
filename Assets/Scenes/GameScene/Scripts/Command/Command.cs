@@ -26,4 +26,12 @@ public class Command
         copy.isNew = this.isNew;
         return copy;
     }
+
+    public TotalAttack GetTotalAttack()
+    {
+        TotalAttack totalAttack = new TotalAttack();
+        totalAttack.AttackList.AddRange(Base.AttackList);
+        totalAttack.EnchantList.AddRange(Base.EnchantList);
+        return totalAttack;
+    }
 }

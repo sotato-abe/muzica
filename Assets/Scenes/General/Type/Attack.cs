@@ -12,4 +12,19 @@ public class Attack
     public AttackType AttackType { get => attackType; }
     public int Val { get => val; }
     public float Times { get => times; }
+
+    // コピーコンストラクタを追加
+    public Attack(Attack other)
+    {
+        this.attackType = other.attackType;
+        this.val = other.val;
+        this.times = other.times;
+    }
+
+    public void AttackUpdate(Attack attack)
+    {
+        if (attackType != attack.AttackType) return;
+        val += attack.Val;
+        times += attack.Times;
+    }
 }

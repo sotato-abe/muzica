@@ -144,7 +144,7 @@ public class EquipPanel : BattleActionPanel
         yield return StartCoroutine(ExecuteTargetAttack(totalAttack.GetPositiveTotalAttack(false)));
         yield return new WaitForSeconds(0.5f);
         RestartSlot();
-        equipmentCard.ResetCard();
+        equipmentCard.ResetCurrentCard();
         OnActionEnd?.Invoke();
     }
 
@@ -193,7 +193,7 @@ public class EquipPanel : BattleActionPanel
     {
         if (!IsEquipmentValid() || !gameObject.activeInHierarchy)
             return;
-        equipmentCard.ResetCard();
+        equipmentCard.ResetCurrentCard();
         StartCoroutine(slotWindow.StartSlot());
     }
     #endregion

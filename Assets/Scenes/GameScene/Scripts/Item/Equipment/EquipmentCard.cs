@@ -16,6 +16,7 @@ public class EquipmentCard : Card
 
     private Equipment currentEquipment;
 
+    private List<EnergyCost> energyCostList = new List<EnergyCost>();
     private List<Attack> attackList = new List<Attack>();
     private List<Enchant> enchantList = new List<Enchant>();
 
@@ -24,12 +25,41 @@ public class EquipmentCard : Card
         base.SetCard(item);
         Equipment equipment = item as Equipment;
         currentEquipment = equipment;
-        SetCost(equipment.EquipmentBase.EnergyCostList);
-        SetAttacks(equipment.EquipmentBase.AttackList);
-        SetEnchants(equipment.EquipmentBase.EnchantList);
+        ResetCurrentCard();
     }
 
-    private void SetCost(List<EnergyCost> energyCostList)
+
+    public void ResetCurrentCard()
+    {
+        energyCostList.Clear();     
+        attackList.Clear();
+        enchantList.Clear();
+        
+        // ディープコピーを作成して元のEquipmentBaseの値を保護する
+        energyCostList = new List<EnergyCost>();
+        foreach (var cost in currentEquipment.EquipmentBase.EnergyCostList)
+        {
+            energyCostList.Add(new EnergyCost(cost.type, cost.val));
+        }
+        
+        attackList = new List<Attack>();
+        foreach (var attack in currentEquipment.EquipmentBase.AttackList)
+        {
+            attackList.Add(new Attack(attack)); // Attackのコピーコンストラクタを使用
+        }
+        
+        enchantList = new List<Enchant>();
+        foreach (var enchant in currentEquipment.EquipmentBase.EnchantList)
+        {
+            enchantList.Add(new Enchant(enchant)); // Enchantにはコピーコンストラクタが既に存在
+        }
+        
+        SetCost();
+        SetAttacks();
+        SetEnchants();
+    }
+
+    private void SetCost()
     {
         foreach (Transform child in costSpace.transform)
         {
@@ -42,43 +72,62 @@ public class EquipmentCard : Card
         }
     }
 
-    private void SetAttacks(List<Attack> attacks)
+    private void SetAttacks()
     {
         foreach (Transform child in attackSpace.transform)
         {
             Destroy(child.gameObject);
         }
-        attackList.Clear();
-        foreach (var attack in attacks)
+        foreach (var attack in attackList)
         {
             AttackPrefab attackPrefabInstance = Instantiate(attackPrefab, attackSpace.transform);
             attackPrefabInstance.SetAttack(attack);
-            attackList.Add(attack);
         }
     }
 
-    private void SetEnchants(List<Enchant> enchants)
+    private void SetEnchants()
     {
 
         foreach (Transform child in enchantSpace.transform)
         {
             Destroy(child.gameObject);
         }
-        enchantList.Clear();
-        foreach (var enchant in enchants)
+        foreach (var enchant in enchantList)
         {
             EnchantPrefab newEnchant = Instantiate(enchantPrefab, enchantSpace.transform);
             newEnchant.SetEnchant(enchant);
-            enchantList.Add(enchant);
         }
     }
 
     public void CommandUpdate(Command command)
     {
-        // TODO : コマンドによる強化を実装
+        if (command == null) return;
         // 一致するAttackがあったらカウントを増やす
         // 一致するEnchantがあったらカウントを増やす
+        TotalAttack totalAttack = command.GetTotalAttack();
+        foreach (var totalAttackItem in totalAttack.AttackList)
+        {
+            foreach (var attack in attackList)
+            {
+                if (attack.AttackType == totalAttackItem.AttackType)
+                {
+                    attack.AttackUpdate(totalAttackItem);
+                }
+            }
+        }
 
+        foreach (var totalEnchantItem in totalAttack.EnchantList)
+        {
+            foreach (var enchant in enchantList)
+            {
+                if (enchant.Type == totalEnchantItem.Type)
+                {
+                    enchant.EnchantUpdate(totalEnchantItem);
+                }
+            }
+        }
+        SetAttacks();
+        SetEnchants();
     }
 
     public TotalAttack GetTotalAttack()
@@ -87,22 +136,5 @@ public class EquipmentCard : Card
         totalAttack.AttackList = attackList;
         totalAttack.EnchantList = enchantList;
         return totalAttack;
-    }
-
-    public void ResetCard()
-    {
-        SetCost(currentEquipment.EquipmentBase.EnergyCostList);
-        SetAttacks(currentEquipment.EquipmentBase.AttackList);
-        SetEnchants(currentEquipment.EquipmentBase.EnchantList);
-    }
-
-    public List<Attack> GetAttackList()
-    {
-        return currentEquipment.EquipmentBase.AttackList;
-    }
-
-    public List<Enchant> GetEnchantList()
-    {
-        return currentEquipment.EquipmentBase.EnchantList;
     }
 }

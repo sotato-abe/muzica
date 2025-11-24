@@ -25,9 +25,15 @@ public class Enchant
         Val = other.Val;
     }
 
-    public void IncreaseEnchant(int amount)
+    public void EnchantUpdate(Enchant enchant)
     {
-        Val += amount;
+        if (type != enchant.Type) return;
+        val += enchant.Val;
+    }
+
+    public bool Reuduce1Enchant()
+    {
+        return ReduceEnchant(1);
     }
 
     public bool ReduceEnchant(int amount)

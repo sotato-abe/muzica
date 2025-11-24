@@ -25,10 +25,13 @@ public class SlotWindow : Window
 
     public IEnumerator StopSlot()
     {
-        equipmentCard.CommandUpdate(commandReel1.StopReel());
+        yield return StartCoroutine(commandReel1.StopReel());
+        equipmentCard.CommandUpdate(commandReel1.GetActiveCommand());
         yield return new WaitForSeconds(stopInterval);
-        equipmentCard.CommandUpdate(commandReel2.StopReel());
+        yield return StartCoroutine(commandReel2.StopReel());
+        equipmentCard.CommandUpdate(commandReel2.GetActiveCommand());
         yield return new WaitForSeconds(stopInterval);
-        equipmentCard.CommandUpdate(commandReel3.StopReel());
+        yield return StartCoroutine(commandReel3.StopReel());
+        equipmentCard.CommandUpdate(commandReel3.GetActiveCommand());
     }
 }
