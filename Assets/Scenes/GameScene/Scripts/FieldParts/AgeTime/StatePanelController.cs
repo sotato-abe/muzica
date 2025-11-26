@@ -20,7 +20,7 @@ public class StatePanelController : MonoBehaviour
         if (state == TimeState.Stop)
         {
             statePanel.color = stopColor; // 修正箇所
-            stopPanel.GetComponent<Image>().color = stopColor;
+            stopPanel.GetComponent<Image>().color = Color.white;
             playPanel.GetComponent<Image>().color = new Color32(0, 0, 0, 0);
             fastPanel.GetComponent<Image>().color = new Color32(0, 0, 0, 0);
             stateText.text = "STOP";
@@ -29,7 +29,7 @@ public class StatePanelController : MonoBehaviour
         {
             statePanel.color = liveColor; // 修正箇所
             stopPanel.GetComponent<Image>().color = new Color32(0, 0, 0, 0);
-            playPanel.GetComponent<Image>().color = liveColor;
+            playPanel.GetComponent<Image>().color = Color.white;
             fastPanel.GetComponent<Image>().color = new Color32(0, 0, 0, 0);
             stateText.text = "LIVE";
         }
@@ -38,7 +38,7 @@ public class StatePanelController : MonoBehaviour
             statePanel.color = fastColor; // 修正箇所
             stopPanel.GetComponent<Image>().color = new Color32(0, 0, 0, 0);
             playPanel.GetComponent<Image>().color = new Color32(0, 0, 0, 0);
-            fastPanel.GetComponent<Image>().color = fastColor;
+            fastPanel.GetComponent<Image>().color = Color.white;
             stateText.text = "FAST";
         }
     }
