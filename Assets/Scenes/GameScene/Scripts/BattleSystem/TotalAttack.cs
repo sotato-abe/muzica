@@ -82,5 +82,17 @@ public static class TotalAttackExtensions
         }
         return false;
     }
+
+    public static bool isPositiveAttack(this TotalAttack totalAttack)
+    {
+        foreach (var attack in totalAttack.AttackList)
+        {
+            if (!attack.AttackType.AssigneeSelf())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 }
 

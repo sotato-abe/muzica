@@ -140,6 +140,10 @@ public class EquipPanel : BattleActionPanel
         yield return new WaitForSeconds(1.3f);
         yield return StartCoroutine(slotWindow.StopSlot());
         TotalAttack totalAttack = equipmentCard.GetTotalAttack();
+        if (totalAttack.isPositiveAttack())
+        {
+            SoundSystem.Instance.PlaySE(SeType.Recovery);
+        }
         PlayerController.Instance.TakeTotalAttack(totalAttack.GetPositiveTotalAttack(true));
         yield return StartCoroutine(ExecuteTargetAttack(totalAttack.GetPositiveTotalAttack(false)));
         yield return new WaitForSeconds(0.5f);
@@ -168,7 +172,8 @@ public class EquipPanel : BattleActionPanel
                 // 全体攻撃の場合、開いている全ての敵に攻撃を行う
                 foreach (var targetSubPanel in enemySubPanels)
                 {
-                    if(!targetSubPanel.isOpen) continue;
+                    if (!targetSubPanel.isOpen) continue;
+                    SoundSystem.Instance.PlaySE(SeType.Damage);
                     fieldPlayer.SetAnimation(AnimationType.Attack);
                     yield return StartCoroutine(targetSubPanel.TakeAttackCoroutine(singleAttackTotal));
                 }
@@ -180,6 +185,7 @@ public class EquipPanel : BattleActionPanel
                 {
                     if (enemySubPanel.isOpen)
                     {
+                        SoundSystem.Instance.PlaySE(SeType.Damage);
                         fieldPlayer.SetAnimation(AnimationType.Attack);
                         yield return StartCoroutine(enemySubPanel.TakeAttackCoroutine(singleAttackTotal));
                         break; // 最初に見つけた開いている敵に攻撃したらループを抜ける

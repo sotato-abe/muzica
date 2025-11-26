@@ -11,6 +11,7 @@ public class StatusLayer : MonoBehaviour
     [SerializeField] EnergyStatusBar batteryStatusBar;
     [SerializeField] StatusText levelText;
     [SerializeField] TextMeshProUGUI powerText;
+    [SerializeField] TextMeshProUGUI techniqueText;
     [SerializeField] TextMeshProUGUI defenseText;
     [SerializeField] TextMeshProUGUI speedText;
     [SerializeField] TextMeshProUGUI luckText;
@@ -26,6 +27,7 @@ public class StatusLayer : MonoBehaviour
 
         levelText.SetText(character.Level.ToString());
         powerText.text = character.Power.ToString();
+        techniqueText.text = character.Technique.ToString();
         defenseText.text = character.Defense.ToString();
         speedText.text = character.Speed.ToString();
         luckText.text = character.Luck.ToString();

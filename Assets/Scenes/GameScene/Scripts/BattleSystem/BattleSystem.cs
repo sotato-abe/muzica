@@ -162,6 +162,7 @@ public class BattleSystem : MonoBehaviour
     private IEnumerator EnemyAttack(TotalAttack totalAttack)
     {
         fieldPlayer.SetAnimation(AnimationType.Damage);
+        SoundSystem.Instance.PlaySE(SeType.Damage);
         yield return StartCoroutine(playerSubPanel.TakeAttackCoroutine(totalAttack));
         OnActionEnd(); // アクション終了イベントを呼び出す
     }

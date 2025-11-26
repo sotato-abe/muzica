@@ -105,6 +105,7 @@ public class BattleCharacterSubPanel : CharacterSubPanel, IDropHandler, IPointer
             AttackList = new List<Attack> { consumable.ConsumableBase.Attack },
             EnchantList = consumable.ConsumableBase.EnchantList
         };
+        SoundSystem.Instance.PlaySE(SeType.Recovery);
         Character.TakeTotalAttack(totalAttack);
         StartCoroutine(UpdateEnergyGauges());
     }

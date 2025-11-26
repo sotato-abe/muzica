@@ -210,6 +210,7 @@ public class PlayerController : MonoBehaviour
     public void SetEquip(Equipment equipment, int equipIndex)
     {
         if (equipment == null) return;
+        SoundSystem.Instance.PlaySE(SeType.Equip);
         if (equipIndex == 0)
         {
             if (PlayerCharacter.RightHandEquipment != null)

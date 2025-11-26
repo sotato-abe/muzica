@@ -19,4 +19,5 @@ public enum SeType
     ReelHit, // スロットリールヒット
     ReelMiss, // スロットリールミス
     TimeSlip, // タイムスリップ
+    Equip, // 装備
 }

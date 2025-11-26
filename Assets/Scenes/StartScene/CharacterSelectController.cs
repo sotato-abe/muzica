@@ -13,6 +13,9 @@ public class CharacterSelectController : MonoBehaviour
     public delegate void CharacterSelectDelegate(int index);
     public event CharacterSelectDelegate OnCharacterSelect;
 
+    public delegate void StartGameDelegate();
+    public event StartGameDelegate OnStartGame;
+
     private List<CharacterSelectButton> characterSelectButtons = new List<CharacterSelectButton>();
     private Character selectedCharacter;
 
@@ -29,6 +32,12 @@ public class CharacterSelectController : MonoBehaviour
     private void Update()
     {
         if (!isActive) return;
+
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            SoundSystem.Instance.PlaySE(SeType.Execute);
+            OnStartGame?.Invoke();
+        }
 
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
