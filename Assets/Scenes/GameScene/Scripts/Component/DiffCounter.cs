@@ -14,6 +14,12 @@ public class DiffCounter : MonoBehaviour
 
     Color startColor = Color.white;
 
+    // 自身がgameobject.activeInHierarchyでなくなった時にDestroyする
+    private void OnDisable()
+    {
+        Destroy(this.gameObject);
+    }
+
     public void SetDiffCounter(EnergyType type, int value)
     {
         switch (type)

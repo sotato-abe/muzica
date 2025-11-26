@@ -11,8 +11,8 @@ public class WorldMapPanel : SlidePanel
     [SerializeField] Title fieldTitle;
     [SerializeField] TextMeshProUGUI fieldDescription;
 
-    float originalHeight = 500f;
-    float smallHeight = 350f;
+    float originalHeight = 550f;
+    float smallHeight = 400f;
     float duration = 0.2f;
 
     public void SetFieldData(FieldBase fieldBase)

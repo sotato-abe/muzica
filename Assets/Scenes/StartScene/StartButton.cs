@@ -33,10 +33,12 @@ public class StartButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void OnPointerEnter(PointerEventData eventData)
     {
         startIcon.SetActive(true);
+        text.color = Color.white;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         startIcon.SetActive(false);
+        text.color = Color.black;
     }
 }

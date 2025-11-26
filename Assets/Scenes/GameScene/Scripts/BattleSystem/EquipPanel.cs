@@ -119,6 +119,7 @@ public class EquipPanel : BattleActionPanel
 
     public void ExecuteEquipAction()
     {
+        if (!gameObject.activeInHierarchy) return;
         if (!canExecuteActionFlg) return;
         if (!IsEquipmentValid()) return;
         if (!TryUseEnergy()) return;
@@ -139,6 +140,7 @@ public class EquipPanel : BattleActionPanel
     {
         yield return new WaitForSeconds(1.3f);
         yield return StartCoroutine(slotWindow.StopSlot());
+        yield return new WaitForSeconds(0.5f);
         TotalAttack totalAttack = equipmentCard.GetTotalAttack();
         if (totalAttack.isPositiveAttack())
         {
