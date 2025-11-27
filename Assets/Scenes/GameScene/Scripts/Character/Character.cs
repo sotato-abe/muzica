@@ -310,6 +310,7 @@ public class Character
     {
         foreach (Enchant enchant in enchantList)
         {
+            Debug.Log("Applying enchant: " + enchant.Type + " with value " + enchant.Val);
             Enchant existingEnchant = EnchantList.Find(e => e.Type == enchant.Type);
             if (existingEnchant != null)
             {

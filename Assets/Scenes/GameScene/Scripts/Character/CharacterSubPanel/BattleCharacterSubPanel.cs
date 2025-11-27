@@ -14,6 +14,8 @@ public class BattleCharacterSubPanel : CharacterSubPanel, IDropHandler, IPointer
     [SerializeField] public EnergyGauge energyGauge;
     [SerializeField] public Image turnBar;
     [SerializeField] Image targetImage;
+    [SerializeField] GameObject enchantSpace;
+    [SerializeField] EnchantPrefab enchantBlockPrefab;
 
     public FieldCharacter FieldCharacter { get; private set; }
     bool inProgress = false; // Panelがアクティブかどうか
@@ -49,6 +51,7 @@ public class BattleCharacterSubPanel : CharacterSubPanel, IDropHandler, IPointer
         SetEnergy();
         SetMessageByType(MessageType.Encount);
         BattleStart();
+        UpdateEnchantsDisplay();
     }
 
     public void SetEnergy()
@@ -163,6 +166,7 @@ public class BattleCharacterSubPanel : CharacterSubPanel, IDropHandler, IPointer
 
     public IEnumerator UpdateEnergyGauges()
     {
+        UpdateEnchantsDisplay();
         // 各ゲージの更新コルーチンを並行実行
         Coroutine lifeCoroutine = StartCoroutine(energyGauge.SetLifeValueCoroutine(Character.Life, Character.MaxLife, Character.LifeGuard));
         Coroutine batteryCoroutine = StartCoroutine(energyGauge.SetBatteryValueCoroutine(Character.Battery, Character.MaxBattery, Character.BatteryGuard));
@@ -172,6 +176,22 @@ public class BattleCharacterSubPanel : CharacterSubPanel, IDropHandler, IPointer
         yield return lifeCoroutine;
         yield return batteryCoroutine;
         yield return soulCoroutine;
+    }
+
+    private void UpdateEnchantsDisplay()
+    {
+        // 既存のエンチャント表示をクリア
+        foreach (Transform child in enchantSpace.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // 現在のエンチャントを表示
+        foreach (var enchant in Character.EnchantList)
+        {
+            EnchantPrefab newEnchant = Instantiate(enchantBlockPrefab, enchantSpace.transform);
+            newEnchant.SetEnchant(enchant);
+        }
     }
 
     private IEnumerator StartTurnBar()
