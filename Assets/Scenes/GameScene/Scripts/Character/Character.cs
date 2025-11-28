@@ -223,8 +223,8 @@ public class Character
 
     public void TakeTotalAttack(TotalAttack totalAttack)
     {
-        TakeAttackList(totalAttack.AttackList);
         TakeEnchantList(totalAttack.EnchantList);
+        TakeAttackList(totalAttack.AttackList);
     }
 
     public void TakeAttackList(List<Attack> attackList)
