@@ -194,6 +194,18 @@ public class BattleCharacterSubPanel : CharacterSubPanel, IDropHandler, IPointer
         }
     }
 
+    public void ReduceEnchant()
+    {
+        Character.ReduceEnchant();
+        UpdateEnchantsDisplay();
+    }
+
+    public void ClearEnchants()
+    {
+        Character.EnchantList.Clear();
+        UpdateEnchantsDisplay();
+    }
+
     private IEnumerator StartTurnBar()
     {
         UnityEngine.Debug.Log("Starting turn bar...");

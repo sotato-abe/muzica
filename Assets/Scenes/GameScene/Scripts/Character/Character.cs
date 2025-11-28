@@ -60,6 +60,17 @@ public class Character
     public int BatteryGuard { get; set; }
     public List<Enchant> EnchantList { get; set; }
 
+    private int DiffLife = 0;
+    private int DiffBattery = 0;
+    private int DiffPower = 0;
+    private int DiffTechnique = 0;
+    private int DiffDefense = 0;
+    private int DiffSpeed = 0;
+    private int DiffLuck = 0;
+    private int DiffMemory = 0;
+    private int DiffStorage = 0;
+    private int DiffPocket = 0;
+
     // message
     public delegate void TalkMessageDelegate(MessageType message);
     public event TalkMessageDelegate OnTalkMessage;
@@ -194,19 +205,20 @@ public class Character
 
     public void ColStatus()
     {
-        int DiffLife = 0;
-        int DiffBattery = 0;
-        int DiffPower = 0;
-        int DiffTechnique = 0;
-        int DiffDefense = 0;
-        int DiffSpeed = 0;
-        int DiffLuck = 0;
-        int DiffMemory = 0;
-        int DiffStorage = 0;
-        int DiffPocket = 0;
+        DiffLife = 0;
+        DiffBattery = 0;
+        DiffPower = 0;
+        DiffTechnique = 0;
+        DiffDefense = 0;
+        DiffSpeed = 0;
+        DiffLuck = 0;
+        DiffMemory = 0;
+        DiffStorage = 0;
+        DiffPocket = 0;
+
+        EnchantActivation();
 
         // TODO Enchantによる強化を追加
-
         ColLife = MaxLife + DiffLife;
         Life = Mathf.Min(Life, ColLife); // LifeがMaxLifeを超えないようにする
         ColBattery = MaxBattery + DiffBattery;
@@ -219,6 +231,176 @@ public class Character
         ColMemory = Memory + DiffMemory;
         ColStorage = Storage + DiffStorage;
         ColPocket = Pocket + DiffPocket;
+    }
+
+    private void EnchantActivation()
+    {
+        if( EnchantList == null || EnchantList.Count == 0) return;
+
+        List<Enchant> PositiveEnchantList = new List<Enchant>();
+        List<Enchant> NegativeEnchantList = new List<Enchant>();
+        foreach (Enchant enchant in EnchantList)
+        {
+            if (enchant.Type.AssigneeSelf())
+            {
+                PositiveEnchantList.Add(enchant);
+            }
+            else
+            {
+                NegativeEnchantList.Add(enchant);
+            }
+        }
+        if (PositiveEnchantList.Count > 0)
+            PositiveEnchantActivation(PositiveEnchantList);
+        if (NegativeEnchantList.Count > 0)
+            NegativeEnchantActivation(NegativeEnchantList);
+    }
+
+    private void PositiveEnchantActivation(List<Enchant> PositiveEnchantList)
+    {
+        foreach (Enchant enchant in PositiveEnchantList)
+        {
+            switch (enchant.Type)
+            {
+                case EnchantType.Acceleration:
+                    DiffSpeed += enchant.Val;
+                    break;
+                case EnchantType.Lucky:
+                    DiffLuck += enchant.Val;
+                    break;
+                case EnchantType.Gaze:
+                    // 敵のステータスを表示する処理
+                    break;
+                case EnchantType.Analysis:
+                    // 敵の詳細情報を表示する処理
+                    break;
+                case EnchantType.Power:
+                    DiffPower += enchant.Val;
+                    break;
+                case EnchantType.Adrenalin:
+                    // アタック時に倍率を10％上げる処理
+                    break;
+                case EnchantType.Guard:
+                    LifeGuard += enchant.Val;
+                    // ガード時に基本値を１上げる処理
+                    break;
+                case EnchantType.Solid:
+                    LifeGuard += (int)(LifeGuard * (enchant.Val * 2) / 100);
+                    // ガード時に倍率を2%上げる処理
+                    break;
+                case EnchantType.Curing:
+                    // TODO :アタックを受ける時、ダメージを半分にする
+                    break;
+                case EnchantType.Splinter:
+                    // TODO :アタックを受ける時、攻撃者にスタック分のLIFEダメージを与える
+                    break;
+                case EnchantType.Reflection:
+                    // TODO :アタックを受ける時、攻撃者にスタック分の
+                    break;
+                case EnchantType.Camouflage:
+                    // TODO :アタックを受ける時、当たり判定をスタック＊
+                    break;
+                case EnchantType.Clear:
+                    // ターン開始時に自身に付与されているデバフをランダムで一つ解除する、
+                    List<Enchant> negativeEnchants = EnchantList.FindAll(e => !e.Type.AssigneeSelf());
+                    int clearCount = enchant.Val;
+                    if (negativeEnchants.Count == 0) break;
+                    for (int i = 0; i < clearCount; i++)
+                    {
+                        int randomIndex = Random.Range(0, negativeEnchants.Count);
+                        Enchant enchantToRemove = negativeEnchants[randomIndex];
+                        EnchantList.Remove(enchantToRemove);
+                    }
+                    break;
+                default:
+                    Debug.LogWarning("未実装のポジティブエンチャントです: " + enchant.Type);
+                    break;
+            }
+        }
+    }
+
+    private void NegativeEnchantActivation(List<Enchant> NegativeEnchantList)
+    {
+        foreach (Enchant enchant in NegativeEnchantList)
+        {
+            switch (enchant.Type)
+            {
+                case EnchantType.Slow:
+                    // Speedを下げる処理
+                    DiffSpeed -= enchant.Val;
+                    break;
+                case EnchantType.UnLucky:
+                    // Luckを下げる処理
+                    DiffLuck -= enchant.Val;
+                    break;
+                case EnchantType.Fatigue:
+                    // SOULを回復させない処理
+                    break;
+                case EnchantType.Lock:
+                    // TODO : ランダムでスロットが１列実行不能になる処理
+                    break;
+                case EnchantType.Cipher:
+                    // TODO : 装備のエナジーコストが20％アップする処理
+                    break;
+                case EnchantType.Bug:
+                    // TODO : コマンド発動時にスタック分BTRYダメージを受ける処理
+                    break;
+                case EnchantType.Atrophy:
+                    // アタック時に基本値を１下げる処理
+                    DiffPower -= enchant.Val;
+                    break;
+                case EnchantType.Blind:
+                    // TODO : アタック時に成功確率をスタック＊２％下げる処理
+                    break;
+                case EnchantType.Paralysis:
+                    // TODO :アタック時にターゲット指定をランダムにする処理
+                    break;
+                case EnchantType.Crack:
+                    // ガード時に基本値を１下げる処理
+                    LifeGuard -= enchant.Val;
+                    break;
+                case EnchantType.Poison:
+                    // ターン開始時にスタック分のLIFEダメージを受ける処理
+                    Life -= enchant.Val;
+                    break;
+                case EnchantType.Leakage:
+                    // ターン開始時にスタック分のBTRYダメージを受ける処理
+                    Battery -= enchant.Val;
+                    break;
+                case EnchantType.Hurt:
+                    // ターン開始時にスタック分のLIFEダメージを受ける処理
+                    Life -= enchant.Val;
+                    break;
+                case EnchantType.Sleep:
+                    // ターン開始時にスタック分の確率で発動しターンがスキップされる処理
+                    break;
+                default:
+                    Debug.LogWarning("未実装のネガティブエンチャントです: " + enchant.Type);
+                    break;
+            }
+        }
+    }
+
+    public void ReduceEnchant()
+    {
+        List<Enchant> enchantsToRemove = new List<Enchant>();
+        foreach (Enchant enchant in EnchantList)
+        {
+            bool stillExists = enchant.Reuduce1Enchant();
+            if (!stillExists)
+            {
+                enchantsToRemove.Add(enchant);
+            }
+        }
+        foreach (Enchant enchant in enchantsToRemove)
+        {
+            EnchantList.Remove(enchant);
+        }
+    }
+
+    public void EnchantClear()
+    {
+        EnchantList.Clear();
     }
 
     public void TakeTotalAttack(TotalAttack totalAttack)

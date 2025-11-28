@@ -33,7 +33,7 @@ public class BattleSystem : MonoBehaviour
     private void Awake()
     {
         battleActionBoard.OnBattleEnd += BattleEnd; // リザーブアクションボードの終了イベントを登録
-        battleActionBoard.OnActionEnd += OnActionEnd; // リザーブアクションボードのアクション結果イベントを登録
+        battleActionBoard.OnActionEnd += EndPlayerActionTurn; // リザーブアクションボードのアクション結果イベントを登録
         playerSubPanel.OnLifeOutAction += LifeOutPlayer; // プレイヤーのサブパネルのライフアウトイベントを登録
         enemySubPanel1.OnLifeOutAction += LifeOutEnemy; // 敵のサブパネルのライフアウトイベントを登録
         enemySubPanel2.OnLifeOutAction += LifeOutEnemy; // 敵のサブパネルのライフアウトイベントを登録
@@ -148,6 +148,12 @@ public class BattleSystem : MonoBehaviour
         battleActionBoard.ChangeExecuteActionFlg(true); // アクションを実行可能にする
     }
 
+    public void EndPlayerActionTurn()
+    {
+        playerSubPanel.ReduceEnchant(); // ターンバーを再開
+        ReStartTurnBar();
+    }
+
     // TODO：敵の攻撃を実装する
     public void ActiveEnemyTurn(BattleCharacterSubPanel enemySubPanel)
     {
@@ -156,6 +162,7 @@ public class BattleSystem : MonoBehaviour
         TotalAttack totalAttack = enemyCharacter.EnemyAttack();
         StartCoroutine(enemySubPanel.UpdateEnergyGauges());
         StartCoroutine(EnemyAttack(totalAttack)); // ターンを再開
+        enemySubPanel.ReduceEnchant();
     }
 
     // 仮の敵ターン
@@ -164,7 +171,7 @@ public class BattleSystem : MonoBehaviour
         fieldPlayer.SetAnimation(AnimationType.Damage);
         SoundSystem.Instance.PlaySE(SeType.Damage);
         yield return StartCoroutine(playerSubPanel.TakeAttackCoroutine(totalAttack));
-        OnActionEnd(); // アクション終了イベントを呼び出す
+        ReStartTurnBar(); // アクション終了イベントを呼び出す
     }
 
     private void StopAllCharacterTurnBar()
@@ -176,7 +183,7 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    private void OnActionEnd()
+    private void ReStartTurnBar()
     {
         playerSubPanel.ReStartTurnBar();
         foreach (EnemySubPanel enemySubPanel in enemySubPanels)
@@ -242,6 +249,7 @@ public class BattleSystem : MonoBehaviour
     public void BattleEnd()
     {
         int completed = 0;
+        playerSubPanel.ClearEnchants();
         if (fieldEnemies != null)
         {
             foreach (FieldCharacter fieldEnemy in fieldEnemies)
