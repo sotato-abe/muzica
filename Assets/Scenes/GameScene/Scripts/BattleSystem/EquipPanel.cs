@@ -40,7 +40,6 @@ public class EquipPanel : BattleActionPanel
     [Header("Equipment Settings")]
     public BodyPartType bodyPartType = BodyPartType.None;
     public int equipmentNum = 0;
-    private List<EnergyCount> energyAttackList;
     private TargetType targetType;
     private List<EnergyCost> energyCostList;
     private List<Enchant> enchantList;

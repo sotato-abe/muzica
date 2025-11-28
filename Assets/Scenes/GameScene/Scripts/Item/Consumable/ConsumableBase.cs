@@ -14,12 +14,4 @@ public class ConsumableBase : ItemBase
     public int UsableCount { get => usableCount; }
     public Attack Attack { get => attack; }   
     public List<Enchant> EnchantList { get => enchantList; }
-
-    // 削除予定
-    [SerializeField] TargetType targetType;
-    [SerializeField] ConsumableType consumableType;
-    [SerializeField] List<EnergyCount> energyAttackList;
-    public TargetType TargetType { get => targetType; }
-    public ConsumableType ConsumableType { get => consumableType; }
-    public List<EnergyCount> EnergyAttackList { get => energyAttackList; }
 }
