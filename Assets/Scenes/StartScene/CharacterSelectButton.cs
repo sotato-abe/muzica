@@ -24,9 +24,9 @@ public class CharacterSelectButton : MonoBehaviour, IPointerEnterHandler, IPoint
 
     float resizeDuration = 0.1f;
 
-    private void Start()
+    private void Awake()
     {
-        frameImage.color = inactiveColor;
+        frameImage.gameObject.SetActive(false);
     }
 
     public void SetCharacter(int index, Sprite characterSprite)
@@ -57,12 +57,12 @@ public class CharacterSelectButton : MonoBehaviour, IPointerEnterHandler, IPoint
     {
         if (isSelected)
         {
-            frameImage.color = activeColor;
+            frameImage.gameObject.SetActive(true);
             StartCoroutine(SmoothResize(buttonTransform, new Vector2(width, width)));
         }
         else
         {
-            frameImage.color = inactiveColor;
+            frameImage.gameObject.SetActive(false);
             StartCoroutine(SmoothResize(buttonTransform, new Vector2(width, defaultHeight)));
         }
     }
