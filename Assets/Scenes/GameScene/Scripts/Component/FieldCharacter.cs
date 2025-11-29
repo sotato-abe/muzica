@@ -24,7 +24,6 @@ public class FieldCharacter : MonoBehaviour
 
     public virtual void SetAnimation(AnimationType animationType)
     {
-        UnityEngine.Debug.Log($"Setting animation: {animationType}");
         switch (animationType)
         {
             case AnimationType.Attack:

@@ -160,7 +160,6 @@ public class BattleSystem : MonoBehaviour
         StopAllCharacterTurnBar();
         EnemyCharacter enemyCharacter = enemySubPanel.Character as EnemyCharacter;
         TotalAttack totalAttack = enemyCharacter.EnemyAttack();
-        StartCoroutine(enemySubPanel.UpdateEnergyGauges());
         StartCoroutine(EnemyAttack(totalAttack)); // ターンを再開
         enemySubPanel.ReduceEnchant();
     }

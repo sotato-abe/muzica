@@ -46,6 +46,9 @@ public class BattleCharacterSubPanel : CharacterSubPanel, IDropHandler, IPointer
     public override void SetCharacter(Character character)
     {
         base.SetCharacter(character);
+        Character.OnLifeGuargeChange += UpdateLifeGauge;
+        Character.OnBatteryGuargeChange += UpdateBatteryGauge;
+        Character.OnSoulGuargeChange += UpdateSoulGauge;
         energyGauge.gameObject.SetActive(true);
         turnBar.gameObject.SetActive(true);
         SetEnergy();
@@ -110,7 +113,7 @@ public class BattleCharacterSubPanel : CharacterSubPanel, IDropHandler, IPointer
         };
         SoundSystem.Instance.PlaySE(SeType.Recovery);
         Character.TakeTotalAttack(totalAttack);
-        StartCoroutine(UpdateEnergyGauges());
+        StartCoroutine(SetUpEnergyGauges());
     }
 
     public void BattleStart()
@@ -131,7 +134,6 @@ public class BattleCharacterSubPanel : CharacterSubPanel, IDropHandler, IPointer
         StartCoroutine(JumpMotion());
         Character.TakeTotalAttack(totalAttack);
         FieldCharacter.SetAnimation(AnimationType.Damage);
-        yield return StartCoroutine(UpdateEnergyGauges());
 
         if (Character.Life <= 0)
         {
@@ -164,7 +166,22 @@ public class BattleCharacterSubPanel : CharacterSubPanel, IDropHandler, IPointer
         yield return null;
     }
 
-    public IEnumerator UpdateEnergyGauges()
+    private void UpdateLifeGauge(int value, int guard, int takeValue)
+    {
+        energyGauge.UpdateLifeValueCoroutine(value, guard, takeValue);
+    }
+
+    private void UpdateBatteryGauge(int value, int guard, int takeValue)
+    {
+        energyGauge.UpdateBatteryValueCoroutine(value, guard, takeValue);
+    }
+
+    private void UpdateSoulGauge(int value, int guard, int takeValue)
+    {
+        energyGauge.UpdateSoulValueCoroutine(value, guard, takeValue);
+    }
+
+    public IEnumerator SetUpEnergyGauges()
     {
         UpdateEnchantsDisplay();
         // 各ゲージの更新コルーチンを並行実行
@@ -208,7 +225,6 @@ public class BattleCharacterSubPanel : CharacterSubPanel, IDropHandler, IPointer
 
     private IEnumerator StartTurnBar()
     {
-        UnityEngine.Debug.Log("Starting turn bar...");
         if (Character == null)
         {
             UnityEngine.Debug.LogWarning("キャラクターが設定されていません。");

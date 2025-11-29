@@ -498,9 +498,9 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// プレイヤーエネルギーを更新
     /// </summary>
-    public void UpdatePlayerEnergy()
+    public void SetUpPlayerEnergy()
     {
-        StartCoroutine(playerSubPanel.UpdateEnergyGauges());
+        StartCoroutine(playerSubPanel.SetUpEnergyGauges());
     }
     #endregion
 
@@ -545,7 +545,7 @@ public class PlayerController : MonoBehaviour
             CalculationEnergy(energyCost.type, energyCost.val);
         }
 
-        UpdatePlayerEnergy();
+        // UpdatePlayerEnergy();
         return true;
     }
 
@@ -597,14 +597,14 @@ public class PlayerController : MonoBehaviour
             return;
 
         PlayerCharacter.TakeTotalAttack(totalAttack);
-        UpdatePlayerEnergy();
+        // UpdatePlayerEnergy();
     }
 
     public void ClearGuard()
     {
         PlayerCharacter.LifeGuard = 0;
         PlayerCharacter.BatteryGuard = 0;
-        UpdatePlayerEnergy();
+        SetUpPlayerEnergy();
     }
     #endregion
 

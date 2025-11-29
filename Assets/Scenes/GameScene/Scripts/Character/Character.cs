@@ -75,6 +75,14 @@ public class Character
     public delegate void TalkMessageDelegate(MessageType message);
     public event TalkMessageDelegate OnTalkMessage;
 
+    // TODO BattleCharacter に継承させる
+    public delegate void LifeGuargeDelegate(int value, int guard, int takeValue);
+    public event LifeGuargeDelegate OnLifeGuargeChange;
+    public delegate void BatteryGuargeDelegate(int value, int guard, int takeValue);
+    public event BatteryGuargeDelegate OnBatteryGuargeChange;
+    public delegate void SoulGuargeDelegate(int value, int guard, int takeValue);
+    public event SoulGuargeDelegate OnSoulGuargeChange;
+
     public Character(CharacterBase baseData)
     {
         _base = baseData;
@@ -235,7 +243,7 @@ public class Character
 
     private void EnchantActivation()
     {
-        if( EnchantList == null || EnchantList.Count == 0) return;
+        if (EnchantList == null || EnchantList.Count == 0) return;
 
         List<Enchant> PositiveEnchantList = new List<Enchant>();
         List<Enchant> NegativeEnchantList = new List<Enchant>();
@@ -417,18 +425,24 @@ public class Character
             {
                 case AttackType.SoloLifeUp:
                 case AttackType.GroupLifeUp:
-                    Life += Mathf.FloorToInt(attack.Val * attack.Times);
+                    int takeLifeAttackValue = Mathf.FloorToInt(attack.Val * attack.Times);
+                    Life += takeLifeAttackValue;
                     Life = Mathf.Min(Life, ColLife);
+                    OnLifeGuargeChange?.Invoke(Life, LifeGuard, takeLifeAttackValue);
                     break;
                 case AttackType.SoloBatteryUp:
                 case AttackType.GroupBatteryUp:
-                    Battery += Mathf.FloorToInt(attack.Val * attack.Times);
+                    int takeBatteryAttackValue = Mathf.FloorToInt(attack.Val * attack.Times);
+                    Battery += takeBatteryAttackValue;
                     Battery = Mathf.Min(Battery, ColBattery);
+                    OnBatteryGuargeChange?.Invoke(Battery, BatteryGuard, takeBatteryAttackValue);
                     break;
                 case AttackType.SoloSoulUp:
                 case AttackType.GroupSoulUp:
-                    Soul += Mathf.FloorToInt(attack.Val * attack.Times);
+                    int takeSoulAttackValue = Mathf.FloorToInt(attack.Val * attack.Times);
+                    Soul += takeSoulAttackValue;
                     Soul = Mathf.Min(Soul, 100);
+                    OnSoulGuargeChange?.Invoke(Soul, 0, takeSoulAttackValue);
                     break;
                 case AttackType.SoloLifeDown:
                 case AttackType.GroupLifeDown:
@@ -448,6 +462,7 @@ public class Character
                     }
                     Life -= damage;
                     Life = Mathf.Max(Life, 0);
+                    OnLifeGuargeChange?.Invoke(Life, LifeGuard, -damage);
                     break;
                 case AttackType.SoloBatteryDown:
                 case AttackType.GroupBatteryDown:
@@ -467,19 +482,26 @@ public class Character
                     }
                     Battery -= btryDamage;
                     Battery = Mathf.Max(Battery, 0);
+                    OnBatteryGuargeChange?.Invoke(Battery, BatteryGuard, -btryDamage);
                     break;
                 case AttackType.SoloSoulDown:
                 case AttackType.GroupSoulDown:
-                    Soul -= Mathf.FloorToInt(attack.Val * attack.Times);
+                    int soulDamage = Mathf.FloorToInt(attack.Val * attack.Times);
+                    Soul -= soulDamage;
                     Soul = Mathf.Max(Soul, 0);
+                    OnSoulGuargeChange?.Invoke(Soul, 0, -soulDamage);
                     break;
                 case AttackType.SoloGuard:
                 case AttackType.GroupGuard:
-                    LifeGuard += Mathf.FloorToInt(attack.Val * attack.Times);
+                    int guardIncrease = Mathf.FloorToInt(attack.Val * attack.Times);
+                    LifeGuard += guardIncrease;
+                    OnLifeGuargeChange?.Invoke(Life, 0, guardIncrease);
                     break;
                 case AttackType.SoloSecurity:
                 case AttackType.GroupSecurity:
-                    BatteryGuard += Mathf.FloorToInt(attack.Val * attack.Times);
+                    int batteryGuardIncrease = Mathf.FloorToInt(attack.Val * attack.Times);
+                    BatteryGuard += batteryGuardIncrease;
+                    OnBatteryGuargeChange?.Invoke(Battery, 0, batteryGuardIncrease);
                     break;
                 default:
                     Debug.LogWarning("未実装のAttackTypeです: " + attack.AttackType);
@@ -492,7 +514,6 @@ public class Character
     {
         foreach (Enchant enchant in enchantList)
         {
-            Debug.Log("Applying enchant: " + enchant.Type + " with value " + enchant.Val);
             Enchant existingEnchant = EnchantList.Find(e => e.Type == enchant.Type);
             if (existingEnchant != null)
             {

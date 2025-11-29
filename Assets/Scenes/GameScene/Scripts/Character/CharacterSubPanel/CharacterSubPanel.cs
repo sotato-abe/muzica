@@ -48,7 +48,6 @@ public class CharacterSubPanel : SlidePanel
 
     public void SetMessageByType(MessageType messageType)
     {
-        UnityEngine.Debug.Log($"Setting message of type: {messageType}");
         TalkMessage talkMessage = character.GetTalkMessageByType(messageType);
         if (talkMessage != null)
         {

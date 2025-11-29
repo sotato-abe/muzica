@@ -83,7 +83,7 @@ public class StatusWindow : MonoBehaviour
     public void RestateWindow()
     {
         SetStatusCounters();
-        PlayerController.Instance.UpdatePlayerEnergy();
+        PlayerController.Instance.SetUpPlayerEnergy();
         skillPoint.SetPoint(playerCharacter.SkillPoint);
     }
 }

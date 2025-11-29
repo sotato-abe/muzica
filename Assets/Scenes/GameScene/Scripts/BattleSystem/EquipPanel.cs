@@ -137,7 +137,7 @@ public class EquipPanel : BattleActionPanel
 
     private IEnumerator StopSlot()
     {
-        yield return new WaitForSeconds(1.3f);
+        yield return new WaitForSeconds(0.8f);
         yield return StartCoroutine(slotWindow.StopSlot());
         yield return new WaitForSeconds(0.5f);
         TotalAttack totalAttack = equipmentCard.GetTotalAttack();

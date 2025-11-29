@@ -66,6 +66,33 @@ public class EnergyBar : MonoBehaviour
         yield return fillCoroutine = StartCoroutine(SmoothFillCoroutine(targetFill));
     }
 
+
+    public IEnumerator UpdateValueCoroutine(int value, int guard, int takeValue)
+    {
+        if (value < 0) value = 0;
+        if (guard > 0)
+            SetGuard(guard);
+    
+        ShowDiffCounter(takeValue);
+        currentEnergy = value;
+
+        float targetFill = (float)currentEnergy / maxEnergy;
+        counterText.text = $"{currentEnergy}/{maxEnergy}";
+
+        if (!gameObject.activeInHierarchy)
+        {
+            barImage.fillAmount = targetFill;
+            yield break;
+        }
+
+        if (fillCoroutine != null)
+        {
+            StopCoroutine(fillCoroutine);
+        }
+
+        yield return fillCoroutine = StartCoroutine(SmoothFillCoroutine(targetFill));
+    }
+
     private void ShowDiffCounter(int value)
     {
         if (value == 0) return;
