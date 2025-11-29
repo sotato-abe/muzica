@@ -6,13 +6,18 @@ using TMPro;
 public class DiffCounter : MonoBehaviour
 {
     [SerializeField] Image iconImage;
+    [SerializeField] Image iconBackImage;
     [SerializeField] Sprite lifeIcon;
     [SerializeField] Sprite batteryIcon;
     [SerializeField] Sprite soulIcon;
     [SerializeField] TextMeshProUGUI counterText;
+    [SerializeField] TextMeshProUGUI counterBackText;
     [SerializeField] RectTransform rectTransform;
 
-    Color startColor = Color.white;
+    Color colorWhite = Color.white;
+    Color currentColor = Color.white;
+    Color positiveColor = new Color(185f / 255f, 255f / 255f, 0f / 255f, 1f);
+    Color negativeColor = new Color(255f / 255f, 0f / 255f, 138f / 255f, 1f);
 
     // 自身がgameobject.activeInHierarchyでなくなった時にDestroyする
     private void OnDisable()
@@ -26,19 +31,33 @@ public class DiffCounter : MonoBehaviour
         {
             case EnergyType.Life:
                 iconImage.sprite = lifeIcon;
+                // iconBackImage.sprite = lifeIcon;
                 break;
             case EnergyType.Battery:
                 iconImage.sprite = batteryIcon;
+                // iconBackImage.sprite = batteryIcon;
                 break;
             case EnergyType.Soul:
                 iconImage.sprite = soulIcon;
+                // iconBackImage.sprite = soulIcon;
                 break;
             default:
                 iconImage.sprite = lifeIcon; // デフォルトはライフアイコン
+                // iconBackImage.sprite = lifeIcon;
                 break;
         }
-        iconImage.color = startColor;
-        counterText.text = value.ToString();
+        if (value > 0)
+        {
+            counterText.text = "+" + value.ToString();
+            // counterBackText.text = "+" + value.ToString();
+            // currentColor = positiveColor;
+        }
+        else
+        {
+            counterText.text = value.ToString();
+            // counterBackText.text = value.ToString();
+            // currentColor = negativeColor;
+        }
 
         StartCoroutine(FadeAndMoveText());
     }
@@ -56,8 +75,8 @@ public class DiffCounter : MonoBehaviour
             float t = elapsed / duration;
 
             rectTransform.anchoredPosition = Vector3.Lerp(startPos, endPos, t);
-            iconImage.color = new Color(startColor.r, startColor.g, startColor.b, 1 - t);
-            counterText.color = new Color(startColor.r, startColor.g, startColor.b, 1 - t);
+            iconImage.color = new Color(currentColor.r, currentColor.g, currentColor.b, 1 - t);
+            counterText.color = new Color(colorWhite.r, colorWhite.g, colorWhite.b, 1 - t);
 
             yield return null;
         }

@@ -8,7 +8,7 @@ public class CommandReel : Window
 {
     [SerializeField] int reelNum = 1; // リールの数
     [SerializeField] List<CommandImage> reelSlots; // Slot1〜3をアサイン
-    [SerializeField] float scrollSpeed = 200f;
+    [SerializeField] float scrollSpeed = 300f;
     private int[] currentCommandIndices;
     private bool isSpinning = true; // 回転状態を管理
 
@@ -17,7 +17,7 @@ public class CommandReel : Window
     private float slotHeight;
 
     private int padding = 20; // スロットの間隔
-    private float centerY = 60f; // 中央位置のY座標
+    private float centerY = 110f; // 中央位置のY座標
 
     private void Start()
     {
