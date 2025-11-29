@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class CharacterLoadSystem : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class CharacterLoadSystem : MonoBehaviour
     [SerializeField] LoadDataButton loadDataButton2;
     [SerializeField] LoadDataButton loadDataButton3;
     [SerializeField] CharacterSelectController characterSelectController;
+    [SerializeField] TextMeshProUGUI ageText;
 
     [SerializeField] private PlayerCharacter sola;
     [SerializeField] private PlayerCharacter huh;
@@ -93,6 +95,7 @@ public class CharacterLoadSystem : MonoBehaviour
         if (characterBase != null)
         {
             startButton.Setup(characterBase.StoryName);
+            ageText.text = characterBase.StartYear.ToString() + "~";
         }
     }
 
