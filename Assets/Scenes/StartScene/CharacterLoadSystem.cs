@@ -12,6 +12,7 @@ public class CharacterLoadSystem : MonoBehaviour
     [SerializeField] LoadDataButton loadDataButton3;
     [SerializeField] CharacterSelectController characterSelectController;
     [SerializeField] TextMeshProUGUI ageText;
+    [SerializeField] TextMeshProUGUI ageBackText;
 
     [SerializeField] private PlayerCharacter sola;
     [SerializeField] private PlayerCharacter huh;
@@ -96,6 +97,7 @@ public class CharacterLoadSystem : MonoBehaviour
         {
             startButton.Setup(characterBase.StoryName);
             ageText.text = characterBase.StartYear.ToString() + "~";
+            ageBackText.text = characterBase.StartYear.ToString() + "~";
         }
     }
 
