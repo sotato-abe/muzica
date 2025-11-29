@@ -98,6 +98,7 @@ public class BattleSystem : MonoBehaviour
             FieldEnemy fieldEnemy = Instantiate(fieldEnemyPrefab, targetPos, Quaternion.identity, enemyGroupArea.transform);
             fieldEnemies.Add(fieldEnemy);
             fieldEnemy.Inversion(!isLeft); // 向きを反転
+            // fieldEnemy.SetNumIcon(index); // 敵の番号アイコンを設定
             fieldEnemy.SetNumIcon(index); // 敵の番号アイコンを設定
             fieldPlayer.OrientationChange(isLeft); // プレイヤーの向きを反転
             SetEnemySubPanel(enemy, fieldEnemy, enemies.Count - (index + 1), enemies.Count); // 敵のサブパネルを設定

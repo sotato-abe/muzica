@@ -20,7 +20,7 @@ public class CharacterSelectButton : MonoBehaviour, IPointerEnterHandler, IPoint
     Color inactiveColor = new Color(255f / 255f, 255f / 255f, 255f / 255f, 200f / 255f);
 
     int width = 100;
-    int defaultHeight = 60;
+    int defaultHeight = 50;
 
     float resizeDuration = 0.1f;
 
