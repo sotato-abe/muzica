@@ -9,5 +9,6 @@ public class StartSceneController : MonoBehaviour
     private void Start()
     {
         SoundSystem.Instance.PlayBGM(BgmType.Opening);
+        SoundSystem.Instance.PlayAmbient(AmbientType.Higurashi);
     }
 }

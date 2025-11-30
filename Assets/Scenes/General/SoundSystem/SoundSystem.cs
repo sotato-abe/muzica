@@ -8,10 +8,12 @@ public class SoundSystem : MonoBehaviour
 
     [SerializeField] private AudioSource bgmSource;
     [SerializeField] private AudioSource seSource;
+    [SerializeField] private AudioSource ambientSource;
 
     [SerializeField] List<BgmBase> bgmClipList;
     [SerializeField] List<AreaBgmBase> areaBgmList;
     [SerializeField] List<SeBase> seClipList;
+    [SerializeField] List<AmbientBase> ambientClipList;
 
     private float fadeInTime = 0f;
     private float fadeOutTime = 0.8f;
@@ -19,6 +21,7 @@ public class SoundSystem : MonoBehaviour
     private float masterVolume = 1.0f;
     private float bgmVolume = 1.0f;
     private float seVolume = 1.0f;
+    private float ambientVolume = 0.7f;
 
     private void Awake()
     {
@@ -100,7 +103,6 @@ public class SoundSystem : MonoBehaviour
         if (!bgmSource.isPlaying) return;
         StartCoroutine(FadeOutBGM());
     }
-    #endregion
 
     private IEnumerator FadeOutBGM()
     {
@@ -113,6 +115,76 @@ public class SoundSystem : MonoBehaviour
         bgmSource.Stop();
         bgmSource.volume = startVolume;
     }
+    #endregion
+
+    #region Ambient
+    public void PlayAmbient(AmbientType ambientType)
+    {
+        AmbientBase ambientData = ambientClipList.Find(a => a.AmbientType() == ambientType);
+        if (ambientData != null)
+        {
+            StartCoroutine(FadeInAmbient(ambientData.AmbientClip()));
+        }
+        else
+        {
+            Debug.LogWarning($"SoundSystem: Ambient of type {ambientType} not found.");
+        }
+    }
+
+    public void SetAmbientBGM(AmbientType ambientType)
+    {
+        AmbientBase ambientData = ambientClipList.Find(a => a.AmbientType() == ambientType);
+
+        if (ambientData != null)
+        {
+            ambientSource.clip = ambientData.AmbientClip();
+            ambientSource.loop = true;
+            ambientSource.Play();
+        }
+        else
+        {
+            Debug.LogWarning($"SoundSystem: Ambient of type {ambientType} not found.");
+        }
+    }
+
+    private IEnumerator FadeInAmbient(AudioClip newClip)
+    {
+
+        if (ambientSource.clip == newClip)
+            yield break;
+        StopAmbient();
+        if (ambientSource.isPlaying)
+            yield return StartCoroutine(FadeOutAmbient());
+        ambientSource.clip = newClip;
+        ambientSource.volume = 0;
+        ambientSource.Play();
+
+        for (float t = 0; t < fadeInTime; t += Time.deltaTime)
+        {
+            ambientSource.volume = Mathf.Lerp(0, 1, t / fadeInTime);
+            yield return null;
+        }
+        ambientSource.volume = 1;
+    }
+
+    public void StopAmbient()
+    {
+        if (!ambientSource.isPlaying) return;
+        StartCoroutine(FadeOutAmbient());
+    }
+
+    private IEnumerator FadeOutAmbient()
+    {
+        float startVolume = ambientSource.volume;
+        for (float t = 0; t < fadeOutTime; t += Time.deltaTime)
+        {
+            ambientSource.volume = Mathf.Lerp(startVolume, 0, t / fadeOutTime);
+            yield return null;
+        }
+        ambientSource.Stop();
+        ambientSource.volume = startVolume;
+    }
+    #endregion
 
     #region SE
     public void PlaySE(SeType seType)
@@ -162,6 +234,16 @@ public class SoundSystem : MonoBehaviour
     public float GetSEVolume()
     {
         return seVolume;
+    }
+
+    public void SetAmbientVolume(float volume)
+    {
+        ambientVolume = volume;
+        ambientSource.volume = ambientVolume * masterVolume;
+    }
+    public float GetAmbientVolume()
+    {
+        return ambientVolume;
     }
     #endregion
 }
