@@ -14,10 +14,6 @@ public class CharacterLoadSystem : MonoBehaviour
     [SerializeField] TextMeshProUGUI ageText;
     [SerializeField] TextMeshProUGUI ageBackText;
 
-    [SerializeField] private PlayerCharacter sola;
-    [SerializeField] private PlayerCharacter huh;
-    [SerializeField] private PlayerCharacter tera;
-
     public const string FILE_NAME1 = "playData1.json";
     public const string FILE_NAME2 = "playData2.json";
     public const string FILE_NAME3 = "playData3.json";
@@ -127,13 +123,8 @@ public class CharacterLoadSystem : MonoBehaviour
     private PlayData PlayerDataConverter(CharacterIndex characterIndex)
     {
         PlayData playData = new PlayData();
-        PlayerCharacter character = characterIndex switch
-        {
-            CharacterIndex.Huh => huh,
-            CharacterIndex.Tera => tera,
-            CharacterIndex.Sola => sola,
-            _ => null
-        };
+        PlayCharacterBase characterBase = CharacterDatabase.Instance.GetCharacterByIndex(characterIndex);
+        PlayerCharacter character = new PlayerCharacter(characterBase.Base);
         character.Init();
 
         if (character == null) return playData;
@@ -200,7 +191,7 @@ public class CharacterLoadSystem : MonoBehaviour
         }
         playData.playerData = playerData;
         playData.position = character.Base.Birthplace.Position;
-        playData.time = new DateTime(2030, 1, 1);
+        playData.time = new DateTime(characterBase.StartYear, characterBase.StartMonth, characterBase.StartDay);
 
         return playData;
     }
