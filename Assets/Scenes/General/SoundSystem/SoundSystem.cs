@@ -31,7 +31,6 @@ public class SoundSystem : MonoBehaviour
 
     private void Awake()
     {
-        UnityEngine.Debug.Log("SoundSystem Awake");
         if (Instance == null)
         {
             Instance = this;
@@ -257,7 +256,6 @@ public class SoundSystem : MonoBehaviour
 
     public void SetBGMVolume(float volume)
     {
-        UnityEngine.Debug.Log("SetBGMVolume: " + volume);
         bgmVolume = volume;
         bgmSource.volume = bgmVolume * masterVolume;
         
@@ -268,7 +266,6 @@ public class SoundSystem : MonoBehaviour
 
     public float GetBGMVolume()
     {
-        UnityEngine.Debug.Log("GetBGMVolume: " + bgmVolume);
         return bgmVolume;
     }
 
