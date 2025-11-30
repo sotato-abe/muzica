@@ -11,9 +11,12 @@ public class FieldCharacter : MonoBehaviour
     [SerializeField] public SpriteRenderer IconImage; // スプライトイメージパネル
     [SerializeField] public SpriteRenderer IconBackImage; // スプライトイメージパネル
 
+    bool isAlive = true;
+
     // TODO characterTypeをenumで管理してここで渡してスプライトを切り替える
     public void SetUp()
     {
+        isAlive = true;
         StartCoroutine(JumpMotion());
     }
 
@@ -24,6 +27,10 @@ public class FieldCharacter : MonoBehaviour
 
     public virtual void SetAnimation(AnimationType animationType)
     {
+        if (!isAlive && animationType == AnimationType.Death)
+        {
+            return; // すでに死亡している場合、再度死亡アニメーションを再生しない
+        }
         switch (animationType)
         {
             case AnimationType.Attack:
@@ -42,6 +49,7 @@ public class FieldCharacter : MonoBehaviour
                 animator.SetTrigger("Debuff");
                 break;
             case AnimationType.Death:
+                isAlive = false;
                 animator.SetTrigger("Death");
                 break;
             default:

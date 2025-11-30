@@ -161,7 +161,10 @@ public class BattleCharacterSubPanel : CharacterSubPanel, IDropHandler, IPointer
         yield return StartCoroutine(SetTalkMessage(talkMessage));
         yield return new WaitForSeconds(1f);
         base.SetActive(false);
-        Destroy(FieldCharacter.gameObject);
+        if (FieldCharacter != null)
+        {
+            Destroy(FieldCharacter.gameObject);
+        }
         OnLifeOutAction?.Invoke(this);
         yield return null;
     }
