@@ -10,9 +10,6 @@ public class WorkQuestTask : MonoBehaviour
     [SerializeField] CurrencyVal coinVal;
     [SerializeField] CurrencyVal discVal;
 
-    public delegate void TargetItemDelegate(Item item);
-    public event TargetItemDelegate OnTargetItem;
-
     public delegate void OwnerMessageDelegate(TalkMessage message);
     public event OwnerMessageDelegate OnOwnerMessage;
 
@@ -37,7 +34,6 @@ public class WorkQuestTask : MonoBehaviour
     {
         var slot = Instantiate(rewardItemPrefab, rewardItemList.transform);
         slot.SetMockItem(item);
-        slot.OnTargetItem += TargetItem;
     }
 
     private void ClearTask()
@@ -49,11 +45,6 @@ public class WorkQuestTask : MonoBehaviour
         }
         coinVal.SetCurrencyVal(0);
         discVal.SetCurrencyVal(0);
-    }
-
-    private void TargetItem(Item item)
-    {
-        OnTargetItem?.Invoke(item);
     }
 
     public void OwnerMessage(TalkMessage message)

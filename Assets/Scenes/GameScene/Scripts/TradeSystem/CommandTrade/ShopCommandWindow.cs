@@ -11,9 +11,6 @@ public class ShopCommandWindow : MonoBehaviour, IDropHandler
     [SerializeField] CommandBlock commandBlockPrefab;
     [SerializeField] GameObject commandList;
 
-    public delegate void TargetCommandDelegate(Command command, bool isOwn = false);
-    public event TargetCommandDelegate OnTargetCommand;
-
     public delegate void OwnerMessageDelegate(TalkMessage message);
     public event OwnerMessageDelegate OnOwnerMessage;
 
@@ -63,7 +60,6 @@ public class ShopCommandWindow : MonoBehaviour, IDropHandler
         CommandBlock commandBlock = Instantiate(commandBlockPrefab, commandList.transform);
         commandBlock.Setup(command, this.transform);
         commandBlock.OnRemoveCommand += SellCommand;
-        commandBlock.OnTargetCommand += TargetCommand;
     }
 
     private void DeleteAllCommands()
@@ -93,15 +89,5 @@ public class ShopCommandWindow : MonoBehaviour, IDropHandler
         TalkMessage talkMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "お金が足りないよ");
         OnOwnerMessage?.Invoke(talkMessage);
         return false;
-    }
-
-    public void TargetCommand(CommandBlock commandBlock)
-    {
-        if (commandBlock == null || commandBlock.Command == null)
-        {
-            OnTargetCommand?.Invoke(null);
-            return;
-        }
-        OnTargetCommand?.Invoke(commandBlock.Command);
     }
 }

@@ -19,9 +19,6 @@ public class QuestCard : MonoBehaviour
 
     [SerializeField] ReceiptButton receiptButton;
 
-    public delegate void TargetItemDelegate(Item item, bool isOwn);
-    public event TargetItemDelegate OnTargetItem;
-
     public delegate void OwnerMessageDelegate(TalkMessage message);
     public event OwnerMessageDelegate OnOwnerMessage;
 
@@ -57,14 +54,12 @@ public class QuestCard : MonoBehaviour
                 if (deliveryQuest.isShipping)
                 {
                     shippingQuestTask.gameObject.SetActive(true);
-                    shippingQuestTask.OnTargetItem += TargetItem;
                     shippingQuestTask.SetShippingTask(deliveryQuest);
                     break;
                 }
                 else
                 {
                     deliveryQuestTask.gameObject.SetActive(true);
-                    deliveryQuestTask.OnTargetItem += TargetItem;
                     deliveryQuestTask.SetDeliveryTask(deliveryQuest);
                     receiptButton.gameObject.SetActive(true);
                     break;
@@ -211,12 +206,7 @@ public class QuestCard : MonoBehaviour
         workQuestTask.gameObject.SetActive(false);
         specialQuestTask.gameObject.SetActive(false);
     }
-
-    private void TargetItem(Item item)
-    {
-        OnTargetItem?.Invoke(item, false);
-    }
-
+    
     public void OwnerMessage(TalkMessage message)
     {
         OnOwnerMessage?.Invoke(message);

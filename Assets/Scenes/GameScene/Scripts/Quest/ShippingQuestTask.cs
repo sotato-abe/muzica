@@ -11,9 +11,6 @@ public class ShippingQuestTask : MonoBehaviour
     [SerializeField] MockItemBlock shippingItemPrefab;
     [SerializeField] GameObject shippingItemList;
 
-    public delegate void TargetItemDelegate(Item item);
-    public event TargetItemDelegate OnTargetItem;
-
     // ここにデリバリークエストタスクのロジックを実装
     public void SetShippingTask(DeliveryQuest quest)
     {
@@ -40,12 +37,6 @@ public class ShippingQuestTask : MonoBehaviour
     {
         var slot = Instantiate(shippingItemPrefab, shippingItemList.transform);
         slot.SetMockItem(item);
-        slot.OnTargetItem += TargetItem;
-    }
-
-    private void TargetItem(Item item)
-    {
-        OnTargetItem?.Invoke(item);
     }
 
     private void ClearTask()

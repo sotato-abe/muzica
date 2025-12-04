@@ -14,9 +14,6 @@ public class DeliveryQuestTask : MonoBehaviour
     private List<OrderItemSlot> orderItemSlots = new List<OrderItemSlot>();
     List<Item> orderItems = new List<Item>();
 
-    public delegate void TargetItemDelegate(Item item);
-    public event TargetItemDelegate OnTargetItem;
-
     public delegate void OwnerMessageDelegate(TalkMessage message);
     public event OwnerMessageDelegate OnOwnerMessage;
 
@@ -45,7 +42,6 @@ public class DeliveryQuestTask : MonoBehaviour
     {
         var slot = Instantiate(orderItemSlotPrefab, deliveryItemList.transform);
         slot.SetOrderItem(item);
-        slot.OnTargetItem += TargetItem;
         slot.OnOwnerMessage += OwnerMessage;
         slot.OnSetItem += CheckAllOrderItemSet;
         orderItemSlots.Add(slot);
@@ -70,7 +66,6 @@ public class DeliveryQuestTask : MonoBehaviour
     {
         var slot = Instantiate(rewardItemPrefab, rewardItemList.transform);
         slot.SetMockItem(item);
-        slot.OnTargetItem += TargetItem;
     }
 
     private void ClearTask()
@@ -84,11 +79,6 @@ public class DeliveryQuestTask : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-    }
-
-    private void TargetItem(Item item)
-    {
-        OnTargetItem?.Invoke(item);
     }
 
     public void OwnerMessage(TalkMessage message)

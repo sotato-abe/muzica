@@ -20,10 +20,7 @@ public class CommandTradePanel : TwoColumnPanel
 
     private void Start()
     {
-        shopCommandWindow.OnTargetCommand += TargetCommand;
         shopCommandWindow.OnOwnerMessage += OwnerMessage;
-        commandBoxWindow.OnTargetCommand += TargetCommand;
-        slotSettingWindow.OnTargetCommand += TargetCommand;
         categorySwitch.OnChangeWindow += ChangeWindow;
         ChangeWindow(true);
     }
@@ -34,11 +31,6 @@ public class CommandTradePanel : TwoColumnPanel
         {
             categorySwitch.SwitchActiveButton();
         }
-    }
-
-    public void TargetCommand(Command Command, bool isOwn = true)
-    {
-        targetCommandWindow.TargetCommand(Command, isOwn);
     }
 
     public void ChangeWindow(bool isBag)

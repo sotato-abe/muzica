@@ -23,10 +23,6 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
     public delegate bool RemoveItemDelegate(ItemBlock itemBlock);
     public event RemoveItemDelegate OnRemoveItem;
 
-    public delegate void TargetItemDelegate(ItemBlock itemBlock);
-    public event TargetItemDelegate OnTargetItem;
-
-
     void Start()
     {
         SetTarget(false);
@@ -75,13 +71,13 @@ public class ItemBlock : Block, IPointerEnterHandler, IPointerExitHandler
             Item.isNew = false;
             statusText.SetText(null);
         }
-        OnTargetItem?.Invoke(this);
+        TooltipUI.Instance.TargetItem(Item, isOwned);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         SetTarget(false);
-        OnTargetItem?.Invoke(null);
+        TooltipUI.Instance.TargetItem(null);
     }
 
     public void SetTarget(bool activeFlg)

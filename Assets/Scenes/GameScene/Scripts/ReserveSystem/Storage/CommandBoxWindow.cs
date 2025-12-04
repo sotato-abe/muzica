@@ -16,8 +16,6 @@ public class CommandBoxWindow : MonoBehaviour, IDropHandler
     [SerializeField] int maxCount = 15;
     Dictionary<Command, CommandBlock> commandBlockMap = new Dictionary<Command, CommandBlock>();
 
-    public delegate void TargetCommandDelegate(Command command, bool isOwn = true);
-    public event TargetCommandDelegate OnTargetCommand;
     private void Awake()
     {
         DeleteAllCommands();
@@ -70,7 +68,6 @@ public class CommandBoxWindow : MonoBehaviour, IDropHandler
             CommandBlock commandBlock = Instantiate(commandBlockPrefab, commandList.transform);
             commandBlock.Setup(command, this.transform);
             commandBlock.OnRemoveCommand += RemoveCommand;
-            commandBlock.OnTargetCommand += TargetCommand;
             commandBlockMap[command] = commandBlock;
         }
     }
@@ -114,15 +111,5 @@ public class CommandBoxWindow : MonoBehaviour, IDropHandler
         Destroy(commandBlock.gameObject);
         SetCommands();
         return true;
-    }
-
-    public void TargetCommand(CommandBlock commandBlock)
-    {
-        if (commandBlock == null || commandBlock.Command == null)
-        {
-            OnTargetCommand?.Invoke(null);
-            return;
-        }
-        OnTargetCommand?.Invoke(commandBlock.Command);
     }
 }

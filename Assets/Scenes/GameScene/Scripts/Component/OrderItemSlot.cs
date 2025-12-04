@@ -15,9 +15,6 @@ public class OrderItemSlot : MonoBehaviour, IDropHandler, IPointerEnterHandler, 
     private bool isSet = false;
     public bool IsSet { get { return isSet; } }
 
-    public delegate void TargetItemDelegate(Item item);
-    public event TargetItemDelegate OnTargetItem;
-
     public delegate void OwnerMessageDelegate(TalkMessage message);
     public event OwnerMessageDelegate OnOwnerMessage;
 
@@ -70,19 +67,14 @@ public class OrderItemSlot : MonoBehaviour, IDropHandler, IPointerEnterHandler, 
         }
     }
 
-    public void TargetItem()
-    {
-        OnTargetItem?.Invoke(currentItem);
-    }
-
     public void OnPointerEnter(PointerEventData eventData)
     {
-        TargetItem();
+        TooltipUI.Instance.TargetItem(currentItem);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        OnTargetItem?.Invoke(null);
+        TooltipUI.Instance.ClearTargetItem();
     }
 
     public void OwnerMessage(TalkMessage message)

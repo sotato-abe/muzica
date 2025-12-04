@@ -19,10 +19,6 @@ public class CommandBlock : Block, IPointerEnterHandler, IPointerExitHandler
     public delegate bool RemoveCommandDelegate(CommandBlock commandBlock);
     public event RemoveCommandDelegate OnRemoveCommand;
 
-    public delegate void TargetCommandDelegate(CommandBlock commandBlock);
-    public event TargetCommandDelegate OnTargetCommand;
-
-
     void Start()
     {
         SetTarget(false);
@@ -63,13 +59,13 @@ public class CommandBlock : Block, IPointerEnterHandler, IPointerExitHandler
             Command.isNew = false;
             statusText.SetText(null);
         }
-        OnTargetCommand?.Invoke(this);
+        TooltipUI.Instance.TargetCommand(Command);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         SetTarget(false);
-        OnTargetCommand?.Invoke(null);
+        TooltipUI.Instance.ClearTargetCommand();
     }
 
     public void SetTarget(bool activeFlg)

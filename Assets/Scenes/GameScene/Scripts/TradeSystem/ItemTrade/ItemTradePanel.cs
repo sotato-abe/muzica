@@ -12,7 +12,6 @@ public class ItemTradePanel : TwoColumnPanel
     [SerializeField] EquipmentSimpleSlot rightHandSlot;
     [SerializeField] EquipmentSimpleSlot leftHandSlot;
     [SerializeField] PocketWindow pocketWindow;
-    [SerializeField] TargetItemWindow targetItemWindow;
 
     [SerializeField] ShopItemWindow shopItemWindow;
 
@@ -21,12 +20,7 @@ public class ItemTradePanel : TwoColumnPanel
 
     private void Start()
     {
-        shopItemWindow.OnTargetItem += TargetItem;
         shopItemWindow.OnOwnerMessage += OwnerMessage;
-        itemBoxWindow.OnTargetItem += TargetItem;
-        rightHandSlot.OnTargetItem += TargetItem;
-        leftHandSlot.OnTargetItem += TargetItem;
-        pocketWindow.OnTargetItem += TargetItem;
         categorySwitch.OnChangeWindow += ChangeWindow;
         ChangeWindow(true);
     }
@@ -37,11 +31,6 @@ public class ItemTradePanel : TwoColumnPanel
         {
             categorySwitch.SwitchActiveButton();
         }
-    }
-
-    public void TargetItem(Item item, bool isOwn = true)
-    {
-        targetItemWindow.TargetItem(item, isOwn);
     }
 
     public void ChangeWindow(bool isBag)

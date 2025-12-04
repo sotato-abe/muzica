@@ -15,17 +15,10 @@ public class BagPanel : SlidePanel
     private void Start()
     {
         equipmentWindow.OnUpdateInventory += UpdateInvenotry;
-        itemBoxWindow.OnTargetItem += TargetItem;
-        pocketWindow.OnTargetItem += TargetItem;
     }
 
     public void UpdateInvenotry()
     {
         itemBoxWindow.SetItems();
-    }
-
-    public void TargetItem(Item item, bool isOwn = true)
-    {
-        targetItemWindow.TargetItem(item, isOwn);
     }
 }

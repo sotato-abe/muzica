@@ -9,7 +9,7 @@ public class DeliveryQuestBase : QuestBase
     public override QuestType QuestType => QuestType.Delivery;
 
     [Header("Task")] // タスク
-    [SerializeField] List<TreasureBase> deliveryItemBaseList; //発送・ 納品アイテムリスト
+    [SerializeField] List<ItemBase> deliveryItemBaseList; //発送・ 納品アイテムリスト
 
     [Header("Rewards")] // 報酬
     [SerializeField] List<ItemBase> rewardItemBaseList; // 報酬アイテムリスト
@@ -22,7 +22,7 @@ public class DeliveryQuestBase : QuestBase
 
     public string ShippingDescription { get => shippingDescription; }
     public PointBase ShippingPointBase { get => shippingPointBase; }
-    public List<TreasureBase> DeliveryItemBaseList { get => deliveryItemBaseList; }
+    public List<ItemBase> DeliveryItemBaseList { get => deliveryItemBaseList; }
     public List<ItemBase> RewardItemBaseList { get => rewardItemBaseList; }
     public int CoinPrice { get => coinPrice; }
     public int DiscPrice { get => discPrice; }

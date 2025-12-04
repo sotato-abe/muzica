@@ -11,16 +11,8 @@ public class BagWindow : SlidePanel
     [SerializeField] ItemBoxWindow itemBoxWindow;
     [SerializeField] CommandBoxWindow commandBoxWindow;
 
-    public delegate void TargetItemDelegate(Item item, bool isOwn = true);
-    public event TargetItemDelegate OnTargetItem;
-
-    public delegate void TargetCommandDelegate(Command Command, bool isOwn = true);
-    public event TargetCommandDelegate OnTargetCommand;
-
     public void Start()
     {
-        itemBoxWindow.OnTargetItem += TargetItem;
-        commandBoxWindow.OnTargetCommand += TargetCommand;
         categorySwitch.OnChangeWindow += ChangeWindow;
         ChangeWindow(true);
     }
@@ -31,16 +23,6 @@ public class BagWindow : SlidePanel
         {
             categorySwitch.SwitchActiveButton();
         }
-    }
-
-    public void TargetItem(Item item, bool isOwn = true)
-    {
-        OnTargetItem?.Invoke(item, isOwn);
-    }
-
-    public void TargetCommand(Command Command, bool isOwn = true)
-    {
-        OnTargetCommand?.Invoke(Command, isOwn);
     }
 
     public void ChangeWindow(bool isBag)

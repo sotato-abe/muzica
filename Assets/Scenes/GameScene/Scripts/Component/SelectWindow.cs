@@ -123,7 +123,6 @@ public class SelectWindow : Window
 
     public virtual void TargetElement(int index)
     {
-        // UnityEngine.Debug.Log("Target Element Index: " + index);
         // 各Windowでオーバーライドして使用
     }
 

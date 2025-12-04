@@ -162,7 +162,6 @@ public class EscapePanel : BattleActionPanel
         else
         {
             // 逃げる失敗
-            UnityEngine.Debug.Log($"{probability}/{rand}");
             PlayerController.Instance.SetPlayerMessageByType(MessageType.Miss);
         }
         RunningOff();

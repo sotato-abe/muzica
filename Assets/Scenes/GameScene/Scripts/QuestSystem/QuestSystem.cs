@@ -13,8 +13,6 @@ public class QuestSystem : MonoBehaviour
 
     [SerializeField] private CameraManager cameraManager;
     [SerializeField] BagWindow bagWindow;
-    [SerializeField] TargetItemWindow targetItemWindow;
-    [SerializeField] TargetCommandWindow targetCommandWindow;
     [SerializeField] QuestActionBoard questActionBoard; // クエストアクションボード
     [SerializeField] WorldMapPanel worldMapPanel;
     [SerializeField] SlidePanel optionActionBoard;
@@ -28,9 +26,6 @@ public class QuestSystem : MonoBehaviour
         }
         Instance = this;
         questActionBoard.OnQuestEnd += QuestEnd;
-        questActionBoard.OnTargetItem += targetItemWindow.TargetItem;
-        bagWindow.OnTargetItem += targetItemWindow.TargetItem;
-        bagWindow.OnTargetCommand += targetCommandWindow.TargetCommand;
     }
 
     private void Update()

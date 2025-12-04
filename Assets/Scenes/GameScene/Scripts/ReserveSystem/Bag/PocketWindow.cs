@@ -16,8 +16,6 @@ public class PocketWindow : MonoBehaviour, IDropHandler
     [SerializeField] int maxCount = 20;
     
     Dictionary<Item, ItemBlock> itemBlockMap = new Dictionary<Item, ItemBlock>();
-    public delegate void TargetItemDelegate(Item item, bool isOwn = true);
-    public event TargetItemDelegate OnTargetItem;
     private int currentBlockCount = 0;
     private void Awake()
     {
@@ -83,7 +81,6 @@ public class PocketWindow : MonoBehaviour, IDropHandler
             itemBlock.Setup(item, this.transform);
             itemBlock.isOwned = true; // 所有フラグを設定
             itemBlock.OnRemoveItem += RemoveItem;
-            itemBlock.OnTargetItem += TargetItem;
             itemBlockMap[item] = itemBlock;
         }
 
@@ -139,15 +136,5 @@ public class PocketWindow : MonoBehaviour, IDropHandler
         Destroy(itemBlock.gameObject);
         SetItems();
         return true;
-    }
-
-    public void TargetItem(ItemBlock itemBlock)
-    {
-        if (itemBlock == null || itemBlock.Item == null)
-        {
-            OnTargetItem?.Invoke(null);
-            return;
-        }
-        OnTargetItem?.Invoke(itemBlock.Item);
     }
 }

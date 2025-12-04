@@ -7,9 +7,6 @@ using UnityEngine.Events;
 
 public class QuestPanel : TwoColumnPanel
 {
-    [SerializeField] TargetItemWindow targetItemWindow;
-    [SerializeField] TargetCommandWindow targetCommandWindow;
-
     [SerializeField] CategorySwitch categorySwitch;
     [SerializeField] ItemBoxWindow itemBoxWindow;
     [SerializeField] CommandBoxWindow commandBoxWindow;
@@ -25,10 +22,7 @@ public class QuestPanel : TwoColumnPanel
 
     public override void Start()
     {
-        itemBoxWindow.OnTargetItem += TargetItem;
-        commandBoxWindow.OnTargetCommand += TargetCommand;
         categorySwitch.OnChangeWindow += ChangeWindow;
-        questCard.OnTargetItem += TargetItem;
         questCard.OnOwnerMessage += OwnerMessage;
         questCard.OnReceiptQuest += ReceiptQuest;
         ChangeWindow(true);
@@ -40,16 +34,6 @@ public class QuestPanel : TwoColumnPanel
         {
             categorySwitch.SwitchActiveButton();
         }
-    }
-
-    public void TargetItem(Item item, bool isOwn = true)
-    {
-        targetItemWindow.TargetItem(item, isOwn);
-    }
-
-    public void TargetCommand(Command Command, bool isOwn = true)
-    {
-        targetCommandWindow.TargetCommand(Command, isOwn);
     }
 
     public void ChangeWindow(bool isBag)
@@ -75,7 +59,6 @@ public class QuestPanel : TwoColumnPanel
         quest.Init();
         emptyAlert.SetActive(false);
         questCard.gameObject.SetActive(true);
-        questCard.OnTargetItem += TargetItem;
         questCard.SetQuest(quest);
     }
 

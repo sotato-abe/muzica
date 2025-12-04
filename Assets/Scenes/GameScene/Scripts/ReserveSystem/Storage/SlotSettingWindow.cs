@@ -17,8 +17,6 @@ public class SlotSettingWindow : MonoBehaviour
     float paddingWidth = 60f; // 横幅
 
     List<CommandSlot> commandSlots = new List<CommandSlot>();
-    public delegate void TargetCommandDelegate(Command command, bool isOwn = true);
-    public event TargetCommandDelegate OnTargetCommand;
 
     private void Awake()
     {
@@ -80,18 +78,7 @@ public class SlotSettingWindow : MonoBehaviour
         {
             CommandSlot newSlot = Instantiate(commandSlotPrefab, slotList.transform);
             newSlot.SlotIndex = i; // スロットのインデックスを設定            
-            newSlot.OnTargetCommand += TargetCommand; // コマンド選択イベントを登録
             commandSlots.Add(newSlot);
         }
-    }
-
-    public void TargetCommand(CommandBlock commandBlock)
-    {
-        if (commandBlock == null || commandBlock.Command == null)
-        {
-            OnTargetCommand?.Invoke(null);
-            return;
-        }
-        OnTargetCommand?.Invoke(commandBlock.Command);
     }
 }

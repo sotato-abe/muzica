@@ -21,9 +21,6 @@ public class QuestActionBoard : SlidePanel
     private List<ActionIcon> actionIconList = new List<ActionIcon>();
     private List<QuestCardPrefab> questCardList = new List<QuestCardPrefab>();
 
-    public delegate void TargetItemDelegate(Item item, bool isOwn = true);
-    public event TargetItemDelegate OnTargetItem;
-
     public void SetQuest(List<Quest> quests)
     {
         currentIndex = 0;
@@ -94,14 +91,8 @@ public class QuestActionBoard : SlidePanel
             QuestCardPrefab card = Instantiate(questCardPrefab, questCardArea.transform);
             quest.Init();
             card.SetQuest(quest);
-            card.OnTargetItem += TargetItem;
             questCardList.Add(card);
         }
-    }
-
-    private void TargetItem(Item item, bool isOwn = true)
-    {
-        OnTargetItem?.Invoke(item, isOwn);
     }
 
     private void SetActionIcons()

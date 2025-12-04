@@ -12,9 +12,6 @@ public class MockItemBlock : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     private Item currentItem;
 
-    public delegate void TargetItemDelegate(Item item);
-    public event TargetItemDelegate OnTargetItem;
-
     public void SetMockItem(Item item)
     {
         if (item == null) return;
@@ -30,19 +27,15 @@ public class MockItemBlock : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         mockItemFrame.color = Color.clear;
     }
 
-    public void TargetItem()
-    {
-        OnTargetItem?.Invoke(currentItem);
-    }
-
     public void OnPointerEnter(PointerEventData eventData)
     {
 
-        OnTargetItem?.Invoke(currentItem);
+        TooltipUI.Instance.TargetItem(currentItem);
+            
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        OnTargetItem?.Invoke(null);
+        TooltipUI.Instance.TargetItem(null);
     }
 }

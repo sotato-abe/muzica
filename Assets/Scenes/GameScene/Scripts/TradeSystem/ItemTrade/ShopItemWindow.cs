@@ -11,9 +11,6 @@ public class ShopItemWindow : MonoBehaviour, IDropHandler
     [SerializeField] ItemBlock itemBlockPrefab;
     [SerializeField] GameObject itemList;
 
-    public delegate void TargetItemDelegate(Item item, bool isOwn = false);
-    public event TargetItemDelegate OnTargetItem;
-
     public delegate void OwnerMessageDelegate(TalkMessage message);
     public event OwnerMessageDelegate OnOwnerMessage;
 
@@ -63,7 +60,6 @@ public class ShopItemWindow : MonoBehaviour, IDropHandler
         ItemBlock itemBlock = Instantiate(itemBlockPrefab, itemList.transform);
         itemBlock.Setup(item, this.transform);
         itemBlock.OnRemoveItem += SellItem;
-        itemBlock.OnTargetItem += TargetItem;
     }
 
     private void DeleteAllItems()
@@ -93,15 +89,5 @@ public class ShopItemWindow : MonoBehaviour, IDropHandler
         TalkMessage talkMessage = new TalkMessage(MessageType.Talk, MessagePanelType.Default, "お金が足りないよ");
         OnOwnerMessage?.Invoke(talkMessage);
         return false;
-    }
-
-    public void TargetItem(ItemBlock itemBlock)
-    {
-        if (itemBlock == null || itemBlock.Item == null)
-        {
-            OnTargetItem?.Invoke(null);
-            return;
-        }
-        OnTargetItem?.Invoke(itemBlock.Item);
     }
 }

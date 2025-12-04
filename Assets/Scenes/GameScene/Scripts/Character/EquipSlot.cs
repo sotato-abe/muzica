@@ -3,20 +3,23 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
-public class EquipSlot : MonoBehaviour
+public class EquipSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] Image equipBlock;
     [SerializeField] Image equipImage;
     [SerializeField] Image rarityFrameImage;
+    public Item Item { get; set; }
 
     public void SetEquip(Equipment equipment)
     {
-        if(equipment == null)
+        if (equipment == null)
         {
             ClearEquip();
             return;
         }
+        Item = equipment;
         equipImage.sprite = equipment.Base.Sprite;
         equipBlock.gameObject.SetActive(true);
         rarityFrameImage.color = equipment.Base.Rarity.GetRarityColor();
@@ -25,5 +28,17 @@ public class EquipSlot : MonoBehaviour
     public void ClearEquip()
     {
         equipBlock.gameObject.SetActive(false);
+    }
+
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+
+        TooltipUI.Instance.TargetItem(Item);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        TooltipUI.Instance.ClearTargetItem();
     }
 }

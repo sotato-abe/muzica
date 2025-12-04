@@ -34,8 +34,33 @@ public class DeliveryQuest : Quest
         DeliveryItemList.Clear();
         foreach (var item in DeliveryQuestBase.DeliveryItemBaseList)
         {
-            Item deliveryItem = new Item((ItemBase)item);
-            DeliveryItemList.Add(deliveryItem);
+            switch (item.itemType)
+            {
+                case ItemType.Consumable:
+                    if (item is ConsumableBase consumableBase)
+                    {
+                        Consumable consumable = new Consumable(consumableBase);
+                        DeliveryItemList.Add(consumable);
+                    }
+                    break;
+                case ItemType.Equipment:
+                    if (item is EquipmentBase equipmentBase)
+                    {
+                        Equipment equipment = new Equipment(equipmentBase);
+                        DeliveryItemList.Add(equipment);
+                    }
+                    break;
+                case ItemType.Treasure:
+                    if (item is TreasureBase treasureBase)
+                    {
+                        Treasure treasure = new Treasure(treasureBase);
+                        DeliveryItemList.Add(treasure);
+                    }
+                    break;
+                default:
+                    Debug.LogError("Unknown item type: " + item.itemType);
+                    break;
+            }
         }
     }
 }

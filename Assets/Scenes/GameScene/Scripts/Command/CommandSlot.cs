@@ -10,9 +10,6 @@ public class CommandSlot : MonoBehaviour, IDropHandler
 
     public int SlotIndex;
 
-    public delegate void TargetCommandDelegate(CommandBlock commandBlock);
-    public event TargetCommandDelegate OnTargetCommand;
-
     public void OnDrop(PointerEventData eventData)
     {
         // ドロップアイテムをバックに追加
@@ -37,7 +34,6 @@ public class CommandSlot : MonoBehaviour, IDropHandler
     {
         CommandBlock newBlock = Instantiate(commandBlockPrefab, this.transform);
         newBlock.OnRemoveCommand += RemoveCommand;
-        newBlock.OnTargetCommand += TargetCommand;
         newBlock.Setup(command, this.transform);
     }
 
@@ -65,15 +61,5 @@ public class CommandSlot : MonoBehaviour, IDropHandler
         commandBlock.RemovePlaceholder();
         Destroy(commandBlock.gameObject);
         return true;
-    }
-
-    public void TargetCommand(CommandBlock commandBlock)
-    {
-        if (commandBlock == null || commandBlock.Command == null)
-        {
-            OnTargetCommand?.Invoke(null);
-            return;
-        }
-        OnTargetCommand?.Invoke(commandBlock);
     }
 }

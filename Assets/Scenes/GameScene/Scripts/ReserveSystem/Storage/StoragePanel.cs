@@ -10,16 +10,4 @@ public class StoragePanel : SlidePanel
 {
     [SerializeField] CommandBoxWindow commandBoxWindow;
     [SerializeField] SlotSettingWindow slotSettingWindow;
-    [SerializeField] TargetCommandWindow targetCommandWindow;
-
-    private void Start()
-    {
-        commandBoxWindow.OnTargetCommand += TargetCommand;
-        slotSettingWindow.OnTargetCommand += TargetCommand;
-    }
-
-    public void TargetCommand(Command command, bool isOwn = true)
-    {
-        targetCommandWindow.TargetCommand(command, isOwn);
-    }
 }

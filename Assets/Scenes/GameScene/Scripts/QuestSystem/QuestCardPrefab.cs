@@ -20,9 +20,6 @@ public class QuestCardPrefab : SlidePanel
 
     [SerializeField] ReceiptButton receiptButton;
 
-    public delegate void TargetItemDelegate(Item item, bool isOwn);
-    public event TargetItemDelegate OnTargetItem;
-
     public delegate void OwnerMessageDelegate(TalkMessage message);
     public event OwnerMessageDelegate OnOwnerMessage;
 
@@ -36,10 +33,8 @@ public class QuestCardPrefab : SlidePanel
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            UnityEngine.Debug.Log("Return Key Pressed");
             if (receiptButton.gameObject.activeSelf)
             {
-                UnityEngine.Debug.Log("Receipt Task");
                 ReceiptTask();
             }
         }
@@ -72,14 +67,12 @@ public class QuestCardPrefab : SlidePanel
                 if (deliveryQuest.isShipping)
                 {
                     shippingQuestTask.gameObject.SetActive(true);
-                    shippingQuestTask.OnTargetItem += TargetItem;
                     shippingQuestTask.SetShippingTask(deliveryQuest);
                     break;
                 }
                 else
                 {
                     deliveryQuestTask.gameObject.SetActive(true);
-                    deliveryQuestTask.OnTargetItem += TargetItem;
                     deliveryQuestTask.SetDeliveryTask(deliveryQuest);
                     receiptButton.gameObject.SetActive(true);
                     break;
@@ -91,7 +84,6 @@ public class QuestCardPrefab : SlidePanel
             case QuestType.Work:
                 var workQuest = currentQuest as WorkQuest;
                 workQuestTask.gameObject.SetActive(true);
-                workQuestTask.OnTargetItem += TargetItem;
                 workQuestTask.SetWorkTask(workQuest);
                 receiptButton.gameObject.SetActive(true);
                 break;
@@ -237,11 +229,6 @@ public class QuestCardPrefab : SlidePanel
         exterminationQuestTask.gameObject.SetActive(false);
         workQuestTask.gameObject.SetActive(false);
         specialQuestTask.gameObject.SetActive(false);
-    }
-
-    private void TargetItem(Item item)
-    {
-        OnTargetItem?.Invoke(item, false);
     }
 
     public void OwnerMessage(TalkMessage message)
