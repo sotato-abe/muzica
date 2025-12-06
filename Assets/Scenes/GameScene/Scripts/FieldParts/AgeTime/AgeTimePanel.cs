@@ -10,6 +10,7 @@ public class AgeTimePanel : MonoBehaviour
     public static AgeTimePanel Instance { get; private set; }
 
     [SerializeField] private TextMeshProUGUI ageTimeField;  // 表示用のTextMeshProUGUIフィールド
+    [SerializeField] private TextMeshProUGUI ageTimeBackField;  // 表示用のTextMeshProUGUIフィールド
     [SerializeField] StatePanelController statePanel;
     [SerializeField] PointDatabase pointDatabase;
 
@@ -102,6 +103,7 @@ public class AgeTimePanel : MonoBehaviour
     private void UpdateAgeTimeField()
     {
         ageTimeField.text = ageTime.ToString("yyyy/MM");
+        ageTimeBackField.text = ageTime.ToString("yyyy/MM");
     }
 
     private void CheckInformation()
