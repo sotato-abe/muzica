@@ -1,143 +1,92 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
 
-public class OptionSystem : MonoBehaviour
+public class OptionSystem : SystemPanel
 {
-    [SerializeField] Image backPanel;
+    public static OptionSystem Instance { get; private set; }
 
-    [SerializeField] WorldBigMapWindow worldBigMapWindow;
-    [SerializeField] LibraryWindow libraryWindow;
-    [SerializeField] SaveWindow saveWindow;
-    [SerializeField] SettingWindow settingWindow;
-    [SerializeField] AgeTimePanel ageTimePanel;
+    [SerializeField] SelectWindow categorySelectWindow;
+    [SerializeField] List<SelectWindow> categoryWindows;
 
-    private Color blockColor = new Color(0f, 0f, 0f, 200f / 255f);
-    private Color inBlockColor = new Color(0f, 0f, 0f, 0f);
-
-    private List<Window> panelList;
-
-    private void Start()
+    private void Awake()
     {
-        panelList = new List<Window>
+        PanelClose();
+        categorySelectWindow.OnChangeTarget += ChangeCategory;
+        categorySelectWindow.OnSelectAction += SelectActiveWindow;
+        categorySelectWindow.OnCancelAction += PanelClose;
+        for (int i = 0; i < categoryWindows.Count; i++)
         {
-            worldBigMapWindow,
-            libraryWindow,
-            saveWindow,
-            settingWindow
-        };
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            foreach (var panel in panelList)
-            {
-                if (panel.isActive)
-                {
-                    panel.WindowClose();
-                    PanelClose();
-                    PlayerController.Instance.SetFieldPlayerMove(true);
-                    StopTimeState(false);
-                    break;
-                }
-            }
+            categoryWindows[i].OnCancelAction += CancelActiveWindow;
         }
     }
-    public void PanelOpen()
+
+    public override void PanelOpen()
     {
-        SoundSystem.Instance.PlaySE(SeType.PanelOpen); // SEをオープンに変更
-        StartCoroutine(BlockChange(true));
+        PlayerController.Instance.SetFieldPlayerMove(false);
+
+        base.PanelOpen();
+        categorySelectWindow.WindowOpen();
+        int selectedIndex = categorySelectWindow.GetCurrentIndex();
+        ChangeCategory(selectedIndex);
     }
 
-    public void PanelClose()
+    public override void PanelClose()
     {
-        SoundSystem.Instance.PlaySE(SeType.PanelClose);
-        foreach (var panel in panelList)
+        base.PanelClose();
+        categorySelectWindow.WindowClose();
+        for (int i = 0; i < categoryWindows.Count; i++)
         {
-            if (panel.isActive)
-            {
-                panel.WindowClose();
-            }
+            categoryWindows[i].WindowClose();
         }
         PlayerController.Instance.SetFieldPlayerMove(true);
-        StartCoroutine(BlockChange(false));
     }
 
-    private IEnumerator BlockChange(bool isOpen)
+    public void ChangeCategory(int index)
     {
-        float duration = 0.2f;
-        float elapsedTime = 0f;
-        Color startColor = backPanel.color;
-        Color targetColor = isOpen ? blockColor : inBlockColor;
-        while (elapsedTime < duration)
+        for (int i = 0; i < categoryWindows.Count; i++)
         {
-            elapsedTime += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsedTime / duration);
-            backPanel.color = Color.Lerp(startColor, targetColor, t);
-            yield return null;
-        }
-        backPanel.color = targetColor;
-        backPanel.raycastTarget = isOpen;
-    }
-
-    public void SwitchWorldBigMapWindow()
-    {
-        SwitchPanel(worldBigMapWindow);
-    }
-
-    public void SwitchLibraryWindow()
-    {
-        SwitchPanel(libraryWindow);
-    }
-
-    public void SwitchSaveWindow()
-    {
-        SwitchPanel(saveWindow);
-    }
-
-    public void SwitchSettingWindow()
-    {
-        SwitchPanel(settingWindow);
-    }
-
-    private void SwitchPanel(Window panel)
-    {
-        SoundSystem.Instance.PlaySE(SeType.Select);
-        foreach (var p in panelList)
-        {
-            if (p == panel && !p.isActive)
+            if (i == index)
             {
-                p.WindowOpen();
-                PanelOpen();
-                PlayerController.Instance.SetFieldPlayerMove(false);
-                StopTimeState(true);
-            }
-            else if (p == panel && p.isActive)
-            {
-                p.WindowClose();
-                PanelClose();
-                PlayerController.Instance.SetFieldPlayerMove(true);
-                StopTimeState(false);
+                categoryWindows[i].WindowOpen();
             }
             else
             {
-                p.WindowClose();
+                categoryWindows[i].WindowClose();
             }
         }
     }
 
-    private void StopTimeState(bool isActive)
+    public void SelectActiveWindow()
     {
-        if (isActive)
+        int selectedIndex = categorySelectWindow.GetCurrentIndex();
+        ChangeActiveWindow(false);
+
+        for (int i = 0; i < categoryWindows.Count; i++)
         {
-            ageTimePanel.SetTimeSpeed(TimeState.Stop);
+            if (i == selectedIndex)
+            {
+                categoryWindows[i].ChangeActiveWindow(true);
+            }
         }
-        else
+    }
+
+    public void CancelActiveWindow()
+    {
+        int selectedIndex = categorySelectWindow.GetCurrentIndex();
+        for (int i = 0; i < categoryWindows.Count; i++)
         {
-            ageTimePanel.SetTimeSpeed(TimeState.Fast);
+            if (i == selectedIndex)
+            {
+                categoryWindows[i].ChangeActiveWindow(false);
+            }
         }
+        ChangeActiveWindow(true);
+    }
+
+    public void ChangeActiveWindow(bool isActive)
+    {
+        categorySelectWindow.ChangeActiveWindow(isActive);
     }
 }
