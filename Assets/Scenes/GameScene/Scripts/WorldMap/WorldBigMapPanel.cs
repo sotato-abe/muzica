@@ -7,7 +7,6 @@ using TMPro;
 public class WorldBigMapWindow : Window
 {
     [SerializeField] WorldBigMapCameraManager worldMapCameraManager;
-    // [SerializeField] AgeTimePanel ageTimePanel;
 
     private bool isCameraUpFlg = false;
     private bool isCameraBottomFlg = false;
@@ -50,7 +49,6 @@ public class WorldBigMapWindow : Window
         isActive = !isActive; // フラグをトグル
         if (isActive)
         {
-            // ageTimePanel.SetTimeSpeed(TimeState.Live); // 時間を止める
             WindowOpen();
         }
         else

@@ -24,6 +24,7 @@ public class OptionSystem : SystemPanel
 
     public override void PanelOpen()
     {
+        AgeTimePanel.Instance.SetTimeSpeed(TimeState.Stop);
         PlayerController.Instance.SetFieldPlayerMove(false);
 
         base.PanelOpen();
@@ -41,6 +42,7 @@ public class OptionSystem : SystemPanel
             categoryWindows[i].WindowClose();
         }
         PlayerController.Instance.SetFieldPlayerMove(true);
+        AgeTimePanel.Instance.SetTimeSpeed(TimeState.Fast);
     }
 
     public void ChangeCategory(int index)
