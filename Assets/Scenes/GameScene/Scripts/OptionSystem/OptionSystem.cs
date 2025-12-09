@@ -26,6 +26,7 @@ public class OptionSystem : SystemPanel
     {
         AgeTimePanel.Instance.SetTimeSpeed(TimeState.Stop);
         PlayerController.Instance.SetFieldPlayerMove(false);
+        SoundSystem.Instance.PlaySE(SeType.PanelOpen); // SEをオープンに変更
 
         base.PanelOpen();
         categorySelectWindow.WindowOpen();
@@ -41,6 +42,7 @@ public class OptionSystem : SystemPanel
         {
             categoryWindows[i].WindowClose();
         }
+        SoundSystem.Instance.PlaySE(SeType.PanelClose);
         PlayerController.Instance.SetFieldPlayerMove(true);
         AgeTimePanel.Instance.SetTimeSpeed(TimeState.Fast);
     }

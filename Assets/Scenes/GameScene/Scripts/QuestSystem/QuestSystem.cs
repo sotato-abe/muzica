@@ -15,7 +15,6 @@ public class QuestSystem : MonoBehaviour
     [SerializeField] BagWindow bagWindow;
     [SerializeField] QuestActionBoard questActionBoard; // クエストアクションボード
     [SerializeField] WorldMapPanel worldMapPanel;
-    [SerializeField] SlidePanel optionActionBoard;
 
     private void Awake()
     {
@@ -46,7 +45,6 @@ public class QuestSystem : MonoBehaviour
         bagWindow.SetActive(true); // キャラクターサブパネルを表示
         cameraManager.SetEventType(EventType.Trade); // トレード時のカメラ位置を設定
         worldMapPanel.SetActive(false); // ワールドマップパネルを非表示
-        optionActionBoard.SetActive(false); // オプションアクションボードを非表示
         questActionBoard.SetQuest(quests);
         questActionBoard.SetActive(true); // クエストアクションボードを表示
     }
@@ -58,7 +56,7 @@ public class QuestSystem : MonoBehaviour
         void CheckAllComplete()
         {
             completed++;
-            if (completed >= 4)
+            if (completed >= 3)
             {
                 OnQuestEnd?.Invoke();
                 transform.gameObject.SetActive(false);
@@ -67,7 +65,6 @@ public class QuestSystem : MonoBehaviour
         bagWindow.SetActive(false, CheckAllComplete); // キャラクタサブパネルを非表示
         questActionBoard.WindowClose(CheckAllComplete); // クエストアクションボードを表示
         worldMapPanel.SetActive(true, CheckAllComplete); // ワールドマップパネルを表示
-        optionActionBoard.SetActive(true, CheckAllComplete); // オプションアクションボードを表示
         cameraManager.SetEventType(EventType.Default); // バトル時のカメラ位置を設定
         PlayerController.Instance.ChangeEventType(EventType.Default); // イベントタイプをデフォルトに変更
     }
