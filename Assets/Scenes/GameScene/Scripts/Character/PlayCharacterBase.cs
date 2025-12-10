@@ -14,6 +14,7 @@ public class PlayCharacterBase : ScriptableObject
     [SerializeField] int startYear;
     [SerializeField] int startMonth;
     [SerializeField] int startDay;
+    [SerializeField, TextArea] string memo;
 
     public CharacterBase Base { get => characterBase; }
     public string StoryName { get => storyName; }
@@ -22,4 +23,5 @@ public class PlayCharacterBase : ScriptableObject
     public int StartYear { get => startYear; }
     public int StartMonth { get => startMonth; }
     public int StartDay { get => startDay; }
+    public string Memo { get => memo; }
 }

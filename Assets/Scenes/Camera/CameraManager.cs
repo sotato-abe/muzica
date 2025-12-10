@@ -11,7 +11,7 @@ public class CameraManager : MonoBehaviour
     private Vector3 defaultPosition = new Vector3(-1.0f, 0, 0); // 通常時のカメラ位置
     private Vector3 battlePosition = new Vector3(-2, -0.5f, 0); // バトル時のカメラ位置
     private Vector3 tradePosition = new Vector3(0, 2.5f, 0); // 取引時のカメラ位置
-    private Vector3 reservePosition = new Vector3(0, 2.5f, 0); // 準備時のカメラ位置
+    private Vector3 reservePosition = new Vector3(-3f, 2.5f, 0); // 準備時のカメラ位置
 
     private float defaultSize = 5f; // 通常時のカメラサイズ
     private float scaleUpSize = 3.5f; // バトル時のカメラ

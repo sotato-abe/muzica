@@ -13,6 +13,8 @@ public class CharacterLoadSystem : MonoBehaviour
     [SerializeField] CharacterSelectController characterSelectController;
     [SerializeField] TextMeshProUGUI ageText;
     [SerializeField] TextMeshProUGUI ageBackText;
+    [SerializeField] TextMeshProUGUI timeText;
+    [SerializeField] TextMeshProUGUI memoText;
 
     public const string FILE_NAME1 = "playData1.json";
     public const string FILE_NAME2 = "playData2.json";
@@ -94,6 +96,8 @@ public class CharacterLoadSystem : MonoBehaviour
             startButton.Setup(characterBase.StoryName);
             ageText.text = characterBase.StartYear.ToString() + "~";
             ageBackText.text = characterBase.StartYear.ToString() + "~";
+            timeText.text = characterBase.StartYear.ToString() + "/" + characterBase.StartMonth.ToString() + "/" + characterBase.StartDay.ToString();
+            memoText.text = characterBase.Memo;
         }
     }
 
