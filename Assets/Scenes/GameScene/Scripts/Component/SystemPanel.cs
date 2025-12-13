@@ -6,7 +6,7 @@ public class SystemPanel : MonoBehaviour
 {
     [SerializeField] Image backPanel;
 
-    private Color activeBackPanelColor = new Color(200f / 255f, 0f / 255f, 104f / 255f, 250f / 255f);
+    private Color activeBackPanelColor = new Color(0f, 0f, 0f, 250f / 255f);
     private Color inactiveBackPanelColor = new Color(0f, 0f, 0f, 0f);
 
     public virtual void PanelOpen()
