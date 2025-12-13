@@ -220,6 +220,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5f212243dee3844bab4e0a88d83e275, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  move3DSettings:
+    xFrequency: 0.8
+    yFrequency: 0.4
+    zFrequency: 0.3
+    xAmplitude: 10
+    yAmplitude: 8
+    zAmplitude: 2
+  open3DSettings:
+    jumpDuration: 0.3
+    transitionDuration: 0.1
+    targetRotation: {x: 10, y: 20, z: 5}
+    maxScaleMultiplier: 0.06
+    jumpHeight: 10
 --- !u!1 &377531921529170549
 GameObject:
   m_ObjectHideFlags: 0
@@ -323,7 +336,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1443925063423399010}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -516,6 +529,7 @@ GameObject:
   - component: {fileID: 300100214459731403}
   - component: {fileID: 8521555660215637150}
   - component: {fileID: 1836466789647760481}
+  - component: {fileID: 1696881103219844002}
   m_Layer: 0
   m_Name: CardTypeIcon
   m_TagString: Untagged
@@ -531,7 +545,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2479361213451133111}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -580,6 +594,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1696881103219844002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2479361213451133111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 4, y: -4}
+  m_UseGraphicAlpha: 1
 --- !u!1 &2577917444168912117
 GameObject:
   m_ObjectHideFlags: 0
@@ -998,6 +1027,7 @@ GameObject:
   - component: {fileID: 7143253208048413420}
   - component: {fileID: 6149025999349077129}
   - component: {fileID: 3021340027129989412}
+  - component: {fileID: 318528552658245180}
   m_Layer: 0
   m_Name: CardTitle
   m_TagString: Untagged
@@ -1013,7 +1043,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5881857298541625763}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1079,6 +1109,21 @@ MonoBehaviour:
   cardTitle: {fileID: 8282773776356199895}
   cardRarity: {fileID: 6205309473775750167}
   backgroundRect: {fileID: 359414909473441492}
+--- !u!114 &318528552658245180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5881857298541625763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 3, y: -3}
+  m_UseGraphicAlpha: 1
 --- !u!1 &5949477741728936701
 GameObject:
   m_ObjectHideFlags: 0

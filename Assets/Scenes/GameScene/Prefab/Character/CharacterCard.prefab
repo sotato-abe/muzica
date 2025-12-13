@@ -1734,7 +1734,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6026278714403771252}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2143,6 +2143,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5f212243dee3844bab4e0a88d83e275, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  move3DSettings:
+    xFrequency: 0.8
+    yFrequency: 0.4
+    zFrequency: 0.3
+    xAmplitude: 10
+    yAmplitude: 8
+    zAmplitude: 2
+  open3DSettings:
+    jumpDuration: 0.3
+    transitionDuration: 0.1
+    targetRotation: {x: 10, y: 20, z: 5}
+    maxScaleMultiplier: 0.06
+    jumpHeight: 10
 --- !u!1 &7865015292888129278
 GameObject:
   m_ObjectHideFlags: 0

@@ -54,10 +54,7 @@ public class Motion : MonoBehaviour
     private Vector3 originalPosition;
     private Coroutine currentMotionCoroutine;
     private Coroutine defaultMotionCoroutine;
-
-    // Open3DMotion実行制御
-    private bool isOpen3DMotionRunning = false;
-
+    
     // Move3DMotionの状態保存用
     private MotionState motionState;
 
@@ -106,16 +103,7 @@ public class Motion : MonoBehaviour
     /// </summary>
     public void StartOpen3DMotion()
     {
-        // 実行中フラグで確実に重複を防ぐ
-        if (isOpen3DMotionRunning)
-        {
-            // 強制停止して新しいモーションを開始
-            StopCoroutineIfRunning(ref currentMotionCoroutine);
-            isOpen3DMotionRunning = false;
-        }
-
-        // 新しいOpen3DMotionを開始
-        isOpen3DMotionRunning = true;
+        StopCoroutineIfRunning(ref currentMotionCoroutine);
         currentMotionCoroutine = StartCoroutine(Open3DMotion());
     }
     #endregion
@@ -271,9 +259,6 @@ public class Motion : MonoBehaviour
         float elapsedTime = 0f;
         var settings = open3DSettings;
 
-        // ★ 常に基準状態から開始（前のモーションの影響を受けない）
-        Vector3 startPosition = originalPosition;
-        Vector3 startScale = Vector3.one;
         Quaternion startRotation = Quaternion.identity;
         Quaternion endRotation = Quaternion.Euler(settings.targetRotation);
 
@@ -285,12 +270,12 @@ public class Motion : MonoBehaviour
             // Sin波ジャンプ
             float jump = Mathf.Sin(progress * Mathf.PI);
 
-            // ★ 基準位置から上方向にジャンプ
-            Vector3 position = startPosition + Vector3.up * jump * settings.jumpHeight;
+            // 上方向にジャンプ
+            Vector3 position = originalPosition + Vector3.up * jump * settings.jumpHeight;
 
-            // ★ 基準スケールからスケール変化
+            // スケール変化
             float scaleMultiplier = 1f + jump * settings.maxScaleMultiplier;
-            Vector3 scale = startScale * scaleMultiplier;
+            Vector3 scale = Vector3.one * scaleMultiplier;
 
             Quaternion rotation = Quaternion.Lerp(startRotation, endRotation, progress);
 
@@ -327,9 +312,6 @@ public class Motion : MonoBehaviour
     /// </summary>
     private void CompleteOpen3DMotion()
     {
-        // 実行フラグをfalseに設定
-        isOpen3DMotionRunning = false;
-
         ApplyTransform(originalPosition, Quaternion.identity, Vector3.one);
         currentMotionCoroutine = null;
         StartDefaultMotion();

@@ -19,7 +19,7 @@ public class SelectWindow : Window
     public UnityAction OnEnterTargetWindow;
     public UnityAction OnExitWindow;
 
-    private Color activeBackPanelColor = new Color(13f / 255f, 103f / 255f, 116f / 255f, 255f / 255f);
+    private Color activeBackPanelColor = new Color(133f / 255f, 10f / 255f, 255f / 255f, 255f / 255f);
     private Color inactiveBackPanelColor = new Color(0f, 0f, 0f, 100f / 255f);
 
 
