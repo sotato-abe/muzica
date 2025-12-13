@@ -1,51 +1,148 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
 public class Motion : MonoBehaviour
 {
-    private Vector3 originalPosition;
-    private Coroutine currentMotionCoroutine; // 現在実行中のモーションコルーチン
-    private Coroutine defaultMotionCoroutine; // デフォルトモーション（Move3DMotion）のコルーチン
-    
-    // Move3DMotionの状態保存用
-    private float savedTime = 0f;
-    private float savedXOffset = 0f;
-    private float savedYOffset = 0f;
-    private float savedZOffset = 0f;
-    private bool isFirstTime = true;
+    #region 設定構造体
+    [System.Serializable]
+    public struct Move3DSettings
+    {
+        public float xFrequency;
+        public float yFrequency;
+        public float zFrequency;
+        public float xAmplitude;
+        public float yAmplitude;
+        public float zAmplitude;
 
+        public static Move3DSettings Default => new Move3DSettings
+        {
+            xFrequency = 0.8f,
+            yFrequency = 0.4f,
+            zFrequency = 0.3f,
+            xAmplitude = 10f,
+            yAmplitude = 8f,
+            zAmplitude = 2f
+        };
+    }
+
+    [System.Serializable]
+    public struct Open3DSettings
+    {
+        public float jumpDuration;
+        public float transitionDuration;
+        public Vector3 targetRotation;
+        public float maxScaleMultiplier;
+        public float jumpHeight;
+
+        public static Open3DSettings Default => new Open3DSettings
+        {
+            jumpDuration = 0.3f,
+            transitionDuration = 0.1f,
+            targetRotation = new Vector3(10f, 20f, 5f),
+            maxScaleMultiplier = 0.06f,
+            jumpHeight = 10f
+        };
+    }
+    #endregion
+
+    #region フィールド
+    [Header("Motion Settings")]
+    [SerializeField] private Move3DSettings move3DSettings = Move3DSettings.Default;
+    [SerializeField] private Open3DSettings open3DSettings = Open3DSettings.Default;
+
+    // 内部状態
+    private Vector3 originalPosition;
+    private Coroutine currentMotionCoroutine;
+    private Coroutine defaultMotionCoroutine;
+
+    // Open3DMotion実行制御
+    private bool isOpen3DMotionRunning = false;
+
+    // Move3DMotionの状態保存用
+    private MotionState motionState;
+
+    private struct MotionState
+    {
+        public float time;
+        public float xOffset;
+        public float yOffset;
+        public float zOffset;
+        public bool isInitialized;
+    }
+    #endregion
+
+    #region Unity Events
     private void Start()
     {
-        // 初期位置を保存
-        originalPosition = transform.localPosition;
+        Initialize();
     }
 
     private void OnEnable()
     {
-        // デフォルトモーション開始
         StartDefaultMotion();
     }
-    
-    // デフォルトモーションを開始するメソッド
+    #endregion
+
+    #region Public Methods
+    /// <summary>
+    /// デフォルトモーションを開始
+    /// </summary>
     public void StartDefaultMotion()
     {
-        if (defaultMotionCoroutine != null)
-        {
-            StopCoroutine(defaultMotionCoroutine);
-        }
+        StopCoroutineIfRunning(ref defaultMotionCoroutine);
         defaultMotionCoroutine = StartCoroutine(Move3DMotion());
     }
-    
-    // デフォルトモーションを停止するメソッド
+
+    /// <summary>
+    /// デフォルトモーションを停止
+    /// </summary>
     public void StopDefaultMotion()
     {
-        if (defaultMotionCoroutine != null)
+        StopCoroutineIfRunning(ref defaultMotionCoroutine);
+    }
+
+    /// <summary>
+    /// Open3DMotionを安全に開始
+    /// </summary>
+    public void StartOpen3DMotion()
+    {
+        // 実行中フラグで確実に重複を防ぐ
+        if (isOpen3DMotionRunning)
         {
-            StopCoroutine(defaultMotionCoroutine);
-            defaultMotionCoroutine = null;
+            // 強制停止して新しいモーションを開始
+            StopCoroutineIfRunning(ref currentMotionCoroutine);
+            isOpen3DMotionRunning = false;
+        }
+
+        // 新しいOpen3DMotionを開始
+        isOpen3DMotionRunning = true;
+        currentMotionCoroutine = StartCoroutine(Open3DMotion());
+    }
+    #endregion
+
+    #region Private Methods
+    /// <summary>
+    /// 初期化処理
+    /// </summary>
+    private void Initialize()
+    {
+        originalPosition = transform.localPosition;
+        motionState = new MotionState
+        {
+            time = 0f,
+            isInitialized = false
+        };
+    }
+
+    /// <summary>
+    /// コルーチンが実行中の場合停止
+    /// </summary>
+    private void StopCoroutineIfRunning(ref Coroutine coroutine)
+    {
+        if (coroutine != null)
+        {
+            StopCoroutine(coroutine);
+            coroutine = null;
         }
     }
 
@@ -85,175 +182,157 @@ public class Motion : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// デフォルトの3D揺れモーション
+    /// </summary>
     private IEnumerator Move3DMotion()
     {
-        // Sin波の周波数（低い値でゆっくりした動き）
-        float xFrequency = 0.8f;
-        float yFrequency = 0.4f;
-        float zFrequency = 0.3f;
+        InitializeMotionStateIfNeeded();
 
-        // 回転の振幅（度数）
-        float xAmplitude = 10f;  // X軸回転の最大角度
-        float yAmplitude = 8f;  // Y軸回転の最大角度
-        float zAmplitude = 2f;   // Z軸回転の最大角度
-
-        // 初回のみランダムオフセットを設定、以降は保存した値を使用
-        if (isFirstTime)
-        {
-            savedXOffset = Random.Range(0f, 2f * Mathf.PI);
-            savedYOffset = Random.Range(0f, 2f * Mathf.PI);
-            savedZOffset = Random.Range(0f, 2f * Mathf.PI);
-            savedTime = 0f;
-            isFirstTime = false;
-        }
-
-        float time = savedTime;
+        float time = motionState.time;
 
         while (true)
         {
             time += Time.deltaTime;
-            savedTime = time; // 時間を保存
+            motionState.time = time;
 
-            // Sin波を使って連続的で滑らかな回転を計算
-            float xRotation = Mathf.Sin(time * xFrequency + savedXOffset) * xAmplitude;
-            float yRotation = Mathf.Sin(time * yFrequency + savedYOffset) * yAmplitude;
-            float zRotation = Mathf.Sin(time * zFrequency + savedZOffset) * zAmplitude;
+            var rotation = CalculateMove3DRotation(time);
+            ApplyTransform(originalPosition, rotation, Vector3.one);
 
-            // 位置は常に元の位置に保持
-            transform.localPosition = originalPosition;
-
-            // 連続的で滑らかな回転を適用
-            transform.localRotation = Quaternion.Euler(xRotation, yRotation, zRotation);
-
-            yield return null; // 毎フレーム実行
+            yield return null;
         }
     }
 
+    /// <summary>
+    /// モーション状態を初期化（初回のみ）
+    /// </summary>
+    private void InitializeMotionStateIfNeeded()
+    {
+        if (!motionState.isInitialized)
+        {
+            motionState.xOffset = Random.Range(0f, 2f * Mathf.PI);
+            motionState.yOffset = Random.Range(0f, 2f * Mathf.PI);
+            motionState.zOffset = Random.Range(0f, 2f * Mathf.PI);
+            motionState.time = 0f;
+            motionState.isInitialized = true;
+        }
+    }
+
+    /// <summary>
+    /// Move3Dモーションの回転を計算
+    /// </summary>
+    private Quaternion CalculateMove3DRotation(float time)
+    {
+        var settings = move3DSettings;
+
+        float xRotation = Mathf.Sin(time * settings.xFrequency + motionState.xOffset) * settings.xAmplitude;
+        float yRotation = Mathf.Sin(time * settings.yFrequency + motionState.yOffset) * settings.yAmplitude;
+        float zRotation = Mathf.Sin(time * settings.zFrequency + motionState.zOffset) * settings.zAmplitude;
+
+        return Quaternion.Euler(xRotation, yRotation, zRotation);
+    }
+
+    /// <summary>
+    /// Transform要素を一括適用
+    /// </summary>
+    private void ApplyTransform(Vector3 position, Quaternion rotation, Vector3 scale)
+    {
+        transform.localPosition = position;
+        transform.localRotation = rotation;
+        transform.localScale = scale;
+    }
+
+    /// <summary>
+    /// Open3D モーション（はね→バウンド→復帰）
+    /// </summary>
     public IEnumerator Open3DMotion()
     {
-        // 前のコルーチンが実行中なら停止
-        if (currentMotionCoroutine != null)
-        {
-            StopCoroutine(currentMotionCoroutine);
-        }
-        
-        // デフォルトモーションを一時停止
+        // 全てのモーションを停止
         StopDefaultMotion();
-        float jumpDuration = 0.3f;   // はねる時間
-        float bounceDuration = 0.6f; // バウンスして戻る時間
 
-        // 開始時点の角度を保存
-        Quaternion startRotation = transform.localRotation;
-        
-        // 基準回転を0度（identity）に固定
-        // Quaternion startRotation = Quaternion.identity;
-        
-        // 固定の回転ターゲット
-        Vector3 targetRotation = new Vector3(
-            10f,  // X軸回転
-            20f,  // Y軸回転
-            5f    // Z軸回転
-        );
-        
-        Quaternion endRotation = Quaternion.Euler(targetRotation);
-        
-        // 連続呼び出し対応：開始時に即座に原点状態にリセット
-        Vector3 originalScale = Vector3.one; // 基準スケールを固定値に
-        
-        // フェーズ1: 元の位置から最大回転位置まで素早くはねる（スケールも変化）
+        // フェーズ1: ジャンプ（スケール変化付き）
+        yield return StartCoroutine(ExecuteJumpPhase());
+
+        // フェーズ2: 元の位置に直接戻る
+        ApplyTransform(originalPosition, Quaternion.identity, Vector3.one);
+
+        // フェーズ3: Move3DMotionへの滑らか移行
+        yield return StartCoroutine(ExecuteTransitionPhase());
+
+        // 完了処理
+        CompleteOpen3DMotion();
+    }
+
+    /// <summary>
+    /// ジャンプフェーズの実行
+    /// </summary>
+    private IEnumerator ExecuteJumpPhase()
+    {
         float elapsedTime = 0f;
-        while (elapsedTime < jumpDuration)
+        var settings = open3DSettings;
+
+        // ★ 常に基準状態から開始（前のモーションの影響を受けない）
+        Vector3 startPosition = originalPosition;
+        Vector3 startScale = Vector3.one;
+        Quaternion startRotation = Quaternion.identity;
+        Quaternion endRotation = Quaternion.Euler(settings.targetRotation);
+
+        while (elapsedTime < settings.jumpDuration)
         {
             elapsedTime += Time.deltaTime;
-            float progress = elapsedTime / jumpDuration;
-            
-            // はねる瞬間のスケール変化（1.0 → 1.2 → 1.0）
-            float scaleProgress = Mathf.Sin(progress * Mathf.PI);
-            float scaleMultiplier = 1f + scaleProgress * 0.06f; // 最大6%拡大
-            
-            // 位置は常に元の位置に保持
-            transform.localPosition = originalPosition;
-            transform.localScale = originalScale * scaleMultiplier;
-            
-            // 元の回転から最大回転まで素早く移動
-            transform.localRotation = Quaternion.Lerp(startRotation, endRotation, progress);
-            
+            float progress = Mathf.Clamp01(elapsedTime / settings.jumpDuration);
+
+            // Sin波ジャンプ
+            float jump = Mathf.Sin(progress * Mathf.PI);
+
+            // ★ 基準位置から上方向にジャンプ
+            Vector3 position = startPosition + Vector3.up * jump * settings.jumpHeight;
+
+            // ★ 基準スケールからスケール変化
+            float scaleMultiplier = 1f + jump * settings.maxScaleMultiplier;
+            Vector3 scale = startScale * scaleMultiplier;
+
+            Quaternion rotation = Quaternion.Lerp(startRotation, endRotation, progress);
+
+            ApplyTransform(position, rotation, scale);
             yield return null;
         }
-        
-        // フェーズ2: 最大回転から元の回転にブルンとバウンドしながら戻る
-        elapsedTime = 0f;
-        while (elapsedTime < bounceDuration)
-        {
-            elapsedTime += Time.deltaTime;
-            float progress = elapsedTime / bounceDuration;
-            
-            // ブルンとしたバウンド
-            float bounceProgress = BouncyEase(progress);
-            
-            // 位置は常に元の位置に保持
-            transform.localPosition = originalPosition;
-            transform.localScale = originalScale; // スケールを元に戻す
-            
-            // バウンドしながら元の回転に戻る
-            transform.localRotation = Quaternion.Lerp(endRotation, startRotation, bounceProgress);
-            
-            yield return null;
-        }
-        
-        // Move3DMotionの現在の角度を計算
-        float xFrequency = 0.8f;
-        float yFrequency = 0.4f;
-        float zFrequency = 0.3f;
-        float xAmplitude = 10f;
-        float yAmplitude = 8f;
-        float zAmplitude = 2f;
-        
-        float targetXRotation = Mathf.Sin(savedTime * xFrequency + savedXOffset) * xAmplitude;
-        float targetYRotation = Mathf.Sin(savedTime * yFrequency + savedYOffset) * yAmplitude;
-        float targetZRotation = Mathf.Sin(savedTime * zFrequency + savedZOffset) * zAmplitude;
-        Quaternion targetMotionRotation = Quaternion.Euler(targetXRotation, targetYRotation, targetZRotation);
-        
-        // 現在の回転からMove3DMotionの回転に滑らかに移行する
-        float transitionDuration = 0.3f;
-        float transitionTime = 0f;
+    }
+
+    /// <summary>
+    /// Move3DMotionへの移行フェーズ
+    /// </summary>
+    private IEnumerator ExecuteTransitionPhase()
+    {
+        var settings = open3DSettings;
         Quaternion currentRotation = transform.localRotation;
-        
-        while (transitionTime < transitionDuration)
+        Quaternion targetMotionRotation = CalculateMove3DRotation(motionState.time);
+
+        float transitionTime = 0f;
+
+        while (transitionTime < settings.transitionDuration)
         {
             transitionTime += Time.deltaTime;
-            float progress = transitionTime / transitionDuration;
-            
-            transform.localPosition = originalPosition;
-            transform.localRotation = Quaternion.Lerp(currentRotation, targetMotionRotation, progress);
-            
+            float progress = transitionTime / settings.transitionDuration;
+
+            var rotation = Quaternion.Lerp(currentRotation, targetMotionRotation, progress);
+            ApplyTransform(originalPosition, rotation, Vector3.one);
+
             yield return null;
         }
-        
-        // 最終的に元の状態に確実に戻す
-        transform.localPosition = originalPosition;
-        
-        // コルーチン参照をクリア
+    }
+
+    /// <summary>
+    /// Open3DMotion完了処理
+    /// </summary>
+    private void CompleteOpen3DMotion()
+    {
+        // 実行フラグをfalseに設定
+        isOpen3DMotionRunning = false;
+
+        ApplyTransform(originalPosition, Quaternion.identity, Vector3.one);
         currentMotionCoroutine = null;
-        
-        UnityEngine.Debug.Log("Open3DMotion completed.");
-        // デフォルトモーションを再開
         StartDefaultMotion();
     }
-    
-    // ブルンとしたバウンド関数
-    private float BouncyEase(float t)
-    {
-        // ブルンとした動きのパラメータ
-        float bounceCount = 2.5f;   // バウンド回数を少なく
-        float bounceHeight = 0.4f;  // バウンドの高さ
-        float damping = 3f;         // 適度な減衰
-        
-        // より自然なバウンド曲線
-        float bounce = Mathf.Exp(-damping * t) * Mathf.Sin(bounceCount * Mathf.PI * t) * bounceHeight;
-        
-        // EaseOutQuart + バウンス効果でブルンとした動き
-        float easeOut = 1f - Mathf.Pow(1f - t, 4f);
-        return easeOut + bounce * (1f - easeOut);
-    }
+    #endregion
 }

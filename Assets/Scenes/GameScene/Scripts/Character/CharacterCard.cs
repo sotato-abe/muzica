@@ -22,7 +22,7 @@ public class CharacterCard : MonoBehaviour
         cardImage.sprite = character.Base.Sprite;
         SetRarity(character.Base.Rarity);
         statusLayer.SetCharacterStatus(character);
-        StartCoroutine(cardMotion.Open3DMotion());
+        cardMotion.StartOpen3DMotion();
     }
 
     private void SetRarity(RarityType rarity)

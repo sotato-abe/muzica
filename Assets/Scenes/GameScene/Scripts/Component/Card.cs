@@ -19,7 +19,7 @@ public class Card : MonoBehaviour
         cardTypeIcon.color = item.Base.Rarity.GetRarityColor();
         cardFrame.color = item.Base.Rarity.GetRarityColor();
         cardTitle.SetCardTitle(item.Base.Rarity, item.Base.Name);
-        StartCoroutine(cardMotion.Open3DMotion());
+        cardMotion.StartOpen3DMotion();
     }
 
     public virtual void SetCommand(Command command)
