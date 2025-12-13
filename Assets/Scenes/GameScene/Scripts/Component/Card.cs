@@ -10,6 +10,7 @@ public class Card : MonoBehaviour
     [SerializeField] Image cardTypeIcon;
     [SerializeField] Image cardFrame;
     [SerializeField] Image cardImage;
+    [SerializeField] Motion cardMotion;
 
     public virtual void SetCard(Item item)
     {
@@ -18,6 +19,7 @@ public class Card : MonoBehaviour
         cardTypeIcon.color = item.Base.Rarity.GetRarityColor();
         cardFrame.color = item.Base.Rarity.GetRarityColor();
         cardTitle.SetCardTitle(item.Base.Rarity, item.Base.Name);
+        StartCoroutine(cardMotion.Open3DMotion());
     }
 
     public virtual void SetCommand(Command command)

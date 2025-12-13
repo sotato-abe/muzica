@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1794298369554233274}
   - component: {fileID: 6952766729698851735}
-  - component: {fileID: 1523915270579525418}
   - component: {fileID: -1620507775677816229}
+  - component: {fileID: 1523915270579525418}
   m_Layer: 0
   m_Name: TreasureCard
   m_TagString: Untagged
@@ -51,18 +51,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 290071995926942590}
   m_CullTransparentMesh: 1
---- !u!114 &1523915270579525418
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 290071995926942590}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5f212243dee3844bab4e0a88d83e275, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &-1620507775677816229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79,7 +67,20 @@ MonoBehaviour:
   cardTypeIcon: {fileID: 1910382198725416520}
   cardFrame: {fileID: 4448237957444037673}
   cardImage: {fileID: 1036822353389679597}
+  cardMotion: {fileID: 1523915270579525418}
   description: {fileID: 8678024352992451315}
+--- !u!114 &1523915270579525418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 290071995926942590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5f212243dee3844bab4e0a88d83e275, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2026272938953963828
 GameObject:
   m_ObjectHideFlags: 0

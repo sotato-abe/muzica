@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1794298369554233274}
   - component: {fileID: 6952766729698851735}
-  - component: {fileID: 1523915270579525418}
   - component: {fileID: 451322262659506531}
+  - component: {fileID: 1523915270579525418}
   m_Layer: 0
   m_Name: EquipmentCard
   m_TagString: Untagged
@@ -51,18 +51,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 290071995926942590}
   m_CullTransparentMesh: 1
---- !u!114 &1523915270579525418
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 290071995926942590}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5f212243dee3844bab4e0a88d83e275, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &451322262659506531
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79,12 +67,25 @@ MonoBehaviour:
   cardTypeIcon: {fileID: 4184610011007194570}
   cardFrame: {fileID: 1032590807373132027}
   cardImage: {fileID: 1036822353389679597}
+  cardMotion: {fileID: 1523915270579525418}
   costIconPrefab: {fileID: 7226569982054911970, guid: 62e590e349b61b246b3be65bffed144e, type: 3}
   attackPrefab: {fileID: 8399925621470370252, guid: 045abe889834c1c489acd4ce9552587f, type: 3}
   enchantPrefab: {fileID: 3932708716858639378, guid: f7cf20ff89b593e4aa60105cafad548e, type: 3}
   costSpace: {fileID: 5736656505807149933}
   attackSpace: {fileID: 2577917444168912117}
   enchantSpace: {fileID: 7522503046178671069}
+--- !u!114 &1523915270579525418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 290071995926942590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5f212243dee3844bab4e0a88d83e275, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1443925063423399010
 GameObject:
   m_ObjectHideFlags: 0

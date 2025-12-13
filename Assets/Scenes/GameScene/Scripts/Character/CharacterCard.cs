@@ -13,6 +13,7 @@ public class CharacterCard : MonoBehaviour
     [SerializeField] Image cardImage;
     [SerializeField] Image rarityFrame;
     [SerializeField] StatusLayer statusLayer;
+    [SerializeField] Motion cardMotion;
     
     public void Setup(Character character)
     {
@@ -21,6 +22,7 @@ public class CharacterCard : MonoBehaviour
         cardImage.sprite = character.Base.Sprite;
         SetRarity(character.Base.Rarity);
         statusLayer.SetCharacterStatus(character);
+        StartCoroutine(cardMotion.Open3DMotion());
     }
 
     private void SetRarity(RarityType rarity)
