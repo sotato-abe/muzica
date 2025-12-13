@@ -9,6 +9,9 @@ using TMPro;
 public class ButtonUX : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     [SerializeField] public TextMeshProUGUI text;
+    [SerializeField] public Image iconImage;
+    [SerializeField] public Color activeColor = Color.white;
+    [SerializeField] public Color inactiveColor = Color.black;
 
     public virtual void OnPointerClick(PointerEventData eventData)
     {
@@ -18,11 +21,13 @@ public class ButtonUX : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public virtual void OnPointerEnter(PointerEventData eventData)
     {
         SoundSystem.Instance.PlaySE(SeType.Cursol);
-        text.color = Color.white;
+        text.color = activeColor;
+        iconImage.color = activeColor;
     }
 
     public virtual void OnPointerExit(PointerEventData eventData)
     {
-        text.color = Color.black;
+        text.color = inactiveColor;
+        iconImage.color = inactiveColor;
     }
 }
