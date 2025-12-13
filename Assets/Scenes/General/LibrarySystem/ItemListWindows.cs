@@ -28,8 +28,15 @@ public class ItemListWindows : SelectWindow
         ChangeActiveWindow(false);
     }
 
+    public override void EnterTargetWindow()
+    {
+        // セレクトパネルの末端なので何もしない
+        // ベースの処理を止めるためにオーバーライドしている
+    }
+
     public void ChangeItemType(ItemType itemType)
     {
+        // 現在のインデックスを保存
         switch (currentItemType)
         {
             case ItemType.Consumable:
@@ -52,7 +59,7 @@ public class ItemListWindows : SelectWindow
         {
             Destroy(child.gameObject);
         }
-        
+
         selectElements.Clear();
 
         int initialIndex = 0;
@@ -93,6 +100,7 @@ public class ItemListWindows : SelectWindow
             newElement.SetActiveCursol(false);
             selectElements.Add(newElement);
         }
+        ResetCursolIndex(consumabeleIndex);
     }
 
     private void SetEquipmentElements()
@@ -107,6 +115,7 @@ public class ItemListWindows : SelectWindow
             newElement.SetActiveCursol(false);
             selectElements.Add(newElement);
         }
+        ResetCursolIndex(equipmentIndex);
     }
 
     private void SetTreasureElements()
@@ -121,6 +130,7 @@ public class ItemListWindows : SelectWindow
             newElement.SetActiveCursol(false);
             selectElements.Add(newElement);
         }
+        ResetCursolIndex(treasureIndex);
     }
 
     public override void TargetElement(int index)

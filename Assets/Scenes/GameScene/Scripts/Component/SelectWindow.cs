@@ -159,4 +159,9 @@ public class SelectWindow : Window
     {
         return currentIndex;
     }
+
+    public void ResetCursolIndex(int index = 0)
+    {
+        currentIndex = index;
+    }   
 }
