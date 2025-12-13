@@ -14,11 +14,11 @@ public class OptionSystem : SystemPanel
     {
         PanelClose();
         categorySelectWindow.OnChangeTarget += ChangeCategory;
-        categorySelectWindow.OnSelectAction += SelectActiveWindow;
-        categorySelectWindow.OnCancelAction += PanelClose;
+        categorySelectWindow.OnEnterTargetWindow += SelectActiveWindow;
+        categorySelectWindow.OnExitWindow += PanelClose;
         for (int i = 0; i < categoryWindows.Count; i++)
         {
-            categoryWindows[i].OnCancelAction += CancelActiveWindow;
+            categoryWindows[i].OnExitWindow += ExitTargetWindow;
         }
     }
 
@@ -76,7 +76,7 @@ public class OptionSystem : SystemPanel
         }
     }
 
-    public void CancelActiveWindow()
+    public void ExitTargetWindow()
     {
         int selectedIndex = categorySelectWindow.GetCurrentIndex();
         for (int i = 0; i < categoryWindows.Count; i++)

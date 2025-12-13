@@ -34,6 +34,7 @@ public class Window : MonoBehaviour
 
     public virtual void WindowOpen()
     {
+        if( isActive ) return;
         isActive = true;
         transform.gameObject.SetActive(isActive);
         if (!isAnimating) // 二重実行防止
@@ -48,6 +49,7 @@ public class Window : MonoBehaviour
         transform.gameObject.SetActive(isActive);
     }
 
+    // バウンド
     private IEnumerator OpenMotion()
     {
         isAnimating = true; // アニメーション開始

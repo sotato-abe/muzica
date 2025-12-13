@@ -72,4 +72,19 @@ public class ItemDatabase : MonoBehaviour
         }
         return itemDataList.IndexOf(item);
     }
+
+    public List<EquipmentBase> GetAllEquipmentBases()
+    {
+        return new List<EquipmentBase>(equipmentDataList);
+    }
+
+    public List<ConsumableBase> GetAllConsumableBases()
+    {
+        return new List<ConsumableBase>(consumableDataList);
+    }
+
+    public List<TreasureBase> GetAllTreasureBases()
+    {
+        return new List<TreasureBase>(treasureDataList);
+    }
 }

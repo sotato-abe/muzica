@@ -11,17 +11,19 @@ public class SelectWindow : Window
 
     private int currentIndex = 0;
     private bool isCursolActive = false;
+    private float inputCooldownTime = 0f;
+    private const float INPUT_COOLDOWN_DURATION = 0.1f; // 100msの入力クールダウン（入力制限）
 
     public delegate void ChangeTargetDelegate(int index);
     public event ChangeTargetDelegate OnChangeTarget;
-    public UnityAction OnSelectAction;
-    public UnityAction OnCancelAction;
+    public UnityAction OnEnterTargetWindow;
+    public UnityAction OnExitWindow;
 
-    private Color activeBackPanelColor = new Color(0f, 0f, 0f, 255f / 255f);
+    private Color activeBackPanelColor = new Color(13f / 255f, 103f / 255f, 116f / 255f, 255f / 255f);
     private Color inactiveBackPanelColor = new Color(0f, 0f, 0f, 100f / 255f);
 
 
-    private void Start()
+    public virtual void Start()
     {
         ChangeTargetCursol();
     }
@@ -29,6 +31,13 @@ public class SelectWindow : Window
     private void Update()
     {
         if (!isCursolActive) return;
+
+        // 入力クールダウンを更新
+        if (inputCooldownTime > 0f)
+        {
+            inputCooldownTime -= Time.deltaTime;
+            return; // クールダウン中は入力を無視
+        }
 
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
@@ -41,37 +50,57 @@ public class SelectWindow : Window
 
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.RightArrow))
         {
-            OnSelectAction?.Invoke();
+            EnterTargetWindow();
         }
 
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            OnCancelAction?.Invoke();
+            ExitWindow();
         }
     }
 
+    // ウィンドウを開くときに使用
     public override void WindowOpen()
     {
         base.WindowOpen();
         isCursolActive = true;
     }
 
+    // ウィンドウを閉じるときに使用
     public override void WindowClose()
     {
         base.WindowClose();
         isCursolActive = false;
     }
 
+    // 下位パネルに行くときに使用
+    public virtual void EnterTargetWindow()
+    {
+        ChangeActiveWindow(false);
+        OnEnterTargetWindow?.Invoke();
+    }
+
+    //　上位パネルに行くときに使用
+    public virtual void ExitWindow()
+    {
+        ChangeActiveWindow(false);
+        OnExitWindow?.Invoke();
+    }
+
     public void ChangeActiveWindow(bool isActive)
     {
-        isCursolActive = isActive;
         if (isActive)
         {
+            // 即座にアクティブ化する場合
+            isCursolActive = true;
             backgroundImage.color = activeBackPanelColor;
-            ChangeTargetCursol();
+            // ChangeTargetCursol();
+            // ウィンドウがアクティブになった直後は入力をブロック
+            inputCooldownTime = INPUT_COOLDOWN_DURATION;
         }
         else
         {
+            isCursolActive = false;
             backgroundImage.color = inactiveBackPanelColor;
         }
     }
