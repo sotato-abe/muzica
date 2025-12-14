@@ -27,7 +27,6 @@ public class QuestCardPrefab : SlidePanel
     public event ReceiptQuest OnReceiptQuest;
 
     private Quest currentQuest;
-    bool isCompleted = false;
 
     private void Update()
     {
@@ -140,7 +139,6 @@ public class QuestCardPrefab : SlidePanel
                 Debug.LogWarning("Unknown quest type");
                 break;
         }
-        isCompleted = true;
         SoundSystem.Instance.PlaySE(SeType.Stamp);
         StampCompleted(true);
         QuestDatabase.Instance.MarkQuestAsFinished(currentQuest.Base);

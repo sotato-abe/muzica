@@ -6,7 +6,7 @@ using System;
 public class QuestBase : ScriptableObject
 {
     [Header("Quest Information")] // クエスト情報
-    [SerializeField] new string title; // クエスト名
+    [SerializeField] string title; // クエスト名
     [SerializeField] RarityType rarity; // レアリティ
     [SerializeField] FieldType fieldType; // フィールドタイプ
     [SerializeField] PointBase pointBase; // ポイント

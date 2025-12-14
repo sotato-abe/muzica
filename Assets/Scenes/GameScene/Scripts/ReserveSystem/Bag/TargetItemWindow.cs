@@ -69,7 +69,7 @@ public class TargetItemWindow : MonoBehaviour
         coinPriceTag.SetPrice(item.Base.CoinPrice, isOwn);
         discPriceTag.SetPrice(item.Base.DiscPrice, isOwn);
 
-        if (item.Base.CoinPrice != null || item.Base.DiscPrice != null)
+        if (item.Base.CoinPrice > 0 || item.Base.DiscPrice > 0)
         {
             currencyWindow.SetActive(true);
         }

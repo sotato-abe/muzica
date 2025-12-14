@@ -12,7 +12,6 @@ public class StartButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [SerializeField] GameObject startIcon;
 
     public UnityAction OnClick;
-    bool isLoaded = false;
 
     private void Start()
     {

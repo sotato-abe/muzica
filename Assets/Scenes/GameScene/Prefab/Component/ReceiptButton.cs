@@ -9,8 +9,9 @@ public class ReceiptButton : Button
     [SerializeField] private Image buttonImage;
     [SerializeField] private TextMeshProUGUI buttonText;
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable(); // 基底クラスのOnEnable()を呼び出し
         this.gameObject.transform.localScale = Vector3.one;
     }
 

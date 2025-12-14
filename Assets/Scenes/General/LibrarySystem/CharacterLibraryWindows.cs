@@ -13,7 +13,7 @@ public class CharacterLibraryWindows : SelectWindow
 
     private List<CharacterBase> characterBaseList;
 
-    private void Start()
+    public override void Start()
     {
         SetListElement();
         ChangeActiveWindow(false);

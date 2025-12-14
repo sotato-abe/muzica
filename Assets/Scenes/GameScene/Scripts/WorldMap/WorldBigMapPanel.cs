@@ -44,27 +44,6 @@ public class WorldBigMapWindow : Window
         }
     }
 
-    public void SwitchActive()
-    {
-        isActive = !isActive; // フラグをトグル
-        if (isActive)
-        {
-            WindowOpen();
-        }
-        else
-        {
-            // ageTimePanel.SetTimeSpeed(TimeState.Fast); // 時間を進める
-            WindowClose();
-        }
-    }
-
-    private void WindowClose()
-    {
-        isActive = false;
-        // ageTimePanel.SetTimeSpeed(TimeState.Fast); // 時間を進める
-        transform.gameObject.SetActive(false);
-    }
-
     public void OnUpStart()
     {
         Debug.Log("Up button pressed");

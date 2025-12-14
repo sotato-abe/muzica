@@ -21,7 +21,6 @@ public class CharacterLoadSystem : MonoBehaviour
     public const string FILE_NAME3 = "playData3.json";
 
     private CharacterIndex currentCharacterIndex = CharacterIndex.Sola;
-    bool isActiveController = false;
 
     private void Start()
     {
@@ -33,7 +32,6 @@ public class CharacterLoadSystem : MonoBehaviour
         characterSelectController.CharacterSelect(0);
         characterSelectController.OnStartGame += StartGame;
         characterSelectController.OnCharacterSelect += SelectPlayerCharacter;
-        isActiveController = true;
     }
 
     private void LoadData()

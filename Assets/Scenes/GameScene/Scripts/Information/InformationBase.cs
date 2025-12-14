@@ -7,7 +7,7 @@ using System;
 public class InformationBase : ScriptableObject
 {
     [Header("Information Information")] // 情報
-    [SerializeField] new string title; // タイトル
+    [SerializeField] string title; // タイトル
     [SerializeField] Sprite sprite;
     [SerializeField] FieldType fieldType; // フィールドタイプ
     [SerializeField] FieldBase fieldBase; // フィールド

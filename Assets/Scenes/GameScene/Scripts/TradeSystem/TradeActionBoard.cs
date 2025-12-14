@@ -23,8 +23,6 @@ public class TradeActionBoard : SlidePanel
     private List<TradeActionType> actionTypeList;
     private TradeActionType currentAction = TradeActionType.Talk;
 
-    private bool isTalkPanelActive = true;
-
     public void SetAllActive()
     {
         talkIcon.gameObject.SetActive(true);

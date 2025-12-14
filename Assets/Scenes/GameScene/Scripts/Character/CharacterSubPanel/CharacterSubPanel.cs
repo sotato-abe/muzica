@@ -26,7 +26,6 @@ public class CharacterSubPanel : SlidePanel
         this.character = character;
         characterImage.sprite = character.Base.SquareSprite;
         characterNameText.text = character.Base.Name;
-        this.character.OnTalkMessage += SetMessageByType;
         SetRarityColor();
         base.SetActive(true);
     }

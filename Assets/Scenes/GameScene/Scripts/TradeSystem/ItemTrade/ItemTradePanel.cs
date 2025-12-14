@@ -18,7 +18,7 @@ public class ItemTradePanel : TwoColumnPanel
     public delegate void OwnerMessageDelegate(TalkMessage message);
     public event OwnerMessageDelegate OnOwnerMessage;
 
-    private void Start()
+    public override void Start()
     {
         shopItemWindow.OnOwnerMessage += OwnerMessage;
         categorySwitch.OnChangeWindow += ChangeWindow;

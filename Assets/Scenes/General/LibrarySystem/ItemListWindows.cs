@@ -22,7 +22,7 @@ public class ItemListWindows : SelectWindow
     private int equipmentIndex = 0;
     private int treasureIndex = 0;
 
-    private void Start()
+    public override void Start()
     {
         ChangeItemType(currentItemType);
         ChangeActiveWindow(false);

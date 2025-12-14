@@ -11,8 +11,6 @@ public class LibrarySystem : SystemPanel
     [SerializeField] List<SelectWindow> categoryWindows;
     [SerializeField] CharacterSelectController characterSelectController;
 
-    int currentIndex = 0;
-
     private void Awake()
     {
         PanelClose();

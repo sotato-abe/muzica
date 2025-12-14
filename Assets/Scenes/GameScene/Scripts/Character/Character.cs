@@ -73,7 +73,6 @@ public class Character
 
     // message
     public delegate void TalkMessageDelegate(MessageType message);
-    public event TalkMessageDelegate OnTalkMessage;
 
     // TODO BattleCharacter に継承させる
     public delegate void LifeGuargeDelegate(int value, int guard, int takeValue);

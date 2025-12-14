@@ -14,7 +14,6 @@ public class WorkQuestTask : MonoBehaviour
     public event OwnerMessageDelegate OnOwnerMessage;
 
     public delegate void CompletedDelegate();
-    public event CompletedDelegate OnCompleted;
 
     public void SetWorkTask(WorkQuest quest)
     {

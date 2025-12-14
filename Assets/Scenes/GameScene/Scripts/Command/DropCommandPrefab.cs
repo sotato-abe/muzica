@@ -8,7 +8,6 @@ using UnityEngine.EventSystems;
 public class DropCommandPrefab : FieldTriggerPrefab
 {
     private Command command;
-    private bool canPickup = false;
     private float groundY; // 初期位置を保存
     private float duration = 0.4f;
 
@@ -57,14 +56,6 @@ public class DropCommandPrefab : FieldTriggerPrefab
         {
             rb.simulated = hadGravity;
         }
-
-        canPickup = true;
-    }
-
-    private IEnumerator EnablePickupAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        canPickup = true;
     }
 
     private IEnumerator StopAfterDelay(Rigidbody2D rb, float delay)
