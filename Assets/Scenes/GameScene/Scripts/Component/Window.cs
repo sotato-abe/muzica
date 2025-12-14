@@ -36,7 +36,7 @@ public class Window : MonoBehaviour
     {
         if( isActive ) return;
         isActive = true;
-        transform.gameObject.SetActive(isActive);
+        transform.gameObject.SetActive(true);
         if (!isAnimating) // 二重実行防止
         {
             openMotionCoroutine = StartCoroutine(OpenMotion());
@@ -46,7 +46,7 @@ public class Window : MonoBehaviour
     public virtual void WindowClose()
     {
         isActive = false;
-        transform.gameObject.SetActive(isActive);
+        transform.gameObject.SetActive(false);
     }
 
     // バウンド

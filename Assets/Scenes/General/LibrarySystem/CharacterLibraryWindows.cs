@@ -19,6 +19,23 @@ public class CharacterLibraryWindows : SelectWindow
         ChangeActiveWindow(false);
     }
 
+    public override void WindowOpen()
+    {
+        base.WindowOpen();
+        characterInformation.WindowOpen();
+    }
+
+    public override void WindowClose()
+    {
+        base.WindowClose();
+        characterInformation.WindowClose();
+    }
+
+    public override void EnterTargetWindow()
+    {
+        // 選択ウィンドウの末端なのでターゲット移動を止める
+    }
+
     private void SetListElement()
     {
         foreach (Transform child in contentArea.transform)
