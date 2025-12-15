@@ -53,4 +53,9 @@ public class CommandDatabase : MonoBehaviour
         }
         return commandDataList.IndexOf(command);
     }
+
+    public List<CommandBase> GetAllCommandBases()
+    {
+        return new List<CommandBase>(commandDataList);
+    }
 }
