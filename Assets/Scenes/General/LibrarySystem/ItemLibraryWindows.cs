@@ -31,10 +31,10 @@ public class ItemLibraryWindows : SelectWindow
         switch (index)
         {
             case 0:
-                itemListWindows.ChangeItemType(ItemType.Consumable);
+                itemListWindows.ChangeItemType(ItemType.Equipment);
                 break;
             case 1:
-                itemListWindows.ChangeItemType(ItemType.Equipment);
+                itemListWindows.ChangeItemType(ItemType.Consumable);
                 break;
             case 2:
                 itemListWindows.ChangeItemType(ItemType.Treasure);

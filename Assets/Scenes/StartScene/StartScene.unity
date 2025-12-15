@@ -1600,6 +1600,58 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &185253075
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 185253076}
+  - component: {fileID: 185253077}
+  m_Layer: 5
+  m_Name: SystemController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &185253076
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 185253075}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 630842073}
+  - {fileID: 894257391}
+  m_Father: {fileID: 412659193}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &185253077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 185253075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 669b4cb164695fd4a96768ba3e922975, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  librarySystemPanel: {fileID: 630842076}
+  settingSystemPanel: {fileID: 894257394}
 --- !u!1001 &194764581
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4475,8 +4527,7 @@ RectTransform:
   - {fileID: 1445492290}
   - {fileID: 281545989}
   - {fileID: 1847621467}
-  - {fileID: 894257391}
-  - {fileID: 630842073}
+  - {fileID: 185253076}
   - {fileID: 134982169}
   - {fileID: 672023573}
   m_Father: {fileID: 0}
@@ -7410,7 +7461,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 630842072}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -7419,7 +7470,7 @@ RectTransform:
   - {fileID: 1379465485}
   - {fileID: 304610943}
   - {fileID: 864588979}
-  m_Father: {fileID: 412659193}
+  m_Father: {fileID: 185253076}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -10383,14 +10434,14 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 894257390}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1164512947}
   - {fileID: 378267591}
-  m_Father: {fileID: 412659193}
+  m_Father: {fileID: 185253076}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -12049,7 +12100,7 @@ GameObject:
   - component: {fileID: 1054392137}
   - component: {fileID: 1054392138}
   m_Layer: 5
-  m_Name: Button (2)
+  m_Name: SettingButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12120,9 +12171,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 894257394}
-        m_TargetAssemblyTypeName: SettingSystem, Assembly-CSharp
-        m_MethodName: PanelOpen
+      - m_Target: {fileID: 185253077}
+        m_TargetAssemblyTypeName: SystemController, Assembly-CSharp
+        m_MethodName: OpenSettingSystem
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -19009,7 +19060,7 @@ GameObject:
   - component: {fileID: 1574138330}
   - component: {fileID: 1574138331}
   m_Layer: 5
-  m_Name: Button (1)
+  m_Name: LibraryButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19080,9 +19131,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 630842076}
-        m_TargetAssemblyTypeName: LibrarySystem, Assembly-CSharp
-        m_MethodName: PanelOpen
+      - m_Target: {fileID: 185253077}
+        m_TargetAssemblyTypeName: SystemController, Assembly-CSharp
+        m_MethodName: OpenLibrarySystem
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -21630,7 +21681,7 @@ GameObject:
   - component: {fileID: 1847609175}
   - component: {fileID: 1847609174}
   m_Layer: 5
-  m_Name: Button (3)
+  m_Name: TimeRecordButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
