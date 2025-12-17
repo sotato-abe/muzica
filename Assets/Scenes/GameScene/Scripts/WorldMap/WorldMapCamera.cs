@@ -9,7 +9,7 @@ public class WorldMapCamera : MonoBehaviour
     private Vector3Int currentPos; // 現在のカメラ位置
 
     // WorldMapのPlayer位置にカメラを合わせる
-    public void TargetPlayer(Vector3Int targetPos)
+    public void CahngeTarget(Vector3Int targetPos)
     {
         currentPos = targetPos; // 現在のカメラ位置を更新
         // カメラの位置をターゲットの位置に合わせる
@@ -19,7 +19,7 @@ public class WorldMapCamera : MonoBehaviour
 
     public void ResetCamera()
     {
-        TargetPlayer(currentPos); // 現在のカメラ位置に戻す
+        CahngeTarget(currentPos); // 現在のカメラ位置に戻す
     }
 
     public void UpTarget()

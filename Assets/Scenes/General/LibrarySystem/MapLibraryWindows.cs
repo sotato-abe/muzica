@@ -28,6 +28,12 @@ public class MapLibraryWindows : SelectWindow
         worldBigMapWindow.WindowClose();
     }
 
+    public override void EnterTargetWindow()
+    {
+        // 選択ウィンドウの末端なのでターゲット移動を止める
+    }
+
+
     private void SetListElement()
     {
         // マップライブラリのリスト要素を設定する処理をここに追加
@@ -36,7 +42,6 @@ public class MapLibraryWindows : SelectWindow
             Destroy(child.gameObject);
         }
         selectElements.Clear();
-        int initialIndex = 0;
         SetFieldElements();
     }
 
@@ -53,5 +58,8 @@ public class MapLibraryWindows : SelectWindow
             newElement.SetActiveCursol(false);
             selectElements.Add(newElement);
         }
+
+        int initialIndex = GetCurrentIndex();
+        selectElements[initialIndex].SetActiveCursol(true);
     }
 }

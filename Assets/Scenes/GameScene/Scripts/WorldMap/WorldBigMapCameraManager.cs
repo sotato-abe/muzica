@@ -22,6 +22,13 @@ public class WorldBigMapCameraManager : MonoBehaviour
         targetPos = newPos; // 目標のカメラ位置を更新
     }
 
+    // WorldMapのPlayer位置にカメラを合わせる
+    public void ChangeTarget(Vector3 newPos)
+    {
+        // 目標となるFieldの位置にカメラを移動
+        targetPos = newPos;
+    }
+
     void LateUpdate()
     {
         if (transform.position == targetPos)
@@ -42,7 +49,7 @@ public class WorldBigMapCameraManager : MonoBehaviour
         cameraPos.y += moveSpeed; // 上に1ユニット移動
         if (cameraPos.y > maxYposition) // 上限を超えないように制限
             return;
-            
+
         targetPos = cameraPos;
     }
 

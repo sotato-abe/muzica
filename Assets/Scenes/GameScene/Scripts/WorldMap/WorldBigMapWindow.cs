@@ -7,6 +7,7 @@ using TMPro;
 public class WorldBigMapWindow : Window
 {
     [SerializeField] WorldBigMapCameraManager worldMapCameraManager;
+    [SerializeField] bool canControl = false;
 
     private bool isCameraUpFlg = false;
     private bool isCameraBottomFlg = false;
@@ -16,6 +17,7 @@ public class WorldBigMapWindow : Window
     void Update()
     {
         if (!isActive) return; // フラグがfalseの場合は処理をスキップ
+        if (!canControl) return; // 操作不可の場合は処理をスキップ
 
         if (isCameraUpFlg || Input.GetKey(KeyCode.UpArrow))
         {

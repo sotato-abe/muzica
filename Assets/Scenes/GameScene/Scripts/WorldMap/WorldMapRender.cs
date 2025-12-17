@@ -10,6 +10,7 @@ public class WorldMapRender : MonoBehaviour
     [SerializeField] private Tilemap groundMap; // 対象のTilemap
     [SerializeField] public Tilemap fieldMap;
     private int[,] groundMapBase;
+    private List<Vector3Int> sectorList = new List<Vector3Int>();
 
     private void Start()
     {
@@ -81,6 +82,7 @@ public class WorldMapRender : MonoBehaviour
     /// </summary>
     private void RenderFieldMap()
     {
+        sectorList.Clear();
         foreach (var fieldBase in FieldDatabase.Instance.GetAllFieldBases())
         {
             if (fieldMap != null && fieldBase.Icon != null)
@@ -89,7 +91,7 @@ public class WorldMapRender : MonoBehaviour
                 Tile tile = ScriptableObject.CreateInstance<Tile>();
                 tile.sprite = fieldBase.Icon;
                 fieldMap.SetTile(cell, tile);
-
+                sectorList.Add(cell);
                 fieldMap.SetTransformMatrix(cell, Matrix4x4.TRS(new Vector3(0, 0.15f, 0), Quaternion.identity, Vector3.one));
             }
         }
@@ -155,13 +157,13 @@ public class WorldMapRender : MonoBehaviour
                             break;
                         case string name when name.Contains("Magma"):
                             fieldType = FieldType.Magma; // 未実装
-                            break;  
+                            break;
                         case string name when name.Contains("Pollution"):
                             fieldType = FieldType.Pollution; // 未実装
                             break;
                         case string name when name.Contains("Ocean"):
                             fieldType = FieldType.Ocean;
-                            break; 
+                            break;
                         default:
                             fieldType = FieldType.None;
                             break;
@@ -210,7 +212,13 @@ public class WorldMapRender : MonoBehaviour
         }
 
         // 指定位置にFieldMapがあるかどうかを確認
-        return groundMapBase[position.y, position.x] != (int)FieldType.None 
+        return groundMapBase[position.y, position.x] != (int)FieldType.None
             && groundMapBase[position.y, position.x] != (int)FieldType.Ocean;
+    }
+
+    public Vector3Int GetTargetSectorPosition(int index)
+    {
+        // targetPositionをターゲットとなるfieldMapの座標に変換して返す
+        return sectorList[index];
     }
 }
