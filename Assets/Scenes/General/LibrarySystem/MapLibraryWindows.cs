@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class MapLibraryWindows : SelectWindow
 {
     [SerializeField] WorldBigMapWindow worldBigMapWindow;
+    [SerializeField] WorldBigMapCameraManager worldBigMapCameraManager;
     [SerializeField] private GameObject contentArea;
     [SerializeField] private SelectElement selectElementObject;
     private List<FieldBase> fieldBaseList;
@@ -61,5 +62,6 @@ public class MapLibraryWindows : SelectWindow
 
         int initialIndex = GetCurrentIndex();
         selectElements[initialIndex].SetActiveCursol(true);
+        TargetElement(initialIndex);
     }
 }

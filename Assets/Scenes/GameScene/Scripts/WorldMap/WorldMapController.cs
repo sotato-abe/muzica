@@ -24,6 +24,7 @@ public class WorldMapController : MonoBehaviour
     [SerializeField] WorldMapPanel worldMapPanel;
     [SerializeField] AgeTimePanel ageTimePanel;
     [SerializeField] MessagePanel messagePanel;
+    [SerializeField] MapLibraryWindows mapLibraryWindows;
 
     private void Awake()
     {
@@ -39,6 +40,7 @@ public class WorldMapController : MonoBehaviour
 
     private void Start()
     {
+        mapLibraryWindows.OnChangeTarget += SelectTargetPosition;
         ChangePlayerCoordinate(DirectionType.Other);
         Vector2Int startPos = Vector2Int.up;
     }
@@ -168,5 +170,16 @@ public class WorldMapController : MonoBehaviour
 
         Vector3Int worldPosInt = new Vector3Int((int)worldPos.x, (int)worldPos.y, -10);
         worldMapBigCamera.TargetPlayer(worldPosInt);
+    }
+
+    public void SelectTargetPosition(int targetIndex)
+    {
+        Vector3Int tilePosition = worldMapRender.GetTargetSectorPosition(targetIndex);
+
+        // タイル座標をワールド座標に変換（WorldMapControllerと同じ方式）
+        Vector3 worldPos = fieldMap.GetCellCenterWorld(tilePosition);
+        Vector3 cameraTarget = new Vector3(worldPos.x, worldPos.y, -10f);
+
+        worldMapBigCamera.ChangeTarget(cameraTarget);
     }
 }
