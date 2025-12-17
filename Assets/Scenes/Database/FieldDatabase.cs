@@ -70,5 +70,8 @@ public class FieldDatabase : MonoBehaviour
         return defaultFieldBase;
     }
 
-    public List<FieldBase> FieldBaseList { get => fieldBaseList; }
+    public List<FieldBase> GetAllFieldBases()
+    {
+        return new List<FieldBase>(fieldBaseList);
+    }
 }
