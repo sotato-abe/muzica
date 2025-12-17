@@ -27,18 +27,20 @@ public class EquipSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void ClearEquip()
     {
+        Item = null;
         equipBlock.gameObject.SetActive(false);
     }
 
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-
+        if (Item != null)
         TooltipUI.Instance.TargetItem(Item);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        // if (Item != null)
         TooltipUI.Instance.ClearTargetItem();
     }
 }
