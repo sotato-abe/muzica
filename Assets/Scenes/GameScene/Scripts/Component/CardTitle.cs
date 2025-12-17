@@ -10,7 +10,7 @@ public class CardTitle : MonoBehaviour
     [SerializeField] RarityIcon cardRarity;
     [SerializeField] RectTransform backgroundRect;
 
-    float padding = 35f;
+    float padding = 30f;
 
     public void SetCardTitle(RarityType rarity, string title)
     {
