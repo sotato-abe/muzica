@@ -58,6 +58,6 @@ public class CommandLibraryWindows : SelectWindow
     {
         CommandBase commandBase = commandBaseList[index];
         Command targetCommand = new Command(commandBase);
-        commandCard.SetCommandCard(targetCommand);
+        commandCard.SetCommand(targetCommand);
     }
 }

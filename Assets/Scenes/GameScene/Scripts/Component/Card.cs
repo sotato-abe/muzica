@@ -29,5 +29,6 @@ public class Card : MonoBehaviour
         cardTypeIcon.color = command.Base.Rarity.GetRarityColor();
         cardFrame.color = command.Base.Rarity.GetRarityColor();
         cardTitle.SetCardTitle(command.Base.Rarity, command.Base.Name);
+        cardMotion.StartOpen3DMotion();
     }
 }

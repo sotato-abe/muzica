@@ -16,7 +16,7 @@ public class CommandCard : Card
     [SerializeField] EnchantPrefab enchantPrefab;
 
 
-    public void SetCommandCard(Command command)
+    public override void SetCommand(Command command)
     {
         base.SetCommand(command);
         descriptionText.text = command.Base.Description;

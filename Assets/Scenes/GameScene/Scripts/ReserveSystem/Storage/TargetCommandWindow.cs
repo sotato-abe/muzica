@@ -27,7 +27,7 @@ public class TargetCommandWindow : MonoBehaviour
             return;
         }
 
-        commandCard.SetCommandCard(command);
+        commandCard.SetCommand(command);
         commandCard.gameObject.SetActive(true);
         ShowPriceTags(command, isOwn);
     }
