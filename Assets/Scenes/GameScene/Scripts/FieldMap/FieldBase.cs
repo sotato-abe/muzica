@@ -20,6 +20,7 @@ public class FieldBase : ScriptableObject
     [SerializeField] string fieldName = "";
     [SerializeField] Sprite fieldSprite; // フィールドのスプライト
     [SerializeField] AudioClip secterBgm;
+    [SerializeField] AudioClip ambient;
     [SerializeField, TextArea] string description;
 
     [Header("Objects")]
@@ -49,6 +50,7 @@ public class FieldBase : ScriptableObject
     public string FieldName { get => fieldName; }
     public Sprite FieldSprite { get => fieldSprite; }
     public AudioClip SecterBgm { get => secterBgm; }
+    public AudioClip Ambient { get => ambient; }
     public string Description { get => description; }
 
     // Objects

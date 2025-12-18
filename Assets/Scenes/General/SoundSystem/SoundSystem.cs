@@ -167,6 +167,18 @@ public class SoundSystem : MonoBehaviour
         }
     }
 
+    public void SetAmbient(AudioClip ambientData)
+    {
+        if (ambientData != null)
+        {
+            StartCoroutine(FadeInAmbient(ambientData));
+        }
+        else
+        {
+            Debug.LogWarning($"SoundSystem: Ambient data is null.");
+        }
+    }
+
     public void SetFieldAmbientBGM(FieldType fieldType)
     {
         AreaBgmBase bgmData = areaBgmList.Find(b => b.FieldType() == fieldType);
