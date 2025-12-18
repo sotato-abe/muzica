@@ -35,7 +35,7 @@ public class SoundSystem : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject); // シーン切り替えても残す
-            
+
             // 保存されたボリューム設定を読み込み
             LoadVolumeSettings();
         }
@@ -57,7 +57,7 @@ public class SoundSystem : MonoBehaviour
         bgmVolume = PlayerPrefs.GetFloat(BGM_VOLUME_KEY, 1.0f);
         seVolume = PlayerPrefs.GetFloat(SE_VOLUME_KEY, 1.0f);
         ambientVolume = PlayerPrefs.GetFloat(AMBIENT_VOLUME_KEY, 0.7f);
-        
+
         // AudioSourceにボリュームを適用
         ApplyVolumeSettings();
     }
@@ -85,12 +85,15 @@ public class SoundSystem : MonoBehaviour
 
     public void SetAreaBGM(FieldType fieldType)
     {
+        UnityEngine.Debug.Log($"SoundSystem: Setting Area BGM for FieldType {fieldType}");
         AreaBgmBase bgmData = areaBgmList.Find(b => b.FieldType() == fieldType);
 
 
         if (bgmData != null)
         {
             StartCoroutine(FadeInBGM(bgmData.BgmClip()));
+            if (bgmData.AmbientClip() != null)
+                StartCoroutine(FadeInAmbient(bgmData.AmbientClip()));
         }
         else
         {
@@ -163,6 +166,21 @@ public class SoundSystem : MonoBehaviour
             Debug.LogWarning($"SoundSystem: Ambient of type {ambientType} not found.");
         }
     }
+
+    public void SetFieldAmbientBGM(FieldType fieldType)
+    {
+        AreaBgmBase bgmData = areaBgmList.Find(b => b.FieldType() == fieldType);
+
+        if (bgmData != null)
+        {
+            StartCoroutine(FadeInAmbient(bgmData.AmbientClip()));
+        }
+        else
+        {
+            Debug.LogWarning($"SoundSystem: Ambient of type {fieldType} not found.");
+        }
+    }
+
 
     public void SetAmbientBGM(AmbientType ambientType)
     {
@@ -243,7 +261,7 @@ public class SoundSystem : MonoBehaviour
         bgmSource.volume = bgmVolume * masterVolume;
         seSource.volume = seVolume * masterVolume;
         ambientSource.volume = ambientVolume * masterVolume;
-        
+
         // PlayerPrefsに保存
         PlayerPrefs.SetFloat(MASTER_VOLUME_KEY, masterVolume);
         PlayerPrefs.Save();
@@ -258,7 +276,7 @@ public class SoundSystem : MonoBehaviour
     {
         bgmVolume = volume;
         bgmSource.volume = bgmVolume * masterVolume;
-        
+
         // PlayerPrefsに保存
         PlayerPrefs.SetFloat(BGM_VOLUME_KEY, bgmVolume);
         PlayerPrefs.Save();
@@ -273,7 +291,7 @@ public class SoundSystem : MonoBehaviour
     {
         seVolume = volume;
         seSource.volume = seVolume * masterVolume;
-        
+
         // PlayerPrefsに保存
         PlayerPrefs.SetFloat(SE_VOLUME_KEY, seVolume);
         PlayerPrefs.Save();
@@ -288,7 +306,7 @@ public class SoundSystem : MonoBehaviour
     {
         ambientVolume = volume;
         ambientSource.volume = ambientVolume * masterVolume;
-        
+
         // PlayerPrefsに保存
         PlayerPrefs.SetFloat(AMBIENT_VOLUME_KEY, ambientVolume);
         PlayerPrefs.Save();

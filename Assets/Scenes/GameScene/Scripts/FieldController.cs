@@ -36,6 +36,7 @@ public class FieldController : MonoBehaviour
 
     public void SetField(FieldBase fieldData)
     {
+        UnityEngine.Debug.Log($"SetField: {fieldData.fieldType}");
         currentFieldBase = fieldData;
         PlayFieldBGM();
     }
@@ -58,6 +59,7 @@ public class FieldController : MonoBehaviour
         if (currentFieldBase != null && currentFieldBase.SecterBgm != null)
         {
             SoundSystem.Instance.SetBGM(currentFieldBase.SecterBgm);
+            SoundSystem.Instance.SetFieldAmbientBGM(currentFieldBase.fieldType);
         }
         else
         {
