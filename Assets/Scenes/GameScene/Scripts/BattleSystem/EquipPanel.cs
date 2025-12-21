@@ -71,6 +71,7 @@ public class EquipPanel : BattleActionPanel
     #region Equipment Management
     public void SetEquipment()
     {
+        UnityEngine.Debug.Log("EquipPanel: Setting equipment for body part " + bodyPartType);
         currentEquipment = PlayerController.Instance.GetEquipmentByBodyPart(bodyPartType);
         if (currentEquipment == null)
         {

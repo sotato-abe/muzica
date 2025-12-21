@@ -50,6 +50,11 @@ public class BattleActionBoard : SlidePanel
         escapePanel.OnActionEnd += ActionEnd;
         escapePanel.OnEscape += BattleEnd; // 逃げるイベントを登録
 
+        equipPanel1.gameObject.SetActive(true);
+        equipPanel2.gameObject.SetActive(false);
+        pocketPanel.gameObject.SetActive(false);
+        escapePanel.gameObject.SetActive(false);
+
         ChangeActiveIcon();
         ChangeActionPanel();
     }
