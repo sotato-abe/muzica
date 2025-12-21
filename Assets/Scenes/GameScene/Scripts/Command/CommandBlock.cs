@@ -80,6 +80,7 @@ public class CommandBlock : Block, IPointerEnterHandler, IPointerExitHandler
         cursor.color = bgColor;
     }
 
+    // パネルを移動する際に呼び出される
     public bool RemoveCommand()
     {
         return OnRemoveCommand?.Invoke(this) ?? false;

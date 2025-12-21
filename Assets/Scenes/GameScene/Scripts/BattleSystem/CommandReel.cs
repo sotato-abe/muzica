@@ -100,6 +100,7 @@ public class CommandReel : Window
         CommandImage closestSlot = GetClosestSlotToCenter();
         if (closestSlot != null)
         {
+            StartCoroutine(closestSlot.ActivateCommand());
             return closestSlot.command;
         }
         return null;

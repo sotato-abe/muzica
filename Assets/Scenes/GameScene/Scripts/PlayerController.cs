@@ -349,10 +349,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void RemoveCommandFromStorage(Command command)
     {
-        Debug.Log("RemoveCommandFromStorage");
         if (command == null) return;
-
-        Debug.Log(PlayerCharacter.StorageList.Count);
 
         if (PlayerCharacter.StorageList.Contains(command))
         {

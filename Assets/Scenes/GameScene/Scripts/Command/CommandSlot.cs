@@ -39,10 +39,8 @@ public class CommandSlot : MonoBehaviour, IDropHandler
 
     public void ResetSlot()
     {
-        // スロットをリセットする場合は、ここで処理を追加
         foreach (Transform child in transform)
         {
-            // CommandBlockを削除
             CommandBlock childBlock = child.GetComponent<CommandBlock>();
             if (childBlock != null)
             {

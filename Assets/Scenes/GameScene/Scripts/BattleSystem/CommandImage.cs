@@ -33,4 +33,30 @@ public class CommandImage : MonoBehaviour
         commandImage.color = new Color(1f, 1f, 1f, 1f);
         this.command = command;
     }
+
+    public IEnumerator ActivateCommand()
+    {
+        if (command == null) yield break;
+
+        // 簡単なアニメーション例: 拡大して元に戻る
+        float activateDuration = 0.07f;
+        Vector3 originalScale = rectTransform.localScale;
+        Vector3 targetScale = originalScale * 1.1f;
+        float elapsed = 0f;
+        while (elapsed < activateDuration)
+        {
+            rectTransform.localScale = Vector3.Lerp(originalScale, targetScale, elapsed / activateDuration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        rectTransform.localScale = targetScale;
+        elapsed = 0f;
+        while (elapsed < activateDuration)
+        {
+            rectTransform.localScale = Vector3.Lerp(targetScale, originalScale, elapsed / activateDuration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        rectTransform.localScale = originalScale;
+    }
 }

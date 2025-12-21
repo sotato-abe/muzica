@@ -29,14 +29,14 @@ public class SlotSettingWindow : MonoBehaviour
 
         slotHeight = backRectTransform.sizeDelta.y;
         // コマンドスロットを初期化
-        InitializeCommandSlots();
-        SetCommandSlot();
+        InitializeCommandSlot();
+        DisplayCommandSlot();
         SetWindowSize();
     }
 
     private void OnEnable()
     {
-        SetCommandSlot();
+        DisplayCommandSlot();
     }
 
     private void SetWindowSize()
@@ -46,7 +46,24 @@ public class SlotSettingWindow : MonoBehaviour
         backRectTransform.sizeDelta = new Vector2(windowWidth, slotHeight);
     }
 
-    public void SetCommandSlot()
+    private void InitializeCommandSlot()
+    {
+        // 既存のスロットをクリア
+        foreach (Transform child in slotList.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // コマンドスロットを生成
+        for (int i = 0; i < playerController.PlayerCharacter.ColMemory * 3; i++)
+        {
+            CommandSlot newSlot = Instantiate(commandSlotPrefab, slotList.transform);
+            newSlot.SlotIndex = i; // スロットのインデックスを設定            
+            commandSlots.Add(newSlot);
+        }
+    }
+
+    public void DisplayCommandSlot()
     {
         // 既存のスロットをクリア
         foreach (CommandSlot slot in commandSlots)
@@ -62,23 +79,6 @@ public class SlotSettingWindow : MonoBehaviour
             {
                 commandSlots[i].SetCommand(command);
             }
-        }
-    }
-
-    private void InitializeCommandSlots()
-    {
-        // 既存のスロットをクリア
-        foreach (Transform child in slotList.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
-        // コマンドスロットを生成
-        for (int i = 0; i < playerController.PlayerCharacter.ColMemory * 3; i++)
-        {
-            CommandSlot newSlot = Instantiate(commandSlotPrefab, slotList.transform);
-            newSlot.SlotIndex = i; // スロットのインデックスを設定            
-            commandSlots.Add(newSlot);
         }
     }
 }
